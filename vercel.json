@@ -91,19 +91,15 @@
   "rewrites": [
     {
       "source": "/HKGold",
-      "destination": "/klien"
-    },
-    {
-      "source": "/hkgold",
-      "destination": "/klien"
+      "destination": "/hkgold"
     },
     {
       "source": "/HKGOLD",
-      "destination": "/klien"
+      "destination": "/hkgold"
     },
     {
       "source": "/HkGold",
-      "destination": "/klien"
+      "destination": "/hkgold"
     }
   ]
 }
