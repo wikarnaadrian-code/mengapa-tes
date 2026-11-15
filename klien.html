@@ -1987,7 +1987,7 @@ const countText = n => L(`${n} dari ${S.items.length} hasil`, `${n} of ${S.items
 
 /* ---------- tampilan ---------- */
 const mengapaLogo = `<span class="brand"><img src="${LOGO_ICON}" alt="" height="30"><img src="${LOGO_WORD}" alt="Mengapa" height="17"></span>`;
-const clientLogo = () => `<img class="client-logo" src="/klien/${encodeURIComponent(SLUG)}.png" alt="${esc(S.clientName || CLIENT)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'client-name',textContent:this.alt}))">`;
+const clientLogo = () => `<img class="client-logo" src="/logo-klien/${encodeURIComponent(SLUG)}.png" alt="${esc(S.clientName || CLIENT)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'client-name',textContent:this.alt}))">`;
 const logoHtml = mengapaLogo;
 const headLogo = () => SLUG ? `${clientLogo()}<span class="by">${L('bersama', 'with')} ${mengapaLogo}</span>` : mengapaLogo;
 const langToggle = () => `<div class="lang" role="group" aria-label="${L('Bahasa', 'Language')}"><button data-lang="id" aria-pressed="${LANG === 'id'}">ID</button><button data-lang="en" aria-pressed="${LANG === 'en'}">EN</button></div>`;
