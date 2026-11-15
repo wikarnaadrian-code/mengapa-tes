@@ -960,7 +960,7 @@ const ROWS = ITEMS.map((opts, i) => ({
    --------------------------------------------------------- */
 const COMBOS = {
   SC: {
-    name: 'Pencetus', en: 'The Spark', natural: true,
+    name: 'Spark', en: '', natural: true,
     tagline: 'Datang, nyalain semangat, lalu ajak semua orang bergerak.',
     about: 'Kamu punya pesona Sanguinis dan dorongan Koleris sekaligus. Kamu bisa bikin orang tertarik, lalu langsung mengajak mereka bergerak. Ini salah satu kombinasi paling ekstrover: energimu terasa dari jauh.',
     powers: ['Persuasif dan gampang memengaruhi orang', 'Berani mulai duluan dan cepat ambil inisiatif', 'Bikin tim tetap semangat saat situasi berat'],
@@ -970,7 +970,7 @@ const COMBOS = {
     fact: 'Sanguinis dan Koleris sama-sama ekstrover dan optimis. Dalam teori temperamen, keduanya disebut pasangan alami, dan energinya paling terasa di antara semua kombinasi.',
   },
   SM: {
-    name: 'Seniman', en: 'The Artist', natural: false,
+    name: 'Artist', en: '', natural: false,
     tagline: 'Panggung di luar, samudra di dalam.',
     about: 'Di depan orang kamu bisa ceria dan ekspresif, tapi di dalam kamu merasakan semuanya dengan dalam. Kombinasi ini menyatukan dua sisi yang berlawanan, jadi energi dan mood bisa naik turun. Justru di situ kreativitasmu lahir.',
     powers: ['Ekspresif dengan rasa estetika yang kuat', 'Bisa membaca dan menyentuh emosi orang', 'Kreatif, idenya hidup sekaligus bermakna'],
@@ -980,7 +980,7 @@ const COMBOS = {
     fact: 'Dalam teori temperamen, Sanguinis dan Melankolis adalah pasangan berlawanan: satu ekspresif, satu reflektif. Kombinasi berlawanan lebih jarang muncul dan menarik untuk didalami.',
   },
   SP: {
-    name: 'Penghangat', en: 'The Charmer', natural: true,
+    name: 'Charmer', en: '', natural: true,
     tagline: 'Bikin semua orang merasa diterima.',
     about: 'Kamu ceria seperti Sanguinis dan santai seperti Plegmatis. Orang betah di dekatmu karena kamu lucu tapi tidak mengintimidasi. Kamu lebih memilih suasana yang enak daripada menang argumen.',
     powers: ['Gampang disukai dan ramah ke siapa saja', 'Penengah alami saat ada ketegangan', 'Humoris dan menenangkan sekaligus'],
@@ -990,7 +990,7 @@ const COMBOS = {
     fact: 'Sanguinis dan Plegmatis sama-sama berorientasi pada orang. Dalam teori temperamen, keduanya disebut pasangan yang saling melengkapi.',
   },
   CS: {
-    name: 'Pendobrak', en: 'The Trailblazer', natural: true,
+    name: 'Trailblazer', en: '', natural: true,
     tagline: 'Target jelas, jalan cepat, dan orang-orang ikut.',
     about: 'Kamu dominan Koleris dengan bumbu Sanguinis. Fokusmu pada hasil, tapi kamu juga tahu cara mengajak orang. Kamu suka tantangan, cepat bergerak, dan biasanya mengambil alih saat semua orang ragu.',
     powers: ['Cepat mengambil keputusan', 'Produktif dan berorientasi target', 'Karismatik saat memimpin'],
@@ -1000,7 +1000,7 @@ const COMBOS = {
     fact: 'Dalam teori temperamen klasik, Koleris dan Sanguinis sama-sama cepat bereaksi. Bedanya, Sanguinis cepat reda, sementara Koleris lebih lama memegang tujuannya.',
   },
   CM: {
-    name: 'Arsitek', en: 'The Architect', natural: true,
+    name: 'Architect', en: '', natural: true,
     tagline: 'Visi besar, eksekusi rapi.',
     about: 'Kamu menggabungkan dorongan Koleris dengan ketelitian Melankolis. Kamu bukan cuma ingin berhasil, kamu ingin semuanya dikerjakan dengan benar. Ini kombinasi yang paling fokus pada tugas: strategis, tekun, dan sulit dihentikan.',
     powers: ['Strategis dan berpikir jangka panjang', 'Standar kualitas tinggi', 'Tangguh menghadapi masalah rumit'],
@@ -1010,7 +1010,7 @@ const COMBOS = {
     fact: 'Koleris dan Melankolis sama-sama berorientasi pada tugas. Itu sebabnya kombinasi ini terlihat serius dan sangat konsisten begitu punya target.',
   },
   CP: {
-    name: 'Nakhoda', en: 'The Captain', natural: false,
+    name: 'Captain', en: '', natural: false,
     tagline: 'Tegas tanpa perlu meninggikan suara.',
     about: 'Kamu punya ketegasan Koleris dan ketenangan Plegmatis. Dalam teori klasik dua sifat ini berlawanan: satu ingin bergerak cepat, satu ingin semuanya damai. Hasilnya bisa jadi pemimpin yang kalem dan efisien, tapi kadang kamu merasa ditarik ke dua arah.',
     powers: ['Tenang di bawah tekanan', 'Praktis dan efisien', 'Bisa memimpin tanpa drama'],
@@ -1020,7 +1020,7 @@ const COMBOS = {
     fact: 'Dalam teori temperamen, Koleris dan Plegmatis adalah pasangan berlawanan. Kombinasi seperti ini menarik untuk dicek ulang: mana sifat bawaan, mana yang terbentuk karena peran.',
   },
   MS: {
-    name: 'Pencerita', en: 'The Storyteller', natural: false,
+    name: 'Storyteller', en: '', natural: false,
     tagline: 'Punya sesuatu yang dalam, dan tahu cara menyampaikannya.',
     about: 'Kamu dominan Melankolis: reflektif, rapi, dan dalam. Sisi Sanguinismu membuat pikiran yang dalam itu keluar dengan hangat dan menarik. Kamu bisa jadi guru, mentor, atau kreator yang ngena.',
     powers: ['Penjelasan dalam tapi mudah dicerna', 'Peka terhadap perasaan orang', 'Kreatif dan tetap terstruktur'],
@@ -1030,7 +1030,7 @@ const COMBOS = {
     fact: 'Melankolis dan Sanguinis adalah pasangan berlawanan: satu reflektif, satu ekspresif. Saat keduanya seimbang, pikiran yang dalam bisa tersampaikan dengan cara yang hidup.',
   },
   MC: {
-    name: 'Ahli', en: 'The Expert', natural: true,
+    name: 'Expert', en: '', natural: true,
     tagline: 'Detail sempurna, keputusan mantap.',
     about: 'Kamu teliti seperti Melankolis dan berani memutuskan seperti Koleris. Kamu menganalisis dulu, lalu bergerak dengan yakin. Orang mengandalkanmu untuk hal-hal yang harus benar.',
     powers: ['Analisis tajam dan akurat', 'Disiplin dan bertanggung jawab', 'Berani mengambil keputusan sulit setelah berpikir matang'],
@@ -1040,7 +1040,7 @@ const COMBOS = {
     fact: 'Melankolis dan Koleris sama-sama berorientasi pada tugas. Bedanya, Melankolis fokus pada melakukan dengan benar, Koleris fokus pada menyelesaikan. Di kombinasi ini keduanya saling melengkapi.',
   },
   MP: {
-    name: 'Pemikir', en: 'The Thinker', natural: true,
+    name: 'Thinker', en: '', natural: true,
     tagline: 'Tenang di luar, dalam di dalam.',
     about: 'Kamu reflektif seperti Melankolis dan tenang seperti Plegmatis. Kamu lebih suka mengamati sebelum bicara, dan saat bicara isinya biasanya matang. Ini kombinasi paling introver: kamu mengisi ulang energi lewat waktu sendiri.',
     powers: ['Pemikir yang mendalam dan teliti', 'Setia dan bisa diandalkan', 'Pendengar yang baik'],
@@ -1050,7 +1050,7 @@ const COMBOS = {
     fact: 'Dalam teori temperamen klasik, Melankolis dan Plegmatis sama-sama "lambat merespons". Bukan lambat berpikir, tapi butuh waktu sebelum bereaksi.',
   },
   PS: {
-    name: 'Pendamai', en: 'The Peacemaker', natural: true,
+    name: 'Peacemaker', en: '', natural: true,
     tagline: 'Santai, lucu, dan bikin adem.',
     about: 'Kamu dominan Plegmatis: stabil, sabar, dan menenangkan. Sisi Sanguinis membuatmu punya humor dan gampang akrab. Orang datang padamu saat butuh tempat yang nyaman.',
     powers: ['Menenangkan suasana', 'Humor yang ringan dan pas', 'Gampang bekerja sama'],
@@ -1060,7 +1060,7 @@ const COMBOS = {
     fact: 'Plegmatis sering diremehkan karena tenang. Padahal kemampuan menenangkan dan menengahi adalah kekuatan khas Plegmatis, dan sisi Sanguinismu membuatnya makin terasa hangat.',
   },
   PC: {
-    name: 'Jangkar', en: 'The Anchor', natural: false,
+    name: 'Anchor', en: '', natural: false,
     tagline: 'Kalem, stabil, tapi punya pendirian.',
     about: 'Kamu tenang seperti Plegmatis, tapi sisi Koleris membuatmu tegas saat dibutuhkan. Kamu tidak suka ribut, tapi juga tidak mudah digeser. Karena dua sisi ini berlawanan dalam teori klasik, kamu mungkin merasa punya dua mode yang berbeda.',
     powers: ['Stabil dan bisa diandalkan', 'Tegas kalau memang perlu', 'Bijak memilih pertarungan'],
@@ -1070,7 +1070,7 @@ const COMBOS = {
     fact: 'Dalam teori temperamen, Plegmatis dan Koleris adalah pasangan berlawanan yang jarang muncul bersama. Sering kali satu sisi bawaan, dan satu sisi terbentuk oleh tuntutan hidup.',
   },
   PM: {
-    name: 'Penjaga', en: 'The Guardian', natural: true,
+    name: 'Guardian', en: '', natural: true,
     tagline: 'Lembut, teliti, dan selalu ada.',
     about: 'Kamu sabar seperti Plegmatis dan teliti seperti Melankolis. Kamu bekerja rapi tanpa banyak suara, dan orang tahu kamu bisa dipercaya. Kamu jarang mencari perhatian, tapi kehadiranmu terasa.',
     powers: ['Konsisten dan dapat dipercaya', 'Rapi dan akurat', 'Empatik dan suka membantu'],
