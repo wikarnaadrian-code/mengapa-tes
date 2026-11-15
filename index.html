@@ -2129,7 +2129,7 @@ function home() {
       <div class="block about">
         <div class="eyebrow">Tentang Mengapa</div>
         <h2>${L('Kenapa <em>Mengapa</em>?', 'Why <em>Mengapa</em>?')}</h2>
-        <p class="prose">${L('Karena perubahan selalu dimulai dari satu pertanyaan: <em>mengapa aku seperti ini?</em> Berdiri sejak 2024, Mengapa adalah tim trainer dan konselor yang terlatih dalam metode <span class="pp">Powered Personality</span> dan mendalami teori empat temperamen. Lewat tes, workshop, dan konseling, kami membantu kamu mengenal diri, memahami orang terdekat, dan bertumbuh lebih jauh.', 'Because change always starts with one question: <em>why am I like this?</em> Founded in 2024, Mengapa (Indonesian for “why”) is a team of trainers and counselors trained in the <span class="pp">Powered Personality</span> method, specializing in the four temperaments. Through tests, workshops, and counseling, we help you know yourself, understand the people closest to you, and grow further.')}</p>
+        <p class="prose">${L('Karena perubahan selalu dimulai dari satu pertanyaan: <em>mengapa aku seperti ini?</em> Berdiri sejak 2024, Mengapa adalah tim trainer dan konselor lulusan pelatihan <span class="pp">Powered Personality</span> dan mendalami teori empat temperamen. Lewat tes, workshop, dan konseling, kami membantu kamu mengenal diri, memahami orang terdekat, dan bertumbuh lebih jauh.', 'Because change always starts with one question: <em>why am I like this?</em> Founded in 2024, Mengapa (Indonesian for “why”) is a team of trainers and counselors trained in the <span class="pp">Powered Personality</span> method, specializing in the four temperaments. Through tests, workshops, and counseling, we help you know yourself, understand the people closest to you, and grow further.')}</p>
         <button class="svc-link" data-act="services"><span>${L('Lihat layanan Mengapa', 'See what Mengapa does')}</span><small>${L('Konseling, coaching, workshop, training, outing, camp', 'Counseling, coaching, workshops, training, outings, camps')}</small>${ARROW}</button>
         ${contactRow(waLink(L('Halo Mengapa, saya ingin tahu lebih lanjut tentang tes, workshop, atau konseling.', 'Hi Mengapa, I would like to know more about your tests, workshops, or counseling.')))}
       </div>
@@ -2170,7 +2170,7 @@ function services() {
           <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" fill="none" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 7"/></svg>
           ${['S', 'C', 'M', 'P'].map((k, i) => `<span class="sv-o sv-o${i}" style="background:${TEMPS[k].soft}">${glyph(k, 38)}</span>`).join('')}
         </div>
-        <div class="sv-badges"><span>${L('Spesialis 4 temperamen', 'Four temperaments specialists')}</span><span>${L('Terlatih metode', 'Trained in')} <b class="pp">Powered Personality</b></span></div>
+        <div class="sv-badges"><span>${L('Spesialis 4 temperamen', 'Four temperaments specialists')}</span><span>${L('Metode', 'The')} <b class="pp">Powered Personality</b>${L('', ' method')}</span></div>
       </header>
 
       <section class="sv-sec">
