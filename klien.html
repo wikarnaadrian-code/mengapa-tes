@@ -694,6 +694,11 @@ body { background: var(--bg); }
 .legend .dot.hi { background: var(--C); }
 .it-res small { font-weight: 600; letter-spacing: .04em; }
 @media (max-width: 979px) { .it-res { max-width: 150px; } .it { gap: 10px; } }
+/* kelompok tanggal: judul menempel ke barisnya, jarak antar kelompok lebih besar + garis pemisah */
+.grp { padding-bottom: 6px; }
+.grp + .grp { border-top: 1px solid var(--line); margin-top: 6px; }
+.grp .day { padding: 14px 8px 4px; }
+.grp .it { padding-top: 8px; padding-bottom: 8px; }
 
 </style>
 </head>
@@ -2158,7 +2163,7 @@ function listHtml(items) {
     : S.sort === 'dom' ? (TEMPS[g] ? `<i class="gd" style="background:${TEMPS[g].color}"></i>${TEMPS[g].name} · ${items.filter(y => domOf(y)[0] === g).length}` : L('Growth Mindset', 'Growth Mindset')) : esc(g);
   items.forEach(x => {
     const dk = groupOf(x);
-    if (dk && dk !== last) { last = dk; out += `<div class="day">${groupLabel(dk, x)}</div>`; }
+    if (dk && dk !== last) { out += `${last ? '</section>' : ''}<section class="grp"><div class="day">${groupLabel(dk, x)}</div>`; last = dk; }
     out += `<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
       ${avatar(x)}
       <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.legacy ? `<em class="old">${L('Arsip', 'Archive')}</em>` : ''}${x.token ? ' · ' + esc(x.token) : ''}</small></span>
@@ -2166,7 +2171,7 @@ function listHtml(items) {
       <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Prioritas follow up', 'Follow-up priority')}: ${levelName(x.flag)}"></i>` : ''}</span>
     </button>`;
   });
-  return out;
+  return out + (last ? '</section>' : '');
 }
 
 function bars(rows, max) {
