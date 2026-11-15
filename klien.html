@@ -682,6 +682,11 @@ body { background: var(--bg); }
 @media (max-width: 520px) { .src { width: 100%; } .src button { flex: 1; justify-content: center; padding: 8px 6px; font-size: 12.5px; } }
 .flagtag { font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: .02em; white-space: nowrap; padding: 2px 6px; border-radius: 6px; background: #FBEFD9; color: #7A5F06; }
 .flagtag.hi { background: #F6DBD6; color: #7C2419; }
+.foot-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; border-top: 1px solid var(--line); padding: 10px 16px; flex-wrap: wrap; }
+.foot-row .count { border: 0; padding: 0; }
+.legend { margin: 0; display: flex; gap: 12px; font-size: 11.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.it-meta .dot { margin-top: 2px; }
 
 </style>
 </head>
@@ -2049,7 +2054,7 @@ function logout() { session.clear(); S.session = ''; S.rows = null; S.items = []
 
 /* ---------- filter & urutan ---------- */
 const FILTERS = () => SLUG ? [] : [
-  { k: 'deep', label: L('Perlu didalami', 'Needs follow-up'), test: x => !!x.flag },
+  { k: 'deep', label: L('Perlu follow up', 'Needs follow-up'), test: x => !!x.flag },
   { k: 'wa', label: L('Ada WhatsApp', 'Has WhatsApp'), test: x => !!x.wa },
   { k: 'minor', label: L('Di bawah 18', 'Under 18'), test: x => Number(x.age) > 0 && Number(x.age) < 18 },
 ];
@@ -2150,7 +2155,7 @@ function listHtml(items) {
       ${avatar(x)}
       <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.legacy ? `<em class="old">${L('Arsip', 'Archive')}</em>` : ''}${x.token ? ' · ' + esc(x.token) : ''}</small></span>
       <span class="it-res"><b>${esc(x.title)}</b><small>${esc(x.sub)}</small></span>
-      <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="flagtag ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Perlu didalami', 'Needs follow-up')}: ${levelName(x.flag)}">Follow up · ${levelName(x.flag)}</i>` : ''}</span>
+      <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="Follow up: ${levelName(x.flag)}"></i>` : ''}</span>
     </button>`;
   });
   return out;
@@ -2169,7 +2174,7 @@ function detailLengkap(x) {
       <div><small class="eyebrow">${P.name} + ${Sx.name}</small><h2>${esc(a.combo.name)}</h2><p class="muted">${esc(a.combo.tagline)}</p>
         ${a.alts.length ? `<p class="note">${L('Bisa juga terbaca sebagai', 'Can also be read as')}: ${a.alts.map(k => COMBOS[k].name).join(', ')}</p>` : ''}</div>
     </section>
-    ${!SLUG && a.flags.length ? `<section class="box warn"><h3>${L('Perlu didalami', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul>${a.flags.map(f => `<li>${esc(f.internal)}</li>`).join('')}</ul></section>` : ''}
+    ${!SLUG && a.flags.length ? `<section class="box warn"><h3>${L('Perlu follow up', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul>${a.flags.map(f => `<li>${esc(f.internal)}</li>`).join('')}</ul></section>` : ''}
     <section class="box"><h3>${L('Gambaran singkat', 'Quick profile')}</h3>
       <div class="prof">
         <div><h4>${L('Kekuatan utama', 'Key strengths')}</h4><ul>${a.combo.powers.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
@@ -2306,7 +2311,7 @@ function app() {
       <div><b>${B.length}</b><span>${filtered ? L('Hasil sesuai filter', 'Matching results') : L('Total tes', 'Total tests')}</span></div>
       ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${B.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}</span></div>`).join('') + '</section><section hidden>' : ''}
       <div><b>${week}</b><span>${L('7 hari terakhir', 'Last 7 days')}</span></div>
-      <div><b>${B.filter(x => x.flag).length}</b><span>${L('Perlu didalami', 'Needs follow-up')}</span></div>
+      <div><b>${B.filter(x => x.flag).length}</b><span>${L('Perlu follow up', 'Needs follow-up')}</span></div>
       <div><b>${B.filter(x => x.wa).length}</b><span>${L('Ada WhatsApp', 'Has WhatsApp')}</span></div>
     </section>
     <div class="main">
@@ -2318,7 +2323,7 @@ function app() {
           ${toolsHtml(B)}
         </div>
         <div class="list" id="list">${listHtml(items)}</div>
-        <p class="count">${countText(items.length)}</p>
+        <div class="foot-row"><p class="count">${countText(items.length)}</p>${!SLUG ? `<p class="legend"><span><i class="dot hi"></i>${L('Follow up tinggi', 'High follow-up')}</span><span><i class="dot"></i>${L('Follow up sedang', 'Medium follow-up')}</span></p>` : ''}</div>
       </aside>
       <article class="detail" id="detail">${detail(sel)}</article>
     </div>
