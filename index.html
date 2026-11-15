@@ -1595,10 +1595,10 @@ function comboArt(p, s, size = 220, uid = 'a') {
     <path d="M100 18 C146 16 184 52 182 100 C180 150 146 184 98 182 C52 180 16 146 18 98 C20 54 56 20 100 18Z" fill="url(#${id})"/>
     <circle cx="100" cy="100" r="66" fill="none" stroke="${S.color}" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="3 6"/>
     ${dots}
-    <g transform="translate(52 52) scale(.96)">${GLYPH[p](P.color, P.deep)}</g>
-    ${p === s ? '' : `<g transform="translate(140 34)">
-      <circle cx="0" cy="0" r="26" fill="#fff" stroke="${S.color}" stroke-width="2"/>
-      <g transform="translate(-18 -18) scale(.36)">${GLYPH[s](S.color, S.deep)}</g>
+    <g transform="translate(46 60) scale(.88)">${GLYPH[p](P.color, P.deep)}</g>
+    ${p === s ? '' : `<g transform="translate(146 46)">
+      <circle cx="0" cy="0" r="33" fill="#fff" stroke="${S.color}" stroke-width="2.5"/>
+      <g transform="translate(-27 -27) scale(.54)">${GLYPH[s](S.color, S.deep)}</g>
     </g>`}
   </svg>`;
 }

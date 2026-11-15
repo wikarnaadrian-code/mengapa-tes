@@ -699,6 +699,16 @@ body { background: var(--bg); }
 .grp + .grp { border-top: 1px solid var(--line); margin-top: 6px; }
 .grp .day { padding: 14px 8px 4px; }
 .grp .it { padding-top: 8px; padding-bottom: 8px; }
+/* skor ringkas SKMP di daftar */
+.scs { display: inline-flex; gap: 7px; justify-content: flex-end; margin-top: 2px; }
+.sc { position: relative; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); padding-bottom: 3px; white-space: nowrap; }
+.sc b { color: var(--c); font-weight: 800; margin-right: 1px; font-size: 11px; }
+.sc.lead { color: var(--ink); font-weight: 700; }
+.sc i { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--c) var(--p), color-mix(in srgb, var(--c) 25%, transparent) var(--p)); }
+.it-res { max-width: 170px; }
+@media (max-width: 979px) { .it-res { max-width: 160px; } .scs { gap: 5px; } }
+.it-res .sc b { font-family: var(--sans); font-size: 11px; font-weight: 800; white-space: nowrap; overflow: visible; display: inline; }
+.scs { display: flex; align-items: baseline; }
 
 </style>
 </head>
@@ -1809,10 +1819,10 @@ function comboArt(p, s, size = 220, uid = 'a') {
     <path d="M100 18 C146 16 184 52 182 100 C180 150 146 184 98 182 C52 180 16 146 18 98 C20 54 56 20 100 18Z" fill="url(#${id})"/>
     <circle cx="100" cy="100" r="66" fill="none" stroke="${S.color}" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="3 6"/>
     ${dots}
-    <g transform="translate(52 52) scale(.96)">${GLYPH[p](P.color, P.deep)}</g>
-    ${p === s ? '' : `<g transform="translate(140 34)">
-      <circle cx="0" cy="0" r="26" fill="#fff" stroke="${S.color}" stroke-width="2"/>
-      <g transform="translate(-18 -18) scale(.36)">${GLYPH[s](S.color, S.deep)}</g>
+    <g transform="translate(46 60) scale(.88)">${GLYPH[p](P.color, P.deep)}</g>
+    ${p === s ? '' : `<g transform="translate(146 46)">
+      <circle cx="0" cy="0" r="33" fill="#fff" stroke="${S.color}" stroke-width="2.5"/>
+      <g transform="translate(-27 -27) scale(.54)">${GLYPH[s](S.color, S.deep)}</g>
     </g>`}
   </svg>`;
 }
@@ -2002,6 +2012,15 @@ function EN2WORD() {
   ROWS.forEach(row => row.options.forEach(o => { if (o.en) _en2w[o.en.toLowerCase()] = o.word; }));
   return _en2w;
 }
+// Skor ringkas di daftar: "S 17" per temperamen, garis bawah = porsi kekuatan (tegas) vs kelemahan (pudar)
+function scoreChips(t, sMap, wMap, max) {
+  const top = [...ORDER].sort((a, b) => t[b] - t[a]).slice(0, 2);
+  return `<span class="scs">${ORDER.map(k => {
+    const tip = sMap ? `${TEMPS[k].name}: ${t[k]} (${L('kekuatan', 'strengths')} ${sMap[k]}, ${L('kelemahan', 'weaknesses')} ${wMap[k]})` : `${TEMPS[k].name}: ${t[k]}/${max}`;
+    const pct = sMap && t[k] ? Math.round(sMap[k] / t[k] * 100) : 100;
+    return `<span class="sc${top.includes(k) && t[k] ? ' lead' : ''}" title="${esc(tip)}" style="--c:${TEMPS[k].color};--p:${pct}%"><b>${ab(k)}</b>${t[k]}${sMap && t[k] ? '<i></i>' : ''}</span>`;
+  }).join('')}</span>`;
+}
 function normRow(r, kind) {
   const t = Date.parse(r.waktu_iso) || Date.parse(r.diterima_server) || Date.parse(r.tanggal_tes) || 0;
   const it = {
@@ -2024,16 +2043,16 @@ function normRow(r, kind) {
       const list = (k, part) => String(r[`${T4[k]}_sifat_${part}`] || '').split(',').map(w => w.trim()).filter(Boolean).map(w => ({ type: k, word: wordOf(w) }));
       a.picks = { strengths: ORDER.flatMap(k => list(k, 'kekuatan')), weaknesses: ORDER.flatMap(k => list(k, 'kelemahan')) };
       it.a = a; it.legacy = true;
-      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`;
+      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`; it.subHtml = scoreChips(a.scores.t, a.scores.s, a.scores.w);
       it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
     } else if (kind === 'lengkap' && /^[SCMP]{40}$/.test(ans)) {
       const a = analyze(ans.split('')); it.a = a;
-      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`;
+      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`; it.subHtml = scoreChips(a.scores.t, a.scores.s, a.scores.w);
       it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
     } else if (kind === 'mini' && /^[SCMP]{10}$/.test(ans)) {
       const c = { S: 0, C: 0, M: 0, P: 0 }; ans.split('').forEach(k => c[k]++);
       const max = Math.max(...Object.values(c)), top = ORDER.filter(k => c[k] === max);
-      it.mini = c; it.top = top; it.p = top[0];
+      it.mini = c; it.top = top; it.p = top[0]; it.subHtml = scoreChips(c, null, null, 10);
       it.title = top.map(k => TEMPS[k].name).join(' / '); it.sub = top.length > 1 ? L('Dominan seri', 'Tied primary') : L('Dominan', 'Primary');
     } else if (kind === 'mindset' && /^[1-5]{15}$/.test(ans)) {
       const a = analyzeMindset(ans.split('')); it.gm = a;
@@ -2167,7 +2186,7 @@ function listHtml(items) {
     out += `<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
       ${avatar(x)}
       <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.legacy ? `<em class="old">${L('Arsip', 'Archive')}</em>` : ''}${x.token ? ' · ' + esc(x.token) : ''}</small></span>
-      <span class="it-res"><b>${esc(x.title)}</b><small>${esc(x.sub)}</small></span>
+      <span class="it-res"><b>${esc(x.title)}</b>${x.subHtml || `<small>${esc(x.sub)}</small>`}</span>
       <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Prioritas follow up', 'Follow-up priority')}: ${levelName(x.flag)}"></i>` : ''}</span>
     </button>`;
   });
