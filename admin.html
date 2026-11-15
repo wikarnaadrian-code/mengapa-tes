@@ -627,6 +627,13 @@ body { background: var(--bg); }
 .prof ul { padding-left: 18px; } .prof p { margin: 0; }
 @media (max-width: 979px) { .stats.five { grid-template-columns: repeat(2, 1fr); } .stats.five div:first-child { grid-column: 1 / -1; } .prof { grid-template-columns: 1fr; } .by { display: none; } }
 .seg[hidden], [hidden] { display: none !important; }
+.login-card .showpw { display: flex; align-items: center; gap: 8px; font-weight: 500; font-size: 13.5px; color: var(--muted); cursor: pointer; margin-top: -4px; }
+.login-card .showpw input { width: 17px; height: 17px; padding: 0; accent-color: var(--ink); }
+/* logo Mengapa: wordmark punya huruf berekor (g, p), jadi diturunkan sedikit supaya sejajar secara visual */
+.brand { align-items: center; }
+.brand img:last-child { margin-top: 3px; }
+.powered .brand img:last-child, .by .brand img:last-child { margin-top: 4px; }
+.powered { align-items: center; line-height: 1; }
 
 </style>
 </head>
@@ -1999,7 +2006,8 @@ function login() {
       <h1>Dashboard</h1>
       <p class="muted">${SLUG ? (S.clientName ? L(`Hasil Tes Karakter tim ${esc(S.clientName)}. Data bersifat rahasia.`, `Character Test results for the ${esc(S.clientName)} team. Data is confidential.`) : L('Hasil Tes Karakter tim kamu. Data bersifat rahasia.', 'Character Test results for your team. Data is confidential.')) : L('Khusus tim Mengapa. Data peserta bersifat rahasia.', 'For the Mengapa team only. Participant data is confidential.')}</p>
       <label>Username<input name="user" autocomplete="username" value="${SLUG ? '' : 'admin'}" required></label>
-      <label>Password<input name="pass" type="password" autocomplete="current-password" required autofocus></label>
+      <label>Password<input name="pass" id="pw" type="password" autocomplete="current-password" required autofocus></label>
+      <label class="showpw"><input type="checkbox" id="showpw"> ${L('Tampilkan password', 'Show password')}</label>
       <div class="err" id="lerr" ${S.err ? '' : 'hidden'}>${esc(S.err)}</div>
       <button class="btn block" id="lbtn">${L('Masuk', 'Sign in')}</button>
       ${SLUG ? `<p class="powered">${L('Didukung oleh', 'Powered by')} ${mengapaLogo}</p>` : ''}
@@ -2195,6 +2203,7 @@ function render() {
     $app.innerHTML = login();
     bindCommon($app);
     const f = document.getElementById('lf');
+    document.getElementById('showpw').addEventListener('change', e => { document.getElementById('pw').type = e.target.checked ? 'text' : 'password'; });
     f.addEventListener('submit', async e => {
       e.preventDefault();
       const btn = document.getElementById('lbtn'), er = document.getElementById('lerr');
