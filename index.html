@@ -1562,12 +1562,12 @@ const GLYPH = {
   M: (c, d) => `
     <path d="M28 72 C14 72 10 56 22 50 C20 36 36 30 44 38 C48 22 72 22 76 40 C90 40 94 58 82 66 C80 70 76 72 72 72 Z" fill="${c}"/>
     <path d="M30 60 C40 63 52 63 62 60" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round"/>`,
-  // Plegmatis: permata (tenang, stabil, berharga)
+  // Plegmatis: daun (teduh, tenang, menyejukkan)
   P: (c, d) => `
-    <polygon points="28,30 72,30 86,46 50,88 14,46" fill="${c}"/>
-    <polyline points="14,46 86,46" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2.5"/>
-    <polyline points="28,30 38,46 50,30 62,46 72,30" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="2.5" stroke-linejoin="round"/>
-    <polyline points="38,46 50,88 62,46" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="2.5" stroke-linejoin="round"/>`,
+    <path d="M27 75 C19 47 41 22 80 19 C83 55 60 79 27 75 Z" fill="${c}"/>
+    <path d="M30 72 C44 58 58 42 72 28" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-linecap="round"/>
+    <path d="M41 61 Q37 55 37 48 M41 61 Q47 64 54 64 M52 49 Q49 43 50 37 M52 49 Q58 52 65 51" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M29 74 L18 86" stroke="${c}" stroke-width="5" stroke-linecap="round"/>`,
 };
 
 function glyph(type, size = 48, opts = {}) {
