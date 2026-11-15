@@ -475,6 +475,13 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .cta-card .code-note, .card.deep .code-note { text-align: left; }
 .contact-lead { margin: 20px 0 10px; }
 .code-note .code { margin-left: 5px; }
+/* kotak kode hasil */
+.code-box { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding: 12px 12px 12px 16px; border-radius: 14px; border: 1.5px dashed currentColor; border-color: rgba(127,127,127,.45); background: rgba(127,127,127,.07); }
+.code-box small { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; opacity: .7; }
+.code-box .code { display: block; font-size: 22px; letter-spacing: .08em; line-height: 1.3; margin: 0; }
+.copy-btn { flex: 0 0 auto; border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-size: 14px; cursor: pointer; background: var(--ink); color: var(--paper); }
+.card.deep .copy-btn { background: var(--paper); color: var(--ink); }
+.code-box + .code-note { margin-top: 8px; text-align: left; }
 
 </style>
 </head>
@@ -1055,7 +1062,10 @@ const UI = {
   'Konsultasi lewat:': 'Book a consultation via:',
   'Tanya Tes Karakter Lengkap atau sesi coaching lewat:': 'Ask about the Full Character Test or coaching via:',
   'Kode hasilmu': 'Your result code',
-  'Sertakan kode ini kalau chat lewat Instagram.': 'Include this code if you message us on Instagram.',
+  'Sertakan kode ini kalau chat lewat Instagram, supaya tim kami bisa langsung membuka hasilmu.': 'Include this code if you message us on Instagram, so our team can open your result right away.',
+  'Salin': 'Copy',
+  'Tersalin': 'Copied',
+  'Kode disalin.': 'Code copied.',
   'Hubungi tim Mengapa lewat Instagram atau WhatsApp, atau coba Tes Karakter Mini gratis dulu.': 'Contact the Mengapa team on Instagram or WhatsApp, or try the free Mini Character Test first.',
   'Kalau diisi, tim Mengapa boleh menghubungimu untuk membahas hasil tes.': 'If you add it, the Mengapa team may contact you to discuss your result.',
   'Menghubungimu untuk membahas hasil tes, kalau kamu mengisi nomor WhatsApp.': 'Contacting you to discuss your result, if you provide a WhatsApp number.',
@@ -1780,7 +1790,7 @@ function clearConsent(m) { state.consent = { ...state.consent, agreed: { ...(sta
 const igLink = () => `https://ig.me/m/${CONFIG.instagram}`;
 const igIcon = () => `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
 const contactRow = (waHref, lead) => `${lead ? `<p class="contact-lead">${lead}</p>` : ''}<div class="contact-row no-print"><a class="btn ig" href="${igLink()}" target="_blank" rel="noopener">${igIcon()} DM Instagram</a><a class="btn wa" href="${waHref}" target="_blank" rel="noopener">${waIcon()} WhatsApp</a></div>`;
-const codeNote = id => `<p class="small code-note">Kode hasilmu <span class="code">${id}</span><br>Sertakan kode ini kalau chat lewat Instagram.</p>`;
+const codeNote = id => `<div class="code-box no-print"><div><small>Kode hasilmu</small><b class="code">${id}</b></div><button type="button" class="copy-btn" data-copy="${id}">Salin</button></div><p class="small code-note">Sertakan kode ini kalau chat lewat Instagram, supaya tim kami bisa langsung membuka hasilmu.</p>`;
 const resultActions = again => `
       <div class="block no-print">
         <div class="eyebrow">Simpan hasilmu</div>
@@ -1899,6 +1909,10 @@ function render() {
   $app.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { if (b.dataset.lang === LANG) return; setLang(b.dataset.lang); store.set('mengapa:lang', LANG); render(); }));
   const first = $app.querySelector('[data-autofocus]');
   if (first && matchMedia('(pointer:fine)').matches) first.focus();
+  $app.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(b.dataset.copy); } catch (e) { const t = Object.assign(document.createElement('textarea'), { value: b.dataset.copy }); document.body.appendChild(t); t.select(); document.execCommand('copy'); t.remove(); }
+    toast(tr('Kode disalin.')); b.textContent = tr('Tersalin'); setTimeout(() => { b.textContent = tr('Salin'); }, 1800);
+  }));
   bind[s] && bind[s]();
 }
 
