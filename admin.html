@@ -680,6 +680,8 @@ body { background: var(--bg); }
 .src button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .srcnote { margin: 0; font-size: 13px; color: var(--muted); }
 @media (max-width: 520px) { .src { width: 100%; } .src button { flex: 1; justify-content: center; padding: 8px 6px; font-size: 12.5px; } }
+.flagtag { font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: .02em; white-space: nowrap; padding: 2px 6px; border-radius: 6px; background: #FBEFD9; color: #7A5F06; }
+.flagtag.hi { background: #F6DBD6; color: #7C2419; }
 
 </style>
 </head>
@@ -2148,7 +2150,7 @@ function listHtml(items) {
       ${avatar(x)}
       <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.legacy ? `<em class="old">${L('lama', 'old')}</em>` : ''}${x.token ? ' · ' + esc(x.token) : ''}</small></span>
       <span class="it-res"><b>${esc(x.title)}</b><small>${esc(x.sub)}</small></span>
-      <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Perlu didalami', 'Needs follow-up')}: ${levelName(x.flag)}"></i>` : ''}</span>
+      <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="flagtag ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Perlu didalami', 'Needs follow-up')}: ${levelName(x.flag)}">${L('Didalami', 'Follow up')} · ${levelName(x.flag)}</i>` : ''}</span>
     </button>`;
   });
   return out;
