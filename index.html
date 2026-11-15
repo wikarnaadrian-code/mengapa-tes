@@ -11,14 +11,14 @@
   <meta property="og:description" content="Kenali dirimu. Tumbuh lebih jauh. Tes karakter 4 temperamen dan Growth Mindset Test dari Mengapa." />
   <meta property="og:url" content="https://mengapa.me/" />
   <meta property="og:site_name" content="Mengapa" />
-  <meta property="og:image" content="https://mengapa.me/og.png" />
+  <meta property="og:image" content="https://mengapa.me/og.png?v=4" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Mengapa: tes karakter 4 temperamen dan Growth Mindset Test" />
-  <meta name="twitter:image" content="https://mengapa.me/og.png" />
+  <meta name="twitter:image" content="https://mengapa.me/og.png?v=4" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="/favicon.png" type="image/png" sizes="64x64" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="icon" href="/favicon.png?v=4" type="image/png" sizes="64x64" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
@@ -2231,7 +2231,7 @@ const resultActions = again => `
         </div>
       </div>`;
 const waLink = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
-const buyLink = () => waLink(L(`Halo Mengapa, saya${state.profile.name ? ' ' + state.profile.name : ''} ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm${state.profile.name ? ' ' + state.profile.name : ''} and I'd like to take the Full Character Test. How do I get a token?`));
+const buyLink = () => waLink(L(`Halo Mengapa${state.profile.name ? ', saya ' + state.profile.name + '.' : '.'}\nSaya ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa${state.profile.name ? ', I\'m ' + state.profile.name + '.' : '.'}\nI'd like to take the Full Character Test. How do I get a token?`));
 
 /* ---------- utilitas ---------- */
 const ARROW = '<svg class="arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>';
@@ -2975,7 +2975,7 @@ function mresult() {
   const tieNote = a.top.length === 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Tes Karakter Lengkap yang menentukan mana yang benar-benar dominan.`, `${list(a.top)} are equally strong in the mini test. The Full Character Test shows which one is truly primary.`)
     : a.top.length > 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Polamu belum terlihat jelas dari 10 pertanyaan, dan Tes Karakter Lengkap akan memperjelasnya.`, `${list(a.top)} are equally strong in the mini test. Ten questions aren’t enough to see your pattern clearly, and the Full Character Test will clarify it.`) : '';
   const trio = ORDER.filter(k => k !== p).map(k => p + k);
-  const wa = waLink(L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Tes Karakter Mini (hasil: ${P.name}, kode ${r.id}). Saya ingin ambil Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm ${r.profile.name}. I just finished the Mini Character Test (result: ${P.name}, code ${r.id}). I'd like to take the Full Character Test. How do I get a token?`));
+  const wa = waLink(L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Tes Karakter Mini (${fmtDate(r.finishedAt)}).\nHasil: ${P.name}.\nKode hasil: ${r.id}\n\nSaya ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm ${r.profile.name}. I just finished the Mini Character Test (${fmtDate(r.finishedAt)}).\nResult: ${P.name}.\nResult code: ${r.id}\n\nI'd like to take the Full Character Test. How do I get a token?`));
   return `
   <section class="screen">
     <div class="wrap wide">
@@ -3065,11 +3065,11 @@ function result() {
   const fact2 = FUN_FACTS[(r.id.charCodeAt(5) || 0) % FUN_FACTS.length];
   const waText = encodeURIComponent(
     L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Tes Karakter Lengkap (${fmtDate(r.finishedAt)}).\n` +
-    `Hasil saya: ${combo.name} (${P.name} + ${S.name}).\n` +
+    `Hasil: ${combo.name} (${P.name} + ${S.name}).\n` +
     `Skor: Sanguinis ${sc.t.S}, Koleris ${sc.t.C}, Melankolis ${sc.t.M}, Plegmatis ${sc.t.P}.\n` +
     `Kode hasil: ${r.id}\n\nSaya ingin konsultasi untuk memahami hasil saya lebih dalam.`,
     `Hi Mengapa, I'm ${r.profile.name}. I just finished the Full Character Test (${fmtDate(r.finishedAt)}).\n` +
-    `My result: ${combo.name} (${P.name} + ${S.name}).\n` +
+    `Result: ${combo.name} (${P.name} + ${S.name}).\n` +
     `Scores: Sanguine ${sc.t.S}, Choleric ${sc.t.C}, Melancholy ${sc.t.M}, Phlegmatic ${sc.t.P}.\n` +
     `Result code: ${r.id}\n\nI'd like a consultation to understand my result more deeply.`));
   const waUrl = `https://wa.me/${CONFIG.whatsapp}?text=${waText}`;
