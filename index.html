@@ -610,6 +610,77 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .navbtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 @media (max-width: 380px) { .navbtn { padding: 0 11px 0 9px; gap: 5px; } }
 
+/* ===== 12 kombinasi: showcase otomatis di beranda ===== */
+.cx { margin-top: 16px; background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 22px 18px 16px; position: relative; overflow: hidden; }
+.cx-stage { position: relative; height: 252px; }
+.cx-slide { position: absolute; inset: 0; margin: 0; display: flex; flex-direction: column; align-items: center; text-align: center; opacity: 0; pointer-events: none; }
+.cx-slide .combo-art { width: 132px; height: 132px; transition: transform .8s var(--ease), filter .8s var(--ease); transform: scale(.86) rotate(-8deg); filter: blur(6px); }
+.cx-slide figcaption { margin-top: 12px; transition: transform .8s var(--ease), filter .8s var(--ease); transform: translateY(12px); filter: blur(4px); }
+.cx-slide b { display: block; font-family: var(--serif); font-size: 26px; font-weight: 600; line-height: 1.1; color: var(--ink); }
+.cx-slide small { display: block; margin-top: 4px; font-size: 12px; font-weight: 600; letter-spacing: .04em; color: var(--muted); }
+.cx-slide i { display: block; margin: 8px auto 0; max-width: 30ch; font-family: var(--serif); font-size: 15px; color: var(--muted); line-height: 1.35; }
+.cx-slide.on { opacity: 1; transition: opacity .7s var(--ease) .12s; }
+.cx-slide.on .combo-art { transform: none; filter: none; transition-delay: .1s; }
+.cx-slide.on figcaption { transform: none; filter: none; transition-delay: .2s; }
+.cx-slide.out { opacity: 0; transition: opacity .45s ease; }
+.cx-slide.out .combo-art { transform: scale(1.08) rotate(8deg); filter: blur(6px); transition-duration: .5s; }
+.cx-slide.out figcaption { transform: translateY(-10px); filter: blur(4px); transition-duration: .5s; }
+.cx-meta { display: flex; align-items: center; gap: 10px; margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cx-bar { flex: 1; height: 2px; background: var(--line); border-radius: 2px; overflow: hidden; }
+.cx-bar i { display: block; height: 100%; width: 100%; background: var(--ink); transform-origin: left; transform: scaleX(0); }
+.cx-bar.run i { animation: cxbar 3.2s linear forwards; }
+@keyframes cxbar { to { transform: scaleX(1); } }
+.cx-cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; background: none; border: 0; padding: 6px 0; font: inherit; font-size: 15px; font-weight: 700; color: var(--ink); cursor: pointer; }
+.cx-cta svg { width: 18px; height: 18px; transition: transform .25s var(--ease); }
+@media (hover: hover) { .cx-cta:hover svg { transform: translateX(4px); } }
+@media (min-width: 760px) { .cx { max-width: 520px; } }
+@media (prefers-reduced-motion: reduce) {
+  .cx-slide .combo-art, .cx-slide figcaption, .cx-slide.out .combo-art, .cx-slide.out figcaption { transform: none !important; filter: none !important; }
+  .cx-bar.run i { animation: none; transform: scaleX(1); }
+}
+
+/* tombol i di hasil */
+.info-i { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-left: 10px; vertical-align: .55em; border-radius: 50%; border: 1.5px solid var(--line-2); background: var(--paper); color: var(--ink); font-family: var(--serif); font-style: italic; font-weight: 700; font-size: 15px; line-height: 1; cursor: pointer; transition: background .2s, color .2s, border-color .2s; position: relative; }
+.info-i::after { content: ""; position: absolute; inset: -9px; }
+@media (hover: hover) { .info-i:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); } }
+.info-i:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* lembar 12 kombinasi */
+html.cxs-lock, html.cxs-lock body { overflow: hidden; }
+.cxs { position: fixed; inset: 0; z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
+.cxs-bg { position: absolute; inset: 0; background: rgba(28,26,23,.42); opacity: 0; transition: opacity .3s ease; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
+.cxs-panel { position: relative; width: 100%; max-height: 88vh; max-height: 88dvh; background: var(--bg); border-radius: 26px 26px 0 0; display: flex; flex-direction: column; transform: translateY(100%); transition: transform .38s var(--ease); box-shadow: 0 -10px 40px rgba(28,26,23,.18); outline: none; }
+.cxs.open .cxs-bg { opacity: 1; }
+.cxs.open .cxs-panel { transform: none; }
+.cxs-grip { width: 40px; height: 4px; border-radius: 4px; background: var(--line-2); margin: 10px auto 0; }
+.cxs-head { display: flex; gap: 12px; align-items: flex-start; justify-content: space-between; padding: 12px 22px 14px; border-bottom: 1px solid var(--line); }
+.cxs-head h3 { font-family: var(--serif); font-size: 26px; font-weight: 600; margin: 4px 0 4px; color: var(--ink); }
+.cxs-head p { margin: 0; font-size: 13px; color: var(--muted); max-width: 40ch; }
+.cxs-x { flex: none; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--line-2); background: var(--paper); font-size: 22px; line-height: 1; color: var(--ink); cursor: pointer; }
+.cxs-body { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; padding: 6px 22px calc(26px + env(safe-area-inset-bottom)); }
+.cxs-group { padding-top: 16px; }
+.cxs-group h4 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.cxs-row { display: grid; gap: 8px; }
+.cxs-item { display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 16px; background: var(--paper); border: 1px solid var(--line); }
+.cxs-item .combo-art { flex: none; width: 56px; height: 56px; }
+.cxs-item b { display: flex; align-items: center; gap: 8px; font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--ink); }
+.cxs-item b em { font-family: var(--sans, inherit); font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 3px 8px; border-radius: 999px; }
+.cxs-item small { display: block; font-size: 11.5px; color: var(--muted); font-weight: 600; margin-top: 1px; }
+.cxs-item p { margin: 3px 0 0; font-size: 13px; line-height: 1.35; color: var(--ink-2, var(--ink)); }
+.cxs-item.me { border: 1.5px solid var(--ink); background: var(--paper); box-shadow: 0 6px 18px rgba(28,26,23,.08); }
+@media (min-width: 760px) {
+  .cxs { align-items: center; padding: 24px; }
+  .cxs-panel { max-width: 760px; border-radius: 26px; transform: translateY(24px) scale(.98); opacity: 0; transition: transform .35s var(--ease), opacity .25s ease; max-height: 86vh; }
+  .cxs.open .cxs-panel { opacity: 1; }
+  .cxs-grip { display: none; }
+  .cxs-head { padding-top: 22px; }
+  .cxs-row { grid-template-columns: repeat(3, 1fr); }
+  .cxs-item { flex-direction: column; text-align: center; align-items: center; padding: 14px 12px; }
+  .cxs-item b { justify-content: center; flex-wrap: wrap; }
+}
+@media (prefers-reduced-motion: reduce) { .cxs-panel, .cxs-bg { transition: none; } }
+@media print { .cxs { display: none !important; } }
+
 </style>
 </head>
 <body>
@@ -2034,6 +2105,7 @@ window.addEventListener('popstate', () => {
 
 /* ---------- render ---------- */
 function render() {
+  clearInterval(window.__cxT);
   const s = state.screen;
   const view = ({ home, services, token, guide, profile, consent, test, interlude, calc, result, mtest, mresult, gmtest, gmresult })[s] || home;
   $app.innerHTML = view();
@@ -2051,6 +2123,39 @@ function render() {
     toast(tr('Kode disalin.')); b.textContent = tr('Tersalin'); setTimeout(() => { b.textContent = tr('Salin'); }, 1800);
   }));
   bind[s] && bind[s]();
+}
+
+/* ---------- semua 12 kombinasi (dibuka dari hasil) ---------- */
+function openAllCombos(mine, opener) {
+  const prevFocus = opener || document.activeElement;
+  const group = k => {
+    const list = ORDER.filter(x => x !== k).map(x => k + x).filter(c => COMBOS[c]);
+    return `<section class="cxs-group"><h4>${glyph(k, 20)}<span>${L('Dominan', 'Dominant')} ${TEMPS[k].name}</span></h4>
+      <div class="cxs-row">${list.map(c => `<div class="cxs-item${c === mine ? ' me' : ''}">${comboArt(c[0], c[1], 64, 'cxs' + c)}<div><b>${COMBOS[c].name}${c === mine ? `<em>${L('Kamu', 'You')}</em>` : ''}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><p>${esc(COMBOS[c].tagline)}</p></div></div>`).join('')}</div></section>`;
+  };
+  const el = document.createElement('div');
+  el.className = 'cxs no-print';
+  el.innerHTML = `<div class="cxs-bg" data-x></div>
+    <div class="cxs-panel" role="dialog" aria-modal="true" aria-labelledby="cxs-h" tabindex="-1">
+      <div class="cxs-grip"></div>
+      <div class="cxs-head"><div><div class="eyebrow">${L('Tes Karakter Lengkap', 'Full Character Test')}</div><h3 id="cxs-h">${L('12 kombinasi karakter', '12 character blends')}</h3>
+        <p>${L('Kombinasi dibaca dari karakter dominan dan karakter keduamu.', 'Each blend reads your dominant temperament with your second one.')}</p></div>
+        <button class="cxs-x" data-x aria-label="${L('Tutup', 'Close')}">&times;</button></div>
+      <div class="cxs-body">${ORDER.map(group).join('')}</div>
+    </div>`;
+  document.body.appendChild(el);
+  document.documentElement.classList.add('cxs-lock');
+  const panel = el.querySelector('.cxs-panel');
+  requestAnimationFrame(() => { el.classList.add('open'); panel.focus({ preventScroll: true }); const me = el.querySelector('.cxs-item.me'); if (me) me.scrollIntoView({ block: 'center' }); });
+  const close = () => {
+    el.classList.remove('open'); document.documentElement.classList.remove('cxs-lock');
+    document.removeEventListener('keydown', key);
+    setTimeout(() => el.remove(), 320); if (prevFocus && prevFocus.focus) prevFocus.focus();
+  };
+  const key = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', key);
+  el.querySelectorAll('[data-x]').forEach(b => b.addEventListener('click', close));
+  translateDom(el);
 }
 
 /* ============ HOME ============ */
@@ -2129,12 +2234,15 @@ function home() {
       </div>
 
       <div class="block">
-        <div class="eyebrow">Terbuka di Tes Karakter Lengkap</div>
-        <h2>12 kombinasi karakter</h2>
-        <div class="combos-strip">
-          ${combos.map(c => `
-            <div class="mini">${comboArt(c[0], c[1], 112, 'm')}<b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small></div>`).join('')}
+        <div class="eyebrow">${L('Terbuka di Tes Karakter Lengkap', 'Unlocked in the Full Character Test')}</div>
+        <h2>${L('12 kombinasi karakter. <em>Kamu yang mana?</em>', '12 character blends. <em>Which one are you?</em>')}</h2>
+        <div class="cx" aria-hidden="true">
+          <div class="cx-stage">
+            ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}">${comboArt(c[0], c[1], 132, 'cx' + i)}<figcaption><b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
+          </div>
+          <div class="cx-meta"><span class="cx-n">01</span><span class="cx-bar"><i></i></span><span>12</span></div>
         </div>
+        <button class="cx-cta" data-act="full">${L('Cari tahu kombinasimu', 'Find your blend')}${ARROW}</button>
       </div>
       <div class="block about">
         <div class="eyebrow">Tentang Mengapa</div>
@@ -2752,7 +2860,7 @@ function result() {
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil ${nick}`, `${nick}’s result`) : L('Hasil kamu', 'Your result')}</div>
         ${comboArt(p, s, 230, 'r')}
-        <h1>${combo.name}</h1>
+        <h1>${combo.name}<button class="info-i no-print" data-act="allcombos" aria-label="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}" title="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}">i</button></h1>
         ${combo.en ? `<div class="en">${combo.en}</div>` : ''}
         <p class="tagline">${esc(combo.tagline)}</p>
         <div class="badges">
@@ -2915,6 +3023,20 @@ const bind = {
     on('home', () => go('home'));
   },
   home() {
+    const slides = [...$app.querySelectorAll('.cx-slide')];
+    if (slides.length) {
+      const num = $app.querySelector('.cx-n'), bar = $app.querySelector('.cx-bar'), box = $app.querySelector('.cx');
+      let i = 0, seen = true;
+      const kick = () => { bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); };
+      if ('IntersectionObserver' in window) new IntersectionObserver(es => { seen = es[0].isIntersecting; if (seen) kick(); }).observe(box);
+      kick();
+      window.__cxT = setInterval(() => {
+        if (!box.isConnected) { clearInterval(window.__cxT); return; }
+        if (!seen || document.hidden) return;
+        const prev = slides[i]; prev.classList.remove('on'); prev.classList.add('out'); setTimeout(() => prev.classList.remove('out'), 800);
+        i = (i + 1) % slides.length; slides[i].classList.add('on'); num.textContent = String(i + 1).padStart(2, '0'); kick();
+      }, 3200);
+    }
     on('services', () => go('services'));
     on('mini', () => {
       state.mode = 'mini';
@@ -3102,6 +3224,7 @@ const bind = {
   calc() {},
   result() {
     on('home', () => go('home'));
+    on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.primary + a.secondary, btn); });
     on('pdf', () => window.print());
     on('share', async btn => {
       btn.disabled = true;
