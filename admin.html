@@ -1742,7 +1742,7 @@ function analyze(answers, cfg = CONFIG) {
     if (sc.w[k] - sc.s[k] >= cfg.weaknessGap) {
       const hi = sc.w[k] - sc.s[k] >= (cfg.weaknessGapHigh || 5);
       flags.push({ code: 'gap', level: hi ? 'tinggi' : 'sedang', type: k,
-        internal: L(`Kelemahan > kekuatan di ${name(k)} (K${sc.s[k]} / L${sc.w[k]}, selisih ${sc.w[k] - sc.s[k]})`, `Weaknesses exceed strengths in ${name(k)} (S${sc.s[k]} / W${sc.w[k]}, gap ${sc.w[k] - sc.s[k]})`),
+        internal: L(`Kelemahan lebih banyak dari kekuatan di ${name(k)}: kekuatan ${sc.s[k]}, kelemahan ${sc.w[k]} (selisih ${sc.w[k] - sc.s[k]})`, `More weaknesses than strengths in ${name(k)}: ${sc.s[k]} strengths, ${sc.w[k]} weaknesses (gap of ${sc.w[k] - sc.s[k]})`),
         user: L(`Di sisi ${name(k)}, kelemahan yang kamu pilih lebih banyak daripada kekuatannya (${sc.w[k]} banding ${sc.s[k]}). Pola seperti ini sering berkaitan dengan cara kita memandang diri sendiri atau pengalaman yang membentuk kita, dan paling enak dibahas langsung.`, `On your ${name(k)} side, you picked more weaknesses than strengths (${sc.w[k]} to ${sc.s[k]}). A pattern like this often relates to how we see ourselves or the experiences that shaped us, and is best discussed in person.`) });
     }
   });
