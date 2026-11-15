@@ -634,6 +634,42 @@ body { background: var(--bg); }
 .brand img:last-child { margin-top: 3px; }
 .powered .brand img:last-child, .by .brand img:last-child { margin-top: 4px; }
 .powered { align-items: center; line-height: 1; }
+/* password: tombol mata di dalam kolom */
+.pwwrap { position: relative; display: block; }
+.pwwrap input { width: 100%; padding-right: 48px; }
+.eye { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 38px; height: 38px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+.eye:hover { background: var(--bg); color: var(--ink); }
+
+/* urutkan & filter */
+.toolrow { display: grid; grid-template-columns: 1fr auto auto; gap: 8px; }
+.sortsel { position: relative; display: flex; align-items: center; border: 1.5px solid var(--line-2); border-radius: 12px; background: #fff; padding-left: 12px; min-width: 0; }
+.sortsel span { font-size: 12px; color: var(--faint); font-weight: 600; white-space: nowrap; }
+.sortsel select { appearance: none; -webkit-appearance: none; border: 0; background: transparent; font-weight: 600; font-size: 14px; padding: 9px 26px 9px 6px; min-width: 0; width: 100%; cursor: pointer; outline: 0; }
+.sortsel::after { content: ''; position: absolute; right: 12px; top: 50%; width: 7px; height: 7px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: translateY(-70%) rotate(45deg); pointer-events: none; }
+.dirbtn, .filterbtn { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid var(--line-2); background: #fff; border-radius: 12px; padding: 0 11px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; color: var(--ink); }
+.dirbtn:hover, .filterbtn:hover { border-color: var(--ink); }
+.filterbtn.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.filterbtn b { background: var(--C); color: #fff; border-radius: 999px; font-size: 11px; min-width: 18px; height: 18px; display: grid; place-items: center; padding: 0 5px; }
+.fpanel { border: 1.5px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 14px; background: var(--bg); animation: fade .2s both; }
+.fsec h5 { margin: 0 0 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.tchips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tchips button { display: grid; justify-items: center; gap: 2px; padding: 8px 4px; border-radius: 12px; border: 1.5px solid var(--line-2); background: var(--paper); cursor: pointer; font-size: 12px; font-weight: 600; color: var(--ink); }
+.tchips button small { font-size: 11px; color: var(--faint); font-weight: 600; }
+.tchips button[aria-pressed="true"] { border-color: var(--c); background: var(--soft); box-shadow: inset 0 0 0 1px var(--c); }
+.chips button small { opacity: .65; margin-left: 2px; }
+.dates { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.dates label { display: grid; gap: 4px; font-size: 11px; font-weight: 600; color: var(--muted); }
+.dates input { border: 1.5px solid var(--line-2); border-radius: 10px; padding: 8px 10px; background: #fff; font-size: 14px; min-width: 0; }
+.factions { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.factions .btn { min-height: 40px; font-size: 14px; padding: 0 16px; }
+.pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pillx { display: inline-flex; align-items: center; gap: 6px; border: 0; background: var(--ink); color: var(--paper); border-radius: 999px; padding: 5px 10px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.pillx i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.pillx svg { opacity: .7; }
+.day .gd { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+.tools { max-height: none; }
+.list-pane { max-height: calc(100svh - 24px); }
+@media (max-width: 420px) { .dirbtn span { display: none; } .sortsel span { display: none; } }
 
 </style>
 </head>
@@ -1910,7 +1946,8 @@ const session = {
   clear() { ls.del(SKEY); },
 };
 
-const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '' };
+const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '',
+  sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
 const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
 const testName = k => ({ lengkap: L('Tes Karakter Lengkap', 'Full Character Test'), mini: L('Tes Karakter Mini', 'Mini Character Test'), mindset: 'Growth Mindset Test' })[k];
 const levelName = v => v === 'Tinggi' ? L('Tinggi', 'High') : v === 'Sedang' ? L('Sedang', 'Medium') : v;
@@ -1976,20 +2013,58 @@ async function load() {
 }
 function logout() { session.clear(); S.session = ''; S.rows = null; S.items = []; S.sel = ''; render(); }
 
-/* ---------- filter ---------- */
-const FILTERS = () => SLUG ? [
-  { k: 'week', label: L('7 hari terakhir', 'Last 7 days'), test: x => Date.now() - x.t < 7 * 864e5 },
-] : [
+/* ---------- filter & urutan ---------- */
+const FILTERS = () => SLUG ? [] : [
   { k: 'deep', label: L('Perlu didalami', 'Needs follow-up'), test: x => !!x.flag },
   { k: 'wa', label: L('Ada WhatsApp', 'Has WhatsApp'), test: x => !!x.wa },
   { k: 'minor', label: L('Di bawah 18', 'Under 18'), test: x => Number(x.age) > 0 && Number(x.age) < 18 },
-  { k: 'week', label: L('7 hari terakhir', 'Last 7 days'), test: x => Date.now() - x.t < 7 * 864e5 },
 ];
-const visible = () => {
-  const q = S.q.trim().toLowerCase(), F = FILTERS();
-  return S.items.filter(x => (S.tab === 'all' || x.kind === S.tab) && (!q || q.split(/\s+/).every(w => x.hay.includes(w)))
-    && [...S.f].every(k => F.find(f => f.k === k).test(x)));
-};
+const RANGES = () => [['all', L('Semua', 'All time')], ['today', L('Hari ini', 'Today')], ['7', L('7 hari', '7 days')], ['30', L('30 hari', '30 days')], ['month', L('Bulan ini', 'This month')], ['custom', L('Pilih tanggal', 'Custom')]];
+const SORTS = () => [['date', L('Tanggal tes', 'Test date')], ['name', L('Nama', 'Name')], ['dom', L('Karakter dominan', 'Primary temperament')], ['age', L('Usia', 'Age')], ['score', L('Skor', 'Score')]];
+const DEFDIR = { date: -1, name: 1, dom: 1, age: 1, score: -1 };
+const dirLabel = () => ({
+  date: [L('Terlama dulu', 'Oldest first'), L('Terbaru dulu', 'Newest first')],
+  name: [L('A ke Z', 'A to Z'), L('Z ke A', 'Z to A')],
+  dom: [L('S, K, M, P', 'S, C, M, P'), L('P, M, K, S', 'P, M, C, S')],
+  age: [L('Termuda dulu', 'Youngest first'), L('Tertua dulu', 'Oldest first')],
+  score: [L('Terendah dulu', 'Lowest first'), L('Tertinggi dulu', 'Highest first')],
+})[S.sort][S.dir === 1 ? 0 : 1];
+const sod = t => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+function rangeBounds() {
+  const now = Date.now();
+  switch (S.range) {
+    case 'today': return [sod(now), Infinity];
+    case '7': return [sod(now - 6 * 864e5), Infinity];
+    case '30': return [sod(now - 29 * 864e5), Infinity];
+    case 'month': { const d = new Date(); return [new Date(d.getFullYear(), d.getMonth(), 1).getTime(), Infinity]; }
+    case 'custom': return [S.from ? new Date(S.from + 'T00:00:00').getTime() : -Infinity, S.to ? new Date(S.to + 'T23:59:59').getTime() : Infinity];
+    default: return [-Infinity, Infinity];
+  }
+}
+const domOf = x => x.kind === 'mini' ? (x.top || []) : x.p ? [x.p] : [];
+const scoreOf = x => x.a ? x.a.scores.t[x.p] : x.mini ? x.mini[x.p] : x.gm ? x.gm.total : -1;
+function base() {
+  const q = S.q.trim().toLowerCase(), F = FILTERS(), [t0, t1] = rangeBounds();
+  return S.items.filter(x => (!q || q.split(/\s+/).every(w => x.hay.includes(w)))
+    && [...S.f].every(k => { const f = F.find(f => f.k === k); return !f || f.test(x); })
+    && (!S.temps.size || domOf(x).some(k => S.temps.has(k)))
+    && (!S.cats.size || (x.gm && S.cats.has(x.gm.category)))
+    && x.t >= t0 && x.t <= t1);
+}
+function sorted(arr) {
+  const d = S.dir, name = (a, b) => String(a.name).localeCompare(String(b.name), 'id', { sensitivity: 'base' });
+  const cmp = {
+    date: (a, b) => (a.t - b.t) * d,
+    name: (a, b) => name(a, b) * d || b.t - a.t,
+    age: (a, b) => ((Number(a.age) || 999) - (Number(b.age) || 999)) * d || name(a, b),
+    dom: (a, b) => ((ORDER.indexOf(domOf(a)[0]) + 1 || 9) - (ORDER.indexOf(domOf(b)[0]) + 1 || 9)) * d || name(a, b),
+    score: (a, b) => (scoreOf(a) - scoreOf(b)) * d || name(a, b),
+  }[S.sort];
+  return [...arr].sort(cmp);
+}
+const visible = () => sorted(base().filter(x => S.tab === 'all' || x.kind === S.tab));
+const rangeOn = () => S.range !== 'all' && (S.range !== 'custom' || S.from || S.to);
+const activeCount = () => S.temps.size + S.cats.size + S.f.size + (rangeOn() ? 1 : 0);
 const countText = n => L(`${n} dari ${S.items.length} hasil`, `${n} of ${S.items.length} results`);
 
 /* ---------- tampilan ---------- */
@@ -1999,6 +2074,10 @@ const logoHtml = mengapaLogo;
 const headLogo = () => SLUG ? `${clientLogo()}<span class="by">${L('bersama', 'with')} ${mengapaLogo}</span>` : mengapaLogo;
 const langToggle = () => `<div class="lang" role="group" aria-label="${L('Bahasa', 'Language')}"><button data-lang="id" aria-pressed="${LANG === 'id'}">ID</button><button data-lang="en" aria-pressed="${LANG === 'en'}">EN</button></div>`;
 
+const EYE = [
+  '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.8 10.8 0 0 1 12 5c6.5 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6A17.4 17.4 0 0 0 2 12s3.5 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>',
+];
 function login() {
   return `<main class="login">
     <form class="login-card" id="lf" autocomplete="on">
@@ -2006,8 +2085,7 @@ function login() {
       <h1>Dashboard</h1>
       <p class="muted">${SLUG ? (S.clientName ? L(`Hasil Tes Karakter tim ${esc(S.clientName)}. Data bersifat rahasia.`, `Character Test results for the ${esc(S.clientName)} team. Data is confidential.`) : L('Hasil Tes Karakter tim kamu. Data bersifat rahasia.', 'Character Test results for your team. Data is confidential.')) : L('Khusus tim Mengapa. Data peserta bersifat rahasia.', 'For the Mengapa team only. Participant data is confidential.')}</p>
       <label>Username<input name="user" autocomplete="username" value="${SLUG ? '' : 'admin'}" required></label>
-      <label>Password<input name="pass" id="pw" type="password" autocomplete="current-password" required autofocus></label>
-      <label class="showpw"><input type="checkbox" id="showpw"> ${L('Tampilkan password', 'Show password')}</label>
+      <label>Password<span class="pwwrap"><input name="pass" id="pw" type="password" autocomplete="current-password" required autofocus><button type="button" class="eye" id="eye" aria-label="${L('Tampilkan password', 'Show password')}" title="${L('Tampilkan password', 'Show password')}">${EYE[0]}</button></span></label>
       <div class="err" id="lerr" ${S.err ? '' : 'hidden'}>${esc(S.err)}</div>
       <button class="btn block" id="lbtn">${L('Masuk', 'Sign in')}</button>
       ${SLUG ? `<p class="powered">${L('Didukung oleh', 'Powered by')} ${mengapaLogo}</p>` : ''}
@@ -2027,14 +2105,17 @@ function listHtml(items) {
   if (!items.length) return `<div class="empty">${S.items.length ? L('Tidak ada hasil yang cocok dengan pencarian atau filter.', 'No results match your search or filters.') : L('Belum ada data tes.', 'No test data yet.')}</div>`;
   const today = dayKey(Date.now()), yest = dayKey(Date.now() - 864e5);
   let last = '', out = '';
+  const groupOf = x => S.sort === 'date' ? dayKey(x.t) : S.sort === 'dom' ? (domOf(x)[0] || '-') : S.sort === 'name' ? (String(x.name).trim()[0] || '#').toUpperCase() : '';
+  const groupLabel = (g, x) => S.sort === 'date' ? (g === today ? L('Hari ini', 'Today') : g === yest ? L('Kemarin', 'Yesterday') : fmtDate(x.t))
+    : S.sort === 'dom' ? (TEMPS[g] ? `<i class="gd" style="background:${TEMPS[g].color}"></i>${TEMPS[g].name} · ${items.filter(y => domOf(y)[0] === g).length}` : L('Growth Mindset', 'Growth Mindset')) : esc(g);
   items.forEach(x => {
-    const dk = dayKey(x.t);
-    if (dk !== last) { last = dk; out += `<div class="day">${dk === today ? L('Hari ini', 'Today') : dk === yest ? L('Kemarin', 'Yesterday') : fmtDate(x.t)}</div>`; }
+    const dk = groupOf(x);
+    if (dk && dk !== last) { last = dk; out += `<div class="day">${groupLabel(dk, x)}</div>`; }
     out += `<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
       ${avatar(x)}
       <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.token ? ' · ' + esc(x.token) : ''}</small></span>
       <span class="it-res"><b>${esc(x.title)}</b><small>${esc(x.sub)}</small></span>
-      <span class="it-meta">${fmtTime(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Perlu didalami', 'Needs follow-up')}: ${levelName(x.flag)}"></i>` : ''}</span>
+      <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Perlu didalami', 'Needs follow-up')}: ${levelName(x.flag)}"></i>` : ''}</span>
     </button>`;
   });
   return out;
@@ -2132,10 +2213,45 @@ function detail(x) {
     </dl></section>`;
 }
 
+const ICON = {
+  sortUp: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20V4"/><path d="M3 8l4-4 4 4"/><path d="M14 6h7M14 12h5M14 18h3"/></svg>',
+  sortDown: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16"/><path d="M3 16l4 4 4-4"/><path d="M14 6h3M14 12h5M14 18h7"/></svg>',
+  filter: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18M6 12h12M10 19h4"/></svg>',
+  x: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+};
+function toolsHtml(B) {
+  const showCats = !SLUG && (S.tab === 'all' || S.tab === 'mindset');
+  const showTemps = S.tab !== 'mindset';
+  const tCount = k => B.filter(x => domOf(x).includes(k)).length;
+  const cCount = k => B.filter(x => x.gm && x.gm.category === k).length;
+  const pills = [];
+  S.temps.forEach(k => pills.push([`t:${k}`, TEMPS[k].name, TEMPS[k].color]));
+  S.cats.forEach(k => pills.push([`c:${k}`, GM_CATEGORIES[k].name]));
+  if (rangeOn()) pills.push(['r', S.range === 'custom' ? `${S.from ? fmtDate(S.from + 'T00:00:00') : '…'} – ${S.to ? fmtDate(S.to + 'T00:00:00') : '…'}` : RANGES().find(r => r[0] === S.range)[1]]);
+  S.f.forEach(k => { const f = FILTERS().find(f => f.k === k); if (f) pills.push([`f:${k}`, f.label]); });
+  return `
+    <div class="toolrow">
+      <label class="sortsel"><span>${L('Urutkan', 'Sort')}</span><select id="sort" aria-label="${L('Urutkan berdasarkan', 'Sort by')}">${SORTS().filter(o => !(SLUG && o[0] === 'score' && false)).map(o => `<option value="${o[0]}"${S.sort === o[0] ? ' selected' : ''}>${o[1]}</option>`).join('')}</select></label>
+      <button class="dirbtn" id="dir" title="${L('Balik urutan', 'Reverse order')}">${S.dir === 1 ? ICON.sortUp : ICON.sortDown}<span>${dirLabel()}</span></button>
+      <button class="filterbtn${S.panel ? ' on' : ''}" id="fbtn" aria-expanded="${S.panel}">${ICON.filter}<span>Filter</span>${activeCount() ? `<b>${activeCount()}</b>` : ''}</button>
+    </div>
+    ${S.panel ? `<div class="fpanel">
+      ${showTemps ? `<div class="fsec"><h5>${L('Karakter dominan', 'Primary temperament')}</h5><div class="tchips">${ORDER.map(k => `<button data-temp="${k}" aria-pressed="${S.temps.has(k)}" style="--c:${TEMPS[k].color};--soft:${TEMPS[k].soft}">${glyph(k, 22)}<span>${TEMPS[k].name}</span><small>${tCount(k)}</small></button>`).join('')}</div></div>` : ''}
+      ${showCats ? `<div class="fsec"><h5>${L('Kategori mindset', 'Mindset category')}</h5><div class="chips">${['fixed', 'transition', 'growth'].map(k => `<button data-cat="${k}" aria-pressed="${S.cats.has(k)}">${GM_CATEGORIES[k].name} <small>${cCount(k)}</small></button>`).join('')}</div></div>` : ''}
+      <div class="fsec"><h5>${L('Rentang tanggal', 'Date range')}</h5>
+        <div class="chips">${RANGES().map(r => `<button data-range="${r[0]}" aria-pressed="${S.range === r[0]}">${r[1]}</button>`).join('')}</div>
+        ${S.range === 'custom' ? `<div class="dates"><label><span>${L('Dari', 'From')}</span><input type="date" id="from" value="${S.from}" max="${S.to || ''}"></label><label><span>${L('Sampai', 'To')}</span><input type="date" id="to" value="${S.to}" min="${S.from || ''}"></label></div>` : ''}
+      </div>
+      ${FILTERS().length ? `<div class="fsec"><h5>${L('Lainnya', 'Other')}</h5><div class="chips">${FILTERS().map(f => `<button data-f="${f.k}" aria-pressed="${S.f.has(f.k)}">${f.label}</button>`).join('')}</div></div>` : ''}
+      <div class="factions">${activeCount() ? `<button class="linkbtn" id="freset">${L('Reset semua filter', 'Clear all filters')}</button>` : '<span></span>'}<button class="btn" id="fdone">${L("Tampilkan", "Show")} ${B.filter(x => S.tab === "all" || x.kind === S.tab).length} ${L("hasil", "results")}</button></div>
+    </div>` : pills.length ? `<div class="pills">${pills.map(p => `<button class="pillx" data-rm="${p[0]}"${p[2] ? ` style="--c:${p[2]}"` : ''}>${p[2] ? '<i></i>' : ''}${esc(p[1])}${ICON.x}</button>`).join('')}</div>` : ''}`;
+}
+
 function app() {
-  const items = visible(), sel = S.items.find(x => x.key === S.sel);
-  const c = k => S.items.filter(x => k === 'all' || x.kind === k).length;
-  const week = S.items.filter(x => Date.now() - x.t < 7 * 864e5).length;
+  const items = visible(), sel = S.items.find(x => x.key === S.sel), B = base();
+  const c = k => B.filter(x => k === 'all' || x.kind === k).length;
+  const week = B.filter(x => Date.now() - x.t < 7 * 864e5).length;
+  const filtered = activeCount() > 0 || S.q.trim();
   return `
   <div class="shell${sel ? ' has-sel' : ''}">
     <header class="bar-top">
@@ -2148,11 +2264,11 @@ function app() {
     </header>
     ${S.err ? `<div class="banner">${esc(S.err)}</div>` : ''}
     <section class="stats${SLUG ? ' five' : ''}">
-      <div><b>${S.items.length}</b><span>${L('Total tes', 'Total tests')}</span></div>
-      ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${S.items.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}</span></div>`).join('') + '</section><section hidden>' : ''}
+      <div><b>${B.length}</b><span>${filtered ? L('Hasil sesuai filter', 'Matching results') : L('Total tes', 'Total tests')}</span></div>
+      ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${B.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}</span></div>`).join('') + '</section><section hidden>' : ''}
       <div><b>${week}</b><span>${L('7 hari terakhir', 'Last 7 days')}</span></div>
-      <div><b>${S.items.filter(x => x.flag).length}</b><span>${L('Perlu didalami', 'Needs follow-up')}</span></div>
-      <div><b>${S.items.filter(x => x.wa).length}</b><span>${L('Ada WhatsApp', 'Has WhatsApp')}</span></div>
+      <div><b>${B.filter(x => x.flag).length}</b><span>${L('Perlu didalami', 'Needs follow-up')}</span></div>
+      <div><b>${B.filter(x => x.wa).length}</b><span>${L('Ada WhatsApp', 'Has WhatsApp')}</span></div>
     </section>
     <div class="main">
       <aside class="list-pane">
@@ -2160,7 +2276,7 @@ function app() {
           <div class="seg"${SLUG ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : kindName(k)}<small>${c(k)}</small></button>`).join('')}</div>
           <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             <input id="q" type="search" placeholder="${SLUG ? L('Cari nama, kode, token…', 'Search name, code, token…') : L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
-          <div class="chips">${FILTERS().map(f => `<button data-f="${f.k}" aria-pressed="${S.f.has(f.k)}">${f.label}</button>`).join('')}</div>
+          ${toolsHtml(B)}
         </div>
         <div class="list" id="list">${listHtml(items)}</div>
         <p class="count">${countText(items.length)}</p>
@@ -2203,7 +2319,11 @@ function render() {
     $app.innerHTML = login();
     bindCommon($app);
     const f = document.getElementById('lf');
-    document.getElementById('showpw').addEventListener('change', e => { document.getElementById('pw').type = e.target.checked ? 'text' : 'password'; });
+    document.getElementById('eye').addEventListener('click', e => {
+      const pw = document.getElementById('pw'), show = pw.type === 'password', b = e.currentTarget;
+      pw.type = show ? 'text' : 'password'; b.innerHTML = EYE[show ? 1 : 0];
+      b.title = b.ariaLabel = show ? L('Sembunyikan password', 'Hide password') : L('Tampilkan password', 'Show password'); pw.focus();
+    });
     f.addEventListener('submit', async e => {
       e.preventDefault();
       const btn = document.getElementById('lbtn'), er = document.getElementById('lerr');
@@ -2221,7 +2341,24 @@ function render() {
   $app.querySelector('[data-act=reload]').addEventListener('click', load);
   $app.querySelector('[data-act=logout]').addEventListener('click', logout);
   $app.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { S.tab = b.dataset.tab; render(); }));
-  $app.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => { S.f.has(b.dataset.f) ? S.f.delete(b.dataset.f) : S.f.add(b.dataset.f); b.setAttribute('aria-pressed', S.f.has(b.dataset.f)); renderList(); }));
+  const tog = (set, v) => { set.has(v) ? set.delete(v) : set.add(v); render(); };
+  $app.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => tog(S.f, b.dataset.f)));
+  $app.querySelectorAll('[data-temp]').forEach(b => b.addEventListener('click', () => tog(S.temps, b.dataset.temp)));
+  $app.querySelectorAll('[data-cat]').forEach(b => b.addEventListener('click', () => tog(S.cats, b.dataset.cat)));
+  $app.querySelectorAll('[data-range]').forEach(b => b.addEventListener('click', () => { S.range = b.dataset.range; render(); }));
+  const on = (id, ev, fn) => { const el = document.getElementById(id); if (el) el.addEventListener(ev, fn); };
+  on('from', 'change', e => { S.from = e.target.value; render(); });
+  on('to', 'change', e => { S.to = e.target.value; render(); });
+  on('sort', 'change', e => { S.sort = e.target.value; S.dir = DEFDIR[S.sort]; ls.set('mengapa:admin:sort', S.sort); ls.set('mengapa:admin:dir', S.dir); render(); });
+  on('dir', 'click', () => { S.dir = -S.dir; ls.set('mengapa:admin:dir', S.dir); render(); });
+  on('fbtn', 'click', () => { S.panel = !S.panel; render(); });
+  on('fdone', 'click', () => { S.panel = false; render(); });
+  on('freset', 'click', () => { S.temps.clear(); S.cats.clear(); S.f.clear(); S.range = 'all'; S.from = S.to = ''; render(); });
+  $app.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => {
+    const [t, v] = b.dataset.rm.split(':');
+    if (t === 't') S.temps.delete(v); else if (t === 'c') S.cats.delete(v); else if (t === 'f') S.f.delete(v); else { S.range = 'all'; S.from = S.to = ''; }
+    render();
+  }));
   const q = document.getElementById('q');
   q.addEventListener('input', () => { S.q = q.value; renderList(); });
   if (qFocused) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
