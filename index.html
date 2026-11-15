@@ -457,6 +457,21 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
+/* kontak setara: Instagram + WhatsApp */
+.contact-lead { margin: 18px 0 8px; font-size: 14px; font-weight: 600; opacity: .85; }
+.contact-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.contact-lead + .contact-row { margin-top: 0; }
+.contact-row .btn { min-height: 52px; font-size: 15px; padding: 0 10px; white-space: nowrap; gap: 8px; }
+.btn.ig { background: linear-gradient(45deg, #F58529, #DD2A7B 55%, #8134AF); color: #fff; }
+.btn.ig:hover { filter: brightness(1.06); background: linear-gradient(45deg, #F58529, #DD2A7B 55%, #8134AF); }
+.code-note { margin-top: 12px; text-align: center; opacity: .8; line-height: 1.5; }
+.share-row.one { grid-template-columns: 1fr; }
+.testbar .row .lang { margin-left: auto; }
+.testbar .row .lang button { padding: 4px 8px; font-size: 11px; }
+@media (max-width: 360px) { .contact-row .btn { font-size: 14px; } }
+.testbar .count { white-space: nowrap; }
+.testbar .section-tag { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 </style>
 </head>
 <body>
@@ -482,7 +497,7 @@ const ITEMS = [[{"t":"C","id":"Petualang","en":"Adventurous","d":"Mau dan berani
 
 const CONFIG = {
   brand: 'Mengapa',
-  whatsapp: '6285881898508',          // nomor WA Mengapa (format internasional, tanpa +)
+  whatsapp: '628563173999',          // nomor WA Mengapa (format internasional, tanpa +)
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
@@ -969,7 +984,7 @@ const EN = {
   ],
   GM_SCALE: ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'],
   GM_PILLARS: {
-    talent: { name: 'Core Mindset', sub: 'Talent vs practice',
+    talent: { name: 'Talent & Ability', sub: 'Born with it vs built by practice',
       hi: 'You believe abilities can be trained. That is a strong foundation for growth.',
       mid: 'Part of you believes abilities can be trained, and part of you still feels "some things just aren’t my talent". This usually shows up in certain areas only.',
       lo: 'You tend to see ability as something you are born with. As a result, things you have not mastered easily feel like "not for me", before you have truly tried.' },
@@ -1008,7 +1023,7 @@ const EN = {
     'I enjoy asking more successful people how they did it.',
   ],
   GM_CATEGORIES: {
-    fixed: { name: 'Leaning Fixed', en: '', tagline: 'Much of your energy goes into proving yourself, not growing yourself.',
+    fixed: { name: 'Mostly Fixed', en: '', tagline: 'Much of your energy goes into proving yourself, not growing yourself.',
       about: 'In many situations, you see ability as something already set. As a result, failure, criticism, and new challenges feel threatening, so it makes sense that you choose the safe path. The good news: mindsets can be trained, and noticing the pattern is the first step.' },
     transition: { name: 'In Transition', en: '', tagline: 'You can see the path, but some triggers still pull you back.',
       about: 'You believe people can grow and often act on that belief. But in certain situations, such as being criticized, failing in front of others, or seeing others succeed, old patterns still show up. This is usually where the biggest change can happen.' },
@@ -1027,6 +1042,24 @@ const EN = {
 /* ===== ui_en.js ===== */
 /* Kamus teks tampilan Indonesia -> Inggris (teks statis). Kunci = teks Indonesia persis seperti tampil. */
 const UI = {
+  'Insight tambahan': 'More insights',
+  'Simpan hasilmu': 'Save your result',
+  'Simpan gambar': 'Save image',
+  'Gambar tersimpan.': 'Image saved.',
+  'DM Instagram': 'DM Instagram',
+  'Dapatkan token lewat:': 'Get a token via:',
+  'Konsultasi lewat:': 'Book a consultation via:',
+  'Tanya Tes Karakter Lengkap atau sesi coaching lewat:': 'Ask about the Full Character Test or coaching via:',
+  'Kode hasilmu': 'Your result code is',
+  '. Kode ini otomatis ikut di pesan WhatsApp. Kalau lewat Instagram, kirim juga kodenya ya.': '. It is added to the WhatsApp message automatically. If you message us on Instagram, please include it.',
+  'Hubungi tim Mengapa lewat Instagram atau WhatsApp, atau coba Tes Karakter Mini gratis dulu.': 'Contact the Mengapa team on Instagram or WhatsApp, or try the free Mini Character Test first.',
+  'Kalau diisi, tim Mengapa boleh menghubungimu untuk membahas hasil tes.': 'If you add it, the Mengapa team may contact you to discuss your result.',
+  'Menghubungimu untuk membahas hasil tes, kalau kamu mengisi nomor WhatsApp.': 'Contacting you to discuss your result, if you provide a WhatsApp number.',
+  'Kantor / sekolah / kampus': 'Work / school / campus',
+  'Workshop / seminar': 'Workshop / seminar',
+  'Coach / konselor Mengapa': 'A Mengapa coach / counselor',
+  'Google': 'Google',
+  'WhatsApp': 'WhatsApp',
   '(opsional)': '(optional)',
   '08xx xxxx xxxx': '08xx xxxx xxxx',
   '10 pertanyaan · ± 3 menit': '10 questions · about 3 minutes',
@@ -1642,6 +1675,45 @@ async function shareCard(result) {
   return new Promise(res => cv.toBlob(res, 'image/png', 0.95));
 }
 
+async function gmCard({ nickname, dateLabel, total, cat, pillars }) {
+  try { await document.fonts.ready; } catch (e) { /* abaikan */ }
+  const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d'), serif = '"Fraunces", Georgia, serif', sans = '"Plus Jakarta Sans", system-ui, sans-serif';
+  ctx.fillStyle = '#FBF7EC'; ctx.fillRect(0, 0, W, H);
+  const g = ctx.createRadialGradient(W * .5, H * .3, 50, W * .5, H * .3, 900);
+  g.addColorStop(0, 'rgba(136,162,97,.28)'); g.addColorStop(1, 'rgba(251,247,236,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center';
+  const [li, lw] = await Promise.all([LOGO_ICON, LOGO_WORD].map(src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; })));
+  const ih = 84, iw = li.width * ih / li.height, wh = 46, ww = lw.width * wh / lw.height, lx = (W - (iw + 16 + ww)) / 2;
+  ctx.drawImage(li, lx, 78, iw, ih); ctx.drawImage(lw, lx + iw + 16, 78 + (ih - wh) / 2 + 6, ww, wh);
+  ctx.font = `500 28px ${sans}`; ctx.fillStyle = '#6B645B'; ctx.fillText('Growth Mindset Test', W / 2, 212);
+  // skor dalam cincin
+  const cx = W / 2, cy = 500, rr = 190;
+  ctx.lineWidth = 34; ctx.lineCap = 'round';
+  ctx.strokeStyle = 'rgba(28,26,23,.08)'; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = '#88A261'; ctx.beginPath(); ctx.arc(cx, cy, rr, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(.02, total / 100)); ctx.stroke();
+  ctx.fillStyle = '#1F3A36'; ctx.font = `600 150px ${serif}`; ctx.fillText(String(total), cx, cy + 40);
+  ctx.font = `500 30px ${sans}`; ctx.fillStyle = '#6B645B'; ctx.fillText(L('dari 100', 'out of 100'), cx, cy + 96);
+  ctx.fillStyle = '#1F3A36'; let fs = 96; ctx.font = `600 ${fs}px ${serif}`;
+  while (ctx.measureText(cat.name).width > 940 && fs > 56) { fs -= 4; ctx.font = `600 ${fs}px ${serif}`; }
+  ctx.fillText(cat.name, W / 2, 870);
+  ctx.font = `italic 400 40px ${serif}`; ctx.fillStyle = '#3A3631';
+  wrap(ctx, cat.tagline, 860).forEach((l, i) => ctx.fillText(l, W / 2, 940 + i * 54));
+  const top = 1130, bw = 760, x0 = (W - bw) / 2;
+  pillars.forEach((p, i) => {
+    const y = top + i * 104;
+    ctx.textAlign = 'left'; ctx.fillStyle = '#1F3A36'; ctx.font = `600 30px ${sans}`; ctx.fillText(p.name, x0, y);
+    ctx.textAlign = 'right'; ctx.fillText(String(p.v), x0 + bw, y);
+    ctx.fillStyle = 'rgba(28,26,23,.08)'; roundRect(ctx, x0, y + 16, bw, 18, 9); ctx.fill();
+    ctx.fillStyle = p.color; roundRect(ctx, x0, y + 16, Math.max(18, bw * p.v / 100), 18, 9); ctx.fill();
+  });
+  ctx.textAlign = 'center'; ctx.fillStyle = '#1F3A36'; ctx.font = `600 34px ${sans}`;
+  ctx.fillText(nickname ? `${nickname} · ${dateLabel}` : dateLabel, W / 2, 1740);
+  ctx.font = `italic 400 32px ${serif}`; ctx.fillStyle = '#6B645B'; ctx.fillText('See yourself clearly, see others truly.', W / 2, 1800);
+  ctx.font = `600 30px ${sans}`; ctx.fillStyle = '#1F3A36'; ctx.fillText('mengapa.me', W / 2, 1852);
+  return new Promise(res => cv.toBlob(res, 'image/png', 0.95));
+}
+
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
   ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
@@ -1699,6 +1771,24 @@ const normToken = v => String(v || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').
 const URL_TOKEN = normToken(params.get('token'));
 function resetFull() { state.answers = Array(40).fill(null); state.index = 0; state.interludeSeen = false; state.startedAt = null; }
 function resetMini() { state.miniAnswers = Array(10).fill(null); state.miniIndex = 0; state.miniStartedAt = null; }
+const agreed = m => !!(state.consent.agreed && state.consent.agreed[m]);
+function clearConsent(m) { state.consent = { ...state.consent, agreed: { ...(state.consent.agreed || {}), [m]: false }, guardian: null }; }
+const igLink = () => `https://ig.me/m/${CONFIG.instagram}`;
+const igIcon = () => `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
+const contactRow = (waHref, lead) => `${lead ? `<p class="contact-lead">${lead}</p>` : ''}<div class="contact-row no-print"><a class="btn ig" href="${igLink()}" target="_blank" rel="noopener">${igIcon()} DM Instagram</a><a class="btn wa" href="${waHref}" target="_blank" rel="noopener">${waIcon()} WhatsApp</a></div>`;
+const codeNote = id => `<p class="small code-note">Kode hasilmu <span class="code">${id}</span>. Kode ini otomatis ikut di pesan WhatsApp. Kalau lewat Instagram, kirim juga kodenya ya.</p>`;
+const resultActions = again => `
+      <div class="block no-print">
+        <div class="eyebrow">Simpan hasilmu</div>
+        <div class="share-row">
+          <button class="btn" data-act="share">${dlIcon()} Simpan gambar</button>
+          <button class="btn ghost" data-act="pdf">Simpan PDF</button>
+        </div>
+        <div class="share-row${again ? '' : ' one'}">
+          ${again ? '<button class="btn ghost" data-act="again">Ulangi tes</button>' : ''}
+          <button class="btn ghost" data-act="home">Kembali ke beranda</button>
+        </div>
+      </div>`;
 const waLink = text => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}`;
 const buyLink = () => waLink(L(`Halo Mengapa, saya${state.profile.name ? ' ' + state.profile.name : ''} ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm${state.profile.name ? ' ' + state.profile.name : ''} and I'd like to take the Full Character Test. How do I get a token?`));
 
@@ -1797,7 +1887,10 @@ function render() {
   const view = ({ home, token, guide, profile, consent, test, interlude, calc, result, mtest, mresult, gmtest, gmresult })[s] || home;
   $app.innerHTML = view();
   const top = $app.querySelector('.top');
-  if (top) top.insertAdjacentHTML('beforeend', `<div class="lang" role="group" aria-label="Bahasa"><button data-lang="id" aria-pressed="${LANG === 'id'}">ID</button><button data-lang="en" aria-pressed="${LANG === 'en'}">EN</button></div>`);
+  const LT = `<div class="lang" role="group" aria-label="Bahasa"><button data-lang="id" aria-pressed="${LANG === 'id'}">ID</button><button data-lang="en" aria-pressed="${LANG === 'en'}">EN</button></div>`;
+  if (top) top.insertAdjacentHTML('beforeend', LT);
+  const cnt = $app.querySelector('.testbar .count');
+  if (cnt) cnt.insertAdjacentHTML('beforebegin', LT);
   translateDom($app);
   $app.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { if (b.dataset.lang === LANG) return; setLang(b.dataset.lang); store.set('mengapa:lang', LANG); render(); }));
   const first = $app.querySelector('[data-autofocus]');
@@ -1892,10 +1985,7 @@ function home() {
         <div class="eyebrow">Tentang Mengapa</div>
         <h2>Kenapa kita jadi <em>kita</em>?</h2>
         <p class="prose">Mengapa lahir di 2024 dari satu pertanyaan sederhana itu. Tim kami adalah trainer dan konselor bersertifikat Powered Personality yang mendalami teori empat temperamen. Lewat tes, workshop, dan konseling, kami membantu kamu mengenal diri, memahami orang terdekat, dan keluar dari pola yang menahanmu.</p>
-        <div class="share-row">
-          <a class="btn ghost" href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">Instagram</a>
-          <a class="btn ghost" href="${waLink(L('Halo Mengapa, saya ingin tahu lebih lanjut tentang tes, workshop, atau konseling.', 'Hi Mengapa, I would like to know more about your tests, workshops, or counseling.'))}" target="_blank" rel="noopener">WhatsApp</a>
-        </div>
+        ${contactRow(waLink(L('Halo Mengapa, saya ingin tahu lebih lanjut tentang tes, workshop, atau konseling.', 'Hi Mengapa, I would like to know more about your tests, workshops, or counseling.')))}
       </div>
     </div>
     ${foot()}
@@ -1924,8 +2014,9 @@ function token() {
       </form>
       <div class="card flat" style="margin-top:18px">
         <b>Belum punya token?</b>
-        <p class="muted small" style="margin-top:4px">Hubungi tim Mengapa lewat WhatsApp, atau coba Tes Karakter Mini gratis dulu.</p>
-        <div class="share-row"><a class="btn wa" href="${buyLink()}" target="_blank" rel="noopener">${waIcon()} WhatsApp</a><button class="btn ghost" data-act="mini">Tes Karakter Mini</button></div>
+        <p class="muted small" style="margin-top:4px">Hubungi tim Mengapa lewat Instagram atau WhatsApp, atau coba Tes Karakter Mini gratis dulu.</p>
+        ${contactRow(buyLink())}
+        <button class="btn ghost block" style="margin-top:10px" data-act="mini">Coba Tes Karakter Mini</button>
       </div>
     </div>
     ${foot()}
@@ -1955,7 +2046,7 @@ function guide() {
 }
 
 /* ============ DATA DIRI ============ */
-const SOURCES = ['Instagram', 'TikTok', 'Teman / keluarga', 'Workshop Mengapa', 'Lainnya'];
+const SOURCES = ['Instagram', 'TikTok', 'WhatsApp', 'Teman / keluarga', 'Kantor / sekolah / kampus', 'Workshop / seminar', 'Coach / konselor Mengapa', 'Google', 'Lainnya'];
 function profile() {
   const p = state.profile;
   const today = new Date().toISOString().slice(0, 10);
@@ -1988,8 +2079,7 @@ function profile() {
         <div class="field">
           <label for="f-wa">Nomor WhatsApp <span class="opt-tag">(opsional)</span></label>
           <input class="input" id="f-wa" name="wa" type="tel" inputmode="tel" autocomplete="tel" value="${esc(p.wa)}" placeholder="08xx xxxx xxxx" />
-          <div class="hint">Isi kalau kamu ingin tim Mengapa bisa membantu membahas hasilmu.</div>
-          <label class="check" id="contact-wrap" style="margin-top:10px" ${p.wa ? '' : 'hidden'}><input type="checkbox" name="contact" ${state.consent.contact !== false ? 'checked' : ''} /><span>Tim Mengapa <b>boleh menghubungi saya</b> lewat WhatsApp untuk membahas hasil tes.</span></label>
+          <div class="hint">Kalau diisi, tim Mengapa boleh menghubungimu untuk membahas hasil tes.</div>
           <div class="err" id="e-wa" hidden></div>
         </div>
         <div class="field">
@@ -2031,6 +2121,7 @@ function consent() {
         <ul>
           <li>Menampilkan hasil tes kamu.</li>
           <li>Membantu tim Mengapa memberi analisis yang lebih tepat saat kamu konsultasi.</li>
+          <li>Menghubungimu untuk membahas hasil tes, kalau kamu mengisi nomor WhatsApp.</li>
           <li>Riset internal untuk meningkatkan layanan kami. Data kamu <b>tidak dijual</b> ke pihak lain.</li>
         </ul>
         <h3>Hak kamu</h3>
@@ -2039,7 +2130,7 @@ function consent() {
         </ul>
       </div>
       <form id="cf">
-        <label class="check"><input type="checkbox" name="agree" ${c.agree ? 'checked' : ''} /><span><b>Saya sudah membaca dan setuju</b> data saya diproses untuk tujuan di atas.</span></label>
+        <label class="check"><input type="checkbox" name="agree" ${agreed(state.mode) ? 'checked' : ''} /><span><b>Saya sudah membaca dan setuju</b> data saya diproses untuk tujuan di atas.</span></label>
         <div class="err" id="e-consent" hidden></div>
         <div class="actions">
           <button type="button" class="btn ghost" data-act="back" aria-label="Kembali">${ARROW_L}</button>
@@ -2176,8 +2267,7 @@ function gmresult() {
   const weakest = a.weakest.length ? a.weakest : [];
   const focus = weakest.length ? weakest : [a.sorted[4]];
   const waBase = L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Growth Mindset Test (${fmtDate(r.finishedAt)}).\nHasil: ${cat.name}, skor ${a.total}/100.${weakest.length ? `\nPilar yang paling menahan: ${names(weakest)}.` : ''}\nKode hasil: ${r.id}\n\n`, `Hi Mengapa, I'm ${r.profile.name}. I just finished the Growth Mindset Test (${fmtDate(r.finishedAt)}).\nResult: ${cat.name}, score ${a.total}/100.${weakest.length ? `\nPillar holding me back most: ${names(weakest)}.` : ''}\nResult code: ${r.id}\n\n`);
-  const waFull = waLink(waBase + L('Saya tertarik ikut Tes Karakter Lengkap. Bagaimana caranya?', 'I am interested in the Full Character Test. How do I take it?'));
-  const waCoach = waLink(waBase + L('Saya tertarik sesi coaching untuk membahas hasil ini lebih dalam.', 'I am interested in a coaching session to discuss this result further.'));
+  const waFull = waLink(waBase + L('Saya tertarik dengan Tes Karakter Lengkap atau sesi coaching. Bisa dibantu?', 'I am interested in the Full Character Test or a coaching session. Could you help?'));
   const pill = k => { const v = a.pillars[k], lv = a.level(v), P = GM_PILLARS[k];
     const tag = a.strongest.includes(k) ? '<em class="tg up">Paling kuat</em>' : a.weakest.includes(k) ? '<em class="tg down">Paling menahan</em>' : '';
     return `<div class="gp">
@@ -2248,19 +2338,12 @@ function gmresult() {
           <div class="eyebrow">Lanjutkan perjalananmu</div>
           <h2 style="margin:8px 0 12px">Pola pikir tidak terbentuk sendiri</h2>
           <p>Cara kita merespons gagal dan kritik banyak dipengaruhi karakter dan pengalaman yang membentuk kita, termasuk dari masa kecil. Tes Karakter Lengkap membantu melihat akarnya, dan sesi coaching membantu mengubah polanya.</p>
-          <a class="btn wa block" style="margin-top:18px" href="${waFull}" target="_blank" rel="noopener">${waIcon()} Ambil Tes Karakter Lengkap</a>
-          <a class="btn inv block" style="margin-top:10px" href="${waCoach}" target="_blank" rel="noopener">Tanya sesi coaching</a>
-          <a class="iglink no-print" href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">atau DM Instagram @${CONFIG.instagram}</a>
-          <p class="small" style="margin-top:10px;text-align:center">Kode <span class="code">${r.id}</span> otomatis ikut di pesan WhatsApp.</p>
+          ${contactRow(waFull, 'Tanya Tes Karakter Lengkap atau sesi coaching lewat:')}
+          ${codeNote(r.id)}
         </div>
       </div>
 
-      <div class="block">
-        <div class="share-row">
-          <button class="btn ghost" data-act="mini">Coba Tes Karakter Mini</button>
-          <button class="btn ghost" data-act="again">Ulangi tes</button>
-        </div>
-      </div>
+${resultActions(true)}
 
       <p class="small muted" style="margin-top:28px">Tes ini adalah alat refleksi diri berdasarkan konsep growth mindset (Carol Dweck), bukan tes psikologi klinis. Semua orang punya campuran fixed dan growth mindset, dan campurannya bisa berubah.</p>
     </div>
@@ -2373,18 +2456,13 @@ function mresult() {
           <h2 style="margin:8px 0 12px">Lihat gambaran utuhnya</h2>
           <p style="margin-bottom:12px">Dominanmu baru satu bagian. Tes Karakter Lengkap menunjukkan kombinasi, kekuatan, dan kelemahanmu di keempat sisi.</p>
           <ul class="locks">${FULL_BENEFITS.map(x => `<li>${lockIcon()}<span>${esc(x)}</span></li>`).join('')}</ul>
-          <a class="btn wa block" style="margin-top:18px" href="${wa}" target="_blank" rel="noopener">${waIcon()} Dapatkan token via WhatsApp</a>
-          <a class="iglink no-print" href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">atau DM Instagram @${CONFIG.instagram}</a>
-          <button class="btn block inv" style="margin-top:10px" data-act="full">Saya sudah punya token</button>
+          ${contactRow(wa, 'Dapatkan token lewat:')}
+          ${codeNote(r.id)}
+          <button class="btn block inv" style="margin-top:14px" data-act="full">Saya sudah punya token</button>
         </div>
       </div>
 
-      <div class="block">
-        <div class="share-row">
-          <button class="btn ghost" data-act="share">${shareIcon()} Share ke Story</button>
-          <button class="btn ghost" data-act="again">Ulangi tes</button>
-        </div>
-      </div>
+${resultActions(true)}
 
       <p class="small muted" style="margin-top:36px">Tes Karakter Mini adalah alat refleksi diri singkat berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Hasilnya indikasi awal dan bisa berbeda dari tes lengkap.</p>
     </div>
@@ -2516,7 +2594,7 @@ function result() {
       </div>
 
       <div class="block">
-        <div class="eyebrow">More insights</div>
+        <div class="eyebrow">Insight tambahan</div>
         <h2>Yang biasanya menyertai skormu</h2>
         <div class="card">
           ${a.insights.map(x => `
@@ -2564,9 +2642,8 @@ function result() {
           <h2 style="margin:8px 0 12px">Ada pola menarik di hasilmu</h2>
           <ul class="list">${dedupeUser(a.flags).map(t => `<li>${esc(t)}</li>`).join('')}</ul>
           <p style="margin-top:16px">Pola seperti ini lebih pas dibahas langsung. Di sesi konsultasi, kita pelan-pelan melihat kenapa kamu bisa menjadi seperti sekarang: pengalaman yang membentukmu, termasuk dari masa kecil, dan pola yang terbawa sampai hari ini. Semuanya dengan cara yang nyaman.</p>
-          <a class="btn wa block no-print" style="margin-top:18px" href="${waUrl}" target="_blank" rel="noopener">${waIcon()} Konsultasi via WhatsApp</a>
-          <a class="iglink no-print" href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">atau DM Instagram @${CONFIG.instagram}</a>
-          <p class="small" style="margin-top:10px;text-align:center">Kode <span class="code">${r.id}</span> otomatis ikut di pesan WhatsApp, supaya tim kami bisa langsung membuka hasilmu.</p>
+          ${contactRow(waUrl, 'Konsultasi lewat:')}
+          ${codeNote(r.id)}
         </div>
       </div>` : `
       <div class="block">
@@ -2574,23 +2651,12 @@ function result() {
           <div class="eyebrow">Ini baru permukaannya</div>
           <h2 style="margin:8px 0 10px">Siap keluar dari <em>jebakan karakter</em>?</h2>
           <p class="muted">Mengenali pola baru langkah pertama. Di sesi konsultasi, kita bahas kenapa kamu bisa menjadi seperti sekarang, termasuk pengalaman masa kecil yang ikut membentukmu, lalu cara keluar dari zona nyaman dan memakai keempat sisimu di situasi yang tepat.</p>
-          <a class="btn wa block no-print" href="${waUrl}" target="_blank" rel="noopener">${waIcon()} Konsultasi via WhatsApp</a>
-          <a class="iglink no-print" href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">atau DM Instagram @${CONFIG.instagram}</a>
-          <p class="small muted" style="margin-top:10px">Kode <span class="code">${r.id}</span> otomatis ikut di pesan WhatsApp, supaya tim kami bisa langsung membuka hasilmu.</p>
+          ${contactRow(waUrl, 'Konsultasi lewat:')}
+          ${codeNote(r.id)}
         </div>
       </div>`}
 
-      <div class="block no-print">
-        <div class="eyebrow">Simpan & bagikan</div>
-        <div class="share-row">
-          <button class="btn" data-act="share">${shareIcon()} Share ke Story</button>
-          <button class="btn ghost" data-act="pdf">Simpan PDF</button>
-        </div>
-        <div class="share-row">
-          <button class="btn ghost" data-act="home">Kembali ke beranda</button>
-          <a class="btn ghost" href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">Instagram kami</a>
-        </div>
-      </div>
+${resultActions(false)}
 
       <p class="small muted" style="margin-top:36px">Tes ini adalah alat refleksi diri berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Semua orang punya keempat temperamen. Hasil ini menggambarkan kecenderungan, bukan label.</p>
     </div>
@@ -2599,6 +2665,7 @@ function result() {
 }
 function dedupeUser(flags) { return [...new Set(flags.map(f => f.user))]; }
 const waIcon = () => `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.8-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2c0 1.3.9 2.5 1.1 2.7.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>`;
+const dlIcon = () => `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>`;
 const shareIcon = () => `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg>`;
 
 /* ---------- event binding per layar ---------- */
@@ -2607,18 +2674,18 @@ const bind = {
     on('mini', () => {
       state.mode = 'mini';
       if (state.miniResult || !state.miniStartedAt) resetMini();
-      if (state.miniStartedAt && state.consent.agree && miniAnswered() > 0) { state.miniIndex = Math.max(0, state.miniAnswers.findIndex(x => !x)); go('mtest'); return; }
+      if (state.miniStartedAt && agreed('mini') && miniAnswered() > 0) { state.miniIndex = Math.max(0, state.miniAnswers.findIndex(x => !x)); go('mtest'); return; }
       go('consent');
     });
     on('full', () => go('token'));
-    on('resume', () => { state.mode = 'full'; const n = state.answers.findIndex(x => !x); state.index = n === -1 ? 39 : n; go(state.consent.agree && state.startedAt ? 'test' : 'consent'); });
+    on('resume', () => { state.mode = 'full'; const n = state.answers.findIndex(x => !x); state.index = n === -1 ? 39 : n; go(agreed('full') && state.startedAt ? 'test' : 'consent'); });
     on('last', () => go('result'));
     on('lastmini', () => go('mresult'));
     on('lastgm', () => go('gmresult'));
     on('gm', () => {
       state.mode = 'gm';
       if (state.gmResult || !state.gmStartedAt) resetGm();
-      if (state.gmStartedAt && state.consent.agree && gmAnswered() > 0) { state.gmIndex = Math.max(0, state.gmAnswers.findIndex(x => !x)); go('gmtest'); return; }
+      if (state.gmStartedAt && agreed('gm') && gmAnswered() > 0) { state.gmIndex = Math.max(0, state.gmAnswers.findIndex(x => !x)); go('gmtest'); return; }
       go('consent');
     });
   },
@@ -2646,7 +2713,7 @@ const bind = {
       state.mode = 'full'; state.token = tok; state.tokenOk = true; state.preview = !!r.preview;
       save();
       const n = state.answers.findIndex(x => !x);
-      if (answered() > 0 && state.consent.agree && state.startedAt) { state.index = n === -1 ? 39 : n; go('test'); }
+      if (answered() > 0 && agreed('full') && state.startedAt) { state.index = n === -1 ? 39 : n; go('test'); }
       else go('consent');
     });
   },
@@ -2668,8 +2735,6 @@ const bind = {
       hAge.textContent = a != null && a >= 0 ? L(`Usia ${a} tahun`, `Age ${a}`) : tr('Kami hitung usiamu otomatis.');
       gw.hidden = !(a != null && a < CONFIG.adultAge && a >= CONFIG.minAge);
     });
-    const cw = document.getElementById('contact-wrap');
-    f.elements.wa.addEventListener('input', () => { cw.hidden = !f.elements.wa.value.trim(); });
     f.querySelectorAll('.pill').forEach(b => b.addEventListener('click', () => {
       const was = b.getAttribute('aria-pressed') === 'true';
       f.querySelectorAll('.pill').forEach(x => x.setAttribute('aria-pressed', 'false'));
@@ -2694,7 +2759,7 @@ const bind = {
         name, dob: dob.value, age: a, wa, guardian: a < CONFIG.adultAge ? guardian : '',
         source: src ? src.dataset.src : '', hp: f.elements.website.value ? 1 : 0,
       };
-      state.consent = { ...state.consent, guardian: minor ? true : null, contact: wa ? f.elements.contact.checked : false };
+      state.consent = { ...state.consent, guardian: minor ? true : null, contact: !!wa };
       save();
       if (state.mode === 'mini') { if (!state.miniStartedAt) state.miniStartedAt = Date.now(); go('mtest'); return; }
       if (state.mode === 'gm') { if (!state.gmStartedAt) state.gmStartedAt = Date.now(); go('gmtest'); return; }
@@ -2708,7 +2773,7 @@ const bind = {
       e.preventDefault();
       const el = document.getElementById('e-consent');
       if (!f.elements.agree.checked) { el.hidden = false; el.textContent = tr('Centang persetujuan dulu untuk lanjut.'); return; }
-      state.consent = { ...state.consent, agree: true, at: new Date().toISOString(), version: CONFIG.consentVersion };
+      state.consent = { ...state.consent, agreed: { ...(state.consent.agreed || {}), [state.mode]: true }, at: new Date().toISOString(), version: CONFIG.consentVersion };
       save(); go('profile');
     });
   },
@@ -2759,13 +2824,24 @@ const bind = {
   },
   gmresult() {
     on('home', () => go('home'));
-    on('mini', () => { state.mode = 'mini'; resetMini(); go(state.consent.agree ? 'profile' : 'consent'); });
-    on('again', () => { state.mode = 'gm'; resetGm(); state.gmResult = null; state.gmStartedAt = Date.now(); save(); go('gmtest'); });
+    on('pdf', () => window.print());
+    on('share', async btn => {
+      btn.disabled = true;
+      try {
+        const r = state.gmResult, a = analyzeMindset(r.answers), cat = GM_CATEGORIES[a.category];
+        const blob = await gmCard({ nickname: nickname(r.profile.name), dateLabel: fmtDate(r.finishedAt), total: a.total, cat,
+          pillars: GM_PILLAR_ORDER.map(k => ({ name: GM_PILLARS[k].name, color: GM_PILLARS[k].color, v: a.pillars[k] })) });
+        await deliverImage(blob, 'mengapa-growth-mindset.png');
+      } catch (e) { if (e && e.name !== 'AbortError') toast('Gagal membuat gambar. Coba lagi ya.'); }
+      finally { btn.disabled = false; }
+    });
+    on('again', () => { state.mode = 'gm'; resetGm(); save(); go('consent'); });
   },
   mresult() {
     on('home', () => go('home'));
+    on('pdf', () => window.print());
     on('full', () => go('token'));
-    on('again', () => { state.mode = 'mini'; resetMini(); state.miniResult = null; state.miniStartedAt = Date.now(); save(); go('mtest'); });
+    on('again', () => { state.mode = 'mini'; resetMini(); save(); go('consent'); });
     on('share', async btn => {
       btn.disabled = true;
       try {
@@ -2794,16 +2870,17 @@ const bind = {
     });
   },
 };
-async function deliverImage(blob, filename, text) {
+async function deliverImage(blob, filename) {
   const file = new File([blob], filename, { type: 'image/png' });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    await navigator.share({ files: [file], title: 'Hasil Tes 4 Temperamen', text });
+  const phone = matchMedia('(pointer:coarse)').matches;
+  if (phone && navigator.canShare && navigator.canShare({ files: [file] })) {
+    await navigator.share({ files: [file] });
   } else {
     const url = URL.createObjectURL(blob);
     const link = Object.assign(document.createElement('a'), { href: url, download: filename });
     document.body.appendChild(link); link.click(); link.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
-    toast('Gambar tersimpan. Upload ke Story kamu ya!');
+    toast('Gambar tersimpan.');
   }
 }
 function on(act, fn) { $app.querySelectorAll(`[data-act="${act}"]`).forEach(el => el.addEventListener('click', e => fn(el, e))); }
@@ -2841,7 +2918,7 @@ function finish() {
   };
   const preview = state.preview;
   state.result = r; state.tokenOk = false; state.token = ''; state.preview = false; state.calcNext = 'result';
-  resetFull(); save();
+  resetFull(); clearConsent('full'); save();
   go('calc', false);
   if (!preview) submit(withLang('id', () => buildPayload(r)));
   setTimeout(() => { history.replaceState({ s: 'result' }, ''); go('result', false); }, 1600);
@@ -2851,7 +2928,7 @@ function finishGm() {
   const now = Date.now();
   const r = { id: makeId(), answers: [...state.gmAnswers], profile: { ...state.profile }, consent: { ...state.consent },
     startedAt: state.gmStartedAt, finishedAt: now, meta: { ...state.meta } };
-  state.gmResult = r; state.calcNext = 'gmresult'; resetGm(); save();
+  state.gmResult = r; state.calcNext = 'gmresult'; resetGm(); clearConsent('gm'); save();
   go('calc', false);
   submit(withLang('id', () => buildGmPayload(r)));
   setTimeout(() => { history.replaceState({ s: 'gmresult' }, ''); go('gmresult', false); }, 1400);
@@ -2891,7 +2968,7 @@ function finishMini() {
     id: makeId(), answers: [...state.miniAnswers], profile: { ...state.profile }, consent: { ...state.consent },
     startedAt: state.miniStartedAt, finishedAt: now, meta: { ...state.meta },
   };
-  state.miniResult = r; state.calcNext = 'mresult'; resetMini(); save();
+  state.miniResult = r; state.calcNext = 'mresult'; resetMini(); clearConsent('mini'); save();
   go('calc', false);
   submit(withLang('id', () => buildMiniPayload(r)));
   setTimeout(() => { history.replaceState({ s: 'mresult' }, ''); go('mresult', false); }, 1400);
@@ -3015,9 +3092,9 @@ async function flush() {
 { const q = (params.get('lang') || '').toLowerCase(); const saved = store.get('mengapa:lang'); setLang(q === 'en' || q === 'id' ? q : saved || 'id'); if (q) store.set('mengapa:lang', LANG); }
 if (state.screen === 'calc') state.screen = state.calcNext || 'home';
 if (state.screen === 'interlude') state.screen = 'test';
-if (state.screen === 'test' && !(state.tokenOk && state.consent.agree)) state.screen = 'home';
-if (state.screen === 'mtest' && !state.consent.agree) state.screen = 'home';
-if (state.screen === 'gmtest' && !state.consent.agree) state.screen = 'home';
+if (state.screen === 'test' && !(state.tokenOk && agreed('full'))) state.screen = 'home';
+if (state.screen === 'mtest' && !agreed('mini')) state.screen = 'home';
+if (state.screen === 'gmtest' && !agreed('gm')) state.screen = 'home';
 if (state.screen === 'gmresult' && !state.gmResult) state.screen = 'home';
 if (state.screen === 'result' && !state.result) state.screen = 'home';
 if (state.screen === 'mresult' && !state.miniResult) state.screen = 'home';

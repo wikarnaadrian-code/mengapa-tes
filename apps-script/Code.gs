@@ -22,6 +22,7 @@
  *  a) Manual / custom: ketik token di kolom A tab "Token" (huruf, angka, tanda hubung; contoh BUDI-2026).
  *     Kolom status boleh dikosongkan. Kolom catatan bebas (nama pembeli, tanggal bayar, dll).
  *  b) Banyak sekaligus: buka Sheet di laptop, menu "Mengapa" > "Buat token baru".
+ *  Status "tim" = token internal untuk testing, tidak pernah habis (hasilnya tetap tersimpan di tab Hasil dengan token itu).
  *  Status: (kosong)/aktif = belum dipakai · dipakai = tes sedang dikerjakan · selesai = sudah dipakai · nonaktif = dibatalkan.
  *  Peserta ganti HP di tengah tes? Ubah status token itu kembali jadi "aktif".
  */
@@ -94,6 +95,7 @@ function findToken_(token) {
 function startToken_(token, session) {
   const f = findToken_(token);
   if (!f.row) return { ok: false, reason: 'tidak_ditemukan' };
+  if (f.status === 'tim') return { ok: true }; // token tim internal: bisa dipakai berkali-kali
   if (f.status === '' || f.status === 'aktif') {
     f.sh.getRange(f.row, 2).setValue('dipakai');
     f.sh.getRange(f.row, 5).setValue(new Date());
@@ -109,6 +111,7 @@ function startToken_(token, session) {
 function finishToken_(token, session, idHasil) {
   const f = findToken_(token);
   if (!f.row) return { ok: false, reason: 'tidak_ditemukan' };
+  if (f.status === 'tim') { f.sh.getRange(f.row, 6).setValue(new Date()); f.sh.getRange(f.row, 7).setValue(idHasil); return { ok: true }; }
   if (f.status === 'selesai' && f.idHasil === String(idHasil)) return { ok: true };
   if (f.status !== 'dipakai' || f.sesi !== String(session)) return { ok: false, reason: 'sudah_dipakai' };
   f.sh.getRange(f.row, 2).setValue('selesai');
@@ -133,7 +136,15 @@ function getTokenSheet_() {
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Mengapa')
     .addItem('Buat token baru', 'menuBuatToken')
+    .addItem('Buat token tim (abadi)', 'menuTokenTim')
     .addToUi();
+}
+
+function menuTokenTim() {
+  const sh = getTokenSheet_(), f = findToken_('TIM-MENGAPA');
+  if (f.row) sh.getRange(f.row, 2).setValue('tim');
+  else sh.appendRow(['TIM-MENGAPA', 'tim', 'token tim internal, tidak pernah habis', new Date(), '', '', '', '']);
+  SpreadsheetApp.getUi().alert('Token tim siap: TIM-MENGAPA (status "tim", bisa dipakai berkali-kali).');
 }
 
 function menuBuatToken() {
