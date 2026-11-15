@@ -2241,7 +2241,7 @@ function home() {
         <h2>${L('12 kombinasi karakter. <em>Kamu yang mana?</em>', '12 character blends. <em>Which one are you?</em>')}</h2>
         <div class="cx" aria-hidden="true">
           <div class="cx-stage">
-            ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}">${comboArt(c[0], c[1], 132, 'cx' + i)}<figcaption><b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
+            ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}">${comboArt(c[0], c[1], 132, 'cx' + i)}<figcaption><b>${COMBOS[c].name}</b><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
           </div>
           <div class="cx-meta"><span class="cx-bar"><i></i></span></div>
         </div>
