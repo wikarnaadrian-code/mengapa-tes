@@ -1,0 +1,82 @@
+{
+  "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=()"
+        }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/our_story(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/our_services(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/our_team(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/counseling(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/workshops(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/tests_catalogue(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/select_language(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/public-workshops(.html)?",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/private-workshops(.html)?",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}
