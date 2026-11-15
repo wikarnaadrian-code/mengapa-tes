@@ -19,11 +19,27 @@ async function callSheet(url, payload) {
 
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  if (req.method === 'GET') return res.status(200).json({ ok: true, service: 'mengapa-tes' });
+  if (req.method === 'GET') {
+    if (!('cek' in (req.query || {}))) return res.status(200).json({ ok: true, service: 'mengapa-tes' });
+    // Diagnosa koneksi: buka /api/submit?cek di browser. Tidak menampilkan isi rahasia.
+    const u = process.env.APPS_SCRIPT_URL || '', sec = process.env.SHEET_SECRET || '';
+    const out = { url_terisi: !!u, url_berakhiran_exec: /\/exec\/?$/.test(u.trim()), url_ada_spasi: u !== u.trim(), secret_terisi: !!sec, secret_ada_spasi: sec !== sec.trim() };
+    if (u && sec) {
+      try {
+        const r = await fetch(u.trim(), { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: sec.trim(), action: 'token', token: 'CEK-DIAGNOSA', session: 'diag' }), redirect: 'follow' });
+        const t = await r.text();
+        out.status_apps_script = r.status;
+        try { const j = JSON.parse(t); out.jawaban_apps_script = j;
+          out.kesimpulan = j.error === 'unauthorized' ? 'SHEET_SECRET di Vercel beda dengan di Apps Script (atau belum diisi di Script Properties)' : j.reason === 'tidak_ditemukan' ? 'KONEKSI OK' : 'cek jawaban_apps_script';
+        } catch (e) { out.cuplikan = t.slice(0, 200).replace(/\s+/g, ' '); out.kesimpulan = /accounts\.google|Sign in|signin/i.test(t) ? 'Apps Script minta login: Deploy ulang dengan Who has access = Anyone' : 'Apps Script tidak membalas JSON: cek URL /exec dan deployment'; }
+      } catch (e) { out.kesimpulan = 'gagal menghubungi Apps Script: ' + String(e.message || e); }
+    } else out.kesimpulan = 'Env var belum terbaca: isi di Vercel lalu Redeploy';
+    return res.status(200).json(out);
+  }
   if (req.method !== 'POST') return res.status(405).json({ ok: false, error: 'method' });
 
-  const url = process.env.APPS_SCRIPT_URL;
-  const secret = process.env.SHEET_SECRET;
+  const url = (process.env.APPS_SCRIPT_URL || '').trim();
+  const secret = (process.env.SHEET_SECRET || '').trim();
   if (!url || !secret) return res.status(500).json({ ok: false, error: 'server belum dikonfigurasi', reason: 'server' });
 
   let body = req.body;
