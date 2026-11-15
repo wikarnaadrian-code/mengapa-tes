@@ -1,4 +1,4 @@
-// Ruang Tim Mengapa: login + baca data dari Google Sheet (lewat Apps Script doGet).
+// Ruang Admin Mengapa: login + baca data dari Google Sheet (lewat Apps Script doGet).
 // Env var di Vercel:
 //   APPS_SCRIPT_URL  (sudah ada)
 //   SHEET_SECRET     (sudah ada, dipakai juga untuk menandatangani sesi login)
