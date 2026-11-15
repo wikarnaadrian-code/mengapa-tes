@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Mengapa</title>
   <meta name="description" content="Tes karakter 4 temperamen dan Growth Mindset Test dari Mengapa. Kenali dirimu, pahami orang terdekat." />
-  <meta name="theme-color" content="#FBF7EC" />
+  <meta name="theme-color" content="#FFFFFF" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Mengapa" />
   <meta property="og:description" content="Kenali dirimu. Tumbuh lebih jauh. Tes karakter 4 temperamen dan Growth Mindset Test dari Mengapa." />
@@ -25,7 +25,7 @@
   <style>
 /* ============ MENGAPA · Tes 4 Temperamen ============ */
 :root {
-  --bg: #FBF7EC;
+  --bg: #FFFFFF;
   --paper: #FFFDF9;
   --ink: #1F3A36;
   --ink-2: #3A3631;
@@ -168,7 +168,7 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .actions .btn.ghost { flex: 0 0 auto; }
 
 /* ---------- test ---------- */
-.testbar { position: sticky; top: 0; z-index: 5; background: rgba(251,247,236,.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 12px 0 14px; }
+.testbar { position: sticky; top: 0; z-index: 5; background: rgba(255,255,255,.92); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 12px 0 14px; }
 .testbar .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .iconbtn { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--line-2); background: var(--paper); display: grid; place-items: center; cursor: pointer; transition: opacity .2s; }
 .iconbtn[disabled] { opacity: .3; cursor: default; }
@@ -680,6 +680,9 @@ html.cxs-lock, html.cxs-lock body { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) { .cxs-panel, .cxs-bg { transition: none; } }
 @media print { .cxs { display: none !important; } }
+
+.cx-meta { justify-content: center; margin-top: 10px; }
+.cx-bar { flex: none; width: 44px; }
 
 </style>
 </head>
@@ -2240,7 +2243,7 @@ function home() {
           <div class="cx-stage">
             ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}">${comboArt(c[0], c[1], 132, 'cx' + i)}<figcaption><b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
           </div>
-          <div class="cx-meta"><span class="cx-n">01</span><span class="cx-bar"><i></i></span><span>12</span></div>
+          <div class="cx-meta"><span class="cx-bar"><i></i></span></div>
         </div>
         <button class="cx-cta" data-act="full">${L('Cari tahu kombinasimu', 'Find your blend')}${ARROW}</button>
       </div>
@@ -2425,9 +2428,9 @@ function profile() {
           <div class="err" id="e-guardian" hidden></div>
         </div>
         <div class="field">
-          <label for="f-wa">Nomor WhatsApp <span class="opt-tag">(opsional)</span></label>
+          <label for="f-wa">Nomor WhatsApp${state.mode === 'full' ? '' : ' <span class="opt-tag">(opsional)</span>'}</label>
           <input class="input" id="f-wa" name="wa" type="tel" inputmode="tel" autocomplete="tel" value="${esc(p.wa)}" placeholder="08xx xxxx xxxx" />
-          <div class="hint">Kalau diisi, tim Mengapa boleh menghubungimu untuk membahas hasil tes.</div>
+          <div class="hint">${state.mode === 'full' ? L('Dipakai tim Mengapa untuk follow-up hasilmu, dan membantu kalau hasil tesmu hilang.', 'Used by the Mengapa team to follow up on your result, and to help if you ever lose it.') : L('Isi kalau mau dikirimi penjelasan lanjutan soal hasilmu dari tim Mengapa.', 'Add it if you would like the Mengapa team to send you a deeper explanation of your result.')}</div>
           <div class="err" id="e-wa" hidden></div>
         </div>
         <div class="field">
@@ -2463,13 +2466,13 @@ function consent() {
         </ul>
         <h3>Data yang kami kumpulkan</h3>
         <ul>
-          <li>Nama, tanggal lahir, nomor WhatsApp (kalau kamu isi), nama orang tua/wali (untuk peserta di bawah 18 tahun), jawaban, hasil tes, dan waktu pengisian.</li>
+          <li>${state.mode === 'full' ? L('Nama, tanggal lahir, nomor WhatsApp, nama orang tua/wali (untuk peserta di bawah 18 tahun), jawaban, hasil tes, dan waktu pengisian.', 'Name, date of birth, WhatsApp number, parent/guardian name (for participants under 18), answers, test results, and completion time.') : `Nama, tanggal lahir, nomor WhatsApp (kalau kamu isi), nama orang tua/wali (untuk peserta di bawah 18 tahun), jawaban, hasil tes, dan waktu pengisian.`}</li>
         </ul>
         <h3>Untuk apa</h3>
         <ul>
           <li>Menampilkan hasil tes kamu.</li>
           <li>Membantu tim Mengapa memberi analisis yang lebih tepat saat kamu konsultasi.</li>
-          <li>Menghubungimu untuk membahas hasil tes, kalau kamu mengisi nomor WhatsApp.</li>
+          <li>${state.mode === 'full' ? L('Menghubungimu lewat WhatsApp untuk membahas hasil tes.', 'Contacting you on WhatsApp to discuss your result.') : 'Menghubungimu untuk membahas hasil tes, kalau kamu mengisi nomor WhatsApp.'}</li>
           <li>Riset internal untuk meningkatkan layanan kami. Data kamu <b>tidak dijual</b> ke pihak lain.</li>
         </ul>
         <h3>Hak kamu</h3>
@@ -3025,7 +3028,7 @@ const bind = {
   home() {
     const slides = [...$app.querySelectorAll('.cx-slide')];
     if (slides.length) {
-      const num = $app.querySelector('.cx-n'), bar = $app.querySelector('.cx-bar'), box = $app.querySelector('.cx');
+      const bar = $app.querySelector('.cx-bar'), box = $app.querySelector('.cx');
       let i = 0, seen = true;
       const kick = () => { bar.classList.remove('run'); void bar.offsetWidth; bar.classList.add('run'); };
       if ('IntersectionObserver' in window) new IntersectionObserver(es => { seen = es[0].isIntersecting; if (seen) kick(); }).observe(box);
@@ -3034,7 +3037,7 @@ const bind = {
         if (!box.isConnected) { clearInterval(window.__cxT); return; }
         if (!seen || document.hidden) return;
         const prev = slides[i]; prev.classList.remove('on'); prev.classList.add('out'); setTimeout(() => prev.classList.remove('out'), 800);
-        i = (i + 1) % slides.length; slides[i].classList.add('on'); num.textContent = String(i + 1).padStart(2, '0'); kick();
+        i = (i + 1) % slides.length; slides[i].classList.add('on'); kick();
       }, 3200);
     }
     on('services', () => go('services'));
@@ -3119,7 +3122,7 @@ const bind = {
       bad = err('dob', !dob.value ? 'Isi tanggal lahirmu.' : a == null || a < 0 || a > 110 ? 'Tanggal lahir belum valid.' : a < CONFIG.minAge ? L(`Tes ini untuk usia ${CONFIG.minAge} tahun ke atas.`, `This test is for ages ${CONFIG.minAge} and up.`) : '') || bad;
       const minor = a != null && a >= CONFIG.minAge && a < CONFIG.adultAge;
       bad = err('guardian', minor && guardian.length < 2 ? 'Peserta di bawah 18 tahun wajib menyertakan nama orang tua/wali.' : minor && !f.elements.gconsent.checked ? 'Centang izin orang tua/wali dulu ya.' : '') || bad;
-      bad = err('wa', f.elements.wa.value.trim() && !validWA(wa) ? 'Nomor WhatsApp belum valid. Contoh: 0812 3456 7890' : '') || bad;
+      bad = err('wa', state.mode === 'full' && !f.elements.wa.value.trim() ? L('Isi nomor WhatsApp-mu ya. Tes Lengkap butuh nomor untuk follow-up hasil.', 'Please add your WhatsApp number. The Full Test needs it for result follow-up.') : f.elements.wa.value.trim() && !validWA(wa) ? 'Nomor WhatsApp belum valid. Contoh: 0812 3456 7890' : '') || bad;
       if (bad) { const firstBad = f.querySelector('.bad'); firstBad && firstBad.focus(); return; }
       const src = f.querySelector('.pill[aria-pressed="true"]');
       state.profile = {
