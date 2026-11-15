@@ -687,6 +687,9 @@ body { background: var(--bg); }
 .legend { margin: 0; display: flex; gap: 12px; font-size: 11.5px; color: var(--muted); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .it-meta .dot { margin-top: 2px; }
+.av.duo { position: relative; overflow: visible; }
+.av.duo .sec { position: absolute; right: -5px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); border: 1.5px solid; display: grid; place-items: center; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.it.on .av.duo .sec { background: #fff; }
 
 </style>
 </head>
@@ -2134,7 +2137,7 @@ function login() {
 }
 
 function avatar(x, size = 44) {
-  if (x.kind === 'lengkap' && x.p) return `<span class="av art">${comboArt(x.p, x.s, size, 'l' + x.id)}</span>`;
+  if (x.kind === 'lengkap' && x.p) return `<span class="av duo" style="background:${TEMPS[x.p].soft}">${glyph(x.p, size * .6)}<span class="sec" style="border-color:${TEMPS[x.s].color}">${glyph(x.s, 15)}</span></span>`;
   if (x.kind === 'mini' && x.p) return `<span class="av" style="background:${TEMPS[x.p].soft}">${glyph(x.p, size * .62)}</span>`;
   if (x.kind === 'mindset' && x.gm) return `<span class="av ring" style="--v:${x.gm.total}"><b>${x.gm.total}</b></span>`;
   return `<span class="av">${esc(initials(x.name))}</span>`;
