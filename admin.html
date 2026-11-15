@@ -479,6 +479,29 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .copy-btn { flex: 0 0 auto; border: 0; border-radius: 999px; padding: 9px 16px; font-weight: 700; font-size: 14px; cursor: pointer; background: var(--ink); color: var(--paper); }
 .card.deep .copy-btn { background: var(--paper); color: var(--ink); }
 .code-box + .code-note { margin-top: 8px; text-align: left; }
+/* cegah melebar di layar sempit (360px) */
+.trio .mini { min-width: 0; }
+.trio .mini .combo-art { width: 100%; height: auto; max-width: 96px; margin: 0 auto; }
+.col { min-width: 0; }
+.col li, .col .words li { overflow-wrap: anywhere; hyphens: auto; }
+/* layar sempit: nama temperamen di lembar skor & kolom tidak bertabrakan */
+@media (max-width: 420px) {
+  .sheet thead th { font-size: 9.5px; letter-spacing: -.02em; padding-left: 0; padding-right: 0; }
+  .sheet thead th span { overflow: hidden; text-overflow: ellipsis; }
+  .sheet tbody th { width: 58px; font-size: 11px; }
+  .col { padding: 12px 10px 8px; }
+  .col-head { gap: 6px; }
+  .col-head b { font-size: 14px; overflow-wrap: anywhere; }
+  .col-head small { font-size: 9.5px; letter-spacing: .04em; }
+}
+@media (max-width: 420px) {
+  .sheet tbody th { width: 70px; font-size: 10px; letter-spacing: -.01em; }
+  .col-head b { overflow-wrap: normal; font-size: 13px; }
+  .col-head .glyph { width: 20px; height: 20px; flex: 0 0 auto; }
+  .col-head strong { font-size: 22px; }
+}
+@media (max-width: 420px) { .sheet tr > :first-child { width: 72px !important; } }
+@media (max-width: 420px) { .sheet tr > :first-child { width: 62px !important; } .sheet tbody th { font-size: 9.5px; } .sheet thead th { font-size: 9px; letter-spacing: -.03em; } .sheet { border-spacing: 3px 0; } }
 
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -710,6 +733,18 @@ body { background: var(--bg); }
 .it-res .sc b { font-family: var(--sans); font-size: 11px; font-weight: 800; white-space: nowrap; overflow: visible; display: inline; }
 .scs { display: flex; align-items: baseline; }
 .code2 { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .03em; }
+@media (max-width: 979px) { .list-pane { max-height: none !important; overflow: visible; } }
+.more { display: block; width: calc(100% - 16px); margin: 10px 8px 6px; padding: 12px; border-radius: 12px; border: 1.5px dashed var(--line-2); background: transparent; font-weight: 600; font-size: 13.5px; color: var(--muted); cursor: pointer; }
+.more:hover { border-color: var(--ink); color: var(--ink); }
+.flaglist li { margin: 8px 0; } .flaglist li b { display: block; font-size: 14.5px; } .flaglist li span { display: block; font-size: 13px; color: var(--ink-2); opacity: .85; margin-top: 2px; }
+.box.seen { background: #F4F7F0; border-color: #DCE6D0; }
+.seen-tag { margin: 12px 0 2px !important; font-size: 11px !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #3F5524; }
+.seen h3 + .seen-tag { margin-top: 0 !important; }
+.seen li.neg { color: var(--ink-2); list-style: circle; }
+.small { font-size: 13px; }
+.it-res small { font-weight: 500; letter-spacing: 0; }
+@media (max-width: 520px) { .hm { display: none; } .it-res { max-width: 46%; } .it-res small { font-size: 11.5px; } }
+@media (max-width: 520px) { .it-res { max-width: 150px; min-width: 0; } .it-res small { white-space: normal; line-height: 1.3; } }
 
 </style>
 </head>
@@ -752,7 +787,8 @@ const CONFIG = {
 
   // Penanda "perlu pendalaman" (tidak pernah ditampilkan sebagai "trauma" ke user)
   extremeScore: 20,       // skor total > 20 di satu temperamen
-  weaknessGap: 5,         // kelemahan - kekuatan >= 5 di satu temperamen
+  weaknessGap: 3,         // kelemahan - kekuatan >= 3 di satu temperamen (>= 5 = prioritas tinggi)
+  weaknessGapHigh: 5,
   imbalanceIndex: 8,      // total ketidakseimbangan kekuatan vs kelemahan (0-20)
   closeThird: 2,          // temperamen ke-3 hanya selisih <= 2 dari ke-2 ...
   closeThirdMin: 9,       // ... dan skornya >= 9  -> pola tiga temperamen
@@ -825,7 +861,7 @@ const COMBOS = {
     watch: ['Bisa terlalu banyak bicara dan kurang mendengar', 'Memutuskan sebelum datanya lengkap', 'Cepat bosan setelah fase serunya lewat'],
     thrive: 'Sales, public speaking, entrepreneur, event, memimpin komunitas.',
     figures: ['Soekarno', 'Tony Stark (Iron Man)'],
-    fact: 'Dalam literatur temperamen klasik, kombinasi ini sering disebut sebagai yang paling ekstrover dari 12 kombinasi.',
+    fact: 'Sanguinis dan Koleris sama-sama ekstrover dan optimis. Dalam teori temperamen, keduanya disebut pasangan alami, dan energinya paling terasa di antara semua kombinasi.',
   },
   SM: {
     name: 'Seniman', en: 'The Artist', natural: false,
@@ -835,7 +871,7 @@ const COMBOS = {
     watch: ['Mood bisa berubah cepat', 'Gampang kepikiran omongan orang', 'Standar tinggi, tapi kadang kurang konsisten menjalankannya'],
     thrive: 'Seni, konten kreatif, musik, desain, mengajar, dunia hiburan.',
     figures: ['Freddie Mercury', 'Lady Gaga'],
-    fact: 'Dalam teori klasik, Sanguinis dan Melankolis adalah pasangan berlawanan. Karena itu kombinasi ini tergolong langka dan menarik untuk didalami.',
+    fact: 'Dalam teori temperamen, Sanguinis dan Melankolis adalah pasangan berlawanan: satu ekspresif, satu reflektif. Kombinasi berlawanan lebih jarang muncul dan menarik untuk didalami.',
   },
   SP: {
     name: 'Penghangat', en: 'The Charmer', natural: true,
@@ -845,7 +881,7 @@ const COMBOS = {
     watch: ['Kurang disiplin dan suka menunda', 'Susah bilang tidak', 'Menghindari konflik yang sebenarnya perlu dihadapi'],
     thrive: 'Hospitality, customer relations, HR, komunitas, MC, pendampingan.',
     figures: ['Olaf (Frozen)', 'SpongeBob'],
-    fact: 'Sanguinis dan Plegmatis sama-sama berorientasi pada orang. Kombinasi ini sering jadi perekat di keluarga dan pertemanan.',
+    fact: 'Sanguinis dan Plegmatis sama-sama berorientasi pada orang. Dalam teori temperamen, keduanya disebut pasangan yang saling melengkapi.',
   },
   CS: {
     name: 'Pendobrak', en: 'The Trailblazer', natural: true,
@@ -855,7 +891,7 @@ const COMBOS = {
     watch: ['Tidak sabaran dengan orang yang lambat', 'Bisa terdengar menyuruh, bukan mengajak', 'Sulit berhenti dan istirahat'],
     thrive: 'Founder, manajer, sales leader, organisasi, olahraga kompetitif.',
     figures: ['Cristiano Ronaldo', 'Gordon Ramsay'],
-    fact: 'Dalam teori klasik, Koleris dan Sanguinis sama-sama cepat bereaksi. Bedanya, Sanguinis cepat reda, sementara Koleris lebih lama memegang tujuannya.',
+    fact: 'Dalam teori temperamen klasik, Koleris dan Sanguinis sama-sama cepat bereaksi. Bedanya, Sanguinis cepat reda, sementara Koleris lebih lama memegang tujuannya.',
   },
   CM: {
     name: 'Arsitek', en: 'The Architect', natural: true,
@@ -865,7 +901,7 @@ const COMBOS = {
     watch: ['Kritis, baik ke orang lain maupun diri sendiri', 'Lupa sisi perasaan saat mengejar target', 'Sulit puas dengan hasil'],
     thrive: 'Engineering, konsultan, strategi bisnis, hukum, kedokteran, manajemen proyek.',
     figures: ['Steve Jobs', 'Batman'],
-    fact: 'Koleris dan Melankolis sama-sama memegang emosi lebih lama. Itu sebabnya kombinasi ini terlihat serius dan sangat konsisten begitu punya tujuan.',
+    fact: 'Koleris dan Melankolis sama-sama berorientasi pada tugas. Itu sebabnya kombinasi ini terlihat serius dan sangat konsisten begitu punya target.',
   },
   CP: {
     name: 'Nakhoda', en: 'The Captain', natural: false,
@@ -875,7 +911,7 @@ const COMBOS = {
     watch: ['Kadang tegas, kadang menghindar, tergantung energi', 'Menyimpan kesal lalu keluar sekaligus', 'Bisa terlihat cuek'],
     thrive: 'Operasional, manajemen, keuangan, keamanan, penanganan krisis.',
     figures: ['Roger Federer', 'Mufasa (The Lion King)'],
-    fact: 'Koleris dan Plegmatis termasuk pasangan berlawanan yang menarik untuk dicek ulang: mana sifat bawaan, mana yang terbentuk karena peran.',
+    fact: 'Dalam teori temperamen, Koleris dan Plegmatis adalah pasangan berlawanan. Kombinasi seperti ini menarik untuk dicek ulang: mana sifat bawaan, mana yang terbentuk karena peran.',
   },
   MS: {
     name: 'Pencerita', en: 'The Storyteller', natural: false,
@@ -885,7 +921,7 @@ const COMBOS = {
     watch: ['Energi sosial cepat habis', 'Overthinking setelah tampil', 'Mood memengaruhi produktivitas'],
     thrive: 'Pengajar, trainer, penulis, content creator, desain, konseling.',
     figures: ['Taylor Swift', 'Albus Dumbledore'],
-    fact: 'Ada ungkapan klasik soal kombinasi ini: Melankolis punya sesuatu untuk dikatakan, Sanguinis punya cara untuk mengatakannya. Karena itu kombinasi ini sering cocok jadi pengajar.',
+    fact: 'Melankolis dan Sanguinis adalah pasangan berlawanan: satu reflektif, satu ekspresif. Saat keduanya seimbang, pikiran yang dalam bisa tersampaikan dengan cara yang hidup.',
   },
   MC: {
     name: 'Ahli', en: 'The Expert', natural: true,
@@ -895,7 +931,7 @@ const COMBOS = {
     watch: ['Sulit mendelegasikan karena khawatir hasilnya kurang', 'Bisa terlalu kritis', 'Kurang fleksibel saat rencana berubah'],
     thrive: 'Dokter, peneliti, auditor, arsitek, programmer, analis.',
     figures: ['Bill Gates', 'Hermione Granger'],
-    fact: 'Tulisan temperamen klasik sering menyebut kombinasi ini cocok untuk profesi seperti dokter, yang butuh ketelitian dan ketegasan sekaligus.',
+    fact: 'Melankolis dan Koleris sama-sama berorientasi pada tugas. Bedanya, Melankolis fokus pada melakukan dengan benar, Koleris fokus pada menyelesaikan. Di kombinasi ini keduanya saling melengkapi.',
   },
   MP: {
     name: 'Pemikir', en: 'The Thinker', natural: true,
@@ -905,7 +941,7 @@ const COMBOS = {
     watch: ['Ragu dan lama memutuskan', 'Cenderung khawatir atau pesimis', 'Memendam perasaan'],
     thrive: 'Riset, penulisan, akuntansi, IT, desain, konseling.',
     figures: ['Albert Einstein', 'Elsa (Frozen)'],
-    fact: 'Dalam teori klasik, Melankolis dan Plegmatis sama-sama "lambat merespons". Bukan lambat berpikir, tapi butuh waktu sebelum bereaksi.',
+    fact: 'Dalam teori temperamen klasik, Melankolis dan Plegmatis sama-sama "lambat merespons". Bukan lambat berpikir, tapi butuh waktu sebelum bereaksi.',
   },
   PS: {
     name: 'Pendamai', en: 'The Peacemaker', natural: true,
@@ -915,7 +951,7 @@ const COMBOS = {
     watch: ['Kurang inisiatif kalau tidak didorong', 'Menunda hal yang tidak menyenangkan', 'Sulit menyuarakan kebutuhan sendiri'],
     thrive: 'Pelayanan, pendidikan, HR, mediasi, kesehatan, tim pendukung.',
     figures: ['Tom Hanks', 'Winnie the Pooh'],
-    fact: 'Plegmatis sering diremehkan karena tenang. Padahal dalam kelompok, merekalah yang paling sering menjaga semua orang tetap akur.',
+    fact: 'Plegmatis sering diremehkan karena tenang. Padahal kemampuan menenangkan dan menengahi adalah kekuatan khas Plegmatis, dan sisi Sanguinismu membuatnya makin terasa hangat.',
   },
   PC: {
     name: 'Jangkar', en: 'The Anchor', natural: false,
@@ -925,7 +961,7 @@ const COMBOS = {
     watch: ['Keras kepala dalam diam', 'Menunda konfrontasi lalu meledak', 'Terlihat santai padahal sedang menekan diri'],
     thrive: 'Manajemen, operasional, administrasi senior, keuangan, pendidikan.',
     figures: ['Ratu Elizabeth II', 'Master Oogway'],
-    fact: 'Koleris dan Plegmatis jarang muncul berpasangan. Banyak orang ternyata punya satu sisi bawaan dan satu sisi yang terbentuk oleh tuntutan hidup.',
+    fact: 'Dalam teori temperamen, Plegmatis dan Koleris adalah pasangan berlawanan yang jarang muncul bersama. Sering kali satu sisi bawaan, dan satu sisi terbentuk oleh tuntutan hidup.',
   },
   PM: {
     name: 'Penjaga', en: 'The Guardian', natural: true,
@@ -935,7 +971,7 @@ const COMBOS = {
     watch: ['Pasif dan menunggu diminta', 'Mudah cemas soal hal kecil', 'Sulit bilang tidak'],
     thrive: 'Administrasi, keuangan, kesehatan, pendidikan anak, riset, layanan.',
     figures: ['Keanu Reeves', 'Baymax'],
-    fact: 'Plegmatis-Melankolis sering digambarkan sebagai kombinasi yang paling jarang menunjukkan permusuhan. Konfliknya lebih sering terjadi di dalam kepala.',
+    fact: 'Plegmatis dan Melankolis sama-sama introver. Dalam teori temperamen, keduanya disebut pasangan alami. Banyak yang dirasakan dan dipikirkan, tapi tidak semuanya ditunjukkan.',
   },
 };
 
@@ -953,10 +989,10 @@ const FIELD_INSIGHTS = {
 };
 
 const FUN_FACTS = [
-  'Teori empat temperamen berasal dari Yunani kuno. Hippocrates mencetuskannya sekitar 400 SM, lalu Galen mengembangkannya.',
+  'Akar teori empat temperamen ada di Yunani kuno. Hippocrates (sekitar 400 SM) menulis tentang empat cairan tubuh, lalu Galen merumuskannya menjadi empat temperamen.',
   'Nama-nama temperamen diambil dari "cairan tubuh" versi kuno: sanguis (darah), chole (empedu kuning), melaina chole (empedu hitam), dan phlegma (lendir). Sekarang dipakai sebagai metafora, bukan teori medis.',
   'Semua orang punya keempat temperamen. Yang berbeda hanya porsinya, dan porsi itu bisa dilatih.',
-  'Pasangan temperamen yang paling sering muncul adalah yang bersebelahan: Sanguinis-Koleris, Koleris-Melankolis, Melankolis-Plegmatis, dan Plegmatis-Sanguinis.',
+  'Pasangan yang bersebelahan (Sanguinis-Koleris, Koleris-Melankolis, Melankolis-Plegmatis, Plegmatis-Sanguinis) paling umum muncul. Pasangan diagonal (Sanguinis-Melankolis, Koleris-Plegmatis) berlawanan dan lebih jarang.',
   'Sanguinis dan Koleris sama-sama cepat bereaksi. Melankolis dan Plegmatis butuh waktu lebih lama sebelum merespons.',
   'Koleris dan Melankolis cenderung fokus pada tugas. Sanguinis dan Plegmatis cenderung fokus pada orang.',
   'Tidak ada temperamen yang paling baik. Tiap kekuatan kalau berlebihan bisa berubah jadi kelemahan.',
@@ -1103,73 +1139,73 @@ const EN = {
       powers: ['Persuasive and naturally influential', 'Bold enough to go first and take initiative', 'Keeps the team going when things get hard'],
       watch: ['Can talk too much and listen too little', 'Decides before all the facts are in', 'Gets bored once the exciting part is over'],
       thrive: 'Sales, public speaking, entrepreneurship, events, community leadership.', figures: ['Soekarno', 'Tony Stark (Iron Man)'],
-      fact: 'Classic temperament literature often calls this the most extroverted of the 12 combinations.' },
+      fact: 'Sanguines and Cholerics are both extroverted and optimistic. Temperament theory calls them a natural pair, and their energy is the most noticeable of all the combinations.' },
     SM: { name: 'Artist', en: '', tagline: 'A stage on the outside, an ocean on the inside.',
       about: 'In front of people you can be cheerful and expressive, but inside you feel everything deeply. This combination brings together two opposite sides, so your energy and mood can rise and fall. That is exactly where your creativity comes from.',
       powers: ['Expressive with a strong sense of beauty', 'Can read and move other people’s emotions', 'Creative, with ideas that are both lively and meaningful'],
       watch: ['Moods can shift quickly', 'Easily dwells on what others say', 'High standards, but not always consistent in following through'],
       thrive: 'Arts, content creation, music, design, teaching, entertainment.', figures: ['Freddie Mercury', 'Lady Gaga'],
-      fact: 'In classic theory, Sanguine and Melancholy are opposites. That makes this combination rare and worth exploring.' },
+      fact: 'In temperament theory, Sanguine and Melancholy are opposites: one expressive, one reflective. Opposite combinations are less common and worth exploring.' },
     SP: { name: 'Charmer', en: '', tagline: 'Makes everyone feel welcome.',
       about: 'You are cheerful like a Sanguine and easygoing like a Phlegmatic. People enjoy being around you because you are funny without being intimidating. You would rather keep the mood pleasant than win an argument.',
       powers: ['Easy to like and friendly to everyone', 'A natural peacemaker when tension rises', 'Funny and calming at the same time'],
       watch: ['Lacks discipline and tends to procrastinate', 'Finds it hard to say no', 'Avoids conflicts that actually need facing'],
       thrive: 'Hospitality, customer relations, HR, communities, hosting, mentoring.', figures: ['Olaf (Frozen)', 'SpongeBob'],
-      fact: 'Sanguines and Phlegmatics are both people-oriented. This combination is often the glue in families and friendships.' },
+      fact: 'Sanguines and Phlegmatics are both people-oriented. Temperament theory calls them a complementary pair.' },
     CS: { name: 'Trailblazer', en: '', tagline: 'Clear target, fast pace, and people follow.',
       about: 'You are mostly Choleric with a touch of Sanguine. You focus on results, but you also know how to bring people along. You love a challenge, move fast, and usually take charge when everyone else hesitates.',
       powers: ['Makes decisions quickly', 'Productive and target-driven', 'Charismatic when leading'],
       watch: ['Impatient with slower people', 'Can sound like giving orders instead of inviting', 'Finds it hard to stop and rest'],
       thrive: 'Founders, managers, sales leaders, organizations, competitive sports.', figures: ['Cristiano Ronaldo', 'Gordon Ramsay'],
-      fact: 'In classic theory, Cholerics and Sanguines both react quickly. The difference: Sanguines cool down fast, while Cholerics hold on to their goals longer.' },
+      fact: 'In classic temperament theory, Cholerics and Sanguines both react quickly. The difference: Sanguines cool down fast, while Cholerics hold on to their goals longer.' },
     CM: { name: 'Architect', en: '', tagline: 'Big vision, tidy execution.',
       about: 'You combine Choleric drive with Melancholy precision. You do not just want to succeed, you want everything done right. This is the most task-focused combination: strategic, persistent, and hard to stop.',
       powers: ['Strategic and long-term minded', 'High quality standards', 'Resilient in the face of complex problems'],
       watch: ['Critical of others and of yourself', 'Forgets feelings while chasing targets', 'Rarely satisfied with results'],
       thrive: 'Engineering, consulting, business strategy, law, medicine, project management.', figures: ['Steve Jobs', 'Batman'],
-      fact: 'Cholerics and Melancholies both hold on to emotions longer. That is why this combination looks serious and very consistent once it has a goal.' },
+      fact: 'Cholerics and Melancholies are both task-oriented. That is why this combination looks serious and very consistent once it has a target.' },
     CP: { name: 'Captain', en: '', tagline: 'Firm without raising your voice.',
       about: 'You have Choleric decisiveness and Phlegmatic calm. In classic theory these two are opposites: one wants to move fast, the other wants peace. The result can be a calm, efficient leader, but at times you may feel pulled in two directions.',
       powers: ['Calm under pressure', 'Practical and efficient', 'Leads without drama'],
       watch: ['Sometimes firm, sometimes avoidant, depending on energy', 'Bottles up frustration, then lets it out all at once', 'Can come across as indifferent'],
       thrive: 'Operations, management, finance, security, crisis handling.', figures: ['Roger Federer', 'Mufasa (The Lion King)'],
-      fact: 'Choleric and Phlegmatic are opposites worth checking twice: which side is natural, and which was shaped by a role?' },
+      fact: 'In temperament theory, Choleric and Phlegmatic are opposites. A combination like this is worth checking twice: which side is natural, and which was shaped by a role?' },
     MS: { name: 'Storyteller', en: '', tagline: 'Has something deep to say, and knows how to say it.',
       about: 'You are mostly Melancholy: reflective, orderly, and deep. Your Sanguine side lets those deep thoughts come out in a warm, engaging way. You can be the teacher, mentor, or creator whose words really land.',
       powers: ['Deep explanations that are easy to digest', 'Sensitive to how people feel', 'Creative yet structured'],
       watch: ['Social energy runs out quickly', 'Overthinks after being on stage', 'Mood affects productivity'],
       thrive: 'Teaching, training, writing, content creation, design, counseling.', figures: ['Taylor Swift', 'Albus Dumbledore'],
-      fact: 'A classic saying about this combination: the Melancholy has something to say, and the Sanguine knows how to say it. That is why it often suits teachers.' },
+      fact: 'Melancholy and Sanguine are opposites: one reflective, one expressive. When both are balanced, deep thoughts can come across in a lively way.' },
     MC: { name: 'Expert', en: '', tagline: 'Perfect details, firm decisions.',
       about: 'You are careful like a Melancholy and decisive like a Choleric. You analyze first, then move with confidence. People rely on you for things that have to be right.',
       powers: ['Sharp and accurate analysis', 'Disciplined and responsible', 'Willing to make hard decisions after careful thought'],
       watch: ['Struggles to delegate for fear of lower quality', 'Can be overly critical', 'Less flexible when plans change'],
       thrive: 'Doctors, researchers, auditors, architects, programmers, analysts.', figures: ['Bill Gates', 'Hermione Granger'],
-      fact: 'Classic temperament writing often says this combination suits professions like medicine, which need both precision and decisiveness.' },
+      fact: 'Melancholies and Cholerics are both task-oriented. The difference: Melancholies focus on doing it right, Cholerics on getting it done. In this combination they complement each other.' },
     MP: { name: 'Thinker', en: '', tagline: 'Calm on the outside, deep on the inside.',
       about: 'You are reflective like a Melancholy and calm like a Phlegmatic. You prefer to observe before speaking, and when you do speak, it is usually well thought out. This is the most introverted combination: you recharge through time alone.',
       powers: ['A deep and careful thinker', 'Loyal and dependable', 'A good listener'],
       watch: ['Hesitant and slow to decide', 'Tends to worry or be pessimistic', 'Keeps feelings bottled up'],
       thrive: 'Research, writing, accounting, IT, design, counseling.', figures: ['Albert Einstein', 'Elsa (Frozen)'],
-      fact: 'In classic theory, Melancholies and Phlegmatics are both "slow to respond". Not slow thinkers, they just need time before reacting.' },
+      fact: 'In classic temperament theory, Melancholies and Phlegmatics are both "slow to respond". Not slow thinkers, they just need time before reacting.' },
     PS: { name: 'Peacemaker', en: '', tagline: 'Easygoing, funny, and calming.',
       about: 'You are mostly Phlegmatic: steady, patient, and soothing. Your Sanguine side gives you humor and makes you easy to get close to. People come to you when they need a comfortable place.',
       powers: ['Calms the room', 'Light, well-timed humor', 'Easy to work with'],
       watch: ['Lacks initiative unless pushed', 'Puts off unpleasant things', 'Struggles to voice your own needs'],
       thrive: 'Service, education, HR, mediation, healthcare, support teams.', figures: ['Tom Hanks', 'Winnie the Pooh'],
-      fact: 'Phlegmatics are often underestimated because they are calm. Yet in a group, they are the ones who most often keep everyone getting along.' },
+      fact: 'Phlegmatics are often underestimated because they are calm. Yet calming and mediating are classic Phlegmatic strengths, and your Sanguine side makes them feel even warmer.' },
     PC: { name: 'Anchor', en: '', tagline: 'Calm and steady, but with a firm stance.',
       about: 'You are calm like a Phlegmatic, but your Choleric side makes you firm when needed. You dislike fuss, yet you are not easily moved. Because these two sides are opposites in classic theory, you may feel you have two different modes.',
       powers: ['Stable and dependable', 'Firm when it truly matters', 'Wise in choosing your battles'],
       watch: ['Quietly stubborn', 'Delays confrontation, then explodes', 'Looks relaxed while actually holding it in'],
       thrive: 'Management, operations, senior administration, finance, education.', figures: ['Queen Elizabeth II', 'Master Oogway'],
-      fact: 'Choleric and Phlegmatic rarely appear as a pair. Many people turn out to have one natural side and one shaped by life’s demands.' },
+      fact: 'In temperament theory, Phlegmatic and Choleric are opposites that rarely appear together. Often one side is natural and the other was shaped by the demands of life.' },
     PM: { name: 'Guardian', en: '', tagline: 'Gentle, careful, and always there.',
       about: 'You are patient like a Phlegmatic and careful like a Melancholy. You work neatly without making noise, and people know they can trust you. You rarely seek attention, but your presence is felt.',
       powers: ['Consistent and trustworthy', 'Neat and accurate', 'Empathetic and helpful'],
       watch: ['Passive, waits to be asked', 'Worries easily about small things', 'Finds it hard to say no'],
       thrive: 'Administration, finance, healthcare, early education, research, service.', figures: ['Keanu Reeves', 'Baymax'],
-      fact: 'Phlegmatic-Melancholy is often described as the combination least likely to show hostility. Its conflicts mostly happen inside the head.' },
+      fact: 'Phlegmatics and Melancholies are both introverted. Temperament theory calls them a natural pair. Much is felt and thought, but not all of it is shown.' },
   },
   FIELD_INSIGHTS: {
     S: { title: 'Comfortable speaking in public', text: 'People with a Sanguine score like this are usually quite comfortable presenting and speaking in front of a crowd.' },
@@ -1180,10 +1216,10 @@ const EN = {
     CP: { title: 'Firm, but chooses peace first', text: 'You can be firm when the situation demands it, but your first choice is usually the most peaceful path.' },
   },
   FUN_FACTS: [
-    'The four temperaments theory comes from ancient Greece. Hippocrates proposed it around 400 BC, and Galen developed it further.',
+    'The roots of the four temperaments go back to ancient Greece. Hippocrates (around 400 BC) wrote about four bodily fluids, and Galen later turned them into four temperaments.',
     'The temperament names come from the ancient "bodily fluids": sanguis (blood), chole (yellow bile), melaina chole (black bile), and phlegma (phlegm). Today they are used as metaphors, not medicine.',
     'Everyone has all four temperaments. Only the proportions differ, and those proportions can be trained.',
-    'The most common pairings are the neighbouring ones: Sanguine-Choleric, Choleric-Melancholy, Melancholy-Phlegmatic, and Phlegmatic-Sanguine.',
+    'Neighbouring pairs (Sanguine-Choleric, Choleric-Melancholy, Melancholy-Phlegmatic, Phlegmatic-Sanguine) are the most common. Diagonal pairs (Sanguine-Melancholy, Choleric-Phlegmatic) are opposites and less common.',
     'Sanguines and Cholerics both react quickly. Melancholies and Phlegmatics take longer before responding.',
     'Cholerics and Melancholies tend to focus on tasks. Sanguines and Phlegmatics tend to focus on people.',
     'No temperament is the best. Any strength, when overused, can turn into a weakness.',
@@ -1508,7 +1544,7 @@ const UI = {
   'Tingkat persetujuan': 'Level of agreement',
   'Token ini sudah dipakai. Satu token hanya berlaku untuk satu kali tes.': 'This token has already been used. Each token is valid for one test only.',
   'Token ini sudah tidak aktif. Hubungi tim Mengapa.': 'This token is no longer active. Please contact the Mengapa team.',
-  'Token kamu terima dari tim Mengapa setelah pembayaran. Satu token berlaku untuk satu kali tes.': 'You receive your token from the Mengapa team after payment. Each token is valid for one test.',
+  'Tes Karakter Lengkap memakai token dari tim Mengapa. Satu token berlaku untuk satu kali tes.': 'The Full Character Test requires a token from the Mengapa team. Each token is valid for one test.',
   'Token tidak ditemukan. Cek lagi penulisannya ya.': 'Token not found. Please check the spelling.',
   'Tidak bisa memeriksa token. Cek koneksi internet lalu coba lagi.': 'Could not check the token. Check your internet connection and try again.',
   'Sistem sedang bermasalah. Coba lagi sebentar lagi.': 'Something went wrong on our side. Please try again shortly.',
@@ -1704,11 +1740,19 @@ function analyze(answers, cfg = CONFIG) {
   });
   ORDER.forEach(k => {
     if (sc.w[k] - sc.s[k] >= cfg.weaknessGap) {
-      flags.push({ code: 'gap', level: 'tinggi', type: k,
-        internal: L(`Kelemahan jauh > kekuatan di ${name(k)} (K${sc.s[k]} / L${sc.w[k]})`, `Weaknesses far exceed strengths in ${name(k)} (S${sc.s[k]} / W${sc.w[k]})`),
-        user: L(`Di sisi ${name(k)}, kelemahan yang kamu pilih jauh lebih banyak daripada kekuatannya. Ini bisa berkaitan dengan cara kamu memandang diri sendiri atau pengalaman tertentu, dan paling enak dibahas langsung.`, `On your ${name(k)} side, you picked far more weaknesses than strengths. This can relate to how you see yourself or to certain experiences, and is best discussed in person.`) });
+      const hi = sc.w[k] - sc.s[k] >= (cfg.weaknessGapHigh || 5);
+      flags.push({ code: 'gap', level: hi ? 'tinggi' : 'sedang', type: k,
+        internal: L(`Kelemahan > kekuatan di ${name(k)} (K${sc.s[k]} / L${sc.w[k]}, selisih ${sc.w[k] - sc.s[k]})`, `Weaknesses exceed strengths in ${name(k)} (S${sc.s[k]} / W${sc.w[k]}, gap ${sc.w[k] - sc.s[k]})`),
+        user: L(`Di sisi ${name(k)}, kelemahan yang kamu pilih lebih banyak daripada kekuatannya (${sc.w[k]} banding ${sc.s[k]}). Pola seperti ini sering berkaitan dengan cara kita memandang diri sendiri atau pengalaman yang membentuk kita, dan paling enak dibahas langsung.`, `On your ${name(k)} side, you picked more weaknesses than strengths (${sc.w[k]} to ${sc.s[k]}). A pattern like this often relates to how we see ourselves or the experiences that shaped us, and is best discussed in person.`) });
     }
   });
+  // Beberapa sisi dengan kelemahan > kekuatan: cukup satu kalimat untuk peserta, supaya tidak terasa menumpuk
+  const gaps = flags.filter(f => f.code === 'gap');
+  if (gaps.length > 1) {
+    const sides = gaps.map(f => name(f.type)).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
+    const txt = L(`Di sisi ${sides}, kelemahan yang kamu pilih lebih banyak daripada kekuatannya. Pola seperti ini sering berkaitan dengan cara kita memandang diri sendiri atau pengalaman yang membentuk kita, dan paling enak dibahas langsung.`, `On your ${sides} sides, you picked more weaknesses than strengths. A pattern like this often relates to how we see ourselves or the experiences that shaped us, and is best discussed in person.`);
+    gaps.forEach(f => { f.user = txt; });
+  }
   const imbalance = ORDER.reduce((a, k) => a + Math.abs(sc.s[k] - sc.w[k]), 0) / 2;
   if (imbalance >= cfg.imbalanceIndex && !flags.some(f => f.code === 'gap')) {
     flags.push({ code: 'imbalance', level: 'sedang',
@@ -1987,7 +2031,7 @@ const session = {
 };
 
 const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '',
-  src: 'new', sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
+  limit: 80, src: 'new', sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
 const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
 const testName = k => ({ lengkap: L('Tes Karakter Lengkap', 'Full Character Test'), mini: L('Tes Karakter Mini', 'Mini Character Test'), mindset: 'Growth Mindset Test' })[k];
 const levelName = v => v === 'Tinggi' ? L('Tinggi', 'High') : v === 'Sedang' ? L('Sedang', 'Medium') : v;
@@ -2044,16 +2088,16 @@ function normRow(r, kind) {
       const list = (k, part) => String(r[`${T4[k]}_sifat_${part}`] || '').split(',').map(w => w.trim()).filter(Boolean).map(w => ({ type: k, word: wordOf(w) }));
       a.picks = { strengths: ORDER.flatMap(k => list(k, 'kekuatan')), weaknesses: ORDER.flatMap(k => list(k, 'kelemahan')) };
       it.a = a; it.legacy = true;
-      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`; it.subHtml = scoreChips(a.scores.t, a.scores.s, a.scores.w);
+      it.title = a.combo.name; it.sub = SLUG ? `${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}` : `${ab(a.primary)} + ${ab(a.secondary)}`; it.subHtml = SLUG ? '' : scoreChips(a.scores.t, a.scores.s, a.scores.w);
       it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
     } else if (kind === 'lengkap' && /^[SCMP]{40}$/.test(ans)) {
       const a = analyze(ans.split('')); it.a = a;
-      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`; it.subHtml = scoreChips(a.scores.t, a.scores.s, a.scores.w);
+      it.title = a.combo.name; it.sub = SLUG ? `${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}` : `${ab(a.primary)} + ${ab(a.secondary)}`; it.subHtml = SLUG ? '' : scoreChips(a.scores.t, a.scores.s, a.scores.w);
       it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
     } else if (kind === 'mini' && /^[SCMP]{10}$/.test(ans)) {
       const c = { S: 0, C: 0, M: 0, P: 0 }; ans.split('').forEach(k => c[k]++);
       const max = Math.max(...Object.values(c)), top = ORDER.filter(k => c[k] === max);
-      it.mini = c; it.top = top; it.p = top[0]; it.subHtml = scoreChips(c, null, null, 10);
+      it.mini = c; it.top = top; it.p = top[0]; it.subHtml = SLUG ? '' : scoreChips(c, null, null, 10);
       it.title = top.map(k => TEMPS[k].name).join(' / '); it.sub = top.length > 1 ? L('Dominan seri', 'Tied primary') : L('Dominan', 'Primary');
     } else if (kind === 'mindset' && /^[1-5]{15}$/.test(ans)) {
       const a = analyzeMindset(ans.split('')); it.gm = a;
@@ -2092,10 +2136,11 @@ const FILTERS = () => SLUG ? [] : [
   { k: 'minor', label: L('Di bawah 18', 'Under 18'), test: x => Number(x.age) > 0 && Number(x.age) < 18 },
 ];
 const RANGES = () => [['all', L('Semua', 'All time')], ['today', L('Hari ini', 'Today')], ['7', L('7 hari', '7 days')], ['30', L('30 hari', '30 days')], ['month', L('Bulan ini', 'This month')], ['custom', L('Pilih tanggal', 'Custom')]];
-const SORTS = () => [['date', L('Tanggal tes', 'Test date')], ['name', L('Nama', 'Name')], ['dom', L('Karakter dominan', 'Primary temperament')], ['age', L('Usia', 'Age')], ['score', L('Skor', 'Score')]];
-const DEFDIR = { date: -1, name: 1, dom: 1, age: 1, score: -1 };
+const SORTS = () => [['date', L('Tanggal tes', 'Test date')], ['type', L('Jenis tes', 'Test type')], ['name', L('Nama', 'Name')], ['dom', L('Karakter dominan', 'Primary temperament')], ['age', L('Usia', 'Age')], ['score', L('Skor', 'Score')]];
+const DEFDIR = { type: 1, date: -1, name: 1, dom: 1, age: 1, score: -1 };
 const dirLabel = () => ({
   date: [L('Terlama dulu', 'Oldest first'), L('Terbaru dulu', 'Newest first')],
+  type: [L('Lengkap dulu', 'Full first'), L('Mindset dulu', 'Mindset first')],
   name: [L('A ke Z', 'A to Z'), L('Z ke A', 'Z to A')],
   dom: [L('S, K, M, P', 'S, C, M, P'), L('P, M, K, S', 'P, M, C, S')],
   age: [L('Termuda dulu', 'Youngest first'), L('Tertua dulu', 'Oldest first')],
@@ -2127,6 +2172,7 @@ function sorted(arr) {
   const d = S.dir, name = (a, b) => String(a.name).localeCompare(String(b.name), 'id', { sensitivity: 'base' });
   const cmp = {
     date: (a, b) => (a.t - b.t) * d,
+    type: (a, b) => (KORDER.indexOf(a.kind) - KORDER.indexOf(b.kind)) * d || b.t - a.t,
     name: (a, b) => name(a, b) * d || b.t - a.t,
     age: (a, b) => ((Number(a.age) || 999) - (Number(b.age) || 999)) * d || name(a, b),
     dom: (a, b) => ((ORDER.indexOf(domOf(a)[0]) + 1 || 9) - (ORDER.indexOf(domOf(b)[0]) + 1 || 9)) * d || name(a, b),
@@ -2134,6 +2180,7 @@ function sorted(arr) {
   }[S.sort];
   return [...arr].sort(cmp);
 }
+const KORDER = ['lengkap', 'mini', 'mindset'];
 const visible = () => sorted(base().filter(x => S.tab === 'all' || x.kind === S.tab));
 const rangeOn = () => S.range !== 'all' && (S.range !== 'custom' || S.from || S.to);
 const activeCount = () => S.temps.size + S.cats.size + S.f.size + (rangeOn() ? 1 : 0);
@@ -2174,30 +2221,74 @@ function avatar(x, size = 44) {
 }
 
 function listHtml(items) {
+  const all = items;
   if (S.loading && !S.items.length) return `<div class="empty"><span class="spin"></span>${L('Memuat data…', 'Loading data…')}</div>`;
   if (!items.length) return `<div class="empty">${S.items.length ? L('Tidak ada hasil yang cocok dengan pencarian atau filter.', 'No results match your search or filters.') : L('Belum ada data tes.', 'No test data yet.')}</div>`;
   const today = dayKey(Date.now()), yest = dayKey(Date.now() - 864e5);
   let last = '', out = '';
-  const groupOf = x => S.sort === 'date' ? dayKey(x.t) : S.sort === 'dom' ? (domOf(x)[0] || '-') : S.sort === 'name' ? (String(x.name).trim()[0] || '#').toUpperCase() : '';
-  const groupLabel = (g, x) => S.sort === 'date' ? (g === today ? L('Hari ini', 'Today') : g === yest ? L('Kemarin', 'Yesterday') : fmtDate(x.t))
-    : S.sort === 'dom' ? (TEMPS[g] ? `<i class="gd" style="background:${TEMPS[g].color}"></i>${TEMPS[g].name} · ${items.filter(y => domOf(y)[0] === g).length}` : L('Growth Mindset', 'Growth Mindset')) : esc(g);
+  const groupOf = x => S.sort === 'type' ? x.kind : S.sort === 'date' ? dayKey(x.t) : S.sort === 'dom' ? (domOf(x)[0] || '-') : S.sort === 'name' ? (String(x.name).trim()[0] || '#').toUpperCase() : '';
+  const groupLabel = (g, x) => S.sort === 'type' ? `${testName(g)} · ${all.filter(y => y.kind === g).length}` : S.sort === 'date' ? (g === today ? L('Hari ini', 'Today') : g === yest ? L('Kemarin', 'Yesterday') : fmtDate(x.t))
+    : S.sort === 'dom' ? (TEMPS[g] ? `<i class="gd" style="background:${TEMPS[g].color}"></i>${TEMPS[g].name} · ${all.filter(y => domOf(y)[0] === g).length}` : L('Growth Mindset', 'Growth Mindset')) : esc(g);
+  const total = items.length; items = items.slice(0, S.limit);
   items.forEach(x => {
     const dk = groupOf(x);
     if (dk && dk !== last) { out += `${last ? '</section>' : ''}<section class="grp"><div class="day">${groupLabel(dk, x)}</div>`; last = dk; }
     out += `<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
       ${avatar(x)}
-      <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.legacy ? `<em class="old">${L('Arsip', 'Archive')}</em>` : ''}${x.token ? ' · ' + esc(x.token) : ''}</small></span>
-      <span class="it-res"><b>${esc(x.title)}${x.p && x.s ? ` <span class="code2">(${ab(x.p)}${ab(x.s)})</span>` : ''}</b>${x.subHtml || `<small>${esc(x.sub)}</small>`}</span>
+      <span class="it-main"><b>${esc(x.name)}</b><small>${SLUG ? (x.age ? `${esc(x.age)} ${L('tahun', 'years')}` : '') : `${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>`}${x.legacy ? `<em class="old">${L('Arsip', 'Archive')}</em>` : ''}${!SLUG && x.token ? ' · ' + esc(x.token) : ''}</small></span>
+      <span class="it-res"><b>${esc(x.title)}${!SLUG && x.p && x.s ? ` <span class="code2">(${ab(x.p)}${ab(x.s)})</span>` : ''}</b>${x.subHtml || `<small>${esc(x.sub)}</small>`}</span>
       <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Prioritas follow up', 'Follow-up priority')}: ${levelName(x.flag)}"></i>` : ''}</span>
     </button>`;
   });
-  return out + (last ? '</section>' : '');
+  out += last ? '</section>' : '';
+  if (total > items.length) out += `<button class="more" id="more">${L(`Tampilkan ${Math.min(80, total - items.length)} lagi`, `Show ${Math.min(80, total - items.length)} more`)} <small>(${items.length}/${total})</small></button>`;
+  return out;
 }
 
 function bars(rows, max) {
   return rows.map(r => `<div class="bar"><span>${esc(r.label)}</span><div class="rail"><i style="width:${Math.max(2, r.v / max * 100)}%;background:${r.color}"></i></div><b>${r.v}</b></div>`).join('');
 }
 
+const FLAG_BASIS = () => ({
+  extreme: L('Skor satu temperamen di atas 20 dari 40. Dari pengalaman lapangan Mengapa, skor sekuat ini sering terkait sisi yang "terpaksa" kuat karena keadaan atau pengalaman tertentu, termasuk kemungkinan trauma.', 'One temperament scores above 20 of 40. In Mengapa field experience, a score this strong often relates to a side that had to become strong because of circumstances, including possible trauma.'),
+  gap: L('Kelemahan yang dipilih minimal 3 lebih banyak dari kekuatannya di temperamen yang sama (5 atau lebih = prioritas tinggi). Dari pengalaman lapangan Mengapa, pola ini sering berkaitan dengan cara pandang negatif terhadap diri sendiri atau pengalaman yang melukai.', 'At least 3 more weaknesses than strengths in the same temperament (5 or more = high priority). In Mengapa field experience, this pattern often relates to a negative self-view or hurtful experiences.'),
+  imbalance: L('Kekuatan dan kelemahan tersebar tidak seimbang di keempat temperamen (indeks ketidakseimbangan 8 atau lebih).', 'Strengths and weaknesses are unevenly spread across the four temperaments (imbalance index 8 or more).'),
+  opposite: L('Dominan dan sekunder adalah pasangan berlawanan (Sanguinis-Melankolis atau Koleris-Plegmatis). Menurut Florence Littauer, kombinasi ini jarang alami dan sering menandakan "topeng": satu sisi terbentuk karena peran atau tuntutan lingkungan.', 'Primary and secondary are opposites (Sanguine-Melancholy or Choleric-Phlegmatic). According to Florence Littauer, this combination is rarely natural and often signals a "mask": one side shaped by a role or expectations.'),
+  triad: L('Tiga temperamen skornya berdekatan (selisih 2 atau kurang, skor 9 ke atas). Menurut konsep topeng Littauer, ini layak dicek: mana yang bawaan, mana yang terbentuk karena peran.', 'Three temperaments score close together (within 2, at 9 or above). Based on Littauer\'s mask concept, this is worth checking: which is natural and which was shaped by a role.'),
+});
+function shownToParticipant(x) {
+  const tag = t => `<p class="seen-tag">${t}</p>`;
+  if (x.kind === 'lengkap' && x.a) {
+    const a = x.a, sc = a.scores, maxT = Math.max(...ORDER.map(k => sc.t[k])), minT = Math.min(...ORDER.map(k => sc.t[k]));
+    const comfort = ORDER.filter(k => sc.t[k] === maxT && maxT !== minT), grow = ORDER.filter(k => sc.t[k] === minT && maxT !== minT);
+    return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
+      ${tag(L('Penjelasan kombinasi', 'Combination explanation'))}<p><b>${esc(a.combo.name)}</b>. ${esc(a.combo.tagline)} ${esc(a.combo.about)}</p>
+      ${comfort.length ? `${tag(L('Cara membaca hasil', 'How to read the result'))}<p>${L('Zona nyaman', 'Comfort zone')}: <b>${comfort.map(k => TEMPS[k].name).join(', ')}</b> · ${L('Ruang tumbuh terbesar', 'Biggest growth area')}: <b>${grow.map(k => TEMPS[k].name).join(', ')}</b></p>` : ''}
+      ${a.insights.length ? `${tag(L('Insight tambahan', 'More insights'))}<ul>${a.insights.map(i => `<li><b>${esc(i.title)}.</b> ${esc(i.text)}</li>`).join('')}</ul>` : ''}
+      ${a.ties.length ? `${tag(L('Catatan skor seri', 'Tie note'))}${a.ties.map(t => `<p>${esc(t)}</p>`).join('')}` : ''}
+      ${a.flags.length ? `${tag(L('Kartu "Ada pola menarik di hasilmu"', '"There is an interesting pattern" card'))}<ul>${[...new Set(a.flags.map(f => f.user))].map(t => `<li>${esc(t)}</li>`).join('')}</ul><p class="muted small">${L('Diarahkan ke konsultasi via Instagram atau WhatsApp.', 'Directed to a consultation via Instagram or WhatsApp.')}</p>`
+        : `${tag(L('Ajakan penutup', 'Closing invitation'))}<p class="muted small">${L('Kartu "Siap keluar dari jebakan karakter?" dengan ajakan konsultasi via Instagram atau WhatsApp.', '"Ready to break out of the character trap?" card with a consultation invite via Instagram or WhatsApp.')}</p>`}
+    </section>`;
+  }
+  if (x.kind === 'mini' && x.mini) {
+    const pr = MINI_PROFILE[x.p];
+    return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
+      ${tag(L('Temperamen dominan', 'Primary temperament'))}<p><b>${esc(TEMPS[x.p].name)}</b>. ${esc(TEMPS[x.p].essence)}</p>
+      ${tag(L('Kekuatan dan yang perlu diwaspadai', 'Strengths and watch-outs'))}<ul>${pr.powers.map(t => `<li>${esc(t)}</li>`).join('')}${pr.watch.map(t => `<li class="neg">${esc(t)}</li>`).join('')}</ul>
+      <p class="muted small">${L('Diajak mengambil Tes Karakter Lengkap via Instagram atau WhatsApp.', 'Invited to take the Full Character Test via Instagram or WhatsApp.')}</p>
+    </section>`;
+  }
+  if (x.kind === 'mindset' && x.gm) {
+    const a = x.gm, focus = a.weakest.length ? a.weakest : [a.sorted[4]];
+    return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
+      ${tag(L('Penjelasan kategori', 'Category explanation'))}<p>${esc(GM_CATEGORIES[a.category].about)}</p>
+      ${tag(L('Penjelasan per pilar', 'Per-pillar explanation'))}<ul>${GM_PILLAR_ORDER.map(k => `<li><b>${esc(GM_PILLARS[k].name)} (${a.pillars[k]}).</b> ${esc(GM_PILLARS[k][a.level(a.pillars[k])])}</li>`).join('')}</ul>
+      ${tag(L('Langkah kecil minggu ini', 'One small step this week'))}<p>${esc(GM_STEP[focus[0]])}</p>
+      <p class="muted small">${L('Diajak Tes Karakter Lengkap atau sesi coaching via Instagram atau WhatsApp.', 'Invited to the Full Character Test or a coaching session via Instagram or WhatsApp.')}</p>
+    </section>`;
+  }
+  return '';
+}
 function detailLengkap(x) {
   const a = x.a, sc = a.scores, P = TEMPS[a.primary], Sx = TEMPS[a.secondary];
   const traits = k => ({ s: a.picks.strengths.filter(w => w.type === k).map(w => w.word), w: a.picks.weaknesses.filter(w => w.type === k).map(w => w.word) });
@@ -2207,7 +2298,7 @@ function detailLengkap(x) {
       <div><small class="eyebrow">${P.name} + ${Sx.name}</small><h2>${esc(a.combo.name)}</h2><p class="muted">${esc(a.combo.tagline)}</p>
         ${a.alts.length ? `<p class="note">${L('Bisa juga terbaca sebagai', 'Can also be read as')}: ${a.alts.map(k => COMBOS[k].name).join(', ')}</p>` : ''}</div>
     </section>
-    ${!SLUG && a.flags.length ? `<section class="box warn"><h3>${L('Perlu follow up', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul>${a.flags.map(f => `<li>${esc(f.internal)}</li>`).join('')}</ul></section>` : ''}
+    ${!SLUG && a.flags.length ? `<section class="box warn"><h3>${L('Perlu follow up', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul class="flaglist">${a.flags.map(f => `<li><b>${esc(f.internal)}</b><span>${esc(FLAG_BASIS()[f.code] || '')}</span></li>`).join('')}</ul></section>` : ''}
     <section class="box"><h3>${L('Gambaran singkat', 'Quick profile')}</h3>
       <div class="prof">
         <div><h4>${L('Kekuatan utama', 'Key strengths')}</h4><ul>${a.combo.powers.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
@@ -2218,7 +2309,7 @@ function detailLengkap(x) {
     </section>
     <section class="box"><h3>${L('Lembar skor', 'Score sheet')}</h3>
       <table class="sheet"><thead><tr><th></th><th>${L('Kekuatan', 'Strengths')}</th><th>${L('Kelemahan', 'Weaknesses')}</th><th>Total</th></tr></thead><tbody>
-      ${ORDER.map(k => `<tr><td><span class="sw" style="background:${TEMPS[k].color}"></span>${TEMPS[k].name}</td><td>${sc.s[k]}</td><td class="${sc.w[k] - sc.s[k] >= 5 ? 'alert' : ''}">${sc.w[k]}</td><td><b>${sc.t[k]}</b></td></tr>`).join('')}
+      ${ORDER.map(k => `<tr><td><span class="sw" style="background:${TEMPS[k].color}"></span>${TEMPS[k].name}</td><td>${sc.s[k]}</td><td class="${sc.w[k] - sc.s[k] >= 3 ? 'alert' : ''}">${sc.w[k]}</td><td><b>${sc.t[k]}</b></td></tr>`).join('')}
       </tbody></table>
       <div class="bars">${bars(ORDER.map(k => ({ label: '', v: sc.t[k], color: TEMPS[k].color })), Math.max(20, ...ORDER.map(k => sc.t[k])))}</div>
     </section>
@@ -2280,6 +2371,7 @@ function detail(x) {
     ${x.legacy ? `<div class="box legacy small"><p>${L('Diambil di <b>web app lama</b>. Skor, kombinasi, dan sifat yang dipilih tetap akurat. Urutan jawaban per soal dan durasi tidak tersimpan di versi lama.', 'Taken on the <b>old web app</b>. Scores, combination, and selected traits are accurate. Per-question order and duration were not stored in the old version.')}</p></div>` : ''}
     ${x.tooFast ? `<div class="box warn small"><p>${L(`Dikerjakan sangat cepat (${fmtDur(x.dur)}). Hasil mungkin kurang akurat.`, `Completed very quickly (${fmtDur(x.dur)}). The result may be less accurate.`)}</p></div>` : ''}
     ${body}
+    ${SLUG ? '' : shownToParticipant(x)}
     <section class="box"><h3>${L('Data peserta', 'Participant details')}</h3><dl class="kv">
       ${row(L('Tanggal lahir', 'Date of birth'), esc(x.dob))}${row(L('Usia', 'Age'), yrs(x.age))}${row(L('Orang tua/wali', 'Parent/guardian'), esc(x.guardian))}
       ${row('WhatsApp', x.wa ? `<a href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${esc(waPretty(x.wa))}</a>` : '')}${row('Token', esc(x.token))}${row(L('Durasi', 'Duration'), fmtDur(x.dur))}
@@ -2338,7 +2430,7 @@ function app() {
       <button class="linkbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
     </header>
     ${S.err ? `<div class="banner">${esc(S.err)}</div>` : ''}
-    ${nOld ? `<div class="srcbar"><div class="src" role="tablist">${[['new', L('Web baru', 'New web app'), nNew], ['old', L('Arsip web lama', 'Old web app archive'), nOld], ['all', L('Semua', 'All'), nNew + nOld]].map(o => `<button data-src="${o[0]}" aria-pressed="${S.src === o[0]}">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>
+    ${nOld ? `<div class="srcbar"><div class="src" role="tablist">${[['new', L('Web baru', 'New web app'), nNew], ['old', L('Arsip<span class="hm"> web lama</span>', 'Archive<span class="hm"> (old web app)</span>'), nOld], ['all', L('Semua', 'All'), nNew + nOld]].map(o => `<button data-src="${o[0]}" aria-pressed="${S.src === o[0]}">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>
       ${S.src === 'old' ? `<p class="srcnote">${L('Hasil dari web app lama, sebelum November 2026. Tidak dihitung di data web baru.', 'Results from the old web app, before November 2026. Not counted in the new web app data.')}</p>` : ''}</div>` : ''}
     <section class="stats${SLUG ? ' five' : ''}">
       <div><b>${B.length}</b><span>${filtered ? L('Hasil sesuai filter', 'Matching results') : L('Total tes', 'Total tests')}</span></div>
@@ -2369,7 +2461,7 @@ function bindCommon(root) {
   root.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', async () => {
     try { await navigator.clipboard.writeText(b.dataset.copy); toast(L('Disalin', 'Copied')); } catch (e) { toast(b.dataset.copy); }
   }));
-  root.querySelectorAll('[data-act=close]').forEach(b => b.addEventListener('click', () => { S.sel = ''; render(); }));
+  root.querySelectorAll('[data-act=close]').forEach(b => b.addEventListener('click', closeDetail));
   root.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => {
     if (b.dataset.lang === LANG) return;
     setLang(b.dataset.lang); ls.set(LKEY, LANG); rebuild(); render();
@@ -2381,7 +2473,15 @@ function renderList() {
   document.querySelector('.count').textContent = countText(visible().length);
   bindList();
 }
+let _io = null;
 function bindList() {
+  const more = document.getElementById('more');
+  if (_io) { _io.disconnect(); _io = null; }
+  if (more) {
+    const go = () => { S.limit += 80; renderList(); };
+    more.addEventListener('click', go);
+    if ('IntersectionObserver' in window) { _io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) go(); }, { rootMargin: '300px' }); _io.observe(more); }
+  }
   $app.querySelectorAll('.it').forEach(b => b.addEventListener('click', () => {
     S.sel = b.dataset.key;
     $app.querySelectorAll('.it.on').forEach(x => x.classList.remove('on')); b.classList.add('on');
@@ -2392,6 +2492,7 @@ function bindList() {
 }
 
 function render() {
+  document.title = SLUG ? `Dashboard · ${S.clientName || CLIENT}` : 'Dashboard · Mengapa';
   if (!S.session) {
     $app.innerHTML = login();
     bindCommon($app);
@@ -2413,6 +2514,7 @@ function render() {
     return;
   }
   const qFocused = document.activeElement && document.activeElement.id === 'q';
+  if (!render.keepLimit) S.limit = 80;
   $app.innerHTML = app();
   bindCommon($app); bindList();
   $app.querySelector('[data-act=reload]').addEventListener('click', load);
@@ -2438,12 +2540,17 @@ function render() {
     render();
   }));
   const q = document.getElementById('q');
-  q.addEventListener('input', () => { S.q = q.value; renderList(); });
+  q.addEventListener('input', () => { S.q = q.value; S.limit = 80; renderList(); });
   if (qFocused) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
 }
 
 { const q = (new URLSearchParams(location.search).get('lang') || '').toLowerCase(); setLang(q === 'en' || q === 'id' ? q : ls.get(LKEY) || 'id'); }
-window.addEventListener('popstate', () => { if (S.sel) { S.sel = ''; render(); } });
+function closeDetail() {
+  S.sel = ''; const sh = document.querySelector('.shell'); if (!sh) return;
+  sh.classList.remove('has-sel'); $app.querySelectorAll('.it.on').forEach(x => x.classList.remove('on'));
+  const d = document.getElementById('detail'); if (d) d.innerHTML = detail(null);
+}
+window.addEventListener('popstate', () => { if (S.sel) closeDetail(); });
 render();
 if (S.session) load();
 
