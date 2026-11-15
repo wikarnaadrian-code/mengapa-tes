@@ -596,6 +596,16 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .sv-orbit { margin: 22px auto 6px; }
 @media (min-width: 760px) { .sv-orbit { grid-row: 1 / 5; align-self: center; margin: 0; } }
 
+/* tombol navigasi atas */
+.navbtn { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px 0 11px; border: 1.5px solid var(--line-2); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 13px; font-weight: 600; letter-spacing: .01em; cursor: pointer; transition: background .2s, color .2s, border-color .2s, transform .2s; -webkit-tap-highlight-color: transparent; }
+.navbtn::before { content: ""; width: 15px; height: 15px; background: currentColor; -webkit-mask: var(--ic) center / contain no-repeat; mask: var(--ic) center / contain no-repeat; transition: transform .25s var(--ease); }
+.navbtn.home { --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z'/%3E%3C/svg%3E"); }
+.navbtn.back { --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E"); }
+@media (hover: hover) { .navbtn:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); } .navbtn.back:hover::before { transform: translateX(-2px); } }
+.navbtn:active { transform: scale(.97); }
+.navbtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+@media (max-width: 380px) { .navbtn { padding: 0 11px 0 9px; gap: 5px; } }
+
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
 .brand img { width: auto; display: block; }
@@ -957,7 +967,7 @@ const ROWS = ITEMS.map((opts, i) => ({
    --------------------------------------------------------- */
 const COMBOS = {
   SC: {
-    name: 'Pemantik', en: 'The Spark', natural: true,
+    name: 'Penyemangat', en: 'The Spark', natural: true,
     tagline: 'Datang, nyalain semangat, lalu ajak semua orang bergerak.',
     about: 'Kamu punya pesona Sanguinis dan dorongan Koleris sekaligus. Kamu bisa bikin orang tertarik, lalu langsung mengajak mereka bergerak. Ini salah satu kombinasi paling ekstrover: energimu terasa dari jauh.',
     powers: ['Persuasif dan gampang memengaruhi orang', 'Berani mulai duluan dan cepat ambil inisiatif', 'Bikin tim tetap semangat saat situasi berat'],
