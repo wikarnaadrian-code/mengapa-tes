@@ -673,6 +673,13 @@ body { background: var(--bg); }
 .kind + .old, .old { font-style: normal; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: #EFE8D8; color: var(--muted); border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
 .box.legacy { background: #EFE8D8; border-color: #E0D6C3; }
 .box.legacy p { margin: 0; }
+.srcbar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 12px; }
+.src { display: inline-flex; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 4px; gap: 2px; }
+.src button { border: 0; background: transparent; border-radius: 10px; padding: 8px 14px; font-size: 13.5px; font-weight: 600; color: var(--muted); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.src button small { font-size: 11.5px; opacity: .7; }
+.src button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.srcnote { margin: 0; font-size: 13px; color: var(--muted); }
+@media (max-width: 520px) { .src { width: 100%; } .src button { flex: 1; justify-content: center; padding: 8px 6px; font-size: 12.5px; } }
 
 </style>
 </head>
@@ -1950,7 +1957,7 @@ const session = {
 };
 
 const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '',
-  sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
+  src: 'new', sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
 const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
 const testName = k => ({ lengkap: L('Tes Karakter Lengkap', 'Full Character Test'), mini: L('Tes Karakter Mini', 'Mini Character Test'), mindset: 'Growth Mindset Test' })[k];
 const levelName = v => v === 'Tinggi' ? L('Tinggi', 'High') : v === 'Sedang' ? L('Sedang', 'Medium') : v;
@@ -2039,12 +2046,7 @@ async function load() {
 function logout() { session.clear(); S.session = ''; S.rows = null; S.items = []; S.sel = ''; render(); }
 
 /* ---------- filter & urutan ---------- */
-const FILTERS = () => SLUG ? [
-  { k: 'old', label: L('Web lama', 'Old web app'), test: x => !!x.legacy },
-  { k: 'new', label: L('Web baru', 'New web app'), test: x => !x.legacy },
-] : [
-  { k: 'old', label: L('Web lama', 'Old web app'), test: x => !!x.legacy },
-  { k: 'new', label: L('Web baru', 'New web app'), test: x => !x.legacy },
+const FILTERS = () => SLUG ? [] : [
   { k: 'deep', label: L('Perlu didalami', 'Needs follow-up'), test: x => !!x.flag },
   { k: 'wa', label: L('Ada WhatsApp', 'Has WhatsApp'), test: x => !!x.wa },
   { k: 'minor', label: L('Di bawah 18', 'Under 18'), test: x => Number(x.age) > 0 && Number(x.age) < 18 },
@@ -2075,7 +2077,7 @@ const domOf = x => x.kind === 'mini' ? (x.top || []) : x.p ? [x.p] : [];
 const scoreOf = x => x.a ? x.a.scores.t[x.p] : x.mini ? x.mini[x.p] : x.gm ? x.gm.total : -1;
 function base() {
   const q = S.q.trim().toLowerCase(), F = FILTERS(), [t0, t1] = rangeBounds();
-  return S.items.filter(x => (!q || q.split(/\s+/).every(w => x.hay.includes(w)))
+  return S.items.filter(x => (S.src === 'all' || (S.src === 'old') === !!x.legacy) && (!q || q.split(/\s+/).every(w => x.hay.includes(w)))
     && [...S.f].every(k => { const f = F.find(f => f.k === k); return !f || f.test(x); })
     && (!S.temps.size || domOf(x).some(k => S.temps.has(k)))
     && (!S.cats.size || (x.gm && S.cats.has(x.gm.category)))
@@ -2095,7 +2097,8 @@ function sorted(arr) {
 const visible = () => sorted(base().filter(x => S.tab === 'all' || x.kind === S.tab));
 const rangeOn = () => S.range !== 'all' && (S.range !== 'custom' || S.from || S.to);
 const activeCount = () => S.temps.size + S.cats.size + S.f.size + (rangeOn() ? 1 : 0);
-const countText = n => L(`${n} dari ${S.items.length} hasil`, `${n} of ${S.items.length} results`);
+const srcTotal = () => S.items.filter(x => S.src === 'all' || (S.src === 'old') === !!x.legacy).length;
+const countText = n => L(`${n} dari ${srcTotal()} hasil`, `${n} of ${srcTotal()} results`);
 
 /* ---------- tampilan ---------- */
 const mengapaLogo = `<span class="brand"><img src="${LOGO_ICON}" alt="" height="30"><img src="${LOGO_WORD}" alt="Mengapa" height="17"></span>`;
@@ -2283,6 +2286,7 @@ function app() {
   const c = k => B.filter(x => k === 'all' || x.kind === k).length;
   const week = B.filter(x => Date.now() - x.t < 7 * 864e5).length;
   const filtered = activeCount() > 0 || S.q.trim();
+  const nOld = S.items.filter(x => x.legacy).length, nNew = S.items.length - nOld;
   return `
   <div class="shell${sel ? ' has-sel' : ''}">
     <header class="bar-top">
@@ -2294,6 +2298,8 @@ function app() {
       <button class="linkbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
     </header>
     ${S.err ? `<div class="banner">${esc(S.err)}</div>` : ''}
+    ${nOld ? `<div class="srcbar"><div class="src" role="tablist">${[['new', L('Web baru', 'New web app'), nNew], ['old', L('Arsip web lama', 'Old web app archive'), nOld], ['all', L('Semua', 'All'), nNew + nOld]].map(o => `<button data-src="${o[0]}" aria-pressed="${S.src === o[0]}">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>
+      ${S.src === 'old' ? `<p class="srcnote">${L('Hasil dari web app lama, sebelum November 2026. Tidak dihitung di data web baru.', 'Results from the old web app, before November 2026. Not counted in the new web app data.')}</p>` : ''}</div>` : ''}
     <section class="stats${SLUG ? ' five' : ''}">
       <div><b>${B.length}</b><span>${filtered ? L('Hasil sesuai filter', 'Matching results') : L('Total tes', 'Total tests')}</span></div>
       ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${B.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}</span></div>`).join('') + '</section><section hidden>' : ''}
@@ -2304,7 +2310,7 @@ function app() {
     <div class="main">
       <aside class="list-pane">
         <div class="tools">
-          <div class="seg"${SLUG ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : kindName(k)}<small>${c(k)}</small></button>`).join('')}</div>
+          <div class="seg"${SLUG || S.src === 'old' ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : kindName(k)}<small>${c(k)}</small></button>`).join('')}</div>
           <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             <input id="q" type="search" placeholder="${SLUG ? L('Cari nama, kode, token…', 'Search name, code, token…') : L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
           ${toolsHtml(B)}
@@ -2371,6 +2377,7 @@ function render() {
   bindCommon($app); bindList();
   $app.querySelector('[data-act=reload]').addEventListener('click', load);
   $app.querySelector('[data-act=logout]').addEventListener('click', logout);
+  $app.querySelectorAll('[data-src]').forEach(b => b.addEventListener('click', () => { S.src = b.dataset.src; if (S.src === 'old') S.tab = 'all'; S.sel = ''; render(); }));
   $app.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { S.tab = b.dataset.tab; render(); }));
   const tog = (set, v) => { set.has(v) ? set.delete(v) : set.add(v); render(); };
   $app.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => tog(S.f, b.dataset.f)));
