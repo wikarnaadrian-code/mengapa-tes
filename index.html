@@ -600,6 +600,16 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .sv-orbit { margin: 22px auto 6px; }
 @media (min-width: 760px) { .sv-orbit { grid-row: 1 / 5; align-self: center; margin: 0; } }
 
+/* tombol navigasi atas */
+.navbtn { display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px 0 11px; border: 1.5px solid var(--line-2); border-radius: 999px; background: var(--paper); color: var(--ink); font: inherit; font-size: 13px; font-weight: 600; letter-spacing: .01em; cursor: pointer; transition: background .2s, color .2s, border-color .2s, transform .2s; -webkit-tap-highlight-color: transparent; }
+.navbtn::before { content: ""; width: 15px; height: 15px; background: currentColor; -webkit-mask: var(--ic) center / contain no-repeat; mask: var(--ic) center / contain no-repeat; transition: transform .25s var(--ease); }
+.navbtn.home { --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z'/%3E%3C/svg%3E"); }
+.navbtn.back { --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E"); }
+@media (hover: hover) { .navbtn:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); } .navbtn.back:hover::before { transform: translateX(-2px); } }
+.navbtn:active { transform: scale(.97); }
+.navbtn:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+@media (max-width: 380px) { .navbtn { padding: 0 11px 0 9px; gap: 5px; } }
+
 </style>
 </head>
 <body>
@@ -2161,7 +2171,7 @@ function services() {
   return `
   <section class="screen sv">
     <div class="wrap wide">
-      <div class="top">${logo()}<button class="linkbtn" data-act="back">${L('Beranda', 'Home')}</button></div>
+      <div class="top">${logo()}<button class="navbtn home" data-act="back">${L('Beranda', 'Home')}</button></div>
       <header class="sv-hero">
         <div class="eyebrow">${L('Layanan Mengapa', 'What we do')}</div>
         <h1>${L('Bertumbuh lewat <em>karakter</em>.', 'Grow through <em>character</em>.')}</h1>
@@ -2227,7 +2237,7 @@ function token() {
   return `
   <section class="screen">
     <div class="wrap">
-      <div class="top">${logo()}<button class="linkbtn" data-act="back">Kembali</button></div>
+      <div class="top">${logo()}<button class="navbtn back" data-act="back">Kembali</button></div>
       <div class="eyebrow" style="margin-top:14px">Tes Karakter Lengkap</div>
       <h2 style="margin-top:8px">Masukkan token kamu</h2>
       <p class="muted" style="margin-top:8px">Tes Karakter Lengkap memakai token dari tim Mengapa. Satu token berlaku untuk satu kali tes.</p>
@@ -2258,7 +2268,7 @@ function guide() {
   return `
   <section class="screen">
     <div class="wrap">
-      <div class="top">${logo()}<button class="linkbtn" data-act="back">Kembali</button></div>
+      <div class="top">${logo()}<button class="navbtn back" data-act="back">Kembali</button></div>
       ${stepper(3)}
       <div class="eyebrow">Cara mengisi</div>
       <h2 style="margin-top:6px">Empat hal sebelum <em>mulai</em></h2>
@@ -2283,7 +2293,7 @@ function profile() {
   return `
   <section class="screen">
     <div class="wrap">
-      <div class="top">${logo()}<button class="linkbtn" data-act="back">Kembali</button></div>
+      <div class="top">${logo()}<button class="navbtn back" data-act="back">Kembali</button></div>
       ${stepper(2)}
       <div class="eyebrow">Kenalan dulu</div>
       <h2 style="margin-top:8px">Data diri</h2>
@@ -2333,7 +2343,7 @@ function consent() {
   return `
   <section class="screen">
     <div class="wrap">
-      <div class="top">${logo()}<button class="linkbtn" data-act="back">Kembali</button></div>
+      <div class="top">${logo()}<button class="navbtn back" data-act="back">Kembali</button></div>
       ${stepper(1)}
       <div class="eyebrow">Sebelum mulai</div>
       <h2 style="margin-top:6px">Disclaimer & persetujuan</h2>
@@ -2508,7 +2518,7 @@ function gmresult() {
   return `
   <section class="screen">
     <div class="wrap wide">
-      <div class="top">${logo()}<button class="linkbtn" data-act="home">Beranda</button></div>
+      <div class="top">${logo()}<button class="navbtn home" data-act="home">Beranda</button></div>
 
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil Growth Mindset ${nick}`, `${nick}’s Growth Mindset result`) : L('Hasil Growth Mindset', 'Your Growth Mindset result')}</div>
@@ -2633,7 +2643,7 @@ function mresult() {
   return `
   <section class="screen">
     <div class="wrap wide">
-      <div class="top">${logo()}<button class="linkbtn" data-act="home">Beranda</button></div>
+      <div class="top">${logo()}<button class="navbtn home" data-act="home">Beranda</button></div>
 
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil Tes Karakter Mini ${nick}`, `${nick}’s Mini Character Test result`) : L('Hasil Tes Karakter Mini', 'Your Mini Character Test result')}</div>
@@ -2737,7 +2747,7 @@ function result() {
   return `
   <section class="screen">
     <div class="wrap wide">
-      <div class="top no-print">${logo()}<button class="linkbtn" data-act="home">Beranda</button></div>
+      <div class="top no-print">${logo()}<button class="navbtn home" data-act="home">Beranda</button></div>
 
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil ${nick}`, `${nick}’s result`) : L('Hasil kamu', 'Your result')}</div>
