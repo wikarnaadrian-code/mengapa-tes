@@ -321,7 +321,7 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .plan.pro .linkbtn { color: rgba(255,253,249,.7); }
 .btn.inv { background: var(--paper); color: var(--ink); }
 .btn.inv:hover { background: #fff; }
-.token-input { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 20px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; text-align: center; }
+.token-input { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 20px; font-weight: 600; letter-spacing: .04em; text-align: center; }
 .token-input::placeholder { font-size: 15px; letter-spacing: .02em; font-weight: 400; text-transform: none; }
 .opt b.long { font-size: 16.5px; font-weight: 600; line-height: 1.4; }
 .locks { list-style: none; margin: 0; padding: 0; }
@@ -610,6 +610,22 @@ body { background: var(--bg); }
 .login-top { display: flex; align-items: center; justify-content: space-between; }
 .kv a { color: #1F8F55; font-weight: 600; }
 @media (max-width: 520px) { .bar-top { gap: 8px; } .bar-top .tag { display: none; } }
+/* mode klien */
+.client-logo { height: 34px; width: auto; display: block; }
+.login-top .client-logo { height: 44px; }
+.client-name { font-family: var(--serif); font-size: 22px; }
+.by { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--faint); padding-left: 12px; border-left: 1.5px solid var(--line-2); }
+.by .brand img:first-child { height: 20px; } .by .brand img:last-child { height: 11px; }
+.by .brand { gap: 4px; }
+.powered { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 12px; color: var(--faint); margin: 6px 0 0 !important; }
+.powered .brand img:first-child { height: 22px; } .powered .brand img:last-child { height: 12px; }
+.stats.five { grid-template-columns: repeat(5, 1fr); }
+.stats.five div:not(:first-child) { border-top: 4px solid var(--c); }
+.prof { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 20px; }
+.prof h4 { margin: 0 0 4px; font-size: 14px; }
+.prof ul { padding-left: 18px; } .prof p { margin: 0; }
+@media (max-width: 979px) { .stats.five { grid-template-columns: repeat(2, 1fr); } .stats.five div:first-child { grid-column: 1 / -1; } .prof { grid-template-columns: 1fr; } .by { display: none; } }
+.seg[hidden], [hidden] { display: none !important; }
 
 </style>
 </head>
@@ -1868,7 +1884,10 @@ function roundRect(ctx, x, y, w, h, r) {
 
 
 
-const API = '/api/admin', SKEY = 'mengapa:admin:sesi', LKEY = 'mengapa:lang';
+// Mode klien: halaman klien.html (contoh mengapa.me/HKGold). Slug diambil dari alamat.
+const CLIENT = document.body.dataset.client ? decodeURIComponent(location.pathname.replace(/^\/+|\/+$/g, '').split('/')[0] || '') : '';
+const SLUG = CLIENT.toLowerCase();
+const API = '/api/admin', SKEY = 'mengapa:admin:sesi' + (SLUG ? ':' + SLUG : ''), LKEY = 'mengapa:lang';
 const $app = document.getElementById('app');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const ls = {
@@ -1882,7 +1901,7 @@ const session = {
   clear() { ls.del(SKEY); },
 };
 
-const S = { session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '' };
+const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '' };
 const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
 const testName = k => ({ lengkap: L('Tes Karakter Lengkap', 'Full Character Test'), mini: L('Tes Karakter Mini', 'Mini Character Test'), mindset: 'Growth Mindset Test' })[k];
 const levelName = v => v === 'Tinggi' ? L('Tinggi', 'High') : v === 'Sedang' ? L('Sedang', 'Medium') : v;
@@ -1912,7 +1931,7 @@ function normRow(r, kind) {
     if (kind === 'lengkap' && /^[SCMP]{40}$/.test(ans)) {
       const a = analyze(ans.split('')); it.a = a;
       it.title = a.combo.name; it.sub = `${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}`;
-      it.p = a.primary; it.s = a.secondary; it.flag = a.level;
+      it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
     } else if (kind === 'mini' && /^[SCMP]{10}$/.test(ans)) {
       const c = { S: 0, C: 0, M: 0, P: 0 }; ans.split('').forEach(k => c[k]++);
       const max = Math.max(...Object.values(c)), top = ORDER.filter(k => c[k] === max);
@@ -1934,7 +1953,7 @@ function rebuild() {
 
 /* ---------- API ---------- */
 async function api(body) {
-  const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  const res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(SLUG ? { ...body, client: SLUG } : body) });
   let j = {}; try { j = await res.json(); } catch (e) { /* abaikan */ }
   if (res.status === 401) { logout(); throw new Error(L('Sesi berakhir, silakan masuk lagi.', 'Session expired, please sign in again.')); }
   if (!j.ok) throw new Error(j.error === 'Username atau password salah' ? L(j.error, 'Wrong username or password') : (j.error || L('Gagal memuat data', 'Could not load data')));
@@ -1942,14 +1961,16 @@ async function api(body) {
 }
 async function load() {
   S.loading = true; S.err = ''; render();
-  try { const j = await api({ action: 'data', session: S.session }); S.rows = j; S.at = j.at; rebuild(); }
+  try { const j = await api({ action: 'data', session: S.session }); S.rows = j; S.at = j.at; if (j.nama) { S.clientName = j.nama; ls.set(SKEY + ':nama', j.nama); } rebuild(); }
   catch (e) { S.err = e.message; }
   S.loading = false; render();
 }
 function logout() { session.clear(); S.session = ''; S.rows = null; S.items = []; S.sel = ''; render(); }
 
 /* ---------- filter ---------- */
-const FILTERS = () => [
+const FILTERS = () => SLUG ? [
+  { k: 'week', label: L('7 hari terakhir', 'Last 7 days'), test: x => Date.now() - x.t < 7 * 864e5 },
+] : [
   { k: 'deep', label: L('Perlu didalami', 'Needs follow-up'), test: x => !!x.flag },
   { k: 'wa', label: L('Ada WhatsApp', 'Has WhatsApp'), test: x => !!x.wa },
   { k: 'minor', label: L('Di bawah 18', 'Under 18'), test: x => Number(x.age) > 0 && Number(x.age) < 18 },
@@ -1963,19 +1984,23 @@ const visible = () => {
 const countText = n => L(`${n} dari ${S.items.length} hasil`, `${n} of ${S.items.length} results`);
 
 /* ---------- tampilan ---------- */
-const logoHtml = `<span class="brand"><img src="${LOGO_ICON}" alt="" height="30"><img src="${LOGO_WORD}" alt="Mengapa" height="17"></span>`;
+const mengapaLogo = `<span class="brand"><img src="${LOGO_ICON}" alt="" height="30"><img src="${LOGO_WORD}" alt="Mengapa" height="17"></span>`;
+const clientLogo = () => `<img class="client-logo" src="/klien/${encodeURIComponent(SLUG)}.png" alt="${esc(S.clientName || CLIENT)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'client-name',textContent:this.alt}))">`;
+const logoHtml = mengapaLogo;
+const headLogo = () => SLUG ? `${clientLogo()}<span class="by">${L('bersama', 'with')} ${mengapaLogo}</span>` : mengapaLogo;
 const langToggle = () => `<div class="lang" role="group" aria-label="${L('Bahasa', 'Language')}"><button data-lang="id" aria-pressed="${LANG === 'id'}">ID</button><button data-lang="en" aria-pressed="${LANG === 'en'}">EN</button></div>`;
 
 function login() {
   return `<main class="login">
     <form class="login-card" id="lf" autocomplete="on">
-      <div class="login-top">${logoHtml}${langToggle()}</div>
+      <div class="login-top">${SLUG ? clientLogo() : logoHtml}${langToggle()}</div>
       <h1>Dashboard</h1>
-      <p class="muted">${L('Khusus tim Mengapa. Data peserta bersifat rahasia.', 'For the Mengapa team only. Participant data is confidential.')}</p>
-      <label>Username<input name="user" autocomplete="username" value="admin" required></label>
+      <p class="muted">${SLUG ? (S.clientName ? L(`Hasil Tes Karakter tim ${esc(S.clientName)}. Data bersifat rahasia.`, `Character Test results for the ${esc(S.clientName)} team. Data is confidential.`) : L('Hasil Tes Karakter tim kamu. Data bersifat rahasia.', 'Character Test results for your team. Data is confidential.')) : L('Khusus tim Mengapa. Data peserta bersifat rahasia.', 'For the Mengapa team only. Participant data is confidential.')}</p>
+      <label>Username<input name="user" autocomplete="username" value="${SLUG ? '' : 'admin'}" required></label>
       <label>Password<input name="pass" type="password" autocomplete="current-password" required autofocus></label>
       <div class="err" id="lerr" ${S.err ? '' : 'hidden'}>${esc(S.err)}</div>
       <button class="btn block" id="lbtn">${L('Masuk', 'Sign in')}</button>
+      ${SLUG ? `<p class="powered">${L('Didukung oleh', 'Powered by')} ${mengapaLogo}</p>` : ''}
     </form>
   </main>`;
 }
@@ -2018,7 +2043,15 @@ function detailLengkap(x) {
       <div><small class="eyebrow">${P.name} + ${Sx.name}</small><h2>${esc(a.combo.name)}</h2><p class="muted">${esc(a.combo.tagline)}</p>
         ${a.alts.length ? `<p class="note">${L('Bisa juga terbaca sebagai', 'Can also be read as')}: ${a.alts.map(k => COMBOS[k].name).join(', ')}</p>` : ''}</div>
     </section>
-    ${a.flags.length ? `<section class="box warn"><h3>${L('Perlu didalami', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul>${a.flags.map(f => `<li>${esc(f.internal)}</li>`).join('')}</ul></section>` : ''}
+    ${!SLUG && a.flags.length ? `<section class="box warn"><h3>${L('Perlu didalami', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul>${a.flags.map(f => `<li>${esc(f.internal)}</li>`).join('')}</ul></section>` : ''}
+    <section class="box"><h3>${L('Gambaran singkat', 'Quick profile')}</h3>
+      <div class="prof">
+        <div><h4>${L('Kekuatan utama', 'Key strengths')}</h4><ul>${a.combo.powers.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
+        <div><h4>${L('Perlu diwaspadai', 'Watch out for')}</h4><ul>${a.combo.watch.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
+        <div><h4>${L('Kebutuhan emosional', 'Emotional needs')}</h4><ul>${P.needs.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
+        <div><h4>${L('Biasanya bersinar di', 'Usually shines in')}</h4><p>${esc(a.combo.thrive)}</p></div>
+      </div>
+    </section>
     <section class="box"><h3>${L('Lembar skor', 'Score sheet')}</h3>
       <table class="sheet"><thead><tr><th></th><th>${L('Kekuatan', 'Strengths')}</th><th>${L('Kelemahan', 'Weaknesses')}</th><th>Total</th></tr></thead><tbody>
       ${ORDER.map(k => `<tr><td><span class="sw" style="background:${TEMPS[k].color}"></span>${TEMPS[k].name}</td><td>${sc.s[k]}</td><td class="${sc.w[k] - sc.s[k] >= 5 ? 'alert' : ''}">${sc.w[k]}</td><td><b>${sc.t[k]}</b></td></tr>`).join('')}
@@ -2077,7 +2110,7 @@ function detail(x) {
       <div class="d-title"><h1>${esc(x.name)}</h1><p>${x.age ? yrs(x.age) + ' · ' : ''}${testName(x.kind)} · ${fmtDate(x.t)}, ${fmtTime(x.t)}</p></div>
     </div>
     <div class="d-actions">
-      ${x.wa ? `<a class="btn wa" href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp ${esc(waPretty(x.wa))}</a>` : `<span class="nowa">${L('Tidak mengisi WhatsApp', 'No WhatsApp number given')}</span>`}
+      ${SLUG ? '' : x.wa ? `<a class="btn wa" href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp ${esc(waPretty(x.wa))}</a>` : `<span class="nowa">${L('Tidak mengisi WhatsApp', 'No WhatsApp number given')}</span>`}
       <button class="btn ghost" data-copy="${esc(x.id)}">${L('Salin kode', 'Copy code')} ${esc(x.id)}</button>
     </div>
     ${x.tooFast ? `<div class="box warn small"><p>${L(`Dikerjakan sangat cepat (${fmtDur(x.dur)}). Hasil mungkin kurang akurat.`, `Completed very quickly (${fmtDur(x.dur)}). The result may be less accurate.`)}</p></div>` : ''}
@@ -2096,7 +2129,7 @@ function app() {
   return `
   <div class="shell${sel ? ' has-sel' : ''}">
     <header class="bar-top">
-      ${logoHtml}<span class="tag">Dashboard</span>
+      ${headLogo()}<span class="tag">Dashboard</span>
       <span class="grow"></span>
       ${S.at ? `<span class="upd">${L('Diperbarui', 'Updated')} ${fmtTime(S.at)}</span>` : ''}
       ${langToggle()}
@@ -2104,8 +2137,9 @@ function app() {
       <button class="linkbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
     </header>
     ${S.err ? `<div class="banner">${esc(S.err)}</div>` : ''}
-    <section class="stats">
+    <section class="stats${SLUG ? ' five' : ''}">
       <div><b>${S.items.length}</b><span>${L('Total tes', 'Total tests')}</span></div>
+      ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${S.items.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}</span></div>`).join('') + '</section><section hidden>' : ''}
       <div><b>${week}</b><span>${L('7 hari terakhir', 'Last 7 days')}</span></div>
       <div><b>${S.items.filter(x => x.flag).length}</b><span>${L('Perlu didalami', 'Needs follow-up')}</span></div>
       <div><b>${S.items.filter(x => x.wa).length}</b><span>${L('Ada WhatsApp', 'Has WhatsApp')}</span></div>
@@ -2113,9 +2147,9 @@ function app() {
     <div class="main">
       <aside class="list-pane">
         <div class="tools">
-          <div class="seg">${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : kindName(k)}<small>${c(k)}</small></button>`).join('')}</div>
+          <div class="seg"${SLUG ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : kindName(k)}<small>${c(k)}</small></button>`).join('')}</div>
           <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
-            <input id="q" type="search" placeholder="${L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
+            <input id="q" type="search" placeholder="${SLUG ? L('Cari nama, kode, token…', 'Search name, code, token…') : L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
           <div class="chips">${FILTERS().map(f => `<button data-f="${f.k}" aria-pressed="${S.f.has(f.k)}">${f.label}</button>`).join('')}</div>
         </div>
         <div class="list" id="list">${listHtml(items)}</div>

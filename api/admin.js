@@ -15,8 +15,8 @@ const safeEq = (a, b) => {
 };
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
-function makeSession(user, key) {
-  const payload = Buffer.from(JSON.stringify({ u: user, exp: Date.now() + SESSION_HOURS * 3600e3 })).toString('base64url');
+function makeSession(user, key, client) {
+  const payload = Buffer.from(JSON.stringify({ u: user, c: client || '', exp: Date.now() + SESSION_HOURS * 3600e3 })).toString('base64url');
   return payload + '.' + sign(payload, key);
 }
 function readSession(tok, key) {
@@ -50,6 +50,39 @@ module.exports = async (req, res) => {
   try { if (typeof body === 'string') body = JSON.parse(body); } catch (e) { body = {}; }
   body = body || {};
 
+  const low = v => String(v || '').trim().toLowerCase();
+  const tokenList = v => String(v || '').split(/[,;\n]/).map(low).filter(Boolean);
+  // Kolom yang boleh dilihat klien (tanpa WA, catatan internal, lokasi, dsb.)
+  const CLIENT_FIELDS = ['id', 'nama', 'usia', 'tanggal_lahir', 'waktu_iso', 'tanggal_tes', 'token', 'jawaban', 'durasi_detik'];
+  async function findClient(slug) {
+    if (!readToken) throw new Error('READ_TOKEN belum diisi di Vercel');
+    const rows = await readTab(url, readToken, 'klien');
+    return rows.find(r => low(r.klien) === low(slug));
+  }
+
+  // ---------- login & data untuk klien perusahaan ----------
+  if (body.client) {
+    try {
+      if (body.action === 'login') {
+        const c = await findClient(body.client);
+        const ok = c && c.password && safeEq(low(body.user), low(c.username)) && safeEq(String(body.pass || ''), String(c.password));
+        if (!ok) { await wait(900); return res.status(200).json({ ok: false, error: 'Username atau password salah' }); }
+        return res.status(200).json({ ok: true, session: makeSession(c.username, key, low(c.klien)), hours: SESSION_HOURS, nama: c.nama || c.klien });
+      }
+      if (body.action === 'data') {
+        const sess = readSession(body.session, key);
+        if (!sess || !sess.c || sess.c !== low(body.client)) return res.status(401).json({ ok: false, error: 'sesi' });
+        const c = await findClient(sess.c);
+        if (!c) return res.status(401).json({ ok: false, error: 'sesi' });
+        const toks = tokenList(c.token);
+        const hasil = (await readTab(url, readToken, '')).filter(r => toks.includes(low(r.token)))
+          .map(r => Object.fromEntries(CLIENT_FIELDS.map(k => [k, r[k] || ''])));
+        return res.status(200).json({ ok: true, hasil, mini: [], mindset: [], nama: c.nama || c.klien, at: new Date().toISOString() });
+      }
+    } catch (e) { return res.status(502).json({ ok: false, error: String(e.message || e) }); }
+    return res.status(400).json({ ok: false, error: 'action' });
+  }
+
   if (body.action === 'login') {
     if (!adminPass) return res.status(500).json({ ok: false, error: 'ADMIN_PASSWORD belum diisi di Vercel' });
     const ok = safeEq(String(body.user || '').trim().toLowerCase(), adminUser.toLowerCase()) && safeEq(String(body.pass || ''), adminPass);
@@ -58,10 +91,11 @@ module.exports = async (req, res) => {
   }
 
   if (body.action === 'data') {
-    if (!readSession(body.session, key)) return res.status(401).json({ ok: false, error: 'sesi' });
+    const sess = readSession(body.session, key);
+    if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
     if (!readToken) return res.status(500).json({ ok: false, error: 'READ_TOKEN belum diisi di Vercel' });
     try {
-      const [hasil, mini, mindset] = await Promise.all([readTab(url, readToken, ''), readTab(url, readToken, 'mini'), readTab(url, readToken, 'mindset')]);
+      const [hasil, mini, mindset] = await Promise.all([readTab(url, readToken, ''), readTab(url, readToken, 'mini'), readTab(url, readToken, 'mindset'), readTab(url, readToken, 'klien').catch(() => [])]);
       return res.status(200).json({ ok: true, hasil, mini, mindset, at: new Date().toISOString() });
     } catch (e) {
       return res.status(502).json({ ok: false, error: String(e.message || e) });

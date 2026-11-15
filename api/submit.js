@@ -47,7 +47,7 @@ module.exports = async (req, res) => {
   if (!body || typeof body !== 'object') return res.status(400).json({ ok: false, error: 'payload' });
   if (JSON.stringify(body).length > MAX_BYTES) return res.status(413).json({ ok: false, error: 'terlalu besar' });
 
-  const normToken = v => String(v || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 40);
+  const normToken = v => String(v || '').trim().replace(/\s+/g, '').replace(/[\u0000-\u001f]/g, '').slice(0, 60);
   const session = String(body.session || '').replace(/[^A-Za-z0-9-]/g, '').slice(0, 40);
 
   try {

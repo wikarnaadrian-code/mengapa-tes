@@ -326,7 +326,7 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .plan.pro .linkbtn { color: rgba(255,253,249,.7); }
 .btn.inv { background: var(--paper); color: var(--ink); }
 .btn.inv:hover { background: #fff; }
-.token-input { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 20px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; text-align: center; }
+.token-input { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 20px; font-weight: 600; letter-spacing: .04em; text-align: center; }
 .token-input::placeholder { font-size: 15px; letter-spacing: .02em; font-weight: 400; text-transform: none; }
 .opt b.long { font-size: 16.5px; font-weight: 600; line-height: 1.4; }
 .locks { list-style: none; margin: 0; padding: 0; }
@@ -1782,7 +1782,7 @@ const gmAnswered = () => state.gmAnswers.filter(Boolean).length;
 function resetGm() { state.gmAnswers = Array(15).fill(null); state.gmIndex = 0; state.gmStartedAt = null; }
 if (META.ref || META.utm_source) state.meta = { ...state.meta, ...Object.fromEntries(Object.entries(META).filter(([, v]) => v)) };
 const save = () => store.set(KEY, state);
-const normToken = v => String(v || '').toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 40);
+const normToken = v => String(v || '').trim().replace(/\s+/g, '').slice(0, 60);
 const URL_TOKEN = normToken(params.get('token'));
 function resetFull() { state.answers = Array(40).fill(null); state.index = 0; state.interludeSeen = false; state.startedAt = null; }
 function resetMini() { state.miniAnswers = Array(10).fill(null); state.miniIndex = 0; state.miniStartedAt = null; }
@@ -2023,7 +2023,7 @@ function token() {
       <form id="tf" novalidate>
         <div class="field">
           <label for="f-token">Token</label>
-          <input class="input token-input" id="f-token" name="token" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" value="${esc(URL_TOKEN || state.token)}" placeholder="Ketik token kamu" data-autofocus />
+          <input class="input token-input" id="f-token" name="token" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="60" value="${esc(URL_TOKEN || state.token)}" placeholder="Ketik token kamu" data-autofocus />
           <div class="err" id="e-token" hidden></div>
         </div>
         <div class="actions">
@@ -3085,7 +3085,7 @@ async function checkToken(tok) {
   } catch (e) {
     // Server belum terpasang (preview): token contoh boleh dipakai, hasil tidak disimpan
     const prod = /(^|\.)mengapa\.me$|\.vercel\.app$/.test(location.hostname);
-    if (!prod && CONFIG.previewToken && tok === CONFIG.previewToken) return { ok: true, preview: true };
+    if (!prod && CONFIG.previewToken && tok.toLowerCase() === CONFIG.previewToken.toLowerCase()) return { ok: true, preview: true };
     return { ok: false, reason: 'network' };
   } finally { clearTimeout(t); }
 }

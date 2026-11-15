@@ -19,7 +19,8 @@
  * Kalau kode ini diubah: Deploy > Manage deployments > Edit (pensil) > Version: New version > Deploy.
  *
  * CARA BIKIN TOKEN:
- *  a) Manual / custom: ketik token di kolom A tab "Token" (huruf, angka, tanda hubung; contoh BUDI-2026).
+ *  a) Manual / custom: ketik token di kolom A tab "Token", bebas (contoh Magelang_OCIE atau budi-2026). Tanpa spasi.
+ *     Huruf besar/kecil dianggap sama saat peserta mengetik.
  *     Kolom status boleh dikosongkan. Kolom catatan bebas (nama pembeli, tanggal bayar, dll).
  *  b) Banyak sekaligus: buka Sheet di laptop, menu "Mengapa" > "Buat token baru".
  *  Status "tim" = token internal untuk testing, tidak pernah habis (hasilnya tetap tersimpan di tab Hasil dengan token itu).
@@ -31,6 +32,8 @@ const SHEET_HASIL = 'Hasil';
 const SHEET_MINI = 'Mini';
 const SHEET_MINDSET = 'Mindset';
 const SHEET_TOKEN = 'Token';
+const SHEET_KLIEN = 'Klien';
+const KLIEN_HEADERS = ['klien', 'nama', 'username', 'password', 'token', 'catatan'];
 const TOKEN_HEADERS = ['token', 'status', 'catatan', 'dibuat', 'mulai_dipakai', 'selesai', 'id_hasil', 'sesi'];
 const TEXT_COLUMNS = ['id', 'token', 'whatsapp', 'tanggal_lahir', 'tanggal_tes', 'jam_tes', 'jawaban', 'kode_kombinasi'];
 
@@ -62,6 +65,7 @@ function doPost(e) {
     if (!mini) {
       const t = finishToken_(row.token, data.session, row.id);
       if (!t.ok) return json_({ ok: false, error: 'token', reason: t.reason });
+      row.token = t.token || row.token; // simpan token persis seperti yang ditulis di tab Token
     }
 
     const missing = Object.keys(row).filter(k => headers.indexOf(k) === -1);
@@ -78,15 +82,16 @@ function doPost(e) {
 }
 
 /* ---------------- TOKEN ---------------- */
-function normToken_(v) { return String(v || '').toUpperCase().replace(/[^A-Z0-9-]/g, ''); }
+function normToken_(v) { return String(v || '').trim().replace(/\s+/g, ''); }
+function tokenKey_(v) { return normToken_(v).toLowerCase(); } // huruf besar/kecil dianggap sama
 
 function findToken_(token) {
   const sh = getTokenSheet_();
-  const t = normToken_(token);
+  const t = tokenKey_(token);
   if (!t || sh.getLastRow() < 2) return { sh: sh, row: 0 };
   const vals = sh.getRange(2, 1, sh.getLastRow() - 1, TOKEN_HEADERS.length).getValues();
   for (let i = 0; i < vals.length; i++) {
-    if (normToken_(vals[i][0]) === t) return { sh: sh, row: i + 2, status: String(vals[i][1]).toLowerCase().trim(), sesi: String(vals[i][7]), idHasil: String(vals[i][6]) };
+    if (tokenKey_(vals[i][0]) === t) return { sh: sh, row: i + 2, token: normToken_(vals[i][0]), status: String(vals[i][1]).toLowerCase().trim(), sesi: String(vals[i][7]), idHasil: String(vals[i][6]) };
   }
   return { sh: sh, row: 0 };
 }
@@ -111,13 +116,13 @@ function startToken_(token, session) {
 function finishToken_(token, session, idHasil) {
   const f = findToken_(token);
   if (!f.row) return { ok: false, reason: 'tidak_ditemukan' };
-  if (f.status === 'tim') { f.sh.getRange(f.row, 6).setValue(new Date()); f.sh.getRange(f.row, 7).setValue(idHasil); return { ok: true }; }
-  if (f.status === 'selesai' && f.idHasil === String(idHasil)) return { ok: true };
+  if (f.status === 'tim') { f.sh.getRange(f.row, 6).setValue(new Date()); f.sh.getRange(f.row, 7).setValue(idHasil); return { ok: true, token: f.token }; }
+  if (f.status === 'selesai' && f.idHasil === String(idHasil)) return { ok: true, token: f.token };
   if (f.status !== 'dipakai' || f.sesi !== String(session)) return { ok: false, reason: 'sudah_dipakai' };
   f.sh.getRange(f.row, 2).setValue('selesai');
   f.sh.getRange(f.row, 6).setValue(new Date());
   f.sh.getRange(f.row, 7).setValue(idHasil);
-  return { ok: true };
+  return { ok: true, token: f.token };
 }
 
 function getTokenSheet_() {
@@ -165,14 +170,14 @@ function buatToken_(n, prefix, catatan) {
   const pre = normToken_(prefix) || 'MGP';
   const abc = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // tanpa 0/O/1/I supaya tidak tertukar
   const existing = {};
-  if (sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues().forEach(function (r) { existing[normToken_(r[0])] = true; });
+  if (sh.getLastRow() > 1) sh.getRange(2, 1, sh.getLastRow() - 1, 1).getValues().forEach(function (r) { existing[tokenKey_(r[0])] = true; });
   const rows = [];
   while (rows.length < n) {
     let code = '';
     for (let i = 0; i < 6; i++) code += abc.charAt(Math.floor(Math.random() * abc.length));
     const t = pre + '-' + code;
-    if (existing[t]) continue;
-    existing[t] = true;
+    if (existing[t.toLowerCase()]) continue;
+    existing[t.toLowerCase()] = true;
     rows.push([t, 'aktif', catatan || '', new Date(), '', '', '', '']);
   }
   sh.getRange(sh.getLastRow() + 1, 1, rows.length, TOKEN_HEADERS.length).setValues(rows);
@@ -193,7 +198,8 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   if (!token || p.token !== token) return json_({ ok: true, service: 'mengapa-tes' });
 
-  const values = getSheet_(p.tab === 'mini' ? SHEET_MINI : p.tab === 'mindset' ? SHEET_MINDSET : SHEET_HASIL).getDataRange().getDisplayValues();
+  const sheet = p.tab === 'klien' ? getKlienSheet_() : getSheet_(p.tab === 'mini' ? SHEET_MINI : p.tab === 'mindset' ? SHEET_MINDSET : SHEET_HASIL);
+  const values = sheet.getDataRange().getDisplayValues();
   const headers = values.shift() || [];
   let rows = values.map(r => { const o = {}; headers.forEach((h, i) => { o[h] = r[i]; }); return o; });
   if (p.ref) rows = rows.filter(r => String(r.ref) === p.ref);
@@ -203,9 +209,26 @@ function doGet(e) {
 
 /** Jalankan sekali dari editor untuk menyiapkan tab & izin. */
 function setup() {
-  getTokenSheet_(); getSheet_(SHEET_HASIL); getSheet_(SHEET_MINI); getSheet_(SHEET_MINDSET);
+  getTokenSheet_(); getKlienSheet_(); getSheet_(SHEET_HASIL); getSheet_(SHEET_MINI); getSheet_(SHEET_MINDSET);
   Logger.log('Tab siap. Secret terpasang: ' +
     (PropertiesService.getScriptProperties().getProperty('SHEET_SECRET') ? 'YA' : 'BELUM, isi di Project Settings'));
+}
+
+// Tab "Klien": akun dashboard untuk perusahaan klien. Satu baris per klien.
+//   klien    = alamat dashboard, contoh HKGold (mengapa.me/HKGold)
+//   nama     = nama yang tampil, contoh HK Gold
+//   username / password = untuk login klien
+//   token    = token milik klien, boleh lebih dari satu dipisah koma. Klien hanya melihat hasil dari token ini.
+function getKlienSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_KLIEN);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_KLIEN);
+    sh.getRange(1, 1, 1, KLIEN_HEADERS.length).setValues([KLIEN_HEADERS]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+    sh.getRange(1, 1, sh.getMaxRows(), KLIEN_HEADERS.length).setNumberFormat('@');
+  }
+  return sh;
 }
 
 function getSheet_(name) {
