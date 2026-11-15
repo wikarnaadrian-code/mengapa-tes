@@ -53,7 +53,9 @@ module.exports = async (req, res) => {
   const low = v => String(v || '').trim().toLowerCase();
   const tokenList = v => String(v || '').split(/[,;\n]/).map(t => t.trim()).filter(Boolean);
   // Kolom yang boleh dilihat klien (tanpa WA, catatan internal, lokasi, dsb.)
-  const CLIENT_FIELDS = ['id', 'nama', 'usia', 'tanggal_lahir', 'waktu_iso', 'tanggal_tes', 'token', 'jawaban', 'durasi_detik'];
+  const T4 = ['sanguinis', 'koleris', 'melankolis', 'plegmatis'];
+  const CLIENT_FIELDS = ['id', 'nama', 'usia', 'tanggal_lahir', 'waktu_iso', 'tanggal_tes', 'token', 'jawaban', 'durasi_detik', 'sumber_data',
+    ...T4.flatMap(t => [t + '_kekuatan', t + '_kelemahan', t + '_sifat_kekuatan', t + '_sifat_kelemahan'])];
   async function findClient(slug) {
     if (!readToken) throw new Error('READ_TOKEN belum diisi di Vercel');
     const rows = await readTab(url, readToken, 'klien');
@@ -75,7 +77,8 @@ module.exports = async (req, res) => {
         const c = await findClient(sess.c);
         if (!c) return res.status(401).json({ ok: false, error: 'sesi' });
         const toks = tokenList(c.token);
-        const hasil = (await readTab(url, readToken, '')).filter(r => toks.includes(String(r.token || '').trim()))
+        const [baru, lama] = await Promise.all([readTab(url, readToken, ''), readTab(url, readToken, 'lama').catch(() => [])]);
+        const hasil = [...baru, ...lama.filter(r => r.sumber_data === 'web lama')].filter(r => toks.includes(String(r.token || '').trim()))
           .map(r => Object.fromEntries(CLIENT_FIELDS.map(k => [k, r[k] || ''])));
         return res.status(200).json({ ok: true, hasil, mini: [], mindset: [], nama: c.nama || c.klien, at: new Date().toISOString() });
       }
@@ -95,8 +98,8 @@ module.exports = async (req, res) => {
     if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
     if (!readToken) return res.status(500).json({ ok: false, error: 'READ_TOKEN belum diisi di Vercel' });
     try {
-      const [hasil, mini, mindset] = await Promise.all([readTab(url, readToken, ''), readTab(url, readToken, 'mini'), readTab(url, readToken, 'mindset'), readTab(url, readToken, 'klien').catch(() => [])]);
-      return res.status(200).json({ ok: true, hasil, mini, mindset, at: new Date().toISOString() });
+      const [baru, mini, mindset, lama] = await Promise.all([readTab(url, readToken, ''), readTab(url, readToken, 'mini'), readTab(url, readToken, 'mindset'), readTab(url, readToken, 'lama').catch(() => []), readTab(url, readToken, 'klien').catch(() => [])]);
+      return res.status(200).json({ ok: true, hasil: [...baru, ...lama.filter(r => r.sumber_data === 'web lama')], mini, mindset, at: new Date().toISOString() });
     } catch (e) {
       return res.status(502).json({ ok: false, error: String(e.message || e) });
     }

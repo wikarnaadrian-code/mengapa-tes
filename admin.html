@@ -670,6 +670,9 @@ body { background: var(--bg); }
 .tools { max-height: none; }
 .list-pane { max-height: calc(100svh - 24px); }
 @media (max-width: 420px) { .dirbtn span { display: none; } .sortsel span { display: none; } }
+.kind + .old, .old { font-style: normal; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; background: #EFE8D8; color: var(--muted); border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
+.box.legacy { background: #EFE8D8; border-color: #E0D6C3; }
+.box.legacy p { margin: 0; }
 
 </style>
 </head>
@@ -1965,6 +1968,13 @@ const yrs = a => a ? `${esc(a)} ${L('tahun', 'years')}` : '';
 const yrsShort = a => a ? `${esc(a)} ${L('th', 'y')} · ` : '';
 
 /* ---------- normalisasi baris Sheet ---------- */
+let _en2w = null, _en2wLang = '';
+function EN2WORD() {
+  if (_en2w && _en2wLang === LANG) return _en2w;
+  _en2w = {}; _en2wLang = LANG;
+  ROWS.forEach(row => row.options.forEach(o => { if (o.en) _en2w[o.en.toLowerCase()] = o.word; }));
+  return _en2w;
+}
 function normRow(r, kind) {
   const t = Date.parse(r.waktu_iso) || Date.parse(r.diterima_server) || Date.parse(r.tanggal_tes) || 0;
   const it = {
@@ -1973,8 +1983,23 @@ function normRow(r, kind) {
     token: r.token || '', t, dur: Number(r.durasi_detik) || 0, tooFast: r.terlalu_cepat === 'YA', place: [r.ip_kota, r.ip_negara].filter(Boolean).join(', '),
   };
   const ans = String(r.jawaban || '');
+  const T4 = { S: 'sanguinis', C: 'koleris', M: 'melankolis', P: 'plegmatis' };
+  const legacy = kind === 'lengkap' && r.sumber_data === 'web lama';
   try {
-    if (kind === 'lengkap' && /^[SCMP]{40}$/.test(ans)) {
+    if (legacy) {
+      // Web app lama: urutan jawaban tidak tersimpan, jadi skor disusun ulang dari jumlah kekuatan/kelemahan per temperamen.
+      const n = (k, part) => Math.max(0, Number(r[`${T4[k]}_${part}`]) || 0);
+      const syn = [...ORDER.flatMap(k => Array(n(k, 'kekuatan')).fill(k)), ...ORDER.flatMap(k => Array(n(k, 'kelemahan')).fill(k))];
+      while (syn.length < 40) syn.push(ORDER[syn.length % 4]);
+      const a = analyze(syn.slice(0, 40));
+      ORDER.forEach(k => { a.scores.s[k] = n(k, 'kekuatan'); a.scores.w[k] = n(k, 'kelemahan'); a.scores.t[k] = n(k, 'kekuatan') + n(k, 'kelemahan'); });
+      const wordOf = en => (EN2WORD()[String(en).trim().toLowerCase()] || en);
+      const list = (k, part) => String(r[`${T4[k]}_sifat_${part}`] || '').split(',').map(w => w.trim()).filter(Boolean).map(w => ({ type: k, word: wordOf(w) }));
+      a.picks = { strengths: ORDER.flatMap(k => list(k, 'kekuatan')), weaknesses: ORDER.flatMap(k => list(k, 'kelemahan')) };
+      it.a = a; it.legacy = true;
+      it.title = a.combo.name; it.sub = `${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}`;
+      it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
+    } else if (kind === 'lengkap' && /^[SCMP]{40}$/.test(ans)) {
       const a = analyze(ans.split('')); it.a = a;
       it.title = a.combo.name; it.sub = `${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}`;
       it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
@@ -1988,7 +2013,7 @@ function normRow(r, kind) {
       it.title = GM_CATEGORIES[a.category].name; it.sub = `${L('Skor', 'Score')} ${a.total}/100`;
     } else { it.title = r.kombinasi || r.dominan || r.kategori || '-'; it.sub = L('Data jawaban tidak lengkap', 'Incomplete answer data'); }
   } catch (e) { it.title = '-'; it.sub = L('Gagal membaca jawaban', 'Could not read answers'); }
-  it.hay = [it.name, it.id, it.wa, it.token, it.ref, it.src, it.title, it.sub].join(' ').toLowerCase();
+  it.hay = [it.name, it.id, it.wa, it.token, it.ref, it.src, it.title, it.sub, it.legacy ? 'lama legacy' : ''].join(' ').toLowerCase();
   return it;
 }
 function rebuild() {
@@ -2014,7 +2039,12 @@ async function load() {
 function logout() { session.clear(); S.session = ''; S.rows = null; S.items = []; S.sel = ''; render(); }
 
 /* ---------- filter & urutan ---------- */
-const FILTERS = () => SLUG ? [] : [
+const FILTERS = () => SLUG ? [
+  { k: 'old', label: L('Web lama', 'Old web app'), test: x => !!x.legacy },
+  { k: 'new', label: L('Web baru', 'New web app'), test: x => !x.legacy },
+] : [
+  { k: 'old', label: L('Web lama', 'Old web app'), test: x => !!x.legacy },
+  { k: 'new', label: L('Web baru', 'New web app'), test: x => !x.legacy },
   { k: 'deep', label: L('Perlu didalami', 'Needs follow-up'), test: x => !!x.flag },
   { k: 'wa', label: L('Ada WhatsApp', 'Has WhatsApp'), test: x => !!x.wa },
   { k: 'minor', label: L('Di bawah 18', 'Under 18'), test: x => Number(x.age) > 0 && Number(x.age) < 18 },
@@ -2113,7 +2143,7 @@ function listHtml(items) {
     if (dk && dk !== last) { last = dk; out += `<div class="day">${groupLabel(dk, x)}</div>`; }
     out += `<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
       ${avatar(x)}
-      <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.token ? ' · ' + esc(x.token) : ''}</small></span>
+      <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.legacy ? `<em class="old">${L('lama', 'old')}</em>` : ''}${x.token ? ' · ' + esc(x.token) : ''}</small></span>
       <span class="it-res"><b>${esc(x.title)}</b><small>${esc(x.sub)}</small></span>
       <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Perlu didalami', 'Needs follow-up')}: ${levelName(x.flag)}"></i>` : ''}</span>
     </button>`;
@@ -2204,6 +2234,7 @@ function detail(x) {
       ${SLUG ? '' : x.wa ? `<a class="btn wa" href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp ${esc(waPretty(x.wa))}</a>` : `<span class="nowa">${L('Tidak mengisi WhatsApp', 'No WhatsApp number given')}</span>`}
       <button class="btn ghost" data-copy="${esc(x.id)}">${L('Salin kode', 'Copy code')} ${esc(x.id)}</button>
     </div>
+    ${x.legacy ? `<div class="box legacy small"><p>${L('Diambil di <b>web app lama</b>. Skor, kombinasi, dan sifat yang dipilih tetap akurat. Urutan jawaban per soal dan durasi tidak tersimpan di versi lama.', 'Taken on the <b>old web app</b>. Scores, combination, and selected traits are accurate. Per-question order and duration were not stored in the old version.')}</p></div>` : ''}
     ${x.tooFast ? `<div class="box warn small"><p>${L(`Dikerjakan sangat cepat (${fmtDur(x.dur)}). Hasil mungkin kurang akurat.`, `Completed very quickly (${fmtDur(x.dur)}). The result may be less accurate.`)}</p></div>` : ''}
     ${body}
     <section class="box"><h3>${L('Data peserta', 'Participant details')}</h3><dl class="kv">

@@ -33,6 +33,7 @@ const SHEET_MINI = 'Mini';
 const SHEET_MINDSET = 'Mindset';
 const SHEET_TOKEN = 'Token';
 const SHEET_KLIEN = 'Klien';
+const SHEET_LAMA = 'Lama'; // hasil dari web app lama (impor sekali)
 const KLIEN_HEADERS = ['klien', 'nama', 'username', 'password', 'token', 'catatan'];
 const TOKEN_HEADERS = ['token', 'status', 'catatan', 'dibuat', 'mulai_dipakai', 'selesai', 'id_hasil', 'sesi'];
 const TEXT_COLUMNS = ['id', 'token', 'whatsapp', 'tanggal_lahir', 'tanggal_tes', 'jam_tes', 'jawaban', 'kode_kombinasi'];
@@ -191,6 +192,7 @@ function buat10Token() { Logger.log(buatToken_(10, 'MGP', 'dibuat dari editor').
  *   GET .../exec?token=READ_TOKEN              -> semua hasil tes lengkap
  *   GET .../exec?token=READ_TOKEN&tab=mini     -> hasil tes mini
  *   GET .../exec?token=READ_TOKEN&tab=mindset  -> hasil Growth Mindset Test
+ *   GET .../exec?token=READ_TOKEN&tab=lama     -> hasil tes dari web app lama
  *   tambahkan &ref=febe atau &id=MGP-XXXXXX untuk filter
  */
 function doGet(e) {
@@ -198,7 +200,7 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   if (!token || p.token !== token) return json_({ ok: true, service: 'mengapa-tes' });
 
-  const sheet = p.tab === 'klien' ? getKlienSheet_() : getSheet_(p.tab === 'mini' ? SHEET_MINI : p.tab === 'mindset' ? SHEET_MINDSET : SHEET_HASIL);
+  const sheet = p.tab === 'klien' ? getKlienSheet_() : getSheet_(p.tab === 'mini' ? SHEET_MINI : p.tab === 'mindset' ? SHEET_MINDSET : p.tab === 'lama' ? SHEET_LAMA : SHEET_HASIL);
   const values = sheet.getDataRange().getDisplayValues();
   const headers = values.shift() || [];
   let rows = values.map(r => { const o = {}; headers.forEach((h, i) => { o[h] = r[i]; }); return o; });
