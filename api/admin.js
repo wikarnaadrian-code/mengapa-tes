@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
   body = body || {};
 
   const low = v => String(v || '').trim().toLowerCase();
-  const tokenList = v => String(v || '').split(/[,;\n]/).map(low).filter(Boolean);
+  const tokenList = v => String(v || '').split(/[,;\n]/).map(t => t.trim()).filter(Boolean);
   // Kolom yang boleh dilihat klien (tanpa WA, catatan internal, lokasi, dsb.)
   const CLIENT_FIELDS = ['id', 'nama', 'usia', 'tanggal_lahir', 'waktu_iso', 'tanggal_tes', 'token', 'jawaban', 'durasi_detik'];
   async function findClient(slug) {
@@ -75,7 +75,7 @@ module.exports = async (req, res) => {
         const c = await findClient(sess.c);
         if (!c) return res.status(401).json({ ok: false, error: 'sesi' });
         const toks = tokenList(c.token);
-        const hasil = (await readTab(url, readToken, '')).filter(r => toks.includes(low(r.token)))
+        const hasil = (await readTab(url, readToken, '')).filter(r => toks.includes(String(r.token || '').trim()))
           .map(r => Object.fromEntries(CLIENT_FIELDS.map(k => [k, r[k] || ''])));
         return res.status(200).json({ ok: true, hasil, mini: [], mindset: [], nama: c.nama || c.klien, at: new Date().toISOString() });
       }

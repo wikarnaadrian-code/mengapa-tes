@@ -20,7 +20,7 @@
  *
  * CARA BIKIN TOKEN:
  *  a) Manual / custom: ketik token di kolom A tab "Token", bebas (contoh Magelang_OCIE atau budi-2026). Tanpa spasi.
- *     Huruf besar/kecil dianggap sama saat peserta mengetik.
+ *     Case sensitive: peserta harus mengetik huruf besar/kecil persis sama (Magelang_OCIE beda dengan magelang_ocie).
  *     Kolom status boleh dikosongkan. Kolom catatan bebas (nama pembeli, tanggal bayar, dll).
  *  b) Banyak sekaligus: buka Sheet di laptop, menu "Mengapa" > "Buat token baru".
  *  Status "tim" = token internal untuk testing, tidak pernah habis (hasilnya tetap tersimpan di tab Hasil dengan token itu).
@@ -83,7 +83,7 @@ function doPost(e) {
 
 /* ---------------- TOKEN ---------------- */
 function normToken_(v) { return String(v || '').trim().replace(/\s+/g, ''); }
-function tokenKey_(v) { return normToken_(v).toLowerCase(); } // huruf besar/kecil dianggap sama
+function tokenKey_(v) { return normToken_(v); } // case sensitive: huruf besar/kecil harus sama persis
 
 function findToken_(token) {
   const sh = getTokenSheet_();
@@ -176,8 +176,8 @@ function buatToken_(n, prefix, catatan) {
     let code = '';
     for (let i = 0; i < 6; i++) code += abc.charAt(Math.floor(Math.random() * abc.length));
     const t = pre + '-' + code;
-    if (existing[t.toLowerCase()]) continue;
-    existing[t.toLowerCase()] = true;
+    if (existing[t]) continue;
+    existing[t] = true;
     rows.push([t, 'aktif', catatan || '', new Date(), '', '', '', '']);
   }
   sh.getRange(sh.getLastRow() + 1, 1, rows.length, TOKEN_HEADERS.length).setValues(rows);
