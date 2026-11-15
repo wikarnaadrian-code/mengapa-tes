@@ -690,6 +690,10 @@ body { background: var(--bg); }
 .av.duo { position: relative; overflow: visible; }
 .av.duo .sec { position: absolute; right: -5px; bottom: -4px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); border: 1.5px solid; display: grid; place-items: center; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 .it.on .av.duo .sec { background: #fff; }
+.legend .dot { display: inline-block; flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%; background: var(--S); margin: 0; }
+.legend .dot.hi { background: var(--C); }
+.it-res small { font-weight: 600; letter-spacing: .04em; }
+@media (max-width: 979px) { .it-res { max-width: 150px; } .it { gap: 10px; } }
 
 </style>
 </head>
@@ -1981,6 +1985,7 @@ const firstName = n => String(n || '').trim().split(/\s+/)[0] || '';
 const waNum = v => { let d = String(v || '').replace(/\D/g, ''); if (d.startsWith('0')) d = '62' + d.slice(1); else if (d.startsWith('8')) d = '62' + d; return d; };
 const waPretty = d => d ? '+' + d.replace(/^(\d{2})(\d{3})(\d{4})(\d+)$/, '$1 $2 $3 $4') : '';
 const fmtDur = s => { if (!s) return ''; const m = Math.floor(s / 60), r = s % 60; return m ? `${m} ${L('menit', 'min')}${r ? ` ${r} ${L('detik', 'sec')}` : ''}` : `${s} ${L('detik', 'sec')}`; };
+const ab = k => L({ S: 'S', C: 'K', M: 'M', P: 'P' }[k], k); // singkatan: ID S K M P, EN S C M P
 const yrs = a => a ? `${esc(a)} ${L('tahun', 'years')}` : '';
 const yrsShort = a => a ? `${esc(a)} ${L('th', 'y')} · ` : '';
 
@@ -2014,11 +2019,11 @@ function normRow(r, kind) {
       const list = (k, part) => String(r[`${T4[k]}_sifat_${part}`] || '').split(',').map(w => w.trim()).filter(Boolean).map(w => ({ type: k, word: wordOf(w) }));
       a.picks = { strengths: ORDER.flatMap(k => list(k, 'kekuatan')), weaknesses: ORDER.flatMap(k => list(k, 'kelemahan')) };
       it.a = a; it.legacy = true;
-      it.title = a.combo.name; it.sub = `${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}`;
+      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`;
       it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
     } else if (kind === 'lengkap' && /^[SCMP]{40}$/.test(ans)) {
       const a = analyze(ans.split('')); it.a = a;
-      it.title = a.combo.name; it.sub = `${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}`;
+      it.title = a.combo.name; it.sub = `${ab(a.primary)} + ${ab(a.secondary)}`;
       it.p = a.primary; it.s = a.secondary; it.flag = SLUG ? '' : a.level;
     } else if (kind === 'mini' && /^[SCMP]{10}$/.test(ans)) {
       const c = { S: 0, C: 0, M: 0, P: 0 }; ans.split('').forEach(k => c[k]++);
