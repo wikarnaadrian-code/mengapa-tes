@@ -1038,7 +1038,7 @@ const FULL_BENEFITS = [
   'Kebutuhan emosionalmu dan cara memahami orang terdekat',
   'Kombinasi dominan + sekunder: 1 dari 12 karakter',
   'Lembar skor: kekuatan dan kelemahan di keempat sisi',
-  'Ruang tumbuh terbesar dan zona nyamanmu',
+  'Karakter dominan dan ruang tumbuh terbesarmu',
   'Insight tambahan dari tim Mengapa',
   'Hasil lengkap yang bisa disimpan sebagai PDF',
 ];
@@ -1058,9 +1058,9 @@ const GM_PILLARS = {
     hi: 'Kamu memperlakukan kegagalan sebagai data, bukan vonis. Ini membuatmu cepat bangkit.',
     mid: 'Kamu bisa belajar dari kegagalan, tapi rasa malunya masih sering datang duluan. Kadang butuh waktu sebelum bisa melihatnya dengan jernih.',
     lo: 'Kegagalan masih sering terasa sebagai bukti tentang siapa kamu. Polanya: menghindari mencoba supaya tidak perlu merasakan gagal.' },
-  challenge: { name: 'Tantangan', sub: 'Zona nyaman vs zona belajar', color: '#E5BE2E',
+  challenge: { name: 'Tantangan', sub: 'Zona aman vs zona belajar', color: '#E5BE2E',
     hi: 'Kamu tertarik pada hal yang sedikit di atas kemampuanmu. Rasa sulit kamu baca sebagai tanda sedang belajar.',
-    mid: 'Kamu mau mengambil tantangan, asal peluang berhasilnya terlihat cukup besar. Di luar itu, zona nyaman masih lebih menarik.',
+    mid: 'Kamu mau mengambil tantangan, asal peluang berhasilnya terlihat cukup besar. Di luar itu, pilihan yang aman masih lebih menarik.',
     lo: 'Kamu lebih memilih hal yang sudah pasti bisa kamu lakukan dengan baik. Aman, tapi ruang tumbuhmu jadi sempit.' },
   criticism: { name: 'Kritik', sub: 'Menerima masukan', color: '#88A261',
     hi: 'Kamu bisa memisahkan kritik atas pekerjaan dari nilai dirimu, bahkan aktif mencari masukan.',
@@ -1252,7 +1252,7 @@ const EN = {
     'Your emotional needs and how to understand the people closest to you',
     'Primary + secondary combination: 1 of 12 characters',
     'Score sheet: strengths and weaknesses across all four sides',
-    'Your biggest growth area and your comfort zone',
+    'Your primary trait and your biggest growth area',
     'Extra insights from the Mengapa team',
     'A full result you can save as PDF',
   ],
@@ -1266,9 +1266,9 @@ const EN = {
       hi: 'You treat failure as data, not a verdict. That helps you bounce back fast.',
       mid: 'You can learn from failure, but the shame often arrives first. It sometimes takes a while before you can see it clearly.',
       lo: 'Failure still often feels like proof of who you are. The pattern: avoiding trying so you never have to feel it.' },
-    challenge: { name: 'Challenge', sub: 'Comfort zone vs learning zone',
+    challenge: { name: 'Challenge', sub: 'Safe zone vs learning zone',
       hi: 'You are drawn to things slightly beyond your current ability. You read difficulty as a sign you are learning.',
-      mid: 'You take on challenges as long as the odds of success look good. Beyond that, the comfort zone is still more appealing.',
+      mid: 'You take on challenges as long as the odds of success look good. Beyond that, the safe option is still more appealing.',
       lo: 'You prefer things you already know you can do well. Safe, but it narrows your room to grow.' },
     criticism: { name: 'Criticism', sub: 'Taking feedback',
       hi: 'You can separate criticism of your work from your worth as a person, and you even seek feedback out.',
@@ -1559,7 +1559,7 @@ const UI = {
   'Yang biasanya menyertai skormu': 'What usually comes with your score',
   'Yang biasanya terlihat darimu': 'What people usually see in you',
   'Yang bikin kamu merasa dihargai': 'What makes you feel valued',
-  'Zona nyamanmu': 'Your comfort zone',
+  'Karakter dominan': 'Primary trait',
   'atau DM Instagram @mengapa.me': 'or DM us on Instagram @mengapa.me',
   'boleh menghubungi saya': 'may contact me',
   'dari 100': 'out of 100',
@@ -2263,7 +2263,7 @@ function shownToParticipant(x) {
     const comfort = ORDER.filter(k => sc.t[k] === maxT && maxT !== minT), grow = ORDER.filter(k => sc.t[k] === minT && maxT !== minT);
     return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
       ${tag(L('Penjelasan kombinasi', 'Combination explanation'))}<p><b>${esc(a.combo.name)}</b>. ${esc(a.combo.tagline)} ${esc(a.combo.about)}</p>
-      ${comfort.length ? `${tag(L('Cara membaca hasil', 'How to read the result'))}<p>${L('Zona nyaman', 'Comfort zone')}: <b>${comfort.map(k => TEMPS[k].name).join(', ')}</b> · ${L('Ruang tumbuh terbesar', 'Biggest growth area')}: <b>${grow.map(k => TEMPS[k].name).join(', ')}</b></p>` : ''}
+      ${comfort.length ? `${tag(L('Cara membaca hasil', 'How to read the result'))}<p>${L('Karakter dominan', 'Primary trait')}: <b>${comfort.map(k => TEMPS[k].name).join(', ')}</b> · ${L('Ruang tumbuh terbesar', 'Biggest growth area')}: <b>${grow.map(k => TEMPS[k].name).join(', ')}</b></p>` : ''}
       ${a.insights.length ? `${tag(L('Insight tambahan', 'More insights'))}<ul>${a.insights.map(i => `<li><b>${esc(i.title)}.</b> ${esc(i.text)}</li>`).join('')}</ul>` : ''}
       ${a.ties.length ? `${tag(L('Catatan skor seri', 'Tie note'))}${a.ties.map(t => `<p>${esc(t)}</p>`).join('')}` : ''}
       ${a.flags.length ? `${tag(L('Kartu "Ada pola menarik di hasilmu"', '"There is an interesting pattern" card'))}<ul>${[...new Set(a.flags.map(f => f.user))].map(t => `<li>${esc(t)}</li>`).join('')}</ul><p class="muted small">${L('Diarahkan ke konsultasi via Instagram atau WhatsApp.', 'Directed to a consultation via Instagram or WhatsApp.')}</p>`
