@@ -595,22 +595,10 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 @media (max-width: 560px) { .sv-hero h1 { max-width: none; } }
 .sv-head h2 em { white-space: nowrap; }
 /* tanda 4 temperamen (menggantikan orbit) */
-.sv-orbit { display: none; }
-.sv-mark { position: relative; margin: 4px 0 18px; width: 168px; }
-.sv-mark > svg { width: 168px; height: 168px; display: block; overflow: visible; }
-.sv-petal { mix-blend-mode: multiply; opacity: .78; transform-box: fill-box; transform-origin: center; animation: petal .9s var(--ease) both; }
-@keyframes petal { from { opacity: 0; transform: scale(.6); } }
-.sv-g { position: absolute; width: 22px; height: 22px; opacity: .95; }
-.sv-tl { left: 15%; top: 15%; } .sv-tr { right: 15%; top: 15%; } .sv-bl { left: 15%; bottom: calc(15% + 30px); } .sv-br { right: 15%; bottom: calc(15% + 30px); }
-.sv-mark figcaption { margin-top: 12px; font-family: var(--serif); font-size: 15px; color: var(--muted); }
-@media (min-width: 760px) {
-  .sv-hero { grid-template-columns: 1fr 260px; }
-  .sv-hero > .sv-mark { grid-column: 2; grid-row: 1 / 6; width: 240px; margin: 0; align-self: center; justify-self: end; text-align: center; }
-  .sv-mark > svg { width: 240px; height: 240px; }
-  .sv-g { width: 26px; height: 26px; } .sv-bl, .sv-br { bottom: calc(15% + 34px); }
-}
 
-.sv-g svg { width: 100%; height: 100%; display: block; }
+/* orbit after title+lead */
+.sv-orbit { margin: 22px auto 6px; }
+@media (min-width: 760px) { .sv-orbit { grid-row: 1 / 5; align-self: center; margin: 0; } }
 
 </style>
 </head>
@@ -2175,17 +2163,13 @@ function services() {
     <div class="wrap wide">
       <div class="top">${logo()}<button class="linkbtn" data-act="back">${L('Beranda', 'Home')}</button></div>
       <header class="sv-hero">
-        <figure class="sv-mark" aria-hidden="true">
-          <svg viewBox="0 0 200 200">
-            ${[['S', 76, 76], ['C', 124, 76], ['P', 76, 124], ['M', 124, 124]].map(([k, x, y], i) => `<circle class="sv-petal" style="animation-delay:${i * 90}ms" cx="${x}" cy="${y}" r="46" fill="${TEMPS[k].color}"/>`).join('')}
-            <circle cx="100" cy="100" r="5" fill="var(--ink)"/>
-          </svg>
-          ${[['S', 'tl'], ['C', 'tr'], ['P', 'bl'], ['M', 'br']].map(([k, pos]) => `<span class="sv-g sv-${pos}">${glyph(k, 22, { mono: '#fff' })}</span>`).join('')}
-          <figcaption>${L('Semua orang punya <em>keempatnya</em>.', 'Everyone has <em>all four</em>.')}</figcaption>
-        </figure>
         <div class="eyebrow">${L('Layanan Mengapa', 'What we do')}</div>
         <h1>${L('Bertumbuh lewat <em>karakter</em>.', 'Grow through <em>character</em>.')}</h1>
         <p class="lead">${L('Pengembangan diri berbasis 4 temperamen. Untuk kamu, komunitasmu, dan timmu.', 'Personal development built on the four temperaments. For you, your community, and your team.')}</p>
+        <div class="sv-orbit" aria-hidden="true">
+          <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" fill="none" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 7"/></svg>
+          ${['S', 'C', 'M', 'P'].map((k, i) => `<span class="sv-o sv-o${i}" style="background:${TEMPS[k].soft}">${glyph(k, 38)}</span>`).join('')}
+        </div>
         <div class="sv-badges"><span>${L('Spesialis 4 temperamen', 'Four temperaments specialists')}</span><span>${L('Terlatih metode', 'Trained in')} <b class="pp">Powered Personality</b></span></div>
       </header>
 
