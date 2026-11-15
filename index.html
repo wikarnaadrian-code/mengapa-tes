@@ -542,6 +542,57 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 @media (max-width: 420px) { .svc-steps { grid-template-columns: 1fr; } .svc-steps div { flex-direction: row; align-items: center; gap: 12px; } .svc-steps span { margin: 0; flex: 0 0 auto; } .svc-steps small { margin-left: auto; text-align: right; } }
 .svc-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
 @media (max-width: 480px) { .svc-card { padding: 14px 14px 12px 16px; } .svc-card b { font-size: 18px; } .svc-card p { font-size: 13.5px; } .svc-ic { width: 40px; height: 40px; } .svc-steps small { display: none; } }
+/* ===== Layanan v2 ===== */
+.sv-hero { position: relative; padding: 8px 0 8px; display: grid; gap: 4px; }
+.sv-hero h1 { font-size: clamp(42px, 10vw, 68px); margin-top: 6px; max-width: 12ch; }
+.sv-hero .lead { margin-top: 10px; max-width: 34ch; }
+.sv-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.sv-badges span { border: 1.5px solid var(--line-2); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 600; background: var(--paper); }
+.sv-orbit { position: relative; width: 210px; height: 210px; margin: 6px auto 18px; }
+.sv-orbit svg { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 60s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.sv-o { position: absolute; width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; box-shadow: 0 6px 18px rgba(28,26,23,.08); border: 3px solid var(--bg); animation: enter .6s var(--ease) both; }
+.sv-o0 { left: 72px; top: 0; } .sv-o1 { right: 0; top: 72px; animation-delay: .08s; } .sv-o2 { left: 72px; bottom: 0; animation-delay: .16s; } .sv-o3 { left: 0; top: 72px; animation-delay: .24s; }
+.sv-core { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--ink); }
+@media (min-width: 760px) { .sv-hero { grid-template-columns: 1fr 240px; column-gap: 40px; } .sv-hero > :not(.sv-orbit) { grid-column: 1; } .sv-orbit { grid-column: 2; grid-row: 1 / 6; margin: 10px 0 0; width: 230px; height: 230px; } .sv-o0, .sv-o2 { left: 82px; } .sv-o1 { top: 82px; } .sv-o3 { top: 82px; } }
+.sv-sec { margin-top: 44px; }
+.sv-head { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 18px; }
+.sv-no { font-family: var(--serif); font-style: italic; font-size: 44px; line-height: .9; color: var(--line-2); }
+.sv-head h2 { font-size: clamp(26px, 6vw, 34px); margin-top: 4px; }
+.sv-grid { display: grid; gap: 12px; }
+.sv-grid.two { grid-template-columns: repeat(2, 1fr); }
+.sv-grid.three { grid-template-columns: repeat(3, 1fr); }
+.sv-tile { background: var(--paper); border: 1px solid var(--line); border-radius: 24px; padding: 20px 18px 18px; display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; }
+.sv-tile::before { content: ''; position: absolute; right: -40px; top: -40px; width: 140px; height: 140px; border-radius: 50%; background: color-mix(in srgb, var(--c) 14%, transparent); }
+.sv-tile h3 { font-family: var(--serif); font-size: 22px; font-weight: 600; line-height: 1.15; }
+.sv-tile p { margin: 6px 0 0; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+.sv-chip { display: inline-block; margin-top: 12px; font-size: 11.5px; font-weight: 700; letter-spacing: .04em; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; width: 100%; }
+.sv-art { position: relative; width: 76px; height: 76px; color: var(--c); }
+.sv-ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sv-disc { position: absolute; inset: 13px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--c) 20%, var(--paper)); color: var(--ink); }
+.sv-disc svg { width: 26px; height: 26px; }
+.sv-dark { background: var(--ink); color: var(--paper); border-radius: 28px; padding: 26px 18px 18px; margin-left: -4px; margin-right: -4px; }
+.sv-dark .eyebrow { color: #E5BE2E; } .sv-dark h2 { color: var(--paper); } .sv-dark .sv-no { color: rgba(251,247,236,.25); }
+.sv-dark .sv-tile { background: rgba(251,247,236,.06); border-color: rgba(251,247,236,.12); }
+.sv-dark .sv-tile h3 { color: var(--paper); } .sv-dark .sv-tile p { color: #BFD8D5; }
+.sv-dark .sv-chip { color: #9BB5AE; border-color: rgba(251,247,236,.12); }
+.sv-dark .sv-disc { color: var(--paper); background: color-mix(in srgb, var(--c) 45%, var(--ink)); }
+.sv-corp { margin-top: 14px; }
+.sv-path { list-style: none; padding: 0; margin: 14px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); position: relative; }
+.sv-path::before { content: ''; position: absolute; left: 16%; right: 16%; top: 19px; height: 2px; background: repeating-linear-gradient(90deg, var(--line-2) 0 6px, transparent 6px 12px); }
+.sv-path li { display: grid; justify-items: center; text-align: center; gap: 4px; position: relative; padding: 0 6px; }
+.sv-path span { width: 40px; height: 40px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-weight: 700; margin-bottom: 6px; box-shadow: 0 0 0 6px var(--bg); }
+.sv-path b { font-size: 14.5px; line-height: 1.3; } .sv-path small { font-size: 12px; color: var(--muted); }
+@media (max-width: 560px) {
+  .sv-grid.three { grid-template-columns: 1fr; }
+  .sv-grid.three .sv-tile { flex-direction: row; align-items: center; gap: 16px; padding: 16px; }
+  .sv-grid.three .sv-art { flex: 0 0 auto; width: 64px; height: 64px; } .sv-grid.three .sv-disc { inset: 11px; }
+  .sv-grid.three .sv-chip { margin-top: 8px; padding-top: 0; border: 0; }
+  .sv-grid.two .sv-tile { padding: 16px 14px; } .sv-grid.two .sv-tile h3 { font-size: 20px; } .sv-grid.two .sv-tile p { font-size: 13.5px; }
+}
+.sv-tile > * { position: relative; z-index: 1; }
+.sv-tile::before { z-index: 0; }
+@media (max-width: 560px) { .sv-hero h1 { max-width: none; } }
 
 </style>
 </head>
@@ -2094,52 +2145,69 @@ const SVC_ICON = {
 };
 const svcIcon = k => `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVC_ICON[k]}</svg>`;
 function services() {
-  const G = [
-    { t: L('Untuk kamu', 'For you'), c: 'var(--P)', items: [
-      ['counseling', L('Konseling', 'Counseling'), L('Bongkar akar pola, termasuk pengalaman masa lalu.', 'Get to the root of your patterns, past included.'), L('1:1 · Online / offline', '1:1 · Online / offline')],
-      ['coaching', 'Coaching', L('Tetapkan target, bangun kebiasaan baru.', 'Set goals, build new habits.'), L('1:1 · Online / offline', '1:1 · Online / offline')],
-    ] },
-    { t: L('Untuk umum & komunitas', 'For the public & communities'), c: 'var(--S)', items: [
-      ['public', 'Public workshop', L('Belajar 4 temperamen bareng peserta lain.', 'Learn the four temperaments with others.'), L('Grup · Offline', 'Group · Offline')],
-      ['webinar', 'Webinar', L('Sesi singkat, bisa dari mana saja.', 'Short sessions, from anywhere.'), L('Grup · Online', 'Group · Online')],
-      ['camp', 'Camp', L('Beberapa hari, fokus total bertumbuh.', 'A few days, fully focused on growth.'), L('Grup · Menginap', 'Group · Overnight')],
-    ] },
-    { t: L('Untuk perusahaan & organisasi', 'For companies & organizations'), c: 'var(--C)', items: [
-      ['training', 'Corporate training', L('Kepemimpinan, komunikasi, dan kerja tim.', 'Leadership, communication, and teamwork.'), L('Tim · Di kantor / venue', 'Team · On-site / venue')],
-      ['private', 'Private workshop', L('Materi khusus untuk timmu saja.', 'Tailored sessions just for your team.'), L('Tim · Online / offline', 'Team · Online / offline')],
-      ['outing', 'Corporate outing', L('Seru, tapi pulang lebih saling paham.', 'Fun, and everyone comes back closer.'), L('Tim · Outdoor', 'Team · Outdoor')],
-    ] },
-  ];
+  const art = (k, c) => `<span class="sv-art" style="--c:${c}">
+      <svg class="sv-ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 6"/>${[0, 1, 2, 3, 4].map(i => { const a = i * 1.26 + .4, r = 54; return `<circle cx="${60 + r * Math.cos(a)}" cy="${60 + r * Math.sin(a)}" r="${2 + i % 2}" fill="currentColor" opacity=".55"/>`; }).join('')}</svg>
+      <span class="sv-disc">${svcIcon(k)}</span></span>`;
+  const tile = (k, n, d, f, c) => `<article class="sv-tile" style="--c:${c}">${art(k, c)}<div><h3>${n}</h3><p>${d}</p><span class="sv-chip">${f}</span></div></article>`;
+  const S = 'var(--S)', C = 'var(--C)', P = 'var(--P)';
   const wa = waLink(L('Halo Mengapa, saya tertarik dengan layanan Mengapa. Boleh minta info lebih lanjut?', 'Hi Mengapa, I am interested in your services. Could you share more information?'));
+  const waCorp = waLink(L('Halo Mengapa, saya ingin diskusi program untuk perusahaan/organisasi kami.', 'Hi Mengapa, I would like to discuss a program for our company/organization.'));
   return `
-  <section class="screen">
+  <section class="screen sv">
     <div class="wrap wide">
       <div class="top">${logo()}<button class="linkbtn" data-act="back">${L('Beranda', 'Home')}</button></div>
-      <div class="svc-hero">
+      <header class="sv-hero">
+        <div class="sv-orbit" aria-hidden="true">
+          <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" fill="none" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 7"/></svg>
+          ${['S', 'C', 'M', 'P'].map((k, i) => `<span class="sv-o sv-o${i}" style="background:${TEMPS[k].soft}">${glyph(k, 38)}</span>`).join('')}
+          <span class="sv-core">${L('karakter', 'character')}</span>
+        </div>
         <div class="eyebrow">${L('Layanan Mengapa', 'What we do')}</div>
         <h1>${L('Bertumbuh lewat <em>karakter</em>.', 'Grow through <em>character</em>.')}</h1>
-        <p class="lead">${L('Pengembangan diri berbasis 4 temperamen, untuk individu, komunitas, dan perusahaan.', 'Character-based personal development using the four temperaments, for individuals, communities, and companies.')}</p>
-        <div class="svc-badges"><span>${L('Spesialis 4 temperamen', 'Four temperaments specialists')}</span><span>${L('Bersertifikat', 'Certified')} <b class="pp">Powered Personality</b></span></div>
-      </div>
-      ${G.map(g => `
-      <div class="block svc-group" style="--g:${g.c}">
-        <div class="svc-gt"><i></i>${g.t}</div>
-        <div class="svc-grid">${g.items.map(([k, n, d, f]) => `
-          <div class="svc-card"><span class="svc-ic">${svcIcon(k)}</span><b>${n}</b><p>${d}</p><small>${f}</small></div>`).join('')}
+        <p class="lead">${L('Pengembangan diri berbasis 4 temperamen. Untuk kamu, komunitasmu, dan timmu.', 'Personal development built on the four temperaments. For you, your community, and your team.')}</p>
+        <div class="sv-badges"><span>${L('Spesialis 4 temperamen', 'Four temperaments specialists')}</span><span>${L('Bersertifikat', 'Certified')} <b class="pp">Powered Personality</b></span></div>
+      </header>
+
+      <section class="sv-sec">
+        <div class="sv-head"><span class="sv-no">01</span><div><div class="eyebrow">${L('Untuk kamu', 'For you')}</div><h2>${L('Satu lawan satu, <em>pelan-pelan</em>.', 'One on one, <em>at your pace</em>.')}</h2></div></div>
+        <div class="sv-grid two">
+          ${tile('counseling', L('Konseling', 'Counseling'), L('Bongkar akar pola, termasuk pengalaman masa lalu.', 'Get to the root of your patterns, past included.'), L('1:1 · Online / offline', '1:1 · Online / offline'), P)}
+          ${tile('coaching', 'Coaching', L('Tetapkan target, bangun kebiasaan baru.', 'Set goals, build new habits.'), L('1:1 · Online / offline', '1:1 · Online / offline'), P)}
         </div>
-      </div>`).join('')}
-      <div class="block">
+      </section>
+
+      <section class="sv-sec">
+        <div class="sv-head"><span class="sv-no">02</span><div><div class="eyebrow">${L('Untuk umum & komunitas', 'For the public & communities')}</div><h2>${L('Belajar <em>bareng</em>.', 'Learn <em>together</em>.')}</h2></div></div>
+        <div class="sv-grid three">
+          ${tile('public', 'Public workshop', L('Kenali 4 temperamen bersama peserta lain.', 'Explore the four temperaments with others.'), L('Grup · Offline', 'Group · Offline'), S)}
+          ${tile('webinar', 'Webinar', L('Sesi singkat, bisa dari mana saja.', 'Short sessions, from anywhere.'), L('Grup · Online', 'Group · Online'), S)}
+          ${tile('camp', 'Camp', L('Beberapa hari, fokus total bertumbuh.', 'A few days, fully focused on growth.'), L('Grup · Menginap', 'Group · Overnight'), S)}
+        </div>
+      </section>
+
+      <section class="sv-sec sv-dark">
+        <div class="sv-head"><span class="sv-no">03</span><div><div class="eyebrow">${L('Untuk perusahaan & organisasi', 'For companies & organizations')}</div><h2>${L('Tim yang saling <em>paham</em>.', 'Teams that <em>understand</em> each other.')}</h2></div></div>
+        <div class="sv-grid three">
+          ${tile('training', 'Corporate training', L('Kepemimpinan, komunikasi, dan kerja tim.', 'Leadership, communication, and teamwork.'), L('Tim · Kantor / venue', 'Team · On-site / venue'), C)}
+          ${tile('private', 'Private workshop', L('Materi khusus untuk timmu saja.', 'Tailored sessions just for your team.'), L('Tim · Online / offline', 'Team · Online / offline'), C)}
+          ${tile('outing', 'Corporate outing', L('Seru, dan pulang lebih saling paham.', 'Fun, and everyone comes back closer.'), L('Tim · Outdoor', 'Team · Outdoor'), C)}
+        </div>
+        <a class="btn inv block sv-corp" href="${waCorp}" target="_blank" rel="noopener">${L('Diskusi program untuk timmu', 'Discuss a program for your team')} ${ARROW}</a>
+      </section>
+
+      <section class="sv-sec">
         <div class="eyebrow">${L('Cara mulai', 'How to start')}</div>
-        <div class="svc-steps">
-          <div><span>1</span><b>${L('Ikut tes gratis', 'Take a free test')}</b><small>${L('Kenali polamu dulu', 'Know your pattern first')}</small></div>
-          <div><span>2</span><b>${L('Ngobrol dengan tim', 'Talk to our team')}</b><small>${L('Ceritakan kebutuhanmu', 'Tell us what you need')}</small></div>
-          <div><span>3</span><b>${L('Program yang pas', 'The right program')}</b><small>${L('Kami susun bersamamu', 'Built with you')}</small></div>
-        </div>
-      </div>
+        <ol class="sv-path">
+          <li><span>1</span><b>${L('Ikut tes gratis', 'Take a free test')}</b><small>${L('Kenali polamu', 'Know your pattern')}</small></li>
+          <li><span>2</span><b>${L('Ngobrol dengan tim', 'Talk to our team')}</b><small>${L('Ceritakan kebutuhanmu', 'Share what you need')}</small></li>
+          <li><span>3</span><b>${L('Program yang pas', 'The right program')}</b><small>${L('Disusun bersamamu', 'Built with you')}</small></li>
+        </ol>
+      </section>
+
       <div class="block">
         <div class="card deep svc-cta">
           <h2>${L('Mau mulai dari mana?', 'Where would you like to start?')}</h2>
-          <p>${L('Ceritakan kebutuhanmu atau timmu. Kami bantu pilihkan yang paling pas.', 'Tell us what you or your team need. We will help you pick the right fit.')}</p>
+          <p>${L('Ceritakan kebutuhanmu. Kami bantu pilihkan yang paling pas.', 'Tell us what you need. We will help you pick the right fit.')}</p>
           ${contactRow(wa)}
           <button class="btn inv block" style="margin-top:12px" data-act="home">${L('Coba tes gratis dulu', 'Try a free test first')}</button>
         </div>
