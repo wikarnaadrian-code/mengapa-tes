@@ -709,6 +709,7 @@ body { background: var(--bg); }
 @media (max-width: 979px) { .it-res { max-width: 160px; } .scs { gap: 5px; } }
 .it-res .sc b { font-family: var(--sans); font-size: 11px; font-weight: 800; white-space: nowrap; overflow: visible; display: inline; }
 .scs { display: flex; align-items: baseline; }
+.code2 { font-family: var(--sans); font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .03em; }
 
 </style>
 </head>
@@ -2186,7 +2187,7 @@ function listHtml(items) {
     out += `<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
       ${avatar(x)}
       <span class="it-main"><b>${esc(x.name)}</b><small>${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>${x.legacy ? `<em class="old">${L('Arsip', 'Archive')}</em>` : ''}${x.token ? ' · ' + esc(x.token) : ''}</small></span>
-      <span class="it-res"><b>${esc(x.title)}</b>${x.subHtml || `<small>${esc(x.sub)}</small>`}</span>
+      <span class="it-res"><b>${esc(x.title)}${x.p && x.s ? ` <span class="code2">(${ab(x.p)}${ab(x.s)})</span>` : ''}</b>${x.subHtml || `<small>${esc(x.sub)}</small>`}</span>
       <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Prioritas follow up', 'Follow-up priority')}: ${levelName(x.flag)}"></i>` : ''}</span>
     </button>`;
   });
