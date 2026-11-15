@@ -507,6 +507,7 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 }
 @media (max-width: 420px) { .sheet tr > :first-child { width: 72px !important; } }
 @media (max-width: 420px) { .sheet tr > :first-child { width: 62px !important; } .sheet tbody th { font-size: 9.5px; } .sheet thead th { font-size: 9px; letter-spacing: -.03em; } .sheet { border-spacing: 3px 0; } }
+.pp { font-family: var(--serif); font-style: italic; font-weight: 600; color: var(--ink); white-space: nowrap; background: linear-gradient(transparent 62%, rgba(229,190,46,.35) 62%); padding: 0 2px; }
 
 </style>
 </head>
@@ -2037,7 +2038,7 @@ function home() {
       <div class="block about">
         <div class="eyebrow">Tentang Mengapa</div>
         <h2>${L('Kenapa kita jadi <em>kita</em>?', 'What makes us <em>us</em>?')}</h2>
-        <p class="prose">Mengapa lahir di 2024 dari satu pertanyaan sederhana itu. Tim kami adalah trainer dan konselor bersertifikat Powered Personality yang mendalami teori empat temperamen. Lewat tes, workshop, dan konseling, kami membantu kamu mengenal diri, memahami orang terdekat, dan keluar dari pola yang menahanmu.</p>
+        <p class="prose">${L('Mengapa lahir di 2024 dari satu pertanyaan sederhana itu. Tim kami adalah trainer dan konselor bersertifikat <span class="pp">Powered Personality</span> yang mendalami teori empat temperamen. Lewat tes, workshop, dan konseling, kami membantu kamu mengenal diri, memahami orang terdekat, dan keluar dari pola yang menahanmu.', 'Mengapa (Indonesian for "why") was born in 2024 from that one simple question. Our team are certified <span class="pp">Powered Personality</span> trainers and counselors who specialize in the four temperaments. Through tests, workshops, and counseling, we help you know yourself, understand the people closest to you, and break free from patterns that hold you back.')}</p>
         ${contactRow(waLink(L('Halo Mengapa, saya ingin tahu lebih lanjut tentang tes, workshop, atau konseling.', 'Hi Mengapa, I would like to know more about your tests, workshops, or counseling.')))}
       </div>
     </div>
