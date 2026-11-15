@@ -787,6 +787,117 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 .cxs-item.me { box-shadow: 0 0 0 2px var(--ink); }
 .cxs-panel { background: var(--bg); }
 
+/* =========================================================
+   TEMA v2, bagian 2: pilihan, disclaimer, cara mengisi, hasil, GM, layanan
+   ========================================================= */
+.tmark { flex: 0 0 auto; display: block; }
+
+/* beranda: tombol sejajar + token kecil */
+.plan { gap: 0; }
+@media (min-width: 620px) { .plan .ticks { flex: 1; } }
+.tokbtn { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 7px 12px; border-radius: 999px; background: rgba(255,255,255,.1); color: #E4E4E0; font-size: 12.5px; font-weight: 600; text-decoration: none; transition: background .2s; }
+@media (hover: hover) { .tokbtn:hover { background: rgba(255,255,255,.2); } }
+
+/* pilihan yang bisa dipilih: hover jelas, terpilih terisi penuh */
+.opt, .lk { background: #FFFFFF; border: 0; box-shadow: none; border-radius: 22px; transition: background .18s, color .18s, transform .15s, box-shadow .18s; }
+@media (hover: hover) {
+  .opt:hover, .lk:hover { background: #FFFFFF; box-shadow: 0 0 0 2px var(--ink) inset; transform: translateY(-1px); }
+  .pill:hover { box-shadow: 0 0 0 1.5px var(--ink) inset; }
+}
+.opt.sel, .lk.sel { background: var(--ink); color: #FFFFFF; box-shadow: none; }
+.opt.sel small { color: rgba(255,255,255,.72); }
+.opt.sel .key { background: #FFFFFF; color: var(--ink); border-color: #FFFFFF; }
+.opt .key { border: 0; background: #F0F0EE; }
+.lk-dot { border-color: #D4D4CF; }
+.lk.sel .lk-dot { background: #FFFFFF; border-color: #FFFFFF; }
+.pill { border: 0; background: #FFFFFF; transition: background .18s, color .18s, box-shadow .18s; }
+.pill[aria-pressed="true"] { background: var(--ink); color: #FFFFFF; }
+.check { background: #FFFFFF; border-radius: 20px; padding: 16px; }
+.input { border: 1.5px solid transparent; border-radius: 16px; }
+.input:focus { border-color: var(--ink); box-shadow: none; }
+
+/* disclaimer: kotak per bagian */
+.legal { background: none; border: 0; padding: 0; margin-top: 18px; display: grid; gap: 10px; }
+.legal .lg { background: #FFFFFF; border-radius: 24px; padding: 18px 20px; }
+.legal h3 { margin: 0 0 8px; font-size: 15px; letter-spacing: -.01em; }
+.legal ul { padding-left: 18px; font-size: 14.5px; line-height: 1.5; }
+.legal li::marker { color: #A3A3A3; }
+
+/* cara mengisi: kotak bernomor */
+.rules { border: 0; display: grid; gap: 10px; }
+.rule { border: 0; background: #FFFFFF; border-radius: 24px; padding: 18px; align-items: flex-start; gap: 14px; }
+.rule .rn { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 50%; background: var(--c); color: var(--ink); display: grid; place-items: center; font-family: var(--sans); font-style: normal; font-size: 14px; font-weight: 800; }
+.rule b { font-size: 17px; font-weight: 700; letter-spacing: -.02em; }
+.rule p { color: #6E6E6E; }
+
+/* animasi hitung */
+.orbit .tmark { width: 56px; height: 56px; }
+.orbit.spin .tmark { animation: counter 2.4s var(--ease) infinite; }
+
+/* hasil */
+.badge { gap: 8px; padding: 6px 14px 6px 6px; }
+.badge .tmark { width: 26px; height: 26px; }
+.map .cell { border: 0; background: #FFFFFF; border-radius: 22px; }
+.map .cell .tmark { margin: 0 auto 6px; }
+.map .cell.on { border-width: 0; opacity: 1; }
+.use { border: 0; border-left: 0; border-radius: 22px; align-items: center; }
+.use b small { background: #F0F0EE; color: var(--ink); }
+.alt { border: 0; border-radius: 22px; }
+.alt b { font-weight: 700; letter-spacing: -.02em; }
+.sheet thead th { border-bottom-width: 0; }
+.sheet thead th .tmark { margin: 0 auto 5px; }
+.sheet td { border-bottom-color: #F0F0EE; }
+.col-head { border-bottom-color: #F0F0EE; }
+.cxs-group h4 .tmark { width: 24px; height: 24px; }
+.trio .mini { border: 0; border-radius: 22px; }
+.trio .mini .combo-art { filter: none; opacity: 1; }
+
+/* GM: spektrum, bukan pilihan */
+.gm-scale { display: none; }
+.gm-spec { width: 100%; max-width: 380px; margin: 18px auto 0; }
+.gs-track { position: relative; height: 12px; border-radius: 999px; background: linear-gradient(90deg, #F6C1AE 0%, #F7E48E 50%, #CDE5B0 75%, #9CCB7A 100%); }
+.gs-pin { position: absolute; top: 50%; width: 22px; height: 22px; margin-left: -11px; margin-top: -11px; border-radius: 50%; background: var(--ink); border: 4px solid #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+.gs-pin i { position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: .06em; background: var(--ink); color: #FFFFFF; border-radius: 999px; padding: 3px 8px; white-space: nowrap; }
+.gs-labels { display: grid; grid-template-columns: 50fr 25fr 25fr; margin-top: 10px; font-size: 12px; font-weight: 600; color: #A3A3A3; text-align: center; }
+.gs-labels span.on { color: var(--ink); font-weight: 800; }
+.gs-ticks { position: relative; height: 14px; margin-top: 2px; font-size: 10.5px; color: #B5B5B0; font-variant-numeric: tabular-nums; }
+.gs-ticks span { position: absolute; transform: translateX(-50%); }
+.gs-ticks span:nth-child(1) { left: 0; transform: none; } .gs-ticks span:nth-child(2) { left: 50%; } .gs-ticks span:nth-child(3) { left: 75%; } .gs-ticks span:nth-child(4) { right: 0; left: auto; transform: none; }
+.gps { border-radius: 28px; }
+.insight .num { border-radius: 50%; }
+
+/* layanan */
+.sv-hero { padding-top: 26px; }
+.sv-hero h1 { max-width: none; }
+.sv-badges span { border: 0; background: #FFFFFF; }
+.sv-sec { margin-top: 56px; }
+.sv-no { font-family: var(--sans); font-style: normal; font-weight: 800; font-size: 34px; letter-spacing: -.04em; color: #D4D4CF; }
+.sv-grid.two, .sv-grid.three { grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 620px) { .sv-grid.two { grid-template-columns: repeat(2, 1fr); } .sv-grid.three { grid-template-columns: repeat(3, 1fr); } }
+.sv-tile { border: 0; border-radius: 26px; padding: 18px; flex-direction: row; align-items: flex-start; gap: 14px; }
+@media (min-width: 620px) { .sv-tile { flex-direction: column; } }
+.sv-tile::before { display: none; }
+.sv-tile h3 { font-family: var(--sans); font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.sv-tile p { font-size: 14px; color: #6E6E6E; margin-top: 4px; }
+.sv-chip { border-top: 0; padding-top: 0; margin-top: 8px; font-size: 12px; font-weight: 600; letter-spacing: 0; color: #8A8A8A; width: auto; }
+.sv-ic2 { flex: 0 0 auto; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; color: var(--ink); }
+.sv-ic2 svg { width: 22px; height: 22px; }
+.sv-dark { margin-left: 0; margin-right: 0; padding: 26px 18px 18px; border-radius: 30px; }
+.sv-dark .sv-no { color: #4A4A4A; }
+.sv-dark .eyebrow { color: var(--pS); }
+.sv-dark .sv-tile { background: #2A2A2A; border: 0; }
+.sv-dark .sv-tile p { color: #B5B5B0; }
+.sv-dark .sv-chip { color: #8A8A8A; }
+.svc-cta, .card.deep { border-radius: 30px; }
+.col { border: 0; border-radius: 22px; }
+.col-part + .col-part { border-top: 1px solid #F0F0EE; }
+.sheet thead th { border-bottom: 0; }
+.section-tag { border: 0; letter-spacing: .06em; font-size: 11px; max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.iconbtn { border: 0; }
+.gm-spec { margin-top: 40px; }
+.res-hero .en { font-family: var(--sans); font-style: normal; font-weight: 600; color: #A3A3A3; font-size: 16px; }
+.tokbtn { white-space: nowrap; }
+
 </style>
 </head>
 <body>
@@ -1077,7 +1188,7 @@ const MINI_PROFILE = {
 
 /* Yang terbuka di tes lengkap (ditampilkan terkunci di hasil tes mini) */
 const FULL_BENEFITS = [
-  'Kebutuhan emosionalmu dan cara memahami orang terdekat',
+  'Kebutuhan emosionalmu: yang bikin kamu merasa dihargai',
   'Kombinasi dominan + sekunder: 1 dari 12 karakter',
   'Lembar skor: kekuatan dan kelemahan di keempat sisi',
   'Karakter dominan dan ruang tumbuh terbesarmu',
@@ -1291,7 +1402,7 @@ const EN = {
     P: { powers: ['Calm and patient under pressure', 'A good listener and natural mediator', 'Adapts easily'], watch: ['Procrastinates and struggles to decide', 'Avoids conflicts that need facing'] },
   },
   FULL_BENEFITS: [
-    'Your emotional needs and how to understand the people closest to you',
+    'Your emotional needs: what makes you feel valued',
     'Primary + secondary combination: 1 of 12 characters',
     'Score sheet: strengths and weaknesses across all four sides',
     'Your primary trait and your biggest growth area',
@@ -1887,29 +1998,31 @@ function glyph(type, size = 48, opts = {}) {
   return `<svg class="glyph" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">${GLYPH[type](color, t.deep)}</svg>`;
 }
 
-// Ilustrasi kombinasi: simbol dominan besar + simbol sekunder mengorbit
+// Warna pastel tema v2 (latar kotak temperamen)
+const PASTEL = { S: '#F7E48E', C: '#F6C1AE', M: '#BDE1EA', P: '#CDE5B0' };
+
+// Tanda satu temperamen gaya v2: lingkaran pastel, lingkaran putih, simbol berwarna
+function tmark(k, size = 40) {
+  const t = TEMPS[k];
+  return `<svg class="tmark" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">
+    <circle cx="50" cy="50" r="50" fill="${PASTEL[k]}"/>
+    <circle cx="50" cy="50" r="34" fill="#fff"/>
+    <g transform="translate(25 25) scale(.5)">${GLYPH[k](t.color, t.deep)}</g>
+  </svg>`;
+}
+
+// Ilustrasi kombinasi gaya v2: tanda dominan besar + tanda sekunder di pojok
 function comboArt(p, s, size = 220, uid = 'a') {
   const P = TEMPS[p], S = TEMPS[s];
-  const id = `g${uid}${p}${s}`;
-  const dots = Array.from({ length: 14 }, (_, i) => {
-    const a = i * 2.39996, r = 70 + (i % 4) * 9;
-    return `<circle cx="${100 + r * Math.cos(a)}" cy="${100 + r * Math.sin(a)}" r="${1.4 + (i % 3)}" fill="${i % 2 ? P.color : S.color}" opacity=".45"/>`;
-  }).join('');
   return `
   <svg class="combo-art" width="${size}" height="${size}" viewBox="0 0 200 200" role="img" aria-label="${p === s ? L(`Ilustrasi ${P.name}`, `${P.name} illustration`) : L(`Ilustrasi ${P.name} dan ${S.name}`, `${P.name} and ${S.name} illustration`)}">
-    <defs>
-      <radialGradient id="${id}" cx="40%" cy="35%" r="75%">
-        <stop offset="0%" stop-color="${P.soft}"/>
-        <stop offset="100%" stop-color="${S.soft}"/>
-      </radialGradient>
-    </defs>
-    <path d="M100 18 C146 16 184 52 182 100 C180 150 146 184 98 182 C52 180 16 146 18 98 C20 54 56 20 100 18Z" fill="url(#${id})"/>
-    <circle cx="100" cy="100" r="66" fill="none" stroke="${S.color}" stroke-opacity=".35" stroke-width="1.5" stroke-dasharray="3 6"/>
-    ${dots}
-    <g transform="translate(56 56) scale(.88)">${GLYPH[p](P.color, P.deep)}</g>
-    ${p === s ? '' : `<g transform="translate(153 47)">
-      <circle cx="0" cy="0" r="31" fill="#fff" stroke="${S.color}" stroke-width="2.5"/>
-      <g transform="translate(-25.5 -25.5) scale(.51)">${GLYPH[s](S.color, S.deep)}</g>
+    <circle cx="100" cy="104" r="88" fill="${PASTEL[p]}"/>
+    <circle cx="100" cy="104" r="58" fill="#fff"/>
+    <g transform="translate(62 66) scale(.76)">${GLYPH[p](P.color, P.deep)}</g>
+    ${p === s ? '' : `<g transform="translate(160 42)">
+      <circle cx="0" cy="0" r="36" fill="${PASTEL[s]}" stroke="#fff" stroke-width="6"/>
+      <circle cx="0" cy="0" r="23" fill="#fff"/>
+      <g transform="translate(-17 -17) scale(.34)">${GLYPH[s](S.color, S.deep)}</g>
     </g>`}
   </svg>`;
 }
@@ -2236,7 +2349,7 @@ function openAllCombos(mine, opener) {
   const prevFocus = opener || document.activeElement;
   const group = k => {
     const list = ORDER.filter(x => x !== k).map(x => k + x).filter(c => COMBOS[c]);
-    return `<section class="cxs-group"><h4>${glyph(k, 20)}<span>${L('Dominan', 'Dominant')} ${TEMPS[k].name}</span></h4>
+    return `<section class="cxs-group"><h4>${tmark(k, 24)}<span>${L('Dominan', 'Dominant')} ${TEMPS[k].name}</span></h4>
       <div class="cxs-row">${list.map(c => `<div class="cxs-item${c === mine ? ' me' : ''}">${comboArt(c[0], c[1], 64, 'cxs' + c)}<div><b>${COMBOS[c].name}${c === mine ? `<em>${L('Kamu', 'You')}</em>` : ''}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><p>${esc(COMBOS[c].tagline)}</p></div></div>`).join('')}</div></section>`;
   };
   const el = document.createElement('div');
@@ -2286,7 +2399,7 @@ function home() {
 
       <div class="group">
         <div class="eyebrow">Tes Karakter · 4 Temperamen</div>
-        <p class="group-sub">Kenali temperamen dominanmu, kebutuhan emosionalmu, dan cara memahami orang terdekat.</p>
+        <p class="group-sub">${L('Kenali temperamen dominanmu, kekuatanmu, dan kebutuhan emosionalmu.', 'Discover your dominant temperament, your strengths, and your emotional needs.')}</p>
         <div class="plans">
         <div class="plan">
           <span class="tagp">Gratis</span>
@@ -2304,13 +2417,13 @@ function home() {
           <span class="tagp">Dengan token${CONFIG.fullPrice ? ' · ' + esc(CONFIG.fullPrice) : ''}</span>
           <h3>Tes Karakter Lengkap</h3>
           <p class="plan-meta">${L('40 pertanyaan · lengkap dengan PDF', '40 questions · with a PDF report')}</p>
+          <a class="tokbtn" href="${buyLink()}" target="_blank" rel="noopener">${L('Belum punya token?', 'No token yet?')}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a>
           <ul class="ticks">
             <li>${L('1 dari 12 kombinasi karakter', '1 of 12 character blends')}</li>
             <li>${L('Lembar skor dan ruang tumbuh terbesarmu', 'Score sheet and your biggest room to grow')}</li>
-            <li>${L('Kebutuhan emosional dan cara memahami orang terdekat', 'Emotional needs and how to understand the people close to you')}</li>
+            <li>${L('Kebutuhan emosional yang bikin kamu merasa dihargai', 'The emotional needs that make you feel valued')}</li>
           </ul>
           <button class="btn block inv" data-act="full">Saya punya token ${ARROW}</button>
-          <a class="linkbtn" href="${buyLink()}" target="_blank" rel="noopener">Belum punya token? Hubungi kami</a>
           ${state.result ? `<button class="linkbtn" data-act="last">Lihat hasil lengkap terakhir</button>` : ''}
         </div>
         </div>
@@ -2378,25 +2491,19 @@ const SVC_ICON = {
 };
 const svcIcon = k => `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVC_ICON[k]}</svg>`;
 function services() {
-  const art = (k, c) => `<span class="sv-art" style="--c:${c}">
-      <svg class="sv-ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" fill="none" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 6"/>${[0, 1, 2, 3, 4].map(i => { const a = i * 1.26 + .4, r = 54; return `<circle cx="${60 + r * Math.cos(a)}" cy="${60 + r * Math.sin(a)}" r="${2 + i % 2}" fill="currentColor" opacity=".55"/>`; }).join('')}</svg>
-      <span class="sv-disc">${svcIcon(k)}</span></span>`;
+  const art = (k, c) => `<span class="sv-ic2" style="background:${c}">${svcIcon(k)}</span>`;
   const tile = (k, n, d, f, c) => `<article class="sv-tile" style="--c:${c}">${art(k, c)}<div><h3>${n}</h3><p>${d}</p><span class="sv-chip">${f}</span></div></article>`;
-  const S = 'var(--S)', C = 'var(--C)', P = 'var(--P)';
+  const S = 'var(--pS)', C = 'var(--pC)', P = 'var(--pP)';
   const wa = waLink(L('Halo Mengapa, saya tertarik dengan layanan Mengapa. Boleh minta info lebih lanjut?', 'Hi Mengapa, I am interested in your services. Could you share more information?'));
   const waCorp = waLink(L('Halo Mengapa, saya ingin diskusi program untuk perusahaan/organisasi kami.', 'Hi Mengapa, I would like to discuss a program for our company/organization.'));
   return `
   <section class="screen sv">
-    <div class="wrap wide">
+    <div class="wrap">
       <div class="top">${logo()}<button class="navbtn home" data-act="back">${L('Beranda', 'Home')}</button></div>
       <header class="sv-hero">
         <div class="eyebrow">${L('Layanan Mengapa', 'What we do')}</div>
         <h1>${L('Bertumbuh lewat <em>karakter</em>.', 'Grow through <em>character</em>.')}</h1>
         <p class="lead">${L('Pengembangan diri berbasis 4 temperamen. Untuk kamu, komunitasmu, dan timmu.', 'Personal development built on the four temperaments. For you, your community, and your team.')}</p>
-        <div class="sv-orbit" aria-hidden="true">
-          <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" fill="none" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 7"/></svg>
-          ${['S', 'C', 'M', 'P'].map((k, i) => `<span class="sv-o sv-o${i}" style="background:${TEMPS[k].soft}">${glyph(k, 38)}</span>`).join('')}
-        </div>
         <div class="sv-badges"><span>${L('Spesialis 4 temperamen', 'Four temperaments specialists')}</span><span>${L('Metode', 'The')} <b class="pp">Powered Personality</b>${L('', ' method')}</span></div>
       </header>
 
@@ -2490,10 +2597,10 @@ function guide() {
       <div class="eyebrow">Cara mengisi</div>
       <h2 style="margin-top:6px">Empat hal sebelum <em>mulai</em></h2>
       <div class="rules">
-        <div class="rule" style="--c:var(--C)"><span class="rn">01</span><div><b>40 pertanyaan, satu pilihan</b><p>Tiap pertanyaan berisi empat sifat. Pilih satu yang paling menggambarkan kamu.</p></div></div>
-        <div class="rule" style="--c:var(--M)"><span class="rn">02</span><div><b>Kekuatan, lalu kelemahan</b><p>20 pertanyaan pertama tentang kekuatan, 20 berikutnya tentang kelemahan. Keduanya sama penting.</p></div></div>
-        <div class="rule" style="--c:var(--P)"><span class="rn">03</span><div><b>Kamu sehari-hari</b><p>Pilih yang paling menggambarkan kamu dalam keseharian, bukan yang ingin kamu miliki.</p></div></div>
-        <div class="rule" style="--c:var(--S)"><span class="rn">04</span><div><b>Ragu? Pilih yang paling sering</b><p>Pikirkan yang paling sering terjadi, sekarang maupun di masa lalu. Ikuti insting pertama, tidak ada jawaban benar atau salah.</p></div></div>
+        <div class="rule" style="--c:var(--pC)"><span class="rn">01</span><div><b>40 pertanyaan, satu pilihan</b><p>Tiap pertanyaan berisi empat sifat. Pilih satu yang paling menggambarkan kamu.</p></div></div>
+        <div class="rule" style="--c:var(--pM)"><span class="rn">02</span><div><b>Kekuatan, lalu kelemahan</b><p>20 pertanyaan pertama tentang kekuatan, 20 berikutnya tentang kelemahan. Keduanya sama penting.</p></div></div>
+        <div class="rule" style="--c:var(--pP)"><span class="rn">03</span><div><b>Kamu sehari-hari</b><p>Pilih yang paling menggambarkan kamu dalam keseharian, bukan yang ingin kamu miliki.</p></div></div>
+        <div class="rule" style="--c:var(--pS)"><span class="rn">04</span><div><b>Ragu? Pilih yang paling sering</b><p>Pikirkan yang paling sering terjadi, sekarang maupun di masa lalu. Ikuti insting pertama, tidak ada jawaban benar atau salah.</p></div></div>
       </div>
       <p class="hint" style="margin-top:12px">Progres tersimpan otomatis di perangkatmu.</p>
       <div class="actions"><button class="btn block" data-act="next" data-autofocus>Mulai tes ${ARROW}</button></div>
@@ -2565,26 +2672,34 @@ function consent() {
       <div class="eyebrow">Sebelum mulai</div>
       <h2 style="margin-top:6px">Disclaimer & persetujuan</h2>
       <div class="legal">
-        <h3>Tentang tes ini</h3>
-        <ul>
-          <li>Tes ini adalah alat refleksi diri berdasarkan ${state.mode === 'gm' ? 'konsep growth mindset' : 'teori empat temperamen'}. <b>Bukan</b> tes psikologi klinis dan <b>bukan</b> diagnosis.</li>
-          <li>Hasilnya menggambarkan kecenderungan, bukan label permanen. ${state.mode === 'gm' ? 'Pola pikir' : 'Karakter'} bisa dikenali, dikelola, dan bertumbuh.</li>
-        </ul>
-        <h3>Data yang kami kumpulkan</h3>
-        <ul>
-          <li>${state.mode === 'full' ? L('Nama, tanggal lahir, nomor WhatsApp, nama orang tua/wali (untuk peserta di bawah 18 tahun), jawaban, hasil tes, dan waktu pengisian.', 'Name, date of birth, WhatsApp number, parent/guardian name (for participants under 18), answers, test results, and completion time.') : `Nama, tanggal lahir, nomor WhatsApp (kalau kamu isi), nama orang tua/wali (untuk peserta di bawah 18 tahun), jawaban, hasil tes, dan waktu pengisian.`}</li>
-        </ul>
-        <h3>Untuk apa</h3>
-        <ul>
-          <li>Menampilkan hasil tes kamu.</li>
-          <li>Membantu tim Mengapa memberi analisis yang lebih tepat saat kamu konsultasi.</li>
-          <li>${state.mode === 'full' ? L('Menghubungimu lewat WhatsApp untuk membahas hasil tes.', 'Contacting you on WhatsApp to discuss your result.') : 'Menghubungimu untuk membahas hasil tes, kalau kamu mengisi nomor WhatsApp.'}</li>
-          <li>Riset internal untuk meningkatkan layanan kami. Data kamu <b>tidak dijual</b> ke pihak lain.</li>
-        </ul>
-        <h3>Hak kamu</h3>
-        <ul>
-          <li>Kamu bisa minta melihat, memperbaiki, atau menghapus datamu kapan saja lewat WhatsApp Mengapa.</li>
-        </ul>
+        <div class="lg">
+          <h3>Tentang tes ini</h3>
+          <ul>
+            <li>Tes ini adalah alat refleksi diri berdasarkan ${state.mode === 'gm' ? 'konsep growth mindset' : 'teori empat temperamen'}. <b>Bukan</b> tes psikologi klinis dan <b>bukan</b> diagnosis.</li>
+            <li>Hasilnya menggambarkan kecenderungan, bukan label permanen. ${state.mode === 'gm' ? 'Pola pikir' : 'Karakter'} bisa dikenali, dikelola, dan bertumbuh.</li>
+          </ul>
+        </div>
+        <div class="lg">
+          <h3>Data yang kami kumpulkan</h3>
+          <ul>
+            <li>${state.mode === 'full' ? L('Nama, tanggal lahir, nomor WhatsApp, nama orang tua/wali (untuk peserta di bawah 18 tahun), jawaban, hasil tes, dan waktu pengisian.', 'Name, date of birth, WhatsApp number, parent/guardian name (for participants under 18), answers, test results, and completion time.') : `Nama, tanggal lahir, nomor WhatsApp (kalau kamu isi), nama orang tua/wali (untuk peserta di bawah 18 tahun), jawaban, hasil tes, dan waktu pengisian.`}</li>
+          </ul>
+        </div>
+        <div class="lg">
+          <h3>Untuk apa</h3>
+          <ul>
+            <li>Menampilkan hasil tes kamu.</li>
+            <li>Membantu tim Mengapa memberi analisis yang lebih tepat saat kamu konsultasi.</li>
+            <li>${state.mode === 'full' ? L('Menghubungimu lewat WhatsApp untuk membahas hasil tes.', 'Contacting you on WhatsApp to discuss your result.') : 'Menghubungimu untuk membahas hasil tes, kalau kamu mengisi nomor WhatsApp.'}</li>
+            <li>Riset internal untuk meningkatkan layanan kami. Data kamu <b>tidak dijual</b> ke pihak lain.</li>
+          </ul>
+        </div>
+        <div class="lg">
+          <h3>Hak kamu</h3>
+          <ul>
+            <li>Kamu bisa minta melihat, memperbaiki, atau menghapus datamu kapan saja lewat WhatsApp Mengapa.</li>
+          </ul>
+        </div>
       </div>
       <form id="cf">
         <label class="check"><input type="checkbox" name="agree" ${agreed(state.mode) ? 'checked' : ''} /><span><b>Saya sudah membaca dan setuju</b> data saya diproses untuk tujuan di atas.</span></label>
@@ -2645,8 +2760,8 @@ function interlude() {
       <div class="eyebrow">Bagian 2 dari 2 · Kelemahan</div>
       <h2 style="margin-top:6px">Setengah jalan. Sekarang <em>kelemahan</em>.</h2>
       <div class="rules">
-        <div class="rule" style="--c:var(--C)"><span class="rn">01</span><div><b>Cara memilihnya sama</b><p>Satu sifat per pertanyaan, yang paling menggambarkan kamu sehari-hari.</p></div></div>
-        <div class="rule" style="--c:var(--M)"><span class="rn">02</span><div><b>Jujur lebih berguna</b><p>Semua orang punya kelemahan. Pilih yang paling sering terjadi, bukan yang paling enak dibaca. Kalau ragu, pikirkan juga masa lalumu.</p></div></div>
+        <div class="rule" style="--c:var(--pC)"><span class="rn">01</span><div><b>Cara memilihnya sama</b><p>Satu sifat per pertanyaan, yang paling menggambarkan kamu sehari-hari.</p></div></div>
+        <div class="rule" style="--c:var(--pM)"><span class="rn">02</span><div><b>Jujur lebih berguna</b><p>Semua orang punya kelemahan. Pilih yang paling sering terjadi, bukan yang paling enak dibaca. Kalau ragu, pikirkan juga masa lalumu.</p></div></div>
       </div>
       <div class="actions"><button class="btn block" data-act="cont" data-autofocus>Lanjut ke bagian 2 ${ARROW}</button></div>
     </div>
@@ -2656,7 +2771,7 @@ function interlude() {
 function calc() {
   return `
   <section class="screen"><div class="wrap center" style="text-align:center">
-    <div class="orbit spin">${ORDER.map((k, i) => `<div class="g${i}">${glyph(k, 56)}</div>`).join('')}</div>
+    <div class="orbit spin">${ORDER.map((k, i) => `<div class="g${i}">${tmark(k, 56)}</div>`).join('')}</div>
     <div class="eyebrow">Menghitung hasil</div>
     <h2 style="margin-top:10px">Menyusun profil karaktermu…</h2>
   </div></section>`;
@@ -2743,7 +2858,11 @@ function gmresult() {
         <h1>${cat.name}</h1>
         <div class="en">${cat.en}</div>
         <p class="tagline">${esc(cat.tagline)}</p>
-        <div class="gm-scale">${Object.values(GM_CATEGORIES).map(c => `<span class="${c === cat ? 'on' : ''}">${c.name}</span>`).join('')}</div>
+        <div class="gm-spec" role="img" aria-label="${L(`Posisimu: ${cat.name}, skor ${a.total} dari 100`, `Your position: ${cat.name}, score ${a.total} of 100`)}">
+          <div class="gs-track"><span class="gs-pin" style="left:${Math.min(97, Math.max(3, a.total))}%"><i>${L('Kamu', 'You')}</i></span></div>
+          <div class="gs-labels">${Object.values(GM_CATEGORIES).map(c => `<span class="${c === cat ? 'on' : ''}">${c.name}</span>`).join('')}</div>
+          <div class="gs-ticks"><span>0</span><span>50</span><span>75</span><span>100</span></div>
+        </div>
         <div class="meta-line">${L(`Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}`, `Taken on ${fmtDate(r.finishedAt)} at ${fmtTime(r.finishedAt)}`)}</div>
       </div>
 
@@ -2958,7 +3077,7 @@ function result() {
   const cellFor = k => {
     const t = TEMPS[k];
     const role = roleLabel(k);
-    return `<div class="cell${role ? ' on' : ''}" style="${role ? `border-color:${t.color};background:${t.soft}` : ''}">${glyph(k, 34)}<b>${t.name}</b>${role ? `<small>${role}</small>` : ''}</div>`;
+    return `<div class="cell${role ? ' on' : ''}" style="${role ? `background:${PASTEL[k]}` : ''}">${tmark(k, 40)}<b>${t.name}</b>${role ? `<small>${role}</small>` : ''}</div>`;
   };
 
   return `
@@ -2973,8 +3092,8 @@ function result() {
         ${combo.en ? `<div class="en">${combo.en}</div>` : ''}
         <p class="tagline">${esc(combo.tagline)}</p>
         <div class="badges">
-          <span class="badge">${glyph(p, 24)}<span><em>${roleLabel(p)}</em> ${P.name}</span></span>
-          <span class="badge">${glyph(s, 24)}<span><em>${roleLabel(s) || 'Sekunder'}</em> ${S.name}</span></span>
+          <span class="badge">${tmark(p, 26)}<span><em>${roleLabel(p)}</em> ${P.name}</span></span>
+          <span class="badge">${tmark(s, 26)}<span><em>${roleLabel(s) || 'Sekunder'}</em> ${S.name}</span></span>
         </div>
         <div class="meta-line">${L(`Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}`, `Taken on ${fmtDate(r.finishedAt)} at ${fmtTime(r.finishedAt)}`)}${durMin ? L(` · selesai dalam ${durMin} menit`, ` · finished in ${durMin} min`) : ''}</div>
         ${a.ties.map(t => `<div class="note">${esc(t)}</div>`).join('')}
@@ -2988,11 +3107,11 @@ function result() {
         <div class="card sheet-card">
           <table class="sheet">
             <thead><tr><th></th>${ORDER.map(k => { const t = TEMPS[k]; const role = roleOf(k);
-              return `<th class="${role}" style="--c:${t.color};--soft:${t.soft}">${glyph(k, 22)}<span>${t.name}</span></th>`; }).join('')}</tr></thead>
+              return `<th class="${role}" style="--c:${t.color};--soft:${PASTEL[k]}">${tmark(k, 28)}<span>${t.name}</span></th>`; }).join('')}</tr></thead>
             <tbody>
-              <tr><th>Kekuatan</th>${ORDER.map(k => `<td class="${roleOf(k)}" style="--soft:${TEMPS[k].soft}">${sc.s[k]}</td>`).join('')}</tr>
-              <tr><th>Kelemahan</th>${ORDER.map(k => `<td class="${roleOf(k)}" style="--soft:${TEMPS[k].soft}">${sc.w[k]}</td>`).join('')}</tr>
-              <tr class="tot"><th>Total</th>${ORDER.map(k => `<td class="${roleOf(k)}" style="--soft:${TEMPS[k].soft}">${sc.t[k]}<i style="width:${Math.round(sc.t[k] / max * 100)}%;background:${TEMPS[k].color}"></i></td>`).join('')}</tr>
+              <tr><th>Kekuatan</th>${ORDER.map(k => `<td class="${roleOf(k)}" style="--soft:${PASTEL[k]}">${sc.s[k]}</td>`).join('')}</tr>
+              <tr><th>Kelemahan</th>${ORDER.map(k => `<td class="${roleOf(k)}" style="--soft:${PASTEL[k]}">${sc.w[k]}</td>`).join('')}</tr>
+              <tr class="tot"><th>Total</th>${ORDER.map(k => `<td class="${roleOf(k)}" style="--soft:${PASTEL[k]}">${sc.t[k]}<i style="width:${Math.round(sc.t[k] / max * 100)}%;background:${TEMPS[k].color}"></i></td>`).join('')}</tr>
             </tbody>
           </table>
           <p class="small muted" style="margin-top:12px">Kekuatan dari pertanyaan 1 sampai 20, kelemahan dari pertanyaan 21 sampai 40. Total semua kolom = 40.</p>
@@ -3007,7 +3126,7 @@ function result() {
             const words = arr => arr.length ? `<ul class="words">${arr.map(x => `<li>${esc(x.word)}</li>`).join('')}</ul>` : '<p class="none">Tidak ada</p>';
             return `
             <div class="col" style="--c:${t.color};--soft:${t.soft};--deep:${t.deep}">
-              <div class="col-head">${glyph(k, 26)}<div><b>${t.name}</b>${role ? `<small>${role}</small>` : ''}</div><strong>${sc.t[k]}</strong></div>
+              <div class="col-head">${tmark(k, 30)}<div><b>${t.name}</b>${role ? `<small>${role}</small>` : ''}</div><strong>${sc.t[k]}</strong></div>
               <div class="col-part"><div class="col-lbl">Kekuatan <span>${st.length}</span></div>${words(st)}</div>
               <div class="col-part"><div class="col-lbl">Kelemahan <span>${wk.length}</span></div>${words(wk)}</div>
             </div>`; }).join('')}
@@ -3021,7 +3140,7 @@ function result() {
         <div class="uses">
           ${[...sorted].reverse().map((k, i) => { const t = TEMPS[k]; return `
           <div class="use" style="--c:${t.color};--soft:${t.soft};--deep:${t.deep}">
-            ${glyph(k, 28)}
+            ${tmark(k, 36)}
             <div><b>${L(`Sisi ${t.name}`, `${t.name} side`)}${sc.t[k] === maxT && maxT !== minT ? '<small>Karakter dominan</small>' : sc.t[k] === minT && maxT !== minT ? '<small>Ruang tumbuh terbesar</small>' : ''}</b><p>${L('Dipakai saat', 'Useful when')} ${esc(USE[k])}</p></div>
             <strong>${sc.t[k]}</strong>
           </div>`; }).join('')}
