@@ -514,6 +514,34 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 @media (max-width: 420px) { .sheet tr > :first-child { width: 72px !important; } }
 @media (max-width: 420px) { .sheet tr > :first-child { width: 62px !important; } .sheet tbody th { font-size: 9.5px; } .sheet thead th { font-size: 9px; letter-spacing: -.03em; } .sheet { border-spacing: 3px 0; } }
 .pp { font-family: var(--serif); font-style: italic; font-weight: 600; color: var(--ink); white-space: nowrap; background: linear-gradient(transparent 62%, rgba(229,190,46,.35) 62%); padding: 0 2px; }
+/* ===== Layanan ===== */
+.svc-link { width: 100%; margin: 18px 0 4px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 12px; text-align: left; background: var(--ink); color: var(--paper); border: 0; border-radius: 18px; padding: 16px 20px; cursor: pointer; }
+.svc-link span { font-weight: 700; font-size: 16.5px; }
+.svc-link small { grid-column: 1; font-size: 13px; opacity: .75; }
+.svc-link svg { grid-column: 2; grid-row: 1 / 3; }
+.svc-hero { padding: 18px 0 6px; }
+.svc-hero h1 { font-size: clamp(40px, 9vw, 64px); margin-top: 8px; }
+.svc-hero .lead { margin-top: 12px; }
+.svc-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.svc-badges span { border: 1.5px solid var(--line-2); border-radius: 999px; padding: 6px 14px; font-size: 13.5px; font-weight: 600; background: var(--paper); }
+.svc-badges .pp { font-size: 14px; }
+.svc-gt { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.svc-gt i { width: 22px; height: 4px; border-radius: 4px; background: var(--g); }
+.svc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.svc-card { background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 6px; position: relative; overflow: hidden; }
+.svc-card::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--g); }
+.svc-ic { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: color-mix(in srgb, var(--g) 18%, var(--paper)); color: var(--ink); margin-bottom: 4px; }
+.svc-card b { font-family: var(--serif); font-size: 21px; font-weight: 600; }
+.svc-card p { margin: 0; font-size: 14.5px; color: var(--ink-2); line-height: 1.45; }
+.svc-card small { margin-top: auto; padding-top: 6px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.svc-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.svc-steps div { background: var(--paper); border: 1px solid var(--line); border-radius: 18px; padding: 16px 14px; display: flex; flex-direction: column; gap: 4px; }
+.svc-steps span { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.svc-steps b { font-size: 15px; } .svc-steps small { font-size: 12.5px; color: var(--muted); }
+.svc-cta h2 { color: var(--paper); margin-bottom: 8px; }
+@media (max-width: 420px) { .svc-steps { grid-template-columns: 1fr; } .svc-steps div { flex-direction: row; align-items: center; gap: 12px; } .svc-steps span { margin: 0; flex: 0 0 auto; } .svc-steps small { margin-left: auto; text-align: right; } }
+.svc-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+@media (max-width: 480px) { .svc-card { padding: 14px 14px 12px 16px; } .svc-card b { font-size: 18px; } .svc-card p { font-size: 13.5px; } .svc-ic { width: 40px; height: 40px; } .svc-steps small { display: none; } }
 
 </style>
 </head>
@@ -1896,7 +1924,7 @@ const foot = () => `
 const stepper = n => { const total = state.mode === 'full' ? 3 : 2; return `<div class="stepper" aria-label="${L(`Langkah ${n} dari ${total}`, `Step ${n} of ${total}`)}">${Array.from({ length: total }, (_, k) => `<i class="${k < n ? 'on' : ''}"></i>`).join('')}</div>`; };
 
 /* ---------- navigasi ---------- */
-const backOf = sc => ({ token: 'home', consent: state.mode === 'full' ? 'token' : 'home', gmresult: 'home', profile: 'consent', guide: 'profile', result: 'home', mresult: 'home' })[sc];
+const backOf = sc => ({ services: 'home', token: 'home', consent: state.mode === 'full' ? 'token' : 'home', gmresult: 'home', profile: 'consent', guide: 'profile', result: 'home', mresult: 'home' })[sc];
 function go(screen, push = true) {
   state.screen = screen; save();
   if (push) history.pushState({ s: screen }, '');
@@ -1940,7 +1968,7 @@ window.addEventListener('popstate', () => {
 /* ---------- render ---------- */
 function render() {
   const s = state.screen;
-  const view = ({ home, token, guide, profile, consent, test, interlude, calc, result, mtest, mresult, gmtest, gmresult })[s] || home;
+  const view = ({ home, services, token, guide, profile, consent, test, interlude, calc, result, mtest, mresult, gmtest, gmresult })[s] || home;
   $app.innerHTML = view();
   const top = $app.querySelector('.top');
   const LT = `<div class="lang" role="group" aria-label="Bahasa"><button data-lang="id" aria-pressed="${LANG === 'id'}">ID</button><button data-lang="en" aria-pressed="${LANG === 'en'}">EN</button></div>`;
@@ -2045,7 +2073,76 @@ function home() {
         <div class="eyebrow">Tentang Mengapa</div>
         <h2>${L('Kenapa kita jadi <em>kita</em>?', 'What makes us <em>us</em>?')}</h2>
         <p class="prose">${L('Mengapa lahir di 2024 dari satu pertanyaan sederhana itu. Tim kami adalah trainer dan konselor bersertifikat <span class="pp">Powered Personality</span> yang mendalami teori empat temperamen. Lewat tes, workshop, dan konseling, kami membantu kamu mengenal diri, memahami orang terdekat, dan keluar dari pola yang menahanmu.', 'Mengapa (Indonesian for "why") was born in 2024 from that one simple question. Our team are certified <span class="pp">Powered Personality</span> trainers and counselors who specialize in the four temperaments. Through tests, workshops, and counseling, we help you know yourself, understand the people closest to you, and break free from patterns that hold you back.')}</p>
+        <button class="svc-link" data-act="services"><span>${L('Lihat layanan Mengapa', 'See what Mengapa does')}</span><small>${L('Konseling, coaching, workshop, training, outing, camp', 'Counseling, coaching, workshops, training, outings, camps')}</small>${ARROW}</button>
         ${contactRow(waLink(L('Halo Mengapa, saya ingin tahu lebih lanjut tentang tes, workshop, atau konseling.', 'Hi Mengapa, I would like to know more about your tests, workshops, or counseling.')))}
+      </div>
+    </div>
+    ${foot()}
+  </section>`;
+}
+
+/* ============ LAYANAN ============ */
+const SVC_ICON = {
+  counseling: '<path d="M4 5h16v11H9l-5 4z"/><path d="M8 10h8M8 13h5"/>',
+  coaching: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/>',
+  public: '<circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20c0-3.3 2.7-6 6-6s6 2.7 6 6M12 20c0-3.3 2-6 4-6 3.3 0 6 2.7 6 6"/>',
+  webinar: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M10 8l4 2-4 2z" fill="currentColor"/><path d="M8 20h8"/>',
+  camp: '<path d="M3 20L12 5l9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/>',
+  training: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/>',
+  private: '<path d="M4 20V9l8-5 8 5v11z"/><path d="M10 20v-6h4v6"/>',
+  outing: '<path d="M3 19l6-9 4 6 3-4 5 7z"/><circle cx="17" cy="6" r="2"/>',
+};
+const svcIcon = k => `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVC_ICON[k]}</svg>`;
+function services() {
+  const G = [
+    { t: L('Untuk kamu', 'For you'), c: 'var(--P)', items: [
+      ['counseling', L('Konseling', 'Counseling'), L('Bongkar akar pola, termasuk pengalaman masa lalu.', 'Get to the root of your patterns, past included.'), L('1:1 · Online / offline', '1:1 · Online / offline')],
+      ['coaching', 'Coaching', L('Tetapkan target, bangun kebiasaan baru.', 'Set goals, build new habits.'), L('1:1 · Online / offline', '1:1 · Online / offline')],
+    ] },
+    { t: L('Untuk umum & komunitas', 'For the public & communities'), c: 'var(--S)', items: [
+      ['public', 'Public workshop', L('Belajar 4 temperamen bareng peserta lain.', 'Learn the four temperaments with others.'), L('Grup · Offline', 'Group · Offline')],
+      ['webinar', 'Webinar', L('Sesi singkat, bisa dari mana saja.', 'Short sessions, from anywhere.'), L('Grup · Online', 'Group · Online')],
+      ['camp', 'Camp', L('Beberapa hari, fokus total bertumbuh.', 'A few days, fully focused on growth.'), L('Grup · Menginap', 'Group · Overnight')],
+    ] },
+    { t: L('Untuk perusahaan & organisasi', 'For companies & organizations'), c: 'var(--C)', items: [
+      ['training', 'Corporate training', L('Kepemimpinan, komunikasi, dan kerja tim.', 'Leadership, communication, and teamwork.'), L('Tim · Di kantor / venue', 'Team · On-site / venue')],
+      ['private', 'Private workshop', L('Materi khusus untuk timmu saja.', 'Tailored sessions just for your team.'), L('Tim · Online / offline', 'Team · Online / offline')],
+      ['outing', 'Corporate outing', L('Seru, tapi pulang lebih saling paham.', 'Fun, and everyone comes back closer.'), L('Tim · Outdoor', 'Team · Outdoor')],
+    ] },
+  ];
+  const wa = waLink(L('Halo Mengapa, saya tertarik dengan layanan Mengapa. Boleh minta info lebih lanjut?', 'Hi Mengapa, I am interested in your services. Could you share more information?'));
+  return `
+  <section class="screen">
+    <div class="wrap wide">
+      <div class="top">${logo()}<button class="linkbtn" data-act="back">${L('Beranda', 'Home')}</button></div>
+      <div class="svc-hero">
+        <div class="eyebrow">${L('Layanan Mengapa', 'What we do')}</div>
+        <h1>${L('Bertumbuh lewat <em>karakter</em>.', 'Grow through <em>character</em>.')}</h1>
+        <p class="lead">${L('Pengembangan diri berbasis 4 temperamen, untuk individu, komunitas, dan perusahaan.', 'Character-based personal development using the four temperaments, for individuals, communities, and companies.')}</p>
+        <div class="svc-badges"><span>${L('Spesialis 4 temperamen', 'Four temperaments specialists')}</span><span>${L('Bersertifikat', 'Certified')} <b class="pp">Powered Personality</b></span></div>
+      </div>
+      ${G.map(g => `
+      <div class="block svc-group" style="--g:${g.c}">
+        <div class="svc-gt"><i></i>${g.t}</div>
+        <div class="svc-grid">${g.items.map(([k, n, d, f]) => `
+          <div class="svc-card"><span class="svc-ic">${svcIcon(k)}</span><b>${n}</b><p>${d}</p><small>${f}</small></div>`).join('')}
+        </div>
+      </div>`).join('')}
+      <div class="block">
+        <div class="eyebrow">${L('Cara mulai', 'How to start')}</div>
+        <div class="svc-steps">
+          <div><span>1</span><b>${L('Ikut tes gratis', 'Take a free test')}</b><small>${L('Kenali polamu dulu', 'Know your pattern first')}</small></div>
+          <div><span>2</span><b>${L('Ngobrol dengan tim', 'Talk to our team')}</b><small>${L('Ceritakan kebutuhanmu', 'Tell us what you need')}</small></div>
+          <div><span>3</span><b>${L('Program yang pas', 'The right program')}</b><small>${L('Kami susun bersamamu', 'Built with you')}</small></div>
+        </div>
+      </div>
+      <div class="block">
+        <div class="card deep svc-cta">
+          <h2>${L('Mau mulai dari mana?', 'Where would you like to start?')}</h2>
+          <p>${L('Ceritakan kebutuhanmu atau timmu. Kami bantu pilihkan yang paling pas.', 'Tell us what you or your team need. We will help you pick the right fit.')}</p>
+          ${contactRow(wa)}
+          <button class="btn inv block" style="margin-top:12px" data-act="home">${L('Coba tes gratis dulu', 'Try a free test first')}</button>
+        </div>
       </div>
     </div>
     ${foot()}
@@ -2730,7 +2827,12 @@ const shareIcon = () => `<svg width="18" height="18" viewBox="0 0 24 24" fill="n
 
 /* ---------- event binding per layar ---------- */
 const bind = {
+  services() {
+    on('back', () => go('home'));
+    on('home', () => go('home'));
+  },
   home() {
+    on('services', () => go('services'));
     on('mini', () => {
       state.mode = 'mini';
       if (state.miniResult || !state.miniStartedAt) resetMini();
@@ -3159,6 +3261,7 @@ if (state.screen === 'gmresult' && !state.gmResult) state.screen = 'home';
 if (state.screen === 'result' && !state.result) state.screen = 'home';
 if (state.screen === 'mresult' && !state.miniResult) state.screen = 'home';
 if (!['result', 'mresult', 'test', 'mtest', 'gmresult', 'gmtest'].includes(state.screen)) state.screen = 'home';
+if (/^\/layanan\/?$/i.test(location.pathname) || location.hash === '#layanan') state.screen = 'services';
 if (URL_TOKEN && !(state.tokenOk && state.token === URL_TOKEN)) state.screen = 'token';
 history.replaceState({ s: state.screen }, '');
 render();
