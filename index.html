@@ -1235,7 +1235,7 @@ const UI = {
   'Ragu? Pilih yang paling sering': 'Unsure? Pick the most frequent',
   'Riset internal untuk meningkatkan layanan kami. Data kamu': 'Internal research to improve our services. Your data is',
   'Ruang tumbuh terbesar': 'Biggest growth area',
-  'Satu kata per pertanyaan, yang paling menggambarkan kamu sehari-hari.': 'One word per question, the one that best describes you day to day.',
+  'Satu sifat per pertanyaan, yang paling menggambarkan kamu sehari-hari.': 'One trait per question, the one that best describes you day to day.',
   'Saya punya token': 'I have a token',
   'Saya sudah membaca dan setuju': 'I have read and agree',
   'Saya sudah punya token': 'I already have a token',
@@ -1274,7 +1274,7 @@ const UI = {
   'Tes ini adalah alat refleksi diri berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Semua orang punya keempat temperamen. Hasil ini menggambarkan kecenderungan, bukan label.': 'This test is a self-reflection tool based on the four temperaments theory, not a clinical psychology test or diagnosis. Everyone has all four temperaments. This result describes tendencies, not labels.',
   'Tes ini adalah alat refleksi diri berdasarkan teori empat temperamen.': 'This test is a self-reflection tool based on the four temperaments theory.',
   'Tes karakter & pola pikir': 'Character & mindset tests',
-  'Tiap pertanyaan berisi empat kata. Pilih satu yang paling menggambarkan kamu.': 'Each question has four words. Pick the one that describes you best.',
+  'Tiap pertanyaan berisi empat sifat. Pilih satu yang paling menggambarkan kamu.': 'Each question has four traits. Pick the one that describes you best.',
   'Tidak ada pemicu yang kamu setujui': 'No triggers you agreed with',
   'Tim Mengapa': 'The Mengapa team',
   'Tingkat persetujuan': 'Level of agreement',
@@ -1470,31 +1470,31 @@ function analyze(answers, cfg = CONFIG) {
   ORDER.forEach(k => {
     if (sc.t[k] > cfg.extremeScore) {
       flags.push({ code: 'extreme', level: 'tinggi', type: k,
-        internal: `Skor ${name(k)} sangat tinggi (${sc.t[k]}/40)`,
+        internal: L(`Skor ${name(k)} sangat tinggi (${sc.t[k]}/40)`, `Very high ${name(k)} score (${sc.t[k]}/40)`),
         user: L(`Skor ${name(k)} kamu sangat tinggi (${sc.t[k]} dari 40). Pola sekuat ini menarik untuk dibahas: apakah ini memang dirimu, atau ada sisi yang terpaksa kuat karena keadaan.`, `Your ${name(k)} score is very high (${sc.t[k]} out of 40). A pattern this strong is worth exploring: is this really you, or a side that had to become strong because of circumstances?`) });
     }
   });
   ORDER.forEach(k => {
     if (sc.w[k] - sc.s[k] >= cfg.weaknessGap) {
       flags.push({ code: 'gap', level: 'tinggi', type: k,
-        internal: `Kelemahan jauh > kekuatan di ${name(k)} (K${sc.s[k]} / L${sc.w[k]})`,
+        internal: L(`Kelemahan jauh > kekuatan di ${name(k)} (K${sc.s[k]} / L${sc.w[k]})`, `Weaknesses far exceed strengths in ${name(k)} (S${sc.s[k]} / W${sc.w[k]})`),
         user: L(`Di sisi ${name(k)}, kelemahan yang kamu pilih jauh lebih banyak daripada kekuatannya. Ini bisa berkaitan dengan cara kamu memandang diri sendiri atau pengalaman tertentu, dan paling enak dibahas langsung.`, `On your ${name(k)} side, you picked far more weaknesses than strengths. This can relate to how you see yourself or to certain experiences, and is best discussed in person.`) });
     }
   });
   const imbalance = ORDER.reduce((a, k) => a + Math.abs(sc.s[k] - sc.w[k]), 0) / 2;
   if (imbalance >= cfg.imbalanceIndex && !flags.some(f => f.code === 'gap')) {
     flags.push({ code: 'imbalance', level: 'sedang',
-      internal: `Indeks ketidakseimbangan K/L tinggi (${imbalance})`,
+      internal: L(`Indeks ketidakseimbangan K/L tinggi (${imbalance})`, `High strength/weakness imbalance index (${imbalance})`),
       user: L('Kekuatan dan kelemahan yang kamu pilih tidak tersebar seimbang di tiap temperamen. Biasanya ada cerita di balik pola seperti ini.', 'The strengths and weaknesses you picked are not evenly spread across the temperaments. There is usually a story behind a pattern like this.') });
   }
   if (combo && combo.natural === false) {
     flags.push({ code: 'opposite', level: 'sedang',
-      internal: `Kombinasi berlawanan ${name(p)}/${name(s)} (indikasi topeng)`,
+      internal: L(`Kombinasi berlawanan ${name(p)}/${name(s)} (indikasi topeng)`, `Opposite combination ${name(p)}/${name(s)} (possible mask)`),
       user: L(`${name(p)} dan ${name(s)} adalah pasangan yang berlawanan. Kadang ini tanda ada satu sisi yang terbentuk karena peran atau tuntutan lingkungan, bukan sifat bawaan.`, `${name(p)} and ${name(s)} are opposites. Sometimes this means one side was shaped by a role or by expectations around you, rather than being natural.`) });
   }
   if (sc.t[s] - sc.t[third] <= cfg.closeThird && sc.t[third] >= cfg.closeThirdMin) {
     flags.push({ code: 'triad', level: 'sedang',
-      internal: `Tiga temperamen berdekatan (${name(p)} ${sc.t[p]}, ${name(s)} ${sc.t[s]}, ${name(third)} ${sc.t[third]})`,
+      internal: L(`Tiga temperamen berdekatan (${name(p)} ${sc.t[p]}, ${name(s)} ${sc.t[s]}, ${name(third)} ${sc.t[third]})`, `Three temperaments close together (${name(p)} ${sc.t[p]}, ${name(s)} ${sc.t[s]}, ${name(third)} ${sc.t[third]})`),
       user: L(`Skor ${name(p)}, ${name(s)}, dan ${name(third)} kamu berdekatan. Pola tiga temperamen seperti ini menarik untuk dicek: mana yang bawaan, mana yang terbentuk karena peran.`, `Your ${name(p)}, ${name(s)}, and ${name(third)} scores are close together. A three-temperament pattern like this is worth checking: which is natural, and which was shaped by a role?`) });
   }
   const level = flags.some(f => f.level === 'tinggi') ? 'Tinggi' : flags.length ? 'Sedang' : '';
@@ -2051,7 +2051,7 @@ function guide() {
       <div class="eyebrow">Cara mengisi</div>
       <h2 style="margin-top:6px">Empat hal sebelum <em>mulai</em></h2>
       <div class="rules">
-        <div class="rule" style="--c:var(--C)"><span class="rn">01</span><div><b>40 pertanyaan, satu pilihan</b><p>Tiap pertanyaan berisi empat kata. Pilih satu yang paling menggambarkan kamu.</p></div></div>
+        <div class="rule" style="--c:var(--C)"><span class="rn">01</span><div><b>40 pertanyaan, satu pilihan</b><p>Tiap pertanyaan berisi empat sifat. Pilih satu yang paling menggambarkan kamu.</p></div></div>
         <div class="rule" style="--c:var(--M)"><span class="rn">02</span><div><b>Kekuatan, lalu kelemahan</b><p>20 pertanyaan pertama tentang kekuatan, 20 berikutnya tentang kelemahan. Keduanya sama penting.</p></div></div>
         <div class="rule" style="--c:var(--P)"><span class="rn">03</span><div><b>Kamu sehari-hari</b><p>Pilih yang paling menggambarkan kamu dalam keseharian, bukan yang ingin kamu miliki.</p></div></div>
         <div class="rule" style="--c:var(--S)"><span class="rn">04</span><div><b>Ragu? Pilih yang paling sering</b><p>Pikirkan yang paling sering terjadi, sekarang maupun di masa lalu. Ikuti insting pertama, tidak ada jawaban benar atau salah.</p></div></div>
@@ -2206,7 +2206,7 @@ function interlude() {
       <div class="eyebrow">Bagian 2 dari 2 · Kelemahan</div>
       <h2 style="margin-top:6px">Setengah jalan. Sekarang <em>kelemahan</em>.</h2>
       <div class="rules">
-        <div class="rule" style="--c:var(--C)"><span class="rn">01</span><div><b>Cara memilihnya sama</b><p>Satu kata per pertanyaan, yang paling menggambarkan kamu sehari-hari.</p></div></div>
+        <div class="rule" style="--c:var(--C)"><span class="rn">01</span><div><b>Cara memilihnya sama</b><p>Satu sifat per pertanyaan, yang paling menggambarkan kamu sehari-hari.</p></div></div>
         <div class="rule" style="--c:var(--M)"><span class="rn">02</span><div><b>Jujur lebih berguna</b><p>Semua orang punya kelemahan. Pilih yang paling sering terjadi, bukan yang paling enak dibaca. Kalau ragu, pikirkan juga masa lalumu.</p></div></div>
       </div>
       <div class="actions"><button class="btn block" data-act="cont" data-autofocus>Lanjut ke bagian 2 ${ARROW}</button></div>
@@ -3033,8 +3033,8 @@ function buildPayload(r) {
   ORDER.forEach(k => {
     const n = TEMPS[k].name.toLowerCase();
     row[`${n}_kekuatan`] = sc.s[k]; row[`${n}_kelemahan`] = sc.w[k]; row[`${n}_total`] = sc.t[k];
-    row[`${n}_kata_kekuatan`] = a.picks.strengths.filter(x => x.type === k).map(x => x.word).join(', ');
-    row[`${n}_kata_kelemahan`] = a.picks.weaknesses.filter(x => x.type === k).map(x => x.word).join(', ');
+    row[`${n}_sifat_kekuatan`] = a.picks.strengths.filter(x => x.type === k).map(x => x.word).join(', ');
+    row[`${n}_sifat_kelemahan`] = a.picks.weaknesses.filter(x => x.type === k).map(x => x.word).join(', ');
   });
   Object.assign(row, {
     pendalaman: a.level || '',
