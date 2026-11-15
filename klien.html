@@ -2453,7 +2453,7 @@ function app() {
     <div class="main">
       <aside class="list-pane">
         <div class="tools">
-          <div class="seg"${SLUG || S.src === 'old' ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : kindName(k)}<small>${c(k)}</small></button>`).join('')}</div>
+          <div class="seg"${SLUG || S.src === 'old' ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : ({ lengkap: L('Tes Lengkap', 'Full test'), mini: L('Tes Mini', 'Mini test'), mindset: L('Tes Mindset', 'Mindset test') })[k]}<small>${c(k)}</small></button>`).join('')}</div>
           <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             <input id="q" type="search" placeholder="${SLUG ? L('Cari nama, kode, token…', 'Search name, code, token…') : L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
           ${toolsHtml(B)}
