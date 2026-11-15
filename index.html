@@ -17,8 +17,7 @@
   <meta property="og:image:alt" content="Mengapa: tes karakter 4 temperamen dan Growth Mindset Test" />
   <meta name="twitter:image" content="https://mengapa.me/og.png?v=4" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="/favicon.png?v=4" type="image/png" sizes="64x64" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4" />
+  <link rel="icon" href="/favicon.png?v=5" type="image/png" sizes="64x64" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
@@ -457,7 +456,7 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
   .no-print, .testbar, .toast { display: none !important; }
   .screen { min-height: 0; animation: none; }
   .card { box-shadow: none; break-inside: avoid; }
-  .col, .sheet { break-inside: avoid; }
+  .col { break-inside: avoid; }
   .block { break-inside: avoid; margin-top: 26px; }
   .deep { background: #fff; color: var(--ink); border: 1.5px solid var(--ink); }
   .deep h2, .deep p, .deep li { color: var(--ink); }
@@ -898,6 +897,61 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 .res-hero .en { font-family: var(--sans); font-style: normal; font-weight: 600; color: #A3A3A3; font-size: 16px; }
 .tokbtn { white-space: nowrap; }
 
+/* ===== v2.1: warna kartu tes ditukar ===== */
+:root { --green: #2E7553; }
+.plan:not(.pro):not(.wide-plan) .btn { background: var(--green); }
+.plan:not(.pro):not(.wide-plan) .btn:hover { background: #245F43; }
+.plan:not(.pro):not(.wide-plan) .btn .arrow { color: var(--green); }
+.plan.pro { background: var(--pP); color: var(--ink); }
+.plan.pro .tagp { background: rgba(255,255,255,.8); color: var(--ink); }
+.plan.pro .plan-meta { color: #3E4A36; }
+.plan.pro .ticks li { color: #26301F; }
+.plan.pro .ticks li::before { background-color: rgba(255,255,255,.8); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231D1D1D' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); }
+.plan.pro .btn.inv { background: var(--ink); color: #FFFFFF; }
+.plan.pro .btn.inv:hover { background: #000; }
+.plan.pro .btn.inv .arrow { background: #FFFFFF; color: var(--ink); }
+.plan.pro .tokbtn { background: rgba(255,255,255,.65); color: var(--ink); }
+@media (hover: hover) { .plan.pro .tokbtn:hover { background: #FFFFFF; } }
+.plan.pro .linkbtn { color: #3E4A36; }
+.wide-plan { background: var(--ink); color: #FFFFFF; }
+.wide-plan .tagp { background: var(--pS); color: var(--ink); }
+.wide-plan .plan-meta { color: #A3A3A3; }
+.wide-plan .ticks li { color: #E4E4E0; }
+.wide-plan .ticks li::before { background-color: #2E2E2E; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F7E48E' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); }
+.wide-plan .btn { background: #FFFFFF; color: var(--ink); }
+.wide-plan .btn:hover { background: #F0F0EE; }
+.wide-plan .btn .arrow { background: var(--ink); color: #FFFFFF; }
+.wide-plan .linkbtn { color: #A3A3A3; }
+/* showcase kombinasi selalu penuh lebar kolom */
+.cx { max-width: none !important; margin-left: 0; margin-right: 0; }
+/* kolom per temperamen: angka total di kanan atas, nama di bawahnya */
+.col-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-bottom: 0; border-bottom: 0 !important; }
+.col-head strong { display: flex; flex-direction: column; align-items: flex-end; font-size: 28px !important; font-weight: 800; letter-spacing: -.03em; line-height: 1; }
+.col-head strong i { font-style: normal; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #9A9A9A; margin-top: 3px; }
+.col-name { margin-top: 10px; padding-bottom: 10px; border-bottom: 1px solid #F0F0EE; line-height: 1.2; }
+.col-name b { display: block; font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+.col-name small { display: block; margin-top: 3px; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--deep); }
+/* porsi keempat temperamen */
+.mix { background: #FFFFFF; border-radius: 26px; padding: 16px 16px 18px; margin-top: 14px; }
+.mix-bar { display: flex; gap: 4px; height: 52px; }
+.mix-bar span { min-width: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.mix-bar b { font-size: 17px; font-weight: 800; letter-spacing: -.02em; }
+.mix p { margin: 14px 2px 0; font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.uses { margin-top: 10px; }
+/* lembar skor lebih terbaca di HP */
+.sheet tbody th { font-size: 13px; font-weight: 600; color: #6E6E6E; }
+.sheet tr.tot th { color: var(--ink); font-weight: 800; }
+.sheet thead th span { font-size: 11.5px; font-weight: 700; }
+@media (max-width: 480px) { .sheet thead th span { font-size: 10.5px; letter-spacing: -.01em; } .sheet td { font-size: 18px; } }
+@media print {
+  .block, .block:not(.btn) { break-inside: auto !important; margin-top: 22px !important; }
+  h2, h3, .eyebrow { break-after: avoid; page-break-after: avoid; }
+  .card { break-inside: auto !important; }
+  .sheet, .mix, .map, .note, .lg, .alt { break-inside: avoid !important; }
+  .use, .insight, .col, .side, .gps > *, .res-hero, li { break-inside: avoid; page-break-inside: avoid; }
+  body { background: #FFFFFF; }
+}
+
 </style>
 </head>
 <body>
@@ -1263,7 +1317,7 @@ const GM_CATEGORIES = {
   transition: { name: 'Masa Transisi', en: 'Transitional', stage: 1,
     tagline: 'Kamu sudah melihat jalannya, tapi beberapa pemicu masih menarikmu mundur.',
     about: 'Kamu percaya orang bisa berkembang dan sering bertindak sesuai keyakinan itu. Tapi di situasi tertentu, misalnya saat dikritik, gagal di depan orang, atau melihat orang lain lebih sukses, pola lama masih muncul. Di sinilah biasanya perubahan terbesar bisa terjadi.' },
-  growth: { name: 'Core Growth', en: 'Core Growth', stage: 2,
+  growth: { name: 'Growth Kuat', en: 'Strong Growth', stage: 2,
     tagline: 'Kamu menjadikan sulit, gagal, dan kritik sebagai bahan bakar.',
     about: 'Kamu konsisten melihat kemampuan sebagai sesuatu yang bisa dilatih, dan reaksimu terhadap gagal maupun kritik cenderung sehat. Tantangannya sekarang adalah menjaga pola ini saat taruhannya tinggi, dan menularkannya ke orang di sekitarmu.' },
 };
@@ -1454,7 +1508,7 @@ const EN = {
       about: 'In many situations, you see ability as something already set. As a result, failure, criticism, and new challenges feel threatening, so it makes sense that you choose the safe path. The good news: mindsets can be trained, and noticing the pattern is the first step.' },
     transition: { name: 'In Transition', en: '', tagline: 'You can see the path, but some triggers still pull you back.',
       about: 'You believe people can grow and often act on that belief. But in certain situations, such as being criticized, failing in front of others, or seeing others succeed, old patterns still show up. This is usually where the biggest change can happen.' },
-    growth: { name: 'Core Growth', en: '', tagline: 'You turn difficulty, failure, and criticism into fuel.',
+    growth: { name: 'Strong Growth', en: '', tagline: 'You turn difficulty, failure, and criticism into fuel.',
       about: 'You consistently see ability as something that can be trained, and your reactions to failure and criticism tend to be healthy. The challenge now is keeping this pattern when the stakes are high, and passing it on to the people around you.' },
   },
   GM_STEP: {
@@ -1582,7 +1636,7 @@ const UI = {
   'Kembali': 'Back',
   'Kembali ke beranda': 'Back to home',
   'Kenalan dulu': 'Let’s get to know you',
-  'Pahami karakter dan pola pikir yang paling sering kamu pakai, lalu belajar keluar dari jebakannya. Mulai dari tes gratis, atau langsung ke Tes Karakter Lengkap.': 'Discover the character and mindset you use most, then learn to break out of their traps. Start with a free test, or go straight to the Full Character Test.',
+  'Pahami karakter dan pola pikir yang paling sering kamu pakai, lalu belajar keluar dari jebakannya.': 'Discover the character and mindset you use most, then learn to break out of their traps.',
   'Kenali temperamen dominanmu, kebutuhan emosionalmu, dan cara memahami orang terdekat.': 'Discover your primary temperament, your emotional needs, and how to understand the people closest to you.',
   'Kenapa kamu jadi': 'Why are you',
   'Kenapa kita jadi': 'Why are we',
@@ -2048,110 +2102,87 @@ function wrap(ctx, text, maxW) {
   return lines;
 }
 
+const loadLogos = () => Promise.all([LOGO_ICON, LOGO_WORD].map(src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; })));
+const SANS = '"Plus Jakarta Sans", system-ui, sans-serif';
+
+// Kerangka kartu share gaya v2: latar abu muda, logo, subjudul, kaki dengan nama + pill mengapa.me
+async function cardBase(sub) {
+  const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#F0F0EE'; ctx.fillRect(0, 0, W, H);
+  ctx.textAlign = 'center';
+  const [li, lw] = await loadLogos();
+  const ih = 80, iw = li.width * ih / li.height, wh = 44, ww = lw.width * wh / lw.height, lx = (W - (iw + 16 + ww)) / 2;
+  ctx.drawImage(li, lx, 74, iw, ih); ctx.drawImage(lw, lx + iw + 16, 74 + (ih - wh) / 2 + 6, ww, wh);
+  ctx.font = `700 26px ${SANS}`; ctx.fillStyle = '#8A8A8A'; ctx.letterSpacing = '5px';
+  ctx.fillText(sub.toUpperCase(), W / 2 + 2, 210); ctx.letterSpacing = '0px';
+  return { W, H, cv, ctx };
+}
+function cardFoot(ctx, W, who) {
+  ctx.textAlign = 'center'; ctx.fillStyle = '#1D1D1D'; ctx.font = `700 34px ${SANS}`;
+  ctx.fillText(who, W / 2, 1752);
+  ctx.font = `800 30px ${SANS}`; const t = 'mengapa.me', tw = ctx.measureText(t).width + 72;
+  ctx.fillStyle = '#1D1D1D'; roundRect(ctx, (W - tw) / 2, 1790, tw, 70, 35); ctx.fill();
+  ctx.fillStyle = '#FFFFFF'; ctx.fillText(t, W / 2, 1836);
+}
+function cardBars(ctx, rows, top, max) {
+  const x0 = 130, bw = 820;
+  rows.forEach((r, i) => {
+    const y = top + i * 86;
+    ctx.textAlign = 'left'; ctx.fillStyle = '#1D1D1D'; ctx.font = `700 30px ${SANS}`; ctx.fillText(r.name, x0, y);
+    ctx.textAlign = 'right'; ctx.font = `800 32px ${SANS}`; ctx.fillText(String(r.v), x0 + bw, y);
+    ctx.fillStyle = '#F0F0EE'; roundRect(ctx, x0, y + 18, bw, 20, 10); ctx.fill();
+    ctx.fillStyle = r.color; roundRect(ctx, x0, y + 18, Math.max(20, bw * r.v / max), 20, 10); ctx.fill();
+  });
+}
+
 async function shareCard(result) {
   const { profile, analysis, dateLabel, mini } = result;
   const { primary: p, secondary: s, combo, scores } = analysis;
   const P = TEMPS[p], S = TEMPS[s];
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
+  const { W, cv, ctx } = await cardBase(mini ? L('Tes Karakter Mini', 'Mini Character Test') : L('Tes Karakter Lengkap', 'Full Character Test'));
 
-  const W = 1080, H = 1920;
-  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
-  const ctx = cv.getContext('2d');
-  const serif = '"Fraunces", Georgia, serif';
-  const sans = '"Plus Jakarta Sans", system-ui, sans-serif';
-
-  // latar
-  ctx.fillStyle = '#FBF7EC'; ctx.fillRect(0, 0, W, H);
-  const g = ctx.createRadialGradient(W * .3, H * .28, 50, W * .5, H * .35, 900);
-  g.addColorStop(0, P.soft); g.addColorStop(1, 'rgba(251,247,236,0)');
-  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-
-  // header
-  ctx.fillStyle = '#1F3A36'; ctx.textAlign = 'center';
-  const [li, lw] = await Promise.all([LOGO_ICON, LOGO_WORD].map(src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; })));
-  const ih = 84, iw = li.width * ih / li.height, wh = 46, ww = lw.width * wh / lw.height, lx = (W - (iw + 16 + ww)) / 2;
-  ctx.drawImage(li, lx, 78, iw, ih); ctx.drawImage(lw, lx + iw + 16, 78 + (ih - wh) / 2 + 6, ww, wh);
-  ctx.font = `500 28px ${sans}`; ctx.fillStyle = '#6B645B';
-  ctx.fillText(mini ? L('Tes Karakter Mini', 'Mini Character Test') : L('Tes Karakter · 4 Temperamen', 'Character Test · 4 Temperaments'), W / 2, 212);
-
-  // ilustrasi
-  const art = await svgToImage(comboArt(p, s, 620, 'share'));
-  ctx.drawImage(art, (W - 620) / 2, 270, 620, 620);
-
-  // nama kombinasi
-  ctx.fillStyle = '#6B645B'; ctx.font = `600 30px ${sans}`;
-  ctx.letterSpacing = '6px';
-  ctx.fillText(mini ? L('TEMPERAMEN DOMINAN', 'PRIMARY TEMPERAMENT') : `${P.name.toUpperCase()} · ${S.name.toUpperCase()}`, W / 2 + 3, 960);
+  // kartu utama berwarna pastel dominan
+  ctx.fillStyle = PASTEL[p]; roundRect(ctx, 60, 262, W - 120, 1000, 64); ctx.fill();
+  const art = await svgToImage(comboArt(p, s, 560, 'share'));
+  ctx.drawImage(art, (W - 560) / 2, 300, 560, 560);
+  ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(29,29,29,.6)'; ctx.font = `700 28px ${SANS}`; ctx.letterSpacing = '5px';
+  ctx.fillText(mini ? L('TEMPERAMEN DOMINAN', 'PRIMARY TEMPERAMENT') : `${P.name.toUpperCase()} + ${S.name.toUpperCase()}`, W / 2 + 2, 930);
   ctx.letterSpacing = '0px';
-  ctx.fillStyle = '#1F3A36';
-  let fs = 104; ctx.font = `600 ${fs}px ${serif}`;
-  while (ctx.measureText(combo.name).width > 940 && fs > 60) { fs -= 4; ctx.font = `600 ${fs}px ${serif}`; }
-  ctx.fillText(combo.name, W / 2, 1080);
-  ctx.font = `italic 400 40px ${serif}`; ctx.fillStyle = '#3A3631';
-  wrap(ctx, combo.tagline, 860).forEach((l, i) => ctx.fillText(l, W / 2, 1150 + i * 54));
+  ctx.fillStyle = '#1D1D1D';
+  let fs = 108; ctx.font = `800 ${fs}px ${SANS}`;
+  while (ctx.measureText(combo.name).width > 880 && fs > 60) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
+  ctx.letterSpacing = '-3px'; ctx.fillText(combo.name, W / 2, 1040); ctx.letterSpacing = '0px';
+  ctx.font = `500 38px ${SANS}`; ctx.fillStyle = '#2F2F2F';
+  wrap(ctx, combo.tagline, 820).slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, 1110 + i * 52));
 
-  // bar skor
-  const top = 1300, bw = 760, x0 = (W - bw) / 2;
-  const max = mini ? 10 : Math.max(20, ...Object.values(scores.t));
-  ['S', 'C', 'M', 'P'].forEach((k, i) => {
-    const y = top + i * 92, T = TEMPS[k];
-    ctx.textAlign = 'left'; ctx.fillStyle = '#1F3A36'; ctx.font = `600 30px ${sans}`;
-    ctx.fillText(T.name, x0, y);
-    ctx.textAlign = 'right'; ctx.fillText(String(scores.t[k]), x0 + bw, y);
-    ctx.fillStyle = 'rgba(28,26,23,.08)';
-    roundRect(ctx, x0, y + 16, bw, 18, 9); ctx.fill();
-    ctx.fillStyle = T.color;
-    roundRect(ctx, x0, y + 16, Math.max(18, bw * scores.t[k] / max), 18, 9); ctx.fill();
-  });
+  // kartu skor
+  ctx.fillStyle = '#FFFFFF'; roundRect(ctx, 60, 1290, W - 120, 400, 64); ctx.fill();
+  cardBars(ctx, ORDER.map(k => ({ name: TEMPS[k].name, v: scores.t[k], color: TEMPS[k].color })), 1372, mini ? 10 : Math.max(20, ...Object.values(scores.t)));
 
-  // footer
-  ctx.textAlign = 'center'; ctx.fillStyle = '#1F3A36';
-  ctx.font = `600 34px ${sans}`;
-  ctx.fillText(profile.nickname ? `${profile.nickname} · ${dateLabel}` : dateLabel, W / 2, 1740);
-  ctx.font = `italic 400 32px ${serif}`; ctx.fillStyle = '#6B645B';
-  ctx.fillText('See yourself clearly, see others truly.', W / 2, 1800);
-  ctx.font = `600 30px ${sans}`; ctx.fillStyle = '#1F3A36';
-  ctx.fillText('mengapa.me', W / 2, 1852);
-
+  cardFoot(ctx, W, profile.nickname ? `${profile.nickname} · ${dateLabel}` : dateLabel);
   return new Promise(res => cv.toBlob(res, 'image/png', 0.95));
 }
 
 async function gmCard({ nickname, dateLabel, total, cat, pillars }) {
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
-  const W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
-  const ctx = cv.getContext('2d'), serif = '"Fraunces", Georgia, serif', sans = '"Plus Jakarta Sans", system-ui, sans-serif';
-  ctx.fillStyle = '#FBF7EC'; ctx.fillRect(0, 0, W, H);
-  const g = ctx.createRadialGradient(W * .5, H * .3, 50, W * .5, H * .3, 900);
-  g.addColorStop(0, 'rgba(136,162,97,.28)'); g.addColorStop(1, 'rgba(251,247,236,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-  ctx.textAlign = 'center';
-  const [li, lw] = await Promise.all([LOGO_ICON, LOGO_WORD].map(src => new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; })));
-  const ih = 84, iw = li.width * ih / li.height, wh = 46, ww = lw.width * wh / lw.height, lx = (W - (iw + 16 + ww)) / 2;
-  ctx.drawImage(li, lx, 78, iw, ih); ctx.drawImage(lw, lx + iw + 16, 78 + (ih - wh) / 2 + 6, ww, wh);
-  ctx.font = `500 28px ${sans}`; ctx.fillStyle = '#6B645B'; ctx.fillText('Growth Mindset Test', W / 2, 212);
-  // skor dalam cincin
-  const cx = W / 2, cy = 500, rr = 190;
+  const { W, cv, ctx } = await cardBase('Growth Mindset Test');
+  ctx.fillStyle = PASTEL.P; roundRect(ctx, 60, 262, W - 120, 860, 64); ctx.fill();
+  const cx = W / 2, cy = 520, rr = 180;
   ctx.lineWidth = 34; ctx.lineCap = 'round';
-  ctx.strokeStyle = 'rgba(28,26,23,.08)'; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
-  ctx.strokeStyle = '#88A261'; ctx.beginPath(); ctx.arc(cx, cy, rr, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(.02, total / 100)); ctx.stroke();
-  ctx.fillStyle = '#1F3A36'; ctx.font = `600 150px ${serif}`; ctx.fillText(String(total), cx, cy + 40);
-  ctx.font = `500 30px ${sans}`; ctx.fillStyle = '#6B645B'; ctx.fillText(L('dari 100', 'out of 100'), cx, cy + 96);
-  ctx.fillStyle = '#1F3A36'; let fs = 96; ctx.font = `600 ${fs}px ${serif}`;
-  while (ctx.measureText(cat.name).width > 940 && fs > 56) { fs -= 4; ctx.font = `600 ${fs}px ${serif}`; }
-  ctx.fillText(cat.name, W / 2, 870);
-  ctx.font = `italic 400 40px ${serif}`; ctx.fillStyle = '#3A3631';
-  wrap(ctx, cat.tagline, 860).forEach((l, i) => ctx.fillText(l, W / 2, 940 + i * 54));
-  const top = 1130, bw = 760, x0 = (W - bw) / 2;
-  pillars.forEach((p, i) => {
-    const y = top + i * 104;
-    ctx.textAlign = 'left'; ctx.fillStyle = '#1F3A36'; ctx.font = `600 30px ${sans}`; ctx.fillText(p.name, x0, y);
-    ctx.textAlign = 'right'; ctx.fillText(String(p.v), x0 + bw, y);
-    ctx.fillStyle = 'rgba(28,26,23,.08)'; roundRect(ctx, x0, y + 16, bw, 18, 9); ctx.fill();
-    ctx.fillStyle = p.color; roundRect(ctx, x0, y + 16, Math.max(18, bw * p.v / 100), 18, 9); ctx.fill();
-  });
-  ctx.textAlign = 'center'; ctx.fillStyle = '#1F3A36'; ctx.font = `600 34px ${sans}`;
-  ctx.fillText(nickname ? `${nickname} · ${dateLabel}` : dateLabel, W / 2, 1740);
-  ctx.font = `italic 400 32px ${serif}`; ctx.fillStyle = '#6B645B'; ctx.fillText('See yourself clearly, see others truly.', W / 2, 1800);
-  ctx.font = `600 30px ${sans}`; ctx.fillStyle = '#1F3A36'; ctx.fillText('mengapa.me', W / 2, 1852);
+  ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
+  ctx.strokeStyle = '#1D1D1D'; ctx.beginPath(); ctx.arc(cx, cy, rr, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(.02, total / 100)); ctx.stroke();
+  ctx.textAlign = 'center'; ctx.fillStyle = '#1D1D1D'; ctx.font = `800 150px ${SANS}`; ctx.letterSpacing = '-4px'; ctx.fillText(String(total), cx, cy + 50); ctx.letterSpacing = '0px';
+  ctx.font = `600 30px ${SANS}`; ctx.fillStyle = 'rgba(29,29,29,.6)'; ctx.fillText(L('dari 100', 'out of 100'), cx, cy + 100);
+  ctx.fillStyle = '#1D1D1D'; let fs = 96; ctx.font = `800 ${fs}px ${SANS}`;
+  while (ctx.measureText(cat.name).width > 880 && fs > 56) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
+  ctx.letterSpacing = '-3px'; ctx.fillText(cat.name, W / 2, 872); ctx.letterSpacing = '0px';
+  ctx.font = `500 38px ${SANS}`; ctx.fillStyle = '#2F2F2F';
+  wrap(ctx, cat.tagline, 820).slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, 944 + i * 52));
+  ctx.fillStyle = '#FFFFFF'; roundRect(ctx, 60, 1150, W - 120, 540, 64); ctx.fill();
+  cardBars(ctx, pillars, 1236, 100);
+  cardFoot(ctx, W, nickname ? `${nickname} · ${dateLabel}` : dateLabel);
   return new Promise(res => cv.toBlob(res, 'image/png', 0.95));
 }
 
@@ -2388,8 +2419,8 @@ function home() {
       <div class="top">${logo()}</div>
       <div class="hero">
         <div class="eyebrow">Tes karakter & pola pikir</div>
-        <h1>${L('Kenali dirimu. Tumbuh lebih <em>jauh</em>.', 'Know yourself. <em>Grow</em> further.')}</h1>
-        <p class="lead">Pahami karakter dan pola pikir yang paling sering kamu pakai, lalu belajar keluar dari jebakannya. Mulai dari tes gratis, atau langsung ke Tes Karakter Lengkap.</p>
+        <h1>${L('Kenali dirimu. Tumbuh lebih <em>jauh</em>.', 'Know yourself. Grow <em>further</em>.')}</h1>
+        <p class="lead">Pahami karakter dan pola pikir yang paling sering kamu pakai, lalu belajar keluar dari jebakannya.</p>
       </div>
       ${inProgress ? `
       <div class="card resume">
@@ -2896,8 +2927,8 @@ function gmresult() {
             <p>${L(`Kamu setuju dengan ${a.triggers.length} pernyataan berpola fixed. Ini titik-titik yang paling mudah menarikmu kembali ke mode bertahan:`, `You agreed with ${a.triggers.length} fixed-pattern statements. These are the points most likely to pull you back into defensive mode:`)}</p>
             <ul class="triggers">${a.triggers.map(t => `<li>"${esc(t.q)}"</li>`).join('')}</ul>
           </div></div>` : `<div class="insight"><div class="num" style="background:#E4ECD8;color:#3F5524">${a.patterns.includes('head') ? 3 : 2}</div><div>
-            <b>Tidak ada pemicu yang kamu setujui</b>
-            <p>Kamu tidak menyetujui satu pun pernyataan berpola fixed. Tetap waspada: pemicu sering baru muncul saat taruhannya tinggi, misalnya di depan atasan, pasangan, atau orang tua.</p>
+            <b>${L('Belum ada pemicu fixed yang menonjol', 'No strong fixed-mindset triggers yet')}</b>
+            <p>${L('Di tes ini, kamu tidak setuju dengan satu pun pernyataan berpola fixed. Artinya, belum terlihat situasi khusus yang langsung membuatmu masuk mode bertahan. Tetap waspada: pemicu seperti ini sering baru muncul saat taruhannya tinggi, misalnya di depan atasan, pasangan, atau orang tua.', 'In this test, you did not agree with any fixed-pattern statement. So far, no particular situation seems to push you straight into defensive mode. Stay alert: triggers like these often only show up when the stakes are high, for example in front of a boss, a partner, or your parents.')}</p>
           </div></div>`}
           ${a.patterns.includes('veryhigh') ? `<p class="note">Skormu sangat tinggi. Semua orang punya campuran fixed dan growth, jadi coba jujur cek: kapan terakhir kali kamu merasa defensif atau menghindari sesuatu karena takut gagal?</p>` : ''}
         </div>
@@ -3102,8 +3133,7 @@ function result() {
       </div>
 
       <div class="block">
-        <div class="eyebrow">Lembar skor</div>
-        <h2>Hasil 40 pilihanmu</h2>
+        <h2>Lembar skor</h2>
         <div class="card sheet-card">
           <table class="sheet">
             <thead><tr><th></th>${ORDER.map(k => { const t = TEMPS[k]; const role = roleOf(k);
@@ -3126,7 +3156,8 @@ function result() {
             const words = arr => arr.length ? `<ul class="words">${arr.map(x => `<li>${esc(x.word)}</li>`).join('')}</ul>` : '<p class="none">Tidak ada</p>';
             return `
             <div class="col" style="--c:${t.color};--soft:${t.soft};--deep:${t.deep}">
-              <div class="col-head">${tmark(k, 30)}<div><b>${t.name}</b>${role ? `<small>${role}</small>` : ''}</div><strong>${sc.t[k]}</strong></div>
+              <div class="col-head">${tmark(k, 34)}<strong>${sc.t[k]}<i>${L('total', 'total')}</i></strong></div>
+              <div class="col-name"><b>${t.name}</b>${role ? `<small>${role}</small>` : ''}</div>
               <div class="col-part"><div class="col-lbl">Kekuatan <span>${st.length}</span></div>${words(st)}</div>
               <div class="col-part"><div class="col-lbl">Kelemahan <span>${wk.length}</span></div>${words(wk)}</div>
             </div>`; }).join('')}
@@ -3136,7 +3167,10 @@ function result() {
       <div class="block">
         <div class="eyebrow">Cara membaca hasil ini</div>
         <h2>Kamu punya <em>keempatnya</em></h2>
-        <p class="prose">${L(`Setiap orang punya keempat temperamen, hanya porsinya yang berbeda. ${a.coDominant.length > 2 ? 'Sisi dengan skor tertinggi' : P.name + ' dan ' + S.name} adalah sisi yang paling sering kamu pakai. Sisi lainnya tetap ada dan bisa dilatih.`, `Everyone has all four temperaments, only in different proportions. ${a.coDominant.length > 2 ? 'Your highest-scoring sides are' : P.name + ' and ' + S.name + ' are'} the sides you use most. The others are still there and can be trained.`)}</p><p class="prose" style="margin-top:10px">Masalah muncul saat kita hanya memakai sisi yang nyaman di semua situasi. Itu yang kami sebut jebakan karakter. Tujuannya belajar menempatkan diri: memakai sisi yang cocok dengan situasi yang dihadapi, tanpa kehilangan jati diri.</p>
+        <div class="mix">
+          <div class="mix-bar" role="img" aria-label="${L('Porsi keempat temperamenmu', 'The mix of your four temperaments')}">${[...sorted].map(k => `<span style="flex:${Math.max(sc.t[k], 1)};background:${PASTEL[k]}">${tmark(k, 22)}<b>${sc.t[k]}</b></span>`).join('')}</div>
+          <p>${L(`Setiap orang punya keempat temperamen, hanya porsinya yang berbeda. ${a.coDominant.length > 2 ? 'Sisi dengan skor tertinggi' : P.name + ' dan ' + S.name} adalah sisi yang paling sering kamu pakai. Sisi lainnya tetap ada dan bisa dilatih.`, `Everyone has all four temperaments, only in different proportions. ${a.coDominant.length > 2 ? 'Your highest-scoring sides are' : P.name + ' and ' + S.name + ' are'} the sides you use most. The others are still there and can be trained.`)}</p><p class="prose" style="margin-top:10px">Masalah muncul saat kita hanya memakai sisi yang nyaman di semua situasi. Itu yang kami sebut jebakan karakter. Tujuannya belajar menempatkan diri: memakai sisi yang cocok dengan situasi yang dihadapi, tanpa kehilangan jati diri.</p>
+        </div>
         <div class="uses">
           ${[...sorted].reverse().map((k, i) => { const t = TEMPS[k]; return `
           <div class="use" style="--c:${t.color};--soft:${t.soft};--deep:${t.deep}">
@@ -3171,7 +3205,7 @@ function result() {
 
       <div class="block">
         <div class="eyebrow">Insight tambahan</div>
-        <h2>Yang biasanya menyertai skormu</h2>
+        <h2>${L('Di balik skor dan pilihanmu', 'Behind your scores and choices')}</h2>
         <div class="card">
           ${a.insights.map(x => `
             <div class="insight"><div class="num" style="background:${TEMPS[x.type].soft};color:${TEMPS[x.type].deep}">${x.score}</div>
