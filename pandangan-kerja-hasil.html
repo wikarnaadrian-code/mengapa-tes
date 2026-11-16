@@ -286,7 +286,7 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
 .share-row .btn { min-height: 50px; font-size: 15px; padding: 0 12px; white-space: nowrap; }
 .btn.wa { white-space: nowrap; font-size: 15.5px; padding: 0 18px; }
-.toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: 999px; font-size: 14px; z-index: 50; animation: enter .3s var(--ease) both; box-shadow: var(--shadow); max-width: calc(100vw - 40px); text-align: center; }
+.toast { position: fixed; left: 0; right: 0; bottom: 26px; margin: 0 auto; width: max-content; background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: 999px; font-size: 14px; z-index: 50; animation: enter .3s var(--ease) both; box-shadow: var(--shadow); max-width: calc(100vw - 40px); text-align: center; }
 
 @media (min-width: 560px) {
   .temps { grid-template-columns: repeat(4, 1fr); }
@@ -1456,7 +1456,7 @@ const LOGO_WORD = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
 
 /* ===== pkdata.js ===== */
 /* Versi Tes Pandangan Kerja, terpisah dari versi web app utama */
-const PK_VERSION = '2.0';
+const PK_VERSION = '2.0.1';
 /* ============ Tes Pandangan Kerja (khusus HK Gold) · isi tes ============ */
 const PK_SCALE = ['Sangat tidak setuju', 'Tidak setuju', 'Netral / ragu-ragu', 'Setuju', 'Sangat setuju'];
 const PK_SCALE_SHORT = ['STS', 'TS', 'N', 'S', 'SS'];

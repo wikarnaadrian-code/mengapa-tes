@@ -286,7 +286,7 @@ footer.foot .tag { font-family: var(--serif); font-style: italic; font-size: 15p
 .share-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
 .share-row .btn { min-height: 50px; font-size: 15px; padding: 0 12px; white-space: nowrap; }
 .btn.wa { white-space: nowrap; font-size: 15.5px; padding: 0 18px; }
-.toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: 999px; font-size: 14px; z-index: 50; animation: enter .3s var(--ease) both; box-shadow: var(--shadow); max-width: calc(100vw - 40px); text-align: center; }
+.toast { position: fixed; left: 0; right: 0; bottom: 26px; margin: 0 auto; width: max-content; background: var(--ink); color: var(--paper); padding: 12px 18px; border-radius: 999px; font-size: 14px; z-index: 50; animation: enter .3s var(--ease) both; box-shadow: var(--shadow); max-width: calc(100vw - 40px); text-align: center; }
 
 @media (min-width: 560px) {
   .temps { grid-template-columns: repeat(4, 1fr); }
@@ -1583,6 +1583,11 @@ body.tk-busy { cursor: progress; }
   .tk-alerts button { text-align: left; }
 }
 
+/* notifikasi dashboard: di tengah layar, semua perangkat */
+.toast { top: 0; bottom: 0; height: max-content; margin: auto; z-index: 70; padding: 14px 22px; font-size: 14.5px; box-shadow: 0 16px 40px rgba(0,0,0,.22); }
+.tk-purge { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px 10px 18px; background: #FBEDEA; font-size: 13px; color: #7C2419; font-weight: 600; }
+.tk-purge .btn.sm { min-height: 34px; height: 34px; padding: 0 14px; font-size: 13px; width: auto; background: #FFFFFF; }
+
 </style>
 </head>
 <body data-client="1">
@@ -1611,7 +1616,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.6.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.6.1', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3207,6 +3212,7 @@ function tkApp() {
           </div>
           ${TK.fl ? `<div class="pills"><button class="pillx" data-tkfl="${esc(TK.fl)}">${L('Batch', 'Batch')}: ${esc(TK.fl)}${ICON.x}</button></div>` : ''}
         </div>
+        ${TK.fs === 'off' && xs.length ? `<div class="tk-purge"><span>${L(`${xs.length} token nonaktif`, `${xs.length} inactive tokens`)}</span><button class="btn ghost sm danger" data-tkpurge>${L('Hapus semua yang nonaktif', 'Delete all inactive')}</button></div>` : ''}
         <div class="tk-bulk" id="tkbulk">${tkBulkHtml(xs)}</div>
         <div class="list" id="tklist">${tkListHtml(xs)}</div>
         <p class="count" id="tkcount">${tkCount(xs)}</p>
@@ -3442,6 +3448,7 @@ function tkBind() {
   $app.querySelectorAll('.tk-alerts [data-tk]').forEach(b => b.addEventListener('click', () => tkOpen(b.dataset.tk)));
   $app.querySelectorAll('[data-tknew]').forEach(b => b.addEventListener('click', () => tkModal({ type: 'create', step: 1 })));
   $app.querySelectorAll('[data-tkretry]').forEach(b => b.addEventListener('click', tkLoad));
+  $app.querySelectorAll('[data-tkpurge]').forEach(b => b.addEventListener('click', () => tkAsk('del', tkVisible().map(t => t.token))));
   tkBindList();
   const d = document.getElementById('tkdetail'); if (d) tkBindDetail(d);
   tkBindModal();
