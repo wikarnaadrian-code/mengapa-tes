@@ -1414,6 +1414,19 @@ body { background: var(--bg); }
 /* tombol Keluar berbentuk pil, sama dengan dashboard lain */
 .btn.sm.outbtn { min-height: 36px; height: 36px; padding: 0 16px; font-size: 13.5px; width: auto; flex: 0 0 auto; }
 
+/* header dashboard seragam (sama dengan dashboard Pandangan Kerja) */
+.dash-actions { display: flex; align-items: center; gap: 8px; }
+.dash-actions .upd, .pka-status { font-size: 12.5px; color: var(--muted); margin-right: 4px; white-space: nowrap; }
+.dash-actions .btn[disabled] { opacity: .5; }
+footer.dash-foot { padding: 32px 0 10px; }
+@media (max-width: 767px) {
+  .bar-top { flex-wrap: wrap; }
+  .dash-actions { width: 100%; }
+  .dash-actions .upd { display: block; flex: 1; }
+}
+@media (max-width: 767px) { .dash-actions { gap: 6px; } .dash-actions .upd { font-size: 12px; margin-right: 0; } .dash-actions .btn.sm.outbtn { padding: 0 11px; font-size: 13px; } }
+@media (max-width: 380px) { .dash-actions { flex-wrap: wrap; } .dash-actions .upd { flex: 0 0 100%; } }
+
 </style>
 </head>
 <body data-client="1">
@@ -1442,7 +1455,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.4.3', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.5.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3199,10 +3212,13 @@ function app() {
     <header class="bar-top">
       ${headLogo()}<span class="tag">Dashboard</span>
       <span class="grow"></span>
-      ${S.at ? `<span class="upd">${L('Diperbarui', 'Updated')} ${fmtTime(S.at)}</span>` : ''}
       ${langToggle()}
-      <button class="iconbtn${S.loading ? ' busy' : ''}" data-act="reload" aria-label="${L('Muat ulang', 'Reload')}" title="${L('Muat ulang', 'Reload')}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg></button>
-      <button class="btn ghost sm outbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
+      <div class="dash-actions">
+        <span class="upd">${S.loading ? L('Memuat…', 'Loading…') : S.at ? `${L('Diperbarui', 'Updated')} ${fmtTime(S.at)}` : ''}</span>
+        <button class="btn ghost sm outbtn" data-act="reload"${S.loading ? ' disabled' : ''}>${L('Muat ulang', 'Reload')}</button>
+        <button class="btn ghost sm outbtn" data-act="csv">${L('Unduh CSV', 'Download CSV')}</button>
+        <button class="btn ghost sm outbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
+      </div>
     </header>
     ${S.err ? `<div class="banner">${esc(S.err)}</div>` : ''}
     ${nOld ? `<div class="srcbar"><div class="src" role="tablist">${[['new', L('Web baru', 'New web app'), nNew], ['old', L('Arsip<span class="hm"> web lama</span>', 'Archive<span class="hm"> (old web app)</span>'), nOld], ['all', L('Semua', 'All'), nNew + nOld]].map(o => `<button data-src="${o[0]}" aria-pressed="${S.src === o[0]}">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>
@@ -3228,8 +3244,36 @@ function app() {
       </aside>
       <article class="detail" id="detail">${detail(sel)}</article>
     </div>
-    <p class="ver">v${CONFIG.appVersion}</p>
+    ${dashFoot()}
   </div>`;
+}
+
+const dashFoot = () => `
+    <footer class="foot dash-foot">
+      <span class="tag">${L('dari "mengapa" jadi tahu harus apa', 'from "why" to knowing what to do')}</span>
+      © ${new Date().getFullYear()} Mengapa · <a href="https://instagram.com/${CONFIG.instagram}" target="_blank" rel="noopener">@${CONFIG.instagram}</a>
+      <span class="ver">v${CONFIG.appVersion}</span>
+    </footer>`;
+
+function csv() {
+  const rows = visible();
+  if (!rows.length) { toast(L('Tidak ada data untuk diunduh', 'No data to download')); return; }
+  const q = v => { const t = String(v == null ? '' : v); return /[;"\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  const d2 = t => { const d = new Date(t); return t ? `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}` : ''; };
+  const t2 = t => { const d = new Date(t); return t ? `${pad(d.getHours())}:${pad(d.getMinutes())}` : ''; };
+  const sc = (x, k) => x.a ? x.a.scores.t[k] : x.mini ? x.mini[k] : '';
+  const head = [L('Tanggal', 'Date'), L('Jam', 'Time'), L('Jenis tes', 'Test type'), L('Nama', 'Name'), L('Usia', 'Age'), L('Hasil', 'Result'), L('Keterangan', 'Details'),
+    ...ORDER.map(k => `${L('Skor', 'Score')} ${TEMPS[k].name}`), L('Skor Mindset', 'Mindset score'), L('Kode hasil', 'Result code'),
+    ...(SLUG ? [] : ['WhatsApp', L('Prioritas follow up', 'Follow-up priority'), L('Tahu dari', 'Heard from'), 'Ref', 'UTM', 'Token', L('Lokasi', 'Location')]),
+    L('Durasi (detik)', 'Duration (s)'), L('Sumber data', 'Data source')];
+  const lines = [head.map(q).join(';')].concat(rows.map(x => [d2(x.t), t2(x.t), testName(x.kind), x.name, x.age, x.title, x.sub, ...ORDER.map(k => sc(x, k)), x.gm ? x.gm.total : '', x.id,
+    ...(SLUG ? [] : [x.wa, x.flag ? levelName(x.flag) : '', x.src, x.ref, x.utm, x.token, x.place]),
+    x.dur || '', x.legacy ? L('Web lama', 'Old web app') : L('Web baru', 'New web app')].map(q).join(';')));
+  const blob = new Blob(['\ufeff' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const n = new Date(), stamp = `${n.getFullYear()}${pad(n.getMonth() + 1)}${pad(n.getDate())}`;
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `${SLUG || 'mengapa'}-hasil-tes-${stamp}.csv` });
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  toast(L(`${rows.length} baris diunduh`, `${rows.length} rows downloaded`));
 }
 
 function toast(m) { document.querySelectorAll('.toast').forEach(t => t.remove()); const t = Object.assign(document.createElement('div'), { className: 'toast', textContent: m }); document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
@@ -3295,6 +3339,7 @@ function render() {
   $app.innerHTML = app();
   bindCommon($app); bindList();
   $app.querySelector('[data-act=reload]').addEventListener('click', load);
+  $app.querySelector('[data-act=csv]').addEventListener('click', csv);
   $app.querySelector('[data-act=logout]').addEventListener('click', logout);
   $app.querySelectorAll('[data-src]').forEach(b => b.addEventListener('click', () => { S.src = b.dataset.src; if (S.src === 'old') S.tab = 'all'; S.sel = ''; render(); }));
   $app.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { S.tab = b.dataset.tab; render(); }));

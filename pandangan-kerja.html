@@ -1428,6 +1428,21 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .pkr .pk-tie { max-width: none; text-align: left; font-size: 16px; }
 .pkr > .wrap > .block:not(.pk-part):not(.no-print) { max-width: 680px; margin-left: auto; margin-right: auto; }
 @media (max-width: 640px) { .pk-sum { grid-template-columns: 1fr; } .pkr .pk-part { margin-top: 48px; } }
+.pka-kpi.one { grid-template-columns: 1fr; margin-bottom: 4px; }
+.pka-kpi.one .pka-card { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.pka-kpi.one .pka-card small { flex: 0 0 auto; }
+.pka-kpi.one .pka-card b { margin-top: 0; }
+
+/* header dashboard seragam (sama dengan dashboard main app) */
+.pka-actions .btn.sm { min-height: 36px; height: 36px; padding: 0 16px; font-size: 13.5px; width: auto; flex: 0 0 auto; }
+.pka .foot .ver, .pk .foot .ver { display: block; }
+@media (max-width: 767px) {
+  .pka-top { flex-wrap: wrap; }
+  .pka-actions { width: 100%; flex-wrap: nowrap; }
+  .pka-status { width: auto !important; order: 0 !important; flex: 1; }
+}
+@media (max-width: 767px) { .pka-actions { gap: 6px; } .pka-status { font-size: 12px; margin-right: 0; white-space: nowrap; } .pka-actions .btn.sm { padding: 0 11px; font-size: 13px; } }
+@media (max-width: 380px) { .pka-actions { flex-wrap: wrap; } .pka-status { flex: 0 0 100% !important; } }
 
 </style>
 </head>
@@ -1458,7 +1473,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.4.3', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.5.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2769,6 +2784,8 @@ function plantSvg(total, cls = 'plant') {
 }
 
 /* ===== pkdata.js ===== */
+/* Versi Tes Pandangan Kerja, terpisah dari versi web app utama */
+const PK_VERSION = '2.0';
 /* ============ Tes Pandangan Kerja (khusus HK Gold) · isi tes ============ */
 const PK_SCALE = ['Sangat tidak setuju', 'Tidak setuju', 'Netral / ragu-ragu', 'Setuju', 'Sangat setuju'];
 const PK_SCALE_SHORT = ['STS', 'TS', 'N', 'S', 'SS'];
@@ -2950,7 +2967,7 @@ const ARROW_L = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" str
 const DL = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>';
 
 const brand = () => `<div class="pk-brand"><span class="brand"><img class="li" src="${LOGO_ICON}" alt="" /><img class="lw" src="${LOGO_WORD}" alt="Mengapa" /></span><span class="pk-x">×</span><img class="pk-hk" src="/logo-klien/hkgold.png" alt="HK Gold" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'pk-hkname',textContent:'HK Gold'}))"></div>`;
-const foot = () => `<footer class="foot wrap"><span class="tag">dari "mengapa" jadi tahu harus apa</span>© ${new Date().getFullYear()} Mengapa untuk HK Gold</footer>`;
+const foot = () => `<footer class="foot wrap"><span class="tag">dari "mengapa" jadi tahu harus apa</span>© ${new Date().getFullYear()} Mengapa · <a href="https://instagram.com/mengapa.me" target="_blank" rel="noopener">@mengapa.me</a><span class="ver">Tes Pandangan Kerja v${PK_VERSION}</span></footer>`;
 const fx = s => esc(s).replace(/\b(Continuance|Job|Career|Calling)\b/g, '<em>$1</em>');
 const woName = d => `<em>${WO_DIMS[d].name}</em>`;
 
