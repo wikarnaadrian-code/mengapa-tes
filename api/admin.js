@@ -34,6 +34,10 @@ async function readTab(url, readToken, tab) {
   return j.rows;
 }
 
+// Vercel Blob untuk logo klien (env BLOB_READ_WRITE_TOKEN terpasang otomatis saat Blob dihubungkan ke project)
+const blobApi = () => globalThis.__blobMock || require('@vercel/blob');
+const isBlobUrl = u => /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//i.test(String(u || '')) || (globalThis.__blobMock && /\/__blob\//.test(String(u || '')));
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('X-Robots-Tag', 'noindex');
@@ -65,22 +69,28 @@ module.exports = async (req, res) => {
   // ---------- login & data untuk klien perusahaan ----------
   if (body.client) {
     try {
+      if (body.action === 'info') {
+        const c = await findClient(body.client);
+        if (!c || low(c.status) === 'nonaktif') return res.status(200).json({ ok: false, error: 'notfound' });
+        return res.status(200).json({ ok: true, nama: c.nama || c.klien, logo: c.logo || '' });
+      }
       if (body.action === 'login') {
         const c = await findClient(body.client);
+        if (c && low(c.status) === 'nonaktif') { await wait(600); return res.status(200).json({ ok: false, error: 'Akun klien ini sedang tidak aktif. Hubungi tim Mengapa.' }); }
         const ok = c && c.password && safeEq(low(body.user), low(c.username)) && safeEq(String(body.pass || ''), String(c.password));
         if (!ok) { await wait(900); return res.status(200).json({ ok: false, error: 'Username atau password salah' }); }
-        return res.status(200).json({ ok: true, session: makeSession(c.username, key, low(c.klien)), hours: SESSION_HOURS, nama: c.nama || c.klien });
+        return res.status(200).json({ ok: true, session: makeSession(c.username, key, low(c.klien)), hours: SESSION_HOURS, nama: c.nama || c.klien, logo: c.logo || '' });
       }
       if (body.action === 'data') {
         const sess = readSession(body.session, key);
         if (!sess || !sess.c || sess.c !== low(body.client)) return res.status(401).json({ ok: false, error: 'sesi' });
         const c = await findClient(sess.c);
-        if (!c) return res.status(401).json({ ok: false, error: 'sesi' });
+        if (!c || low(c.status) === 'nonaktif') return res.status(401).json({ ok: false, error: 'sesi' });
         const toks = tokenList(c.token);
         const [baru, lama] = await Promise.all([readTab(url, readToken, ''), readTab(url, readToken, 'lama').catch(() => [])]);
         const hasil = [...baru, ...lama.filter(r => r.sumber_data === 'web lama')].filter(r => toks.includes(String(r.token || '').trim()))
           .map(r => Object.fromEntries(CLIENT_FIELDS.map(k => [k, r[k] || ''])));
-        return res.status(200).json({ ok: true, hasil, mini: [], mindset: [], nama: c.nama || c.klien, at: new Date().toISOString() });
+        return res.status(200).json({ ok: true, hasil, mini: [], mindset: [], nama: c.nama || c.klien, logo: c.logo || '', at: new Date().toISOString() });
       }
     } catch (e) { return res.status(502).json({ ok: false, error: String(e.message || e) }); }
     return res.status(400).json({ ok: false, error: 'action' });
@@ -104,13 +114,13 @@ module.exports = async (req, res) => {
       return res.status(502).json({ ok: false, error: String(e.message || e) });
     }
   }
-  // Kelola token: wajib masukkan password admin lagi. Hasilnya sesi khusus token, berlaku 60 menit.
+  // Kelola token: wajib masukkan password admin lagi. Hasilnya sesi khusus token, berlaku 15 menit.
   if (body.action === 'tokauth') {
     const sess = readSession(body.session, key);
     if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
     if (!adminPass || !safeEq(String(body.pass || ''), adminPass)) { await wait(900); return res.status(200).json({ ok: false, error: 'Password salah' }); }
-    const payload = Buffer.from(JSON.stringify({ u: sess.u, c: '', tk: 1, exp: Date.now() + 60 * 60e3 })).toString('base64url');
-    return res.status(200).json({ ok: true, tksession: payload + '.' + sign(payload, key), minutes: 60 });
+    const payload = Buffer.from(JSON.stringify({ u: sess.u, c: '', tk: 1, exp: Date.now() + 15 * 60e3 })).toString('base64url');
+    return res.status(200).json({ ok: true, tksession: payload + '.' + sign(payload, key), minutes: 15 });
   }
 
   // Kelola token: khusus admin Mengapa, dengan sesi khusus token
@@ -119,23 +129,53 @@ module.exports = async (req, res) => {
     if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
     const tks = readSession(body.tksession, key);
     if (!tks || tks.c || !tks.tk) return res.status(403).json({ ok: false, error: 'tk' });
-    const ops = { list: 'token_list', create: 'token_create', update: 'token_update', delete: 'token_delete' };
+    const ops = { list: 'token_list', create: 'token_create', update: 'token_update', delete: 'token_delete', klien_create: 'klien_create', klien_update: 'klien_update', klien_delete: 'klien_delete', logo: 'klien_update' };
     const action = ops[body.op];
     if (!action) return res.status(400).json({ ok: false, error: 'op' });
-    const pick = o => Object.fromEntries(Object.entries(o || {}).filter(([k]) => ['jenis', 'kode', 'jumlah', 'awalan', 'kuota', 'berlaku', 'label', 'catatan', 'klien'].includes(k)));
+    const pick = (o, keys) => Object.fromEntries(Object.entries(o && typeof o === 'object' ? o : {}).filter(([k]) => keys.includes(k)).map(([k, v]) => [k, typeof v === 'string' ? v.slice(0, 300) : v]));
+    const KK = ['klien', 'nama', 'username', 'password', 'catatan'];
     const payload = { secret: key, action };
-    if (body.op === 'create') Object.assign(payload, pick(body.data));
+    if (body.op === 'create') { Object.assign(payload, pick(body.data, ['jenis', 'kode', 'jumlah', 'awalan', 'kuota', 'berlaku', 'label', 'catatan', 'klien'])); if (body.data && body.data.klien_baru) payload.klien_baru = pick(body.data.klien_baru, KK); }
     if (body.op === 'update' || body.op === 'delete') {
       payload.tokens = (Array.isArray(body.tokens) ? body.tokens : []).map(t => String(t || '').trim()).filter(Boolean).slice(0, 1000);
       if (!payload.tokens.length) return res.status(400).json({ ok: false, error: 'Tidak ada token yang dipilih' });
     }
     if (body.op === 'update') { payload.op = ['aktif', 'nonaktif', 'set'].includes(body.mode) ? body.mode : ''; payload.fields = body.fields && typeof body.fields === 'object' ? body.fields : {}; if (!payload.op) return res.status(400).json({ ok: false, error: 'mode' }); }
+    if (body.op === 'klien_create') payload.data = pick(body.data, KK);
+    if (body.op === 'klien_update') { payload.klien = String(body.klien || ''); payload.fields = pick(body.fields, ['nama', 'username', 'password', 'catatan', 'status']); payload.nonaktifToken = !!body.nonaktifToken; }
+    if (body.op === 'klien_delete') payload.klien = String(body.klien || '');
+    let oldLogo = '';
+    if (body.op === 'logo') {
+      // upload logo ke Vercel Blob, lalu simpan URL-nya di tab Klien
+      payload.klien = String(body.klien || ''); oldLogo = String(body.old || '');
+      const tokenBlob = (process.env.BLOB_READ_WRITE_TOKEN || '').trim();
+      if (!body.image) payload.fields = { logo: '' };
+      else {
+        if (!tokenBlob && !(process.env.BLOB_STORE_ID || '').trim() && !globalThis.__blobMock) return res.status(500).json({ ok: false, error: 'Vercel Blob belum terhubung ke project. Buka Vercel > Storage > Blob lalu hubungkan ke mengapa-tes.' });
+        const m = String(body.image).match(/^data:image\/(png|webp|jpeg);base64,([A-Za-z0-9+/=]+)$/);
+        if (!m) return res.status(400).json({ ok: false, error: 'Format gambar harus PNG, WebP, atau JPG' });
+        const buf = Buffer.from(m[2], 'base64');
+        if (buf.length > 1.5e6) return res.status(400).json({ ok: false, error: 'Ukuran logo maksimal 1,5 MB' });
+        const slug = payload.klien.toLowerCase().replace(/[^a-z0-9-]/g, '') || 'klien';
+        try {
+          const up = await blobApi().put(`logo-klien/${slug}.${m[1] === 'jpeg' ? 'jpg' : m[1]}`, buf, { access: 'public', contentType: 'image/' + m[1], addRandomSuffix: true, token: tokenBlob || undefined });
+          payload.fields = { logo: up.url };
+        } catch (e) {
+          const msg = String(e && e.message || e);
+          return res.status(502).json({ ok: false, error: /oidc|credential|token/i.test(msg) ? 'Vercel Blob belum bisa diakses. Di Vercel > Storage > mengapa-logo, sambungkan ulang ke project dengan centang "Add a read-write token", lalu kabari tim.' : /private/i.test(msg) ? 'Blob store Vercel diatur Private. Buat ulang Blob dengan akses Public.' : 'Gagal upload logo: ' + msg });
+        }
+      }
+    }
     try {
       const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), redirect: 'follow' });
       const t = await r.text();
       let j; try { j = JSON.parse(t); } catch (e) { throw new Error('Apps Script tidak membalas JSON'); }
       if (j.error === 'unauthorized') throw new Error('SHEET_SECRET di Vercel beda dengan di Apps Script');
       if (!j.tokens && (j.ok !== false || j.error === 'token')) throw new Error('Apps Script belum diperbarui. Tempel Code.gs terbaru lalu deploy ulang.');
+      if (j.ok !== false && (j.klien || [])[0] && !('status' in j.klien[0]) && body.op.startsWith('klien')) throw new Error('Apps Script belum diperbarui. Tempel Code.gs terbaru lalu deploy ulang.');
+      const stale = body.op === 'logo' && j.ok !== false ? oldLogo : body.op === 'klien_delete' && j.ok !== false ? j.old_logo : '';
+      if (stale && isBlobUrl(stale)) { try { await blobApi().del(stale, { token: (process.env.BLOB_READ_WRITE_TOKEN || '').trim() || undefined }); } catch (e) { /* logo lama gagal dihapus: tidak apa-apa */ } }
+      delete j.old_logo;
       return res.status(200).json({ ...j, at: new Date().toISOString() });
     } catch (e) {
       return res.status(502).json({ ok: false, error: String(e.message || e) });

@@ -1581,6 +1581,58 @@ body.tk-busy { cursor: progress; }
 .tk-purge { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px 10px 18px; background: #FBEDEA; font-size: 13px; color: #7C2419; font-weight: 600; }
 .tk-purge .btn.sm { min-height: 34px; height: 34px; padding: 0 14px; font-size: 13px; width: auto; background: #FFFFFF; }
 
+/* ============ Kelola Klien ============ */
+.kl-kpis { grid-template-columns: repeat(4, 1fr); }
+.kl-kpis .tk-kpi { cursor: default; }
+.kl-ini { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--c); color: #FFFFFF; font-weight: 800; font-size: 14px; letter-spacing: .02em; }
+.kl-ini.lg { width: 56px; height: 56px; border-radius: 16px; font-size: 19px; }
+.kl-ini.hd { width: 34px; height: 34px; border-radius: 10px; font-size: 13px; }
+.kl-img { display: block; object-fit: contain; }
+.kl-img.sm { width: 40px; height: 40px; }
+.kl-img.lg { width: 72px; height: 56px; }
+.kl-img.hd { height: 34px; max-width: 160px; width: auto; }
+.kl-av { flex: 0 0 auto; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--tint); overflow: hidden; }
+.kl-av.big { width: auto; min-width: 56px; height: 56px; background: transparent; }
+.kl-it { grid-template-columns: 44px minmax(0, 1fr) auto; }
+.kl-it.off { opacity: .6; }
+.kl-login { display: grid; gap: 6px; background: #FFFFFF; border-radius: 16px; padding: 6px; }
+.kl-login > div { display: grid; grid-template-columns: 112px minmax(0, 1fr) auto auto; align-items: center; gap: 8px; padding: 8px 10px; }
+.kl-login > div + div { border-top: 1px solid var(--tint); }
+.kl-login span { font-size: 12.5px; color: var(--muted); }
+.kl-login b { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kl-login button { border: 0; background: var(--tint); border-radius: 999px; padding: 5px 11px; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.kl-login > div > button:only-of-type { grid-column: 4; }
+.kl-logo { display: grid; gap: 10px; }
+.kl-prev { display: flex; align-items: center; gap: 10px; background: #FFFFFF; border-radius: 16px; padding: 14px 16px; }
+.kl-prevby { font-size: 12.5px; color: var(--muted); } .kl-prevby b { color: var(--ink); }
+.kl-drop { display: grid; gap: 4px; place-items: center; text-align: center; border: 2px dashed #D6D6D0; border-radius: 16px; padding: 18px 14px; cursor: pointer; background: rgba(255,255,255,.55); transition: border-color .15s, background .15s; }
+.kl-drop b { font-size: 14px; } .kl-drop span { font-size: 12.5px; color: var(--muted); max-width: 34em; }
+.kl-drop:hover, .kl-drop.over { border-color: var(--ink); background: #FFFFFF; }
+.kl-drop.busy { opacity: .55; pointer-events: none; }
+.kl-drop.busy b::after { content: ' …'; }
+.kl-logo .linkbtn { justify-self: start; padding: 2px 0; color: #B04A39; }
+.kl-slug { display: flex; align-items: center; background: #FFFFFF; border-radius: 12px; padding-left: 14px; }
+.kl-slug span { font-size: 14.5px; color: var(--muted); white-space: nowrap; }
+.kl-slug .input { padding-left: 2px !important; }
+.kl-slugmsg.bad { color: #B04A39 !important; font-weight: 600; } .kl-slugmsg.good { color: #2F7A55 !important; }
+.kl-pwrow { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 6px; }
+.kl-regen { border: 0; background: #FFFFFF; border-radius: 12px; font-size: 18px; cursor: pointer; }
+.kl-newbox { display: grid; gap: 12px; background: rgba(255,255,255,.6); border-radius: 18px; padding: 14px; box-shadow: inset 0 0 0 1.5px #EADFC2; }
+.kl-newbox > b { font-size: 13px; }
+.kl-sec { margin: 14px 0 6px !important; font-size: 12px !important; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.tk-check { display: flex; gap: 10px; align-items: flex-start; background: #FFFFFF; border-radius: 14px; padding: 12px 14px; margin: 4px 0 12px; font-size: 13.5px; cursor: pointer; }
+.tk-check input { width: 17px; height: 17px; margin-top: 1px; accent-color: #1D1D1D; flex: 0 0 auto; }
+.login-card.nf h1 { margin-top: 6px; }
+@media (max-width: 1000px) { .kl-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 767px) { .viewtabs button { padding: 7px 8px; font-size: 13px; } .kl-login > div { grid-template-columns: 1fr auto auto; } .kl-login span { grid-column: 1 / -1; } }
+.tkv .tk-zoneact .btn.sm, .tkv .tk-zoneact .btn { min-height: 40px; height: 40px; padding: 0 16px; font-size: 13.5px; width: auto; }
+.tkv .tk-zoneact .btn.ghost { background: #FFFFFF; }
+@media (max-width: 767px) {
+  .kl-login > div { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+  .kl-login > div > span { width: 100%; }
+  .kl-login > div > b { flex: 1; min-width: 0; }
+}
+
 </style>
 </head>
 <body data-client="1">
@@ -1609,7 +1661,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.6.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.7.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2925,7 +2977,7 @@ function plantSvg(total, cls = 'plant') {
 /* Kelola token: bagian dashboard admin Mengapa (tidak tampil di dashboard klien).
    Dibundel SEBELUM tim.js; memakai S, L, esc, api, render, toast, fmtDate, fmtTime, CONFIG dari tim.js saat dipanggil. */
 
-const TK = { auth: null, authErr: '', list: null, clients: [], today: '', at: '', loading: false, busy: false, err: '', q: '', fj: 'all', fs: 'all', fk: '', fl: '', sort: 'new', sel: '', pick: new Set(), modal: null, hm: {} };
+const TK = { ksel: '', kq: '', auth: null, authErr: '', list: null, clients: [], today: '', at: '', loading: false, busy: false, err: '', q: '', fj: 'all', fs: 'all', fk: '', fl: '', sort: 'new', sel: '', pick: new Set(), modal: null, hm: {} };
 
 function tkJ() {
   return {
@@ -2987,8 +3039,8 @@ function tkLock(msg) { TK.auth = null; TK.list = null; TK.authErr = msg || ''; t
 function tkLockHtml() {
   return `<div class="tk-lockwrap"><form class="tk-lock" id="tklock">
     <div class="tk-lockic">🔒</div>
-    <h2>${L('Kelola token dilindungi', 'Token management is protected')}</h2>
-    <p class="muted">${L('Masukkan password admin sekali lagi untuk membuka halaman ini. Berlaku 60 menit atau sampai tab browser ditutup.', 'Enter the admin password again to open this page. Valid for 60 minutes or until the browser tab is closed.')}</p>
+    <h2>${S.view === 'klien' ? L('Kelola Klien dilindungi', 'Client management is protected') : L('Kelola Token dilindungi', 'Token management is protected')}</h2>
+    <p class="muted">${L('Masukkan password admin sekali lagi. Berlaku untuk Kelola Token dan Kelola Klien selama 15 menit atau sampai tab browser ditutup.', 'Enter the admin password again. Unlocks Tokens and Clients for 15 minutes or until the browser tab is closed.')}</p>
     <input class="input" type="password" id="tkpw" autocomplete="current-password" placeholder="${L('Password admin', 'Admin password')}" required>
     <p class="err" id="tklerr"${TK.authErr ? '' : ' hidden'}>${esc(TK.authErr)}</p>
     <button class="btn" id="tklbtn" type="submit">${L('Buka', 'Unlock')}</button>
@@ -3003,7 +3055,7 @@ function tkBindLock() {
     btn.disabled = true; btn.textContent = L('Memeriksa…', 'Checking…'); er.hidden = true;
     try {
       const j = await api({ action: 'tokauth', session: S.session, pass: pw.value });
-      TK.auth = { s: j.tksession, exp: Date.now() + (j.minutes || 60) * 60e3 - 30e3 }; TK.authErr = '';
+      TK.auth = { s: j.tksession, exp: Date.now() + (j.minutes || 15) * 60e3 - 30e3 }; TK.authErr = '';
       try { sessionStorage.setItem(TK_AKEY, JSON.stringify(TK.auth)); } catch (e2) { /* abaikan */ }
       tkLoad();
     } catch (err) { er.hidden = false; er.textContent = err.message === 'Password salah' ? L('Password salah.', 'Wrong password.') : err.message; btn.disabled = false; btn.textContent = L('Buka', 'Unlock'); pw.select(); }
@@ -3021,15 +3073,15 @@ async function tkLoad() {
   TK.loading = true; TK.err = ''; render();
   if (!tkAuthed()) { TK.loading = false; return render(); }
   try { tkSet(await api({ action: 'token', op: 'list', session: S.session, tksession: TK.auth.s })); }
-  catch (e) { if (e.message === 'tk') tkLock(L('Sesi kelola token berakhir. Masukkan password lagi.', 'Token session ended. Enter the password again.')); else TK.err = e.message; }
+  catch (e) { if (e.message === 'tk') tkLock(L('Akses 15 menit sudah habis. Masukkan password lagi.', 'Your 15-minute access ended. Enter the password again.')); else TK.err = e.message; }
   TK.loading = false; render();
 }
 async function tkCall(body, msg) {
   if (TK.busy) return null;
   TK.busy = true; document.body.classList.add('tk-busy');
-  if (!tkAuthed()) { tkLock(L('Sesi kelola token berakhir. Masukkan password lagi.', 'Token session ended. Enter the password again.')); TK.modal = null; render(); return null; }
+  if (!tkAuthed()) { tkLock(L('Akses 15 menit sudah habis. Masukkan password lagi.', 'Your 15-minute access ended. Enter the password again.')); TK.modal = null; render(); return null; }
   try { const j = await api({ action: 'token', session: S.session, tksession: TK.auth.s, ...body }); tkSet(j); if (msg) toast(typeof msg === 'function' ? msg(j) : msg); return j; }
-  catch (e) { if (e.message === 'tk') { tkLock(L('Sesi kelola token berakhir. Masukkan password lagi.', 'Token session ended. Enter the password again.')); TK.modal = null; render(); } else toast(e.message); return null; }
+  catch (e) { if (e.message === 'tk') { tkLock(L('Akses 15 menit sudah habis. Masukkan password lagi.', 'Your 15-minute access ended. Enter the password again.')); TK.modal = null; render(); } else toast(e.message); return null; }
   finally { TK.busy = false; document.body.classList.remove('tk-busy'); }
 }
 
@@ -3223,7 +3275,16 @@ function tkModalHtml() {
   const J = tkJ(), x = `<button class="tk-mx" data-tkm="close" aria-label="${L('Tutup', 'Close')}">${ICON.x}</button>`;
   let body = '';
   if (m.type === 'confirm') {
-    body = `<h2>${m.title}</h2><p>${m.msg}</p><div class="tk-mact">${(m.extra || []).map((b, i) => `<button class="btn ghost sm" data-tkm="extra${i}">${b.label}</button>`).join('')}<button class="btn ghost sm" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm${m.danger ? ' danger' : ''}" data-tkm="ok">${m.ok}</button></div>`;
+    body = `<h2>${m.title}</h2><p>${m.msg}</p>${m.check ? `<label class="tk-check"><input type="checkbox" id="tkcheck"${m.check.checked ? ' checked' : ''}> <span>${m.check.label}</span></label>` : ''}<div class="tk-mact">${(m.extra || []).map((b, i) => `<button class="btn ghost sm" data-tkm="extra${i}">${b.label}</button>`).join('')}<button class="btn ghost sm" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm${m.danger ? ' danger' : ''}" data-tkm="ok">${m.ok}</button></div>`;
+  } else if (m.type === 'klien' && m.step === 1) {
+    body = `<h2>${L('Tambah klien', 'New client')}</h2><p class="muted">${L('Dashboard klien langsung aktif setelah dibuat.', 'The client dashboard is live right after creating.')}</p>
+      <form id="klcreate" class="tk-cform" novalidate>${klFields(m, { note: true })}${m.err ? `<p class="tk-merr">${esc(m.err)}</p>` : ''}
+        <div class="tk-mact"><button class="btn ghost sm" type="button" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm" type="submit">${L('Tambah klien', 'Add client')}</button></div></form>`;
+  } else if (m.type === 'klien' && m.step === 2) {
+    const k = klGet(m.slug) || { klien: m.slug, nama: m.nama, username: m.username, password: m.password };
+    body = `<div class="tk-ok">✓</div><h2>${L('Klien ditambahkan', 'Client added')}</h2><p class="muted">${L(`Dashboard ${esc(k.nama)} sudah aktif. Kirim info login ini ke PIC klien.`, `${esc(k.nama)}'s dashboard is live. Send this login info to the client's contact.`)}</p>
+      ${klLoginCard(k)}
+      <div class="tk-mact wrap"><button class="btn ghost sm" data-copy="${esc(klWa(k))}">${L('Salin info login', 'Copy login info')}</button><button class="btn ghost sm" data-klmtok>+ ${tkJ().klien.name}</button><button class="btn sm" data-tkm="done">${L('Selesai', 'Done')}</button></div>`;
   } else if (m.step === 1) {
     body = `<h2>${L('Buat token', 'New token')}</h2><p class="muted">${L('Pilih jenis token yang mau dibuat.', 'Choose the type of token.')}</p>
       <div class="tk-types">${['personal', 'klien', 'admin'].map(k => `<button data-tktype="${k}" style="--c:${J[k].c};--soft:${J[k].soft}"><i></i><b>${J[k].name}</b><span>${J[k].desc}</span></button>`).join('')}</div>`;
@@ -3232,12 +3293,11 @@ function tkModalHtml() {
     const until = `<div class="tk-f"><span class="tk-fl">${L('Masa berlaku', 'Validity')}</span>
         <div class="chips">${[['', L('Tanpa batas', 'No end date')], ['7', L('7 hari', '7 days')], ['30', L('30 hari', '30 days')], ['90', L('90 hari', '90 days')], ['custom', L('Pilih tanggal', 'Pick a date')]].map(([v, l]) => `<button type="button" data-tkpreset="${v}" aria-pressed="${preset === v}">${l}</button>`).join('')}</div>
         ${preset === 'custom' ? `<input class="input" type="date" name="berlaku" value="${esc(m.berlaku)}" min="${esc(TK.today)}">` : m.berlaku ? `<small>${L('Berlaku sampai', 'Valid until')} ${tkDate(m.berlaku)}</small>` : ''}</div>`;
-    const klienSel = req => TK.clients.length ? `<label class="tk-f"><span class="tk-fl">${L('Klien', 'Client')}${req ? '' : ` <em>${L('opsional', 'optional')}</em>`}</span><select class="input" name="klien">${req ? `<option value="">${L('Pilih klien…', 'Choose a client…')}</option>` : `<option value="">${L('Tanpa klien (hasil hanya di dashboard Mengapa)', 'No client (results only in the Mengapa dashboard)')}</option>`}${TK.clients.map(c => `<option value="${esc(c.klien)}"${m.klien === c.klien ? ' selected' : ''}>${esc(c.nama)}</option>`).join('')}</select>${req ? '' : `<small>${L('Kalau dipilih, hasil tes dengan token ini juga muncul di dashboard klien tersebut.', 'If chosen, results with these tokens also show up in that client\'s dashboard.')}</small>`}</label>`
-      : req ? `<p class="tk-merr">${L('Belum ada klien. Tambahkan klien dulu di tab Klien di Google Sheet.', 'No clients yet. Add one first in the Klien tab of the Google Sheet.')}</p>` : '';
+    const klienSel = req => (TK.clients.length || req) ? `<label class="tk-f"><span class="tk-fl">${L('Klien', 'Client')}${req ? '' : ` <em>${L('opsional', 'optional')}</em>`}</span><select class="input" name="klien">${req ? `<option value="">${L('Pilih klien…', 'Choose a client…')}</option><option value="__new"${m.klien === '__new' ? ' selected' : ''}>+ ${L('Klien baru', 'New client')}</option>` : `<option value="">${L('Tanpa klien (hasil hanya di dashboard Mengapa)', 'No client (results only in the Mengapa dashboard)')}</option>`}${TK.clients.map(c => `<option value="${esc(c.klien)}"${m.klien === c.klien ? ' selected' : ''}>${esc(c.nama)}${c.status === 'nonaktif' ? ' (' + L('nonaktif', 'inactive') + ')' : ''}</option>`).join('')}</select>${req ? '' : `<small>${L('Kalau dipilih, hasil tes dengan token ini juga muncul di dashboard klien tersebut.', 'If chosen, results with these tokens also show up in that client\'s dashboard.')}</small>`}</label>${req && m.klien === '__new' ? `<div class="kl-newbox"><b>${L('Klien baru', 'New client')}</b>${klFields(m.kb || {})}</div>` : ''}` : '';
     const labels = [...new Set((TK.list || []).map(t => t.label).filter(Boolean))].sort();
     const label = `<label class="tk-f"><span class="tk-fl">${L('Label batch', 'Batch label')} <em>${L('opsional', 'optional')}</em></span><input class="input" name="label" value="${esc(m.label)}" list="tklabels2" maxlength="60" placeholder="${L('Contoh: Workshop Nov', 'e.g. November workshop')}"><datalist id="tklabels2">${labels.map(l => `<option value="${esc(l)}">`).join('')}</datalist><small>${L('Untuk mengelompokkan token dan melihat progresnya.', 'Groups tokens so you can track progress.')}</small></label>`;
     const note = `<label class="tk-f"><span class="tk-fl">${L('Catatan', 'Notes')} <em>${L('opsional', 'optional')}</em></span><input class="input" name="catatan" value="${esc(m.catatan)}" maxlength="300" placeholder="${j === 'personal' ? L('Contoh: nama pembeli, tanggal bayar', 'e.g. buyer name, payment date') : ''}"></label>`;
-    const code = (ph, help) => `<label class="tk-f"><span class="tk-fl">${L('Kode token', 'Token code')}${j === 'admin' ? ` <em>${L('opsional', 'optional')}</em>` : ''}</span><input class="input mono" name="kode" value="${esc(m.kode)}" maxlength="40" placeholder="${ph}" autocapitalize="characters" spellcheck="false">${help ? `<small>${help}</small>` : ''}</label>`;
+    const code = (ph, help) => `<label class="tk-f"><span class="tk-fl">${L('Kode token', 'Token code')}${j !== 'personal' ? ` <em>${L('opsional', 'optional')}</em>` : ''}</span><input class="input mono" name="kode" value="${esc(m.kode)}" maxlength="40" placeholder="${ph}" autocapitalize="characters" spellcheck="false">${help ? `<small>${help}</small>` : ''}</label>`;
     let f = '';
     if (j === 'personal') {
       f = `<div class="seg tk-mode"><button type="button" data-tkmode="acak" aria-pressed="${m.mode === 'acak'}">${L('Buat acak', 'Random codes')}</button><button type="button" data-tkmode="kode" aria-pressed="${m.mode === 'kode'}">${L('Tulis kode sendiri', 'Custom code')}</button></div>
@@ -3246,7 +3306,7 @@ function tkModalHtml() {
         : code(L('Contoh: budi-2026', 'e.g. budi-2026'), L('Huruf besar dan kecil dibedakan saat peserta mengetik. Link undangan menghindari salah ketik.', 'Upper and lower case matter when typed. The invite link avoids typos.'))}
         ${until}${klienSel(false)}${label}${note}`;
     } else if (j === 'klien') {
-      f = `${klienSel(true)}${code(L('Contoh: HKGOLD-NOV26', 'e.g. HKGOLD-NOV26'), L('Satu kode ini dibagikan ke semua peserta.', 'This one code is shared with every participant.'))}
+      f = `${klienSel(true)}${code(L('Kosongkan untuk dibuat otomatis, contoh HKGOLD-NOV26', 'Leave empty to auto-generate, e.g. HKGOLD-NOV26'), L('Satu kode ini dibagikan ke semua peserta.', 'This one code is shared with every participant.'))}
         <div class="tk-f"><span class="tk-fl">${L('Kuota peserta', 'Participant quota')}</span>
           <div class="seg tk-mode"><button type="button" data-tkquota="0" aria-pressed="${!m.batasi}">${L('Tanpa batas', 'Unlimited')}</button><button type="button" data-tkquota="1" aria-pressed="${!!m.batasi}">${L('Batasi', 'Limit')}</button></div>
           ${m.batasi ? `<input class="input" type="number" name="kuota" min="1" value="${esc(m.kuota)}" placeholder="${L('Contoh: 40', 'e.g. 40')}"><small>${L('Setelah kuota terpakai, token otomatis ditolak.', 'Once the quota is used, the token is refused automatically.')}</small>` : ''}</div>
@@ -3259,12 +3319,14 @@ function tkModalHtml() {
         <div class="tk-mact"><button class="btn ghost sm" type="button" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm" type="submit">${j === 'personal' && m.mode === 'acak' && Number(m.jumlah) > 1 ? L(`Buat ${m.jumlah} token`, `Create ${m.jumlah} tokens`) : L('Buat token', 'Create token')}</button></div></form>`;
   } else if (m.step === 3) {
     const codes = m.created || [], one = codes.length === 1, t0 = one ? (TK.list || []).find(t => t.token === codes[0]) : null;
-    body = `<div class="tk-ok">✓</div><h2>${one ? L('Token dibuat', 'Token created') : L(`${codes.length} token dibuat`, `${codes.length} tokens created`)}</h2>
+    const nk = m.klienNew ? klGet(m.klienNew) : null;
+    body = `<div class="tk-ok">✓</div><h2>${one ? L('Token dibuat', 'Token created') : L(`${codes.length} token dibuat`, `${codes.length} tokens created`)}</h2>${nk ? `<p class="kl-sec">${L('Untuk peserta', 'For participants')}</p>` : ''}
       <div class="tk-made">${codes.map(c => `<div><b class="mono">${esc(c)}</b><button data-copy="${esc(c)}">${L('Salin', 'Copy')}</button></div>`).join('')}</div>
       <div class="tk-mact wrap">
         ${one && t0 ? `<button class="btn ghost sm" data-copy="${esc(tkWa(t0))}">${L('Salin pesan WhatsApp', 'Copy WhatsApp message')}</button><button class="btn ghost sm" data-copy="${esc(tkLink(codes[0]))}">${L('Salin link', 'Copy link')}</button>`
           : `<button class="btn ghost sm" data-copy="${esc(codes.join('\n'))}">${L('Salin semua kode', 'Copy all codes')}</button><button class="btn ghost sm" data-copy="${esc(codes.map(c => `${c}  ${tkLink(c)}`).join('\n'))}">${L('Salin semua link', 'Copy all links')}</button><button class="btn ghost sm" data-tkm="csv">${L('Unduh CSV', 'Download CSV')}</button>`}
-        <button class="btn sm" data-tkm="done">${L('Selesai', 'Done')}</button></div>`;
+        ${nk ? '' : `<button class="btn sm" data-tkm="done">${L('Selesai', 'Done')}</button>`}</div>
+      ${nk ? `<p class="kl-sec">${L(`Untuk klien: dashboard ${esc(nk.nama)} sudah aktif`, `For the client: ${esc(nk.nama)}'s dashboard is live`)}</p>${klLoginCard(nk)}<div class="tk-mact wrap"><button class="btn ghost sm" data-copy="${esc(klWa(nk))}">${L('Salin info login', 'Copy login info')}</button><button class="btn sm" data-tkm="done">${L('Selesai', 'Done')}</button></div>` : ''}`;
   }
   return `<div class="tk-ov${m.anim ? ' anim' : ''}" data-tkm="bg"><div class="tk-modal${m.type === 'confirm' ? ' small' : ''}" role="dialog" aria-modal="true">${x}${body}</div></div>`;
 }
@@ -3277,22 +3339,25 @@ function tkReadForm(f) {
 }
 async function tkSubmitCreate(f) {
   const m = TK.modal; tkReadForm(f); m.err = '';
+  if (m.jenis === 'klien' && m.klien === '__new') { m.kb = m.kb || {}; klReadFields(f, m.kb); }
+  if (m.jenis === 'klien' && !String(m.kode || '').trim() && m.klien) m.kode = klSuggestCode(m.klien === '__new' ? (m.kb.klien || 'KLIEN') : m.klien);
   const kode = String(m.kode || '').trim().replace(/\s+/g, '');
   const bad = msg => { m.err = msg; tkModal(m); };
   if ((m.jenis === 'klien' || (m.jenis === 'personal' && m.mode === 'kode') || (m.jenis === 'admin' && kode)) && !/^[A-Za-z0-9_.\-]{3,40}$/.test(kode)) return bad(kode ? L('Kode 3 sampai 40 karakter: huruf, angka, titik, strip, atau garis bawah.', 'Code must be 3 to 40 characters: letters, numbers, dot, dash, or underscore.') : L('Isi kode tokennya dulu.', 'Enter the token code first.'));
   if (kode && (TK.list || []).some(t => t.token.toLowerCase() === kode.toLowerCase()) && !(m.jenis === 'personal' && m.mode === 'acak')) return bad(L(`Kode ${kode} sudah dipakai token lain.`, `Code ${kode} is already used by another token.`));
   if (m.jenis === 'personal' && m.mode === 'acak' && !(Number(m.jumlah) >= 1 && Number(m.jumlah) <= 500)) return bad(L('Jumlah token 1 sampai 500.', 'Number of tokens must be 1 to 500.'));
   if (m.jenis === 'klien' && !m.klien) return bad(L('Pilih kliennya dulu.', 'Choose the client first.'));
+  if (m.jenis === 'klien' && m.klien === '__new') { const e = klFieldsErr(m.kb); if (e) return bad(e); }
   if (m.jenis === 'klien' && m.batasi && !(Number(m.kuota) >= 1)) return bad(L('Isi kuota minimal 1, atau pilih Tanpa batas.', 'Enter a quota of at least 1, or choose Unlimited.'));
   if (m.preset === 'custom' && !m.berlaku) return bad(L('Pilih tanggal berlakunya.', 'Pick the end date.'));
   const data = { jenis: m.jenis, berlaku: m.berlaku || '', label: m.label || '', catatan: m.catatan || '' };
   if (m.jenis === 'personal') { if (m.mode === 'acak') { data.jumlah = Number(m.jumlah); data.awalan = m.awalan; } else data.kode = kode; data.klien = m.klien || ''; }
-  if (m.jenis === 'klien') { data.kode = kode; data.klien = m.klien; data.kuota = m.batasi ? Number(m.kuota) : 0; }
+  if (m.jenis === 'klien') { data.kode = kode; data.klien = m.klien === '__new' ? '' : m.klien; data.kuota = m.batasi ? Number(m.kuota) : 0; if (m.klien === '__new') data.klien_baru = { klien: m.kb.klien, nama: m.kb.nama, username: m.kb.username, password: m.kb.password }; }
   if (m.jenis === 'admin') { if (kode) data.kode = kode; else data.awalan = 'ADMIN'; }
   const btn = f.querySelector('[type=submit]'); if (btn) { btn.disabled = true; btn.textContent = L('Membuat…', 'Creating…'); }
   const j = await tkCall({ op: 'create', data });
   if (!j || j.ok === false) { m.err = (j && j.error) || L('Gagal membuat token.', 'Could not create the token.'); return tkModal(m); }
-  TK.modal = { type: 'create', step: 3, created: j.created || [], anim: false };
+  TK.modal = { type: 'create', step: 3, created: j.created || [], anim: false, klienNew: j.created_klien || '' };
   if ((j.created || []).length === 1) TK.sel = j.created[0];
   render();
 }
@@ -3414,6 +3479,23 @@ function tkBindModal() {
     m.step = 2; tkModal(m);
     const first = document.querySelector('#tkcreate input:not([type=hidden]), #tkcreate select'); if (first && !matchMedia('(pointer:coarse)').matches) first.focus();
   }));
+  root.querySelectorAll('[data-klshow]').forEach(b => b.addEventListener('click', () => { const pw = b.parentElement.querySelector('.kl-pw'); const show = pw.textContent.startsWith('•'); pw.textContent = show ? pw.dataset.pw : '••••••••'; b.textContent = show ? L('Sembunyikan', 'Hide') : L('Lihat', 'Show'); }));
+  root.querySelectorAll('[data-klregen]').forEach(b => b.addEventListener('click', () => { const i = b.parentElement.querySelector('input'); i.value = klPass(); i.dispatchEvent(new Event('input', { bubbles: true })); }));
+  root.querySelectorAll('[data-klmtok]').forEach(b => b.addEventListener('click', () => { const slug = m.slug; tkModal({ type: 'create', step: 2, jenis: 'klien', mode: 'acak', jumlah: 1, awalan: '', kode: klSuggestCode(slug), kuota: '', batasi: false, preset: '', berlaku: '', klien: slug, label: '', catatan: '', err: '' }); }));
+  const kf = root.querySelector('#klcreate');
+  if (kf) {
+    kf.addEventListener('input', e => klReadFields(kf, m, e.target));
+    kf.addEventListener('submit', async e => {
+      e.preventDefault(); klReadFields(kf, m); m.err = klFieldsErr(m);
+      if (m.err) return tkModal(m);
+      const btn = kf.querySelector('[type=submit]'); btn.disabled = true; btn.textContent = L('Menyimpan…', 'Saving…');
+      const j = await tkCall({ op: 'klien_create', data: { klien: m.klien, nama: m.nama.trim(), username: m.username, password: m.password, catatan: m.catatan || '' } });
+      if (!j || j.ok === false) { m.err = (j && j.error) || L('Gagal menambah klien.', 'Could not add the client.'); return tkModal(m); }
+      TK.modal = { type: 'klien', step: 2, slug: j.created_klien || m.klien, anim: false }; TK.ksel = j.created_klien || m.klien; render();
+    });
+  }
+  const ksel = root.querySelector('#tkcreate select[name=klien]');
+  if (ksel && m.jenis === 'klien') ksel.addEventListener('change', () => { tkReadForm(f); if (m.klien === '__new' && !m.kb) m.kb = { password: klPass() }; m.err = ''; tkModal(m); const n = document.querySelector('#tkcreate [name=k_nama]'); if (n) n.focus(); });
   root.querySelectorAll('[data-tkmode]').forEach(b => b.addEventListener('click', () => { tkReadForm(f); m.mode = b.dataset.tkmode; m.err = ''; tkModal(m); }));
   root.querySelectorAll('[data-tkquota]').forEach(b => b.addEventListener('click', () => { tkReadForm(f); m.batasi = b.dataset.tkquota === '1'; tkModal(m); }));
   root.querySelectorAll('[data-tkpreset]').forEach(b => b.addEventListener('click', () => {
@@ -3422,7 +3504,7 @@ function tkBindModal() {
     tkModal(m);
   }));
   if (f) {
-    f.addEventListener('input', () => { tkReadForm(f); if (m.jenis === 'personal' && m.mode === 'acak') { const s = f.querySelector('[type=submit]'); if (s) s.textContent = Number(m.jumlah) > 1 ? L(`Buat ${m.jumlah} token`, `Create ${m.jumlah} tokens`) : L('Buat token', 'Create token'); const ex = f.querySelector('small b.mono'); if (ex) ex.textContent = ((m.awalan || 'MGP').replace(/[^A-Za-z0-9_.\-]/g, '') || 'MGP') + '-7K2QXA'; } });
+    f.addEventListener('input', e => { if (m.klien === '__new' && e.target.name && e.target.name.startsWith('k_')) { m.kb = m.kb || {}; klReadFields(f, m.kb, e.target); return; } tkReadForm(f); if (m.jenis === 'personal' && m.mode === 'acak') { const s = f.querySelector('[type=submit]'); if (s) s.textContent = Number(m.jumlah) > 1 ? L(`Buat ${m.jumlah} token`, `Create ${m.jumlah} tokens`) : L('Buat token', 'Create token'); const ex = f.querySelector('small b.mono'); if (ex) ex.textContent = ((m.awalan || 'MGP').replace(/[^A-Za-z0-9_.\-]/g, '') || 'MGP') + '-7K2QXA'; } });
     f.addEventListener('submit', e => { e.preventDefault(); tkSubmitCreate(f); });
   }
 }
@@ -3447,6 +3529,267 @@ function tkBind() {
   tkBindModal();
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && TK.modal) tkModal(null); });
+
+/* ===================== Kelola Klien ===================== */
+const KL_RESERVED = ['admin', 'api', 'assets', 'klien', 'tim', 'layanan', 'index', 'pandangan-kerja', 'pandangan-kerja-hasil', 'logo-klien', 'apps-script', 'robots', 'sitemap', 'favicon', 'public-workshops', 'private-workshops', 'tes', 'test', 'dashboard', 'login', 'mengapa', 'www', 'hasil', 'token', 'readme'];
+const KL_WORDS = ['Kopi', 'Senja', 'Hujan', 'Bintang', 'Pagi', 'Laut', 'Bulan', 'Angin', 'Gunung', 'Pelangi', 'Embun', 'Daun', 'Awan', 'Ombak', 'Rimba', 'Teduh', 'Cahaya', 'Sungai'];
+const klRand = n => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
+const klPass = () => `${KL_WORDS[klRand(KL_WORDS.length)]}-${1000 + klRand(9000)}-${KL_WORDS[klRand(KL_WORDS.length)]}`;
+const klSlugify = s => String(s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').split(/[^A-Za-z0-9]+/).filter(Boolean).map(w => w[0].toUpperCase() + w.slice(1)).join('').slice(0, 40);
+function klSlugErr(slug, except) {
+  if (!/^[A-Za-z0-9][A-Za-z0-9-]{1,38}[A-Za-z0-9]$/.test(slug)) return L('Alamat 3 sampai 40 karakter: huruf, angka, atau strip.', 'Address must be 3 to 40 characters: letters, numbers, or dashes.');
+  if (KL_RESERVED.includes(slug.toLowerCase())) return L(`Alamat ${slug} tidak bisa dipakai.`, `The address ${slug} can't be used.`);
+  if (TK.clients.some(c => c.klien.toLowerCase() === slug.toLowerCase() && c.klien !== except)) return L(`Alamat ${slug} sudah dipakai klien lain.`, `The address ${slug} is already taken.`);
+  return '';
+}
+const klGet = slug => TK.clients.find(c => c.klien.toLowerCase() === String(slug || '').toLowerCase());
+const klLink = slug => `${String(CONFIG.site || 'https://www.mengapa.me').replace(/\/+$/, '')}/${slug}`;
+const klToks = k => (TK.list || []).filter(t => t.klien && t.klien.toLowerCase() === k.klien.toLowerCase());
+const klRes = k => { const set = new Set(k.tokens || []); return S.items.filter(x => x.kind === 'lengkap' && set.has(x.token)).sort((a, b) => b.t - a.t); };
+const KL_COL = ['#C25B4A', '#4F86BF', '#6F9150', '#B8892A', '#7B5EA7', '#2F8F86', '#C46A2E'];
+function klLogo(k, cls = '') {
+  const ini = String(k.nama || k.klien).split(/\s+/).filter(Boolean).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+  const col = KL_COL[[...k.klien].reduce((a, c) => a + c.charCodeAt(0), 0) % KL_COL.length];
+  const badge = `<span class="kl-ini ${cls}" style="--c:${col}">${esc(ini || '?')}</span>`;
+  if (k.logo) return `<img class="kl-img ${cls}" src="${esc(k.logo)}" alt="${esc(k.nama)}">`;
+  if (k.klien.toLowerCase() === 'hkgold') return `<img class="kl-img ${cls}" src="/logo-klien/hkgold.png" alt="${esc(k.nama)}">`;
+  return badge;
+}
+function klWa(k) {
+  return L(`Halo! Berikut akses dashboard hasil tes Mengapa untuk ${k.nama}.\n\nLink: ${klLink(k.klien)}\nUsername: ${k.username}\nPassword: ${k.password}\n\nDi dashboard ini bisa dilihat hasil Tes Karakter Lengkap peserta dari ${k.nama}. Mohon password dijaga kerahasiaannya ya.`,
+    `Hi! Here is the Mengapa results dashboard access for ${k.nama}.\n\nLink: ${klLink(k.klien)}\nUsername: ${k.username}\nPassword: ${k.password}\n\nThis dashboard shows the Full Character Test results of ${k.nama}'s participants. Please keep the password confidential.`);
+}
+function klLoginCard(k) {
+  return `<div class="kl-login">
+    <div><span>${L('Link dashboard', 'Dashboard link')}</span><b class="mono">${esc(klLink(k.klien).replace(/^https?:\/\//, ''))}</b><button data-copy="${esc(klLink(k.klien))}">${L('Salin', 'Copy')}</button></div>
+    <div><span>Username</span><b class="mono">${esc(k.username)}</b><button data-copy="${esc(k.username)}">${L('Salin', 'Copy')}</button></div>
+    <div><span>Password</span><b class="mono kl-pw" data-pw="${esc(k.password)}">••••••••</b><button data-klshow>${L('Lihat', 'Show')}</button><button data-copy="${esc(k.password)}">${L('Salin', 'Copy')}</button></div>
+  </div>`;
+}
+function klFields(m, opt = {}) {
+  const err = m.slugTouched || m.klien ? klSlugErr(m.klien || '') : '';
+  return `
+    <label class="tk-f"><span class="tk-fl">${L('Nama klien', 'Client name')}</span><input class="input" name="k_nama" value="${esc(m.nama || '')}" maxlength="80" placeholder="${L('Contoh: Prudential Superstars', 'e.g. Acme Corp')}"></label>
+    <label class="tk-f"><span class="tk-fl">${L('Alamat dashboard', 'Dashboard address')}</span>
+      <div class="kl-slug"><span>mengapa.me/</span><input class="input mono" name="k_klien" value="${esc(m.klien || '')}" maxlength="40" spellcheck="false" autocapitalize="off"></div>
+      <small class="kl-slugmsg${err ? ' bad' : m.klien ? ' good' : ''}">${err || (m.klien ? L('Tersedia. Alamat tidak bisa diubah setelah dibuat.', 'Available. The address can\'t be changed later.') : L('Terisi otomatis dari nama.', 'Filled in from the name.'))}</small></label>
+    <div class="tk-two"><label class="tk-f"><span class="tk-fl">Username</span><input class="input mono" name="k_username" value="${esc(m.username || '')}" maxlength="60" spellcheck="false" autocapitalize="off"></label>
+      <label class="tk-f"><span class="tk-fl">Password</span><div class="kl-pwrow"><input class="input mono" name="k_password" value="${esc(m.password || '')}" maxlength="60" spellcheck="false" autocapitalize="off"><button type="button" class="kl-regen" data-klregen title="${L('Buat password baru', 'New password')}">↻</button></div></label></div>
+    ${opt.note ? `<label class="tk-f"><span class="tk-fl">${L('Catatan', 'Notes')} <em>${L('opsional', 'optional')}</em></span><input class="input" name="k_catatan" value="${esc(m.catatan || '')}" maxlength="300" placeholder="${L('Contoh: PIC Bu Rina, kontrak s.d. Des', 'e.g. PIC name, contract end')}"></label>` : ''}`;
+}
+function klReadFields(f, m, target) {
+  if (!f) return;
+  const e = f.elements; if (!e.k_nama) return;
+  const tn = target && target.name;
+  if (tn === 'k_klien') m.slugTouched = !!e.k_klien.value.trim();
+  if (tn === 'k_username') m.userTouched = !!e.k_username.value.trim();
+  m.nama = e.k_nama.value;
+  if (!m.slugTouched) e.k_klien.value = klSlugify(m.nama);
+  m.klien = e.k_klien.value.trim();
+  if (!m.userTouched) e.k_username.value = m.klien ? 'admin_' + m.klien.toLowerCase() : '';
+  m.username = e.k_username.value.trim(); m.password = e.k_password.value.trim();
+  if (e.k_catatan) m.catatan = e.k_catatan.value;
+  const msg = f.querySelector('.kl-slugmsg');
+  if (msg) { const er = m.klien ? klSlugErr(m.klien) : ''; msg.className = 'kl-slugmsg' + (er ? ' bad' : m.klien ? ' good' : ''); msg.textContent = er || (m.klien ? L('Tersedia. Alamat tidak bisa diubah setelah dibuat.', 'Available. The address can\'t be changed later.') : L('Terisi otomatis dari nama.', 'Filled in from the name.')); }
+}
+function klFieldsErr(m) {
+  if (!String(m.nama || '').trim()) return L('Isi nama klien.', 'Enter the client name.');
+  const e = klSlugErr(m.klien || ''); if (e) return e;
+  if (!String(m.username || '').trim()) return L('Isi username.', 'Enter a username.');
+  if (String(m.password || '').trim().length < 6) return L('Password minimal 6 karakter.', 'Password must be at least 6 characters.');
+  return '';
+}
+
+/* ---------- tampilan Kelola Klien ---------- */
+function klApp() {
+  if (!tkAuthed()) return tkLockHtml();
+  TK.hm = {};
+  S.items.forEach(x => { if (x.kind === 'lengkap' && x.token) (TK.hm[x.token] = TK.hm[x.token] || []).push(x); });
+  if (!TK.list) return `${TK.err ? `<div class="banner">${esc(TK.err)}</div>` : ''}<div class="empty tk-wait">${TK.err ? `<button class="btn sm" data-tkretry>${L('Coba lagi', 'Try again')}</button>` : `<span class="spin"></span>${L('Memuat klien…', 'Loading clients…')}`}</div>`;
+  const cs = TK.clients, act = cs.filter(c => c.status !== 'nonaktif').length;
+  const resTotal = cs.reduce((a, c) => a + klRes(c).length, 0);
+  const tokAct = (TK.list || []).filter(t => t.jenis === 'klien' && tkStat(t) === 'ready').length;
+  const xs = klVisible(), sel = klGet(TK.ksel);
+  return `
+    ${TK.err ? `<div class="banner">${esc(TK.err)}</div>` : ''}
+    <section class="tk-kpis kl-kpis">
+      <div class="tk-kpi"><b>${cs.length}</b><span>${L('Total klien', 'Total clients')}</span></div>
+      <div class="tk-kpi" style="--c:#2F9E6B"><b>${act}</b><span><i></i>${L('Aktif', 'Active')}${cs.length ? ` · ${tkPct(act, cs.length)}%` : ''}</span></div>
+      <div class="tk-kpi"><b>${resTotal}</b><span>${L('Hasil tes dari klien', 'Results from clients')}</span></div>
+      <div class="tk-kpi" style="--c:#B8892A"><b>${tokAct}</b><span><i></i>${L('Token Klien aktif', 'Active client tokens')}</span></div>
+    </section>
+    <div class="main">
+      <aside class="list-pane">
+        <div class="tools"><div class="tk-top">
+          <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+            <input id="klq" type="search" placeholder="${L('Cari nama, alamat, username…', 'Search name, address, username…')}" value="${esc(TK.kq)}" autocomplete="off"></div>
+          <button class="btn sm tk-new" data-klnew>+ ${L('Tambah klien', 'New client')}</button></div></div>
+        <div class="list" id="kllist">${klListHtml(xs)}</div>
+        <p class="count" id="klcount">${L(`${xs.length} dari ${cs.length} klien`, `${xs.length} of ${cs.length} clients`)}</p>
+      </aside>
+      <article class="detail" id="kldetail">${klDetail(sel)}</article>
+    </div>
+    <div id="tkm">${tkModalHtml()}</div>`;
+}
+function klVisible() {
+  const q = String(TK.kq || '').trim().toLowerCase();
+  return TK.clients.filter(c => !q || [c.nama, c.klien, c.username, c.catatan].join(' ').toLowerCase().includes(q))
+    .sort((a, b) => (a.status === 'nonaktif') - (b.status === 'nonaktif') || String(a.nama).localeCompare(String(b.nama), 'id'));
+}
+function klListHtml(xs) {
+  if (!xs.length) return `<div class="empty">${TK.clients.length ? L('Tidak ada klien yang cocok.', 'No matching clients.') : L('Belum ada klien. Klik "Tambah klien" untuk mulai.', 'No clients yet. Click "New client" to start.')}</div>`;
+  return xs.map(c => {
+    const nt = klToks(c).length, nr = klRes(c).length, last = klRes(c)[0];
+    return `<button class="it kl-it${TK.ksel === c.klien ? ' on' : ''}${c.status === 'nonaktif' ? ' off' : ''}" data-kl="${esc(c.klien)}">
+      <span class="kl-av">${klLogo(c, 'sm')}</span>
+      <span class="it-main"><b>${esc(c.nama)}</b><small>mengapa.me/${esc(c.klien)}</small></span>
+      <span class="tk-meta"><span class="tk-st" style="--c:${c.status === 'nonaktif' ? '#A9A9A3' : '#2F9E6B'}">${c.status === 'nonaktif' ? L('Nonaktif', 'Inactive') : L('Aktif', 'Active')}</span><small>${L(`${nt} token · ${nr} hasil`, `${nt} tokens · ${nr} results`)}${last ? ` · ${fmtDate(last.t)}` : ''}</small></span>
+    </button>`;
+  }).join('');
+}
+function klDetail(k) {
+  if (!k) return `<div class="pick"><span>🏢</span><p>${L('Pilih klien untuk melihat info login, token, dan hasil tesnya.', 'Select a client to see login info, tokens, and results.')}</p></div>`;
+  const toks = klToks(k), res = klRes(k), off = k.status === 'nonaktif', S2 = tkS(), J = tkJ();
+  return `
+    <div class="d-head">
+      <button class="iconbtn only-m" data-klclose aria-label="${L('Kembali', 'Back')}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <span class="kl-av big">${klLogo(k, 'lg')}</span>
+      <div class="d-title"><h1>${esc(k.nama)}</h1><p class="tk-tags"><span class="mono">mengapa.me/${esc(k.klien)}</span><span class="tk-st" style="--c:${off ? '#A9A9A3' : '#2F9E6B'}">${off ? L('Nonaktif', 'Inactive') : L('Aktif', 'Active')}</span></p></div>
+    </div>
+    <div class="d-actions tk-share">
+      <a class="btn ghost" href="${esc(klLink(k.klien))}" target="_blank" rel="noopener">${L('Buka dashboard', 'Open dashboard')} ↗</a>
+      <button class="btn ghost" data-copy="${esc(klWa(k))}">${L('Salin info login', 'Copy login info')}</button>
+    </div>
+    ${off ? `<div class="box warn small"><p>${L('Klien ini nonaktif: login ke dashboard ditolak.', 'This client is inactive: dashboard login is refused.')}</p></div>` : ''}
+    <section class="box"><h3>${L('Info login', 'Login info')}</h3>${klLoginCard(k)}
+      <div class="tk-zoneact"><button class="btn ghost sm" data-klpass>${L('Buat password baru', 'New password')}</button></div></section>
+    <section class="box"><h3>Logo</h3>
+      <div class="kl-logo">
+        <div class="kl-prev"><span class="kl-prevlogo">${klLogo(k, 'hd')}</span><span class="kl-prevby">${L('bersama', 'with')} <b>mengapa</b></span></div>
+        <label class="kl-drop" id="kldrop"><input type="file" id="klfile" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden>
+          <b>${k.logo ? L('Ganti logo', 'Replace logo') : L('Upload logo', 'Upload logo')}</b><span>${L('Klik atau seret file ke sini. PNG, JPG, WebP, atau SVG. Logo dengan latar transparan paling rapi.', 'Click or drop a file here. PNG, JPG, WebP, or SVG. Transparent backgrounds look best.')}</span></label>
+        ${k.logo ? `<button class="linkbtn" data-kllogodel>${L('Hapus logo', 'Remove logo')}</button>` : ''}
+      </div></section>
+    <section class="box"><h3>${L('Token milik klien', 'Client tokens')} <small>${toks.length}</small></h3>
+      ${toks.length ? `<div class="tk-hist">${toks.map(t => { const st = S2[tkStat(t)]; return `<button data-gotok="${esc(t.token)}"><b class="mono">${esc(t.token)}</b><span>${J[t.jenis] ? J[t.jenis].name : ''} · ${tkUsage(t)}</span><small class="tk-st" style="--c:${st.c}">${st.name}</small></button>`; }).join('')}</div>` : `<p class="small muted">${L('Belum ada token untuk klien ini.', 'No tokens for this client yet.')}</p>`}
+      <div class="tk-zoneact"><button class="btn sm" data-klnewtok="klien">+ ${J.klien.name}</button><button class="btn ghost sm" data-klnewtok="personal">+ ${J.personal.name}</button></div></section>
+    <section class="box"><h3>${L('Hasil tes', 'Test results')} <small>${res.length}</small></h3>
+      ${res.length ? `<div class="tk-hist">${res.slice(0, 5).map(x => `<button data-gores="${esc(x.key)}"><b>${esc(x.name)}</b><span>${esc(x.title)}</span><small>${fmtDate(x.t)}</small></button>`).join('')}</div>
+        <div class="tk-zoneact"><button class="btn ghost sm" data-klres>${L(`Lihat semua ${res.length} hasil di Hasil tes`, `See all ${res.length} on Test results`)}</button></div>` : `<p class="small muted">${L('Belum ada hasil tes dari token klien ini.', 'No results from this client\'s tokens yet.')}</p>`}</section>
+    <section class="box"><h3>${L('Ubah', 'Edit')}</h3>
+      <form class="tk-form" id="kledit">
+        <label><span>${L('Nama klien', 'Client name')}</span><input class="input" name="nama" value="${esc(k.nama)}" maxlength="80"></label>
+        <label><span>Username</span><input class="input mono" name="username" value="${esc(k.username)}" maxlength="60" spellcheck="false" autocapitalize="off"></label>
+        <label class="full"><span>${L('Catatan', 'Notes')}</span><textarea class="input" name="catatan" rows="2" maxlength="300">${esc(k.catatan)}</textarea></label>
+        <div class="full tk-formact"><button class="btn sm" type="submit">${L('Simpan perubahan', 'Save changes')}</button></div>
+      </form></section>
+    <section class="box tk-zone"><h3>${L('Status klien', 'Client status')}</h3>
+      <p class="small muted">${off ? L('Aktifkan kembali supaya klien bisa login lagi. Hapus klien hanya bisa saat nonaktif. Hasil tes tidak ikut terhapus.', 'Activate again so the client can sign in. A client can only be deleted while inactive. Results are kept.') : L('Nonaktifkan untuk menolak login klien tanpa menghapus data apa pun.', 'Deactivate to refuse client sign-in without deleting anything.')}</p>
+      <div class="tk-zoneact">${off ? `<button class="btn sm" data-klstat="aktif">${L('Aktifkan kembali', 'Activate again')}</button><button class="btn ghost sm danger" data-kldel>${L('Hapus klien', 'Delete client')}</button>` : `<button class="btn ghost sm" data-klstat="nonaktif">${L('Nonaktifkan klien', 'Deactivate client')}</button>`}</div></section>`;
+}
+
+/* ---------- logo: kecilkan di browser lalu upload ---------- */
+function klPrepLogo(file) {
+  return new Promise((resolve, reject) => {
+    if (!/^image\/(png|jpeg|webp|svg\+xml)$/.test(file.type)) return reject(new Error(L('Format harus PNG, JPG, WebP, atau SVG.', 'Use PNG, JPG, WebP, or SVG.')));
+    if (file.size > 8e6) return reject(new Error(L('File terlalu besar (maks 8 MB).', 'File too large (max 8 MB).')));
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const W = img.naturalWidth || 600, H = img.naturalHeight || 240, s = Math.min(1, 720 / W, 288 / H, file.type === 'image/svg+xml' ? 4 : 1);
+      const sc = file.type === 'image/svg+xml' ? Math.min(720 / W, 288 / H) : s;
+      const cv = document.createElement('canvas'); cv.width = Math.max(1, Math.round(W * sc)); cv.height = Math.max(1, Math.round(H * sc));
+      cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); URL.revokeObjectURL(url);
+      let out = cv.toDataURL('image/png');
+      if (out.length > 1.2e6) out = cv.toDataURL('image/webp', 0.9);
+      resolve(out);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error(L('Gambar tidak bisa dibaca.', 'Could not read the image.'))); };
+    img.src = url;
+  });
+}
+async function klUpload(k, file) {
+  const drop = document.getElementById('kldrop'); if (drop) drop.classList.add('busy');
+  try {
+    const image = await klPrepLogo(file);
+    const j = await tkCall({ op: 'logo', klien: k.klien, image, old: k.logo || '' }, L('Logo tersimpan', 'Logo saved'));
+    if (j) render();
+  } catch (e) { toast(e.message); }
+  if (drop) drop.classList.remove('busy');
+}
+
+/* ---------- event Kelola Klien ---------- */
+function klOpen(slug) {
+  TK.ksel = slug;
+  $app.querySelectorAll('.kl-it.on').forEach(x => x.classList.remove('on'));
+  const b = $app.querySelector(`.kl-it[data-kl="${CSS.escape(slug)}"]`); if (b) b.classList.add('on');
+  const d = document.getElementById('kldetail'); if (d) { d.innerHTML = klDetail(klGet(slug)); d.scrollTop = 0; bindCommon(d); klBindDetail(d); }
+  const sh = document.querySelector('.shell'); if (sh) sh.classList.add('has-sel');
+  if (matchMedia('(max-width: 767px)').matches) history.pushState({ kl: 1 }, '');
+}
+function klClose() { TK.ksel = ''; const sh = document.querySelector('.shell'); if (sh) sh.classList.remove('has-sel'); const d = document.getElementById('kldetail'); if (d) d.innerHTML = klDetail(null); $app.querySelectorAll('.kl-it.on').forEach(x => x.classList.remove('on')); }
+function klBindList() { $app.querySelectorAll('#kllist [data-kl]').forEach(b => b.addEventListener('click', () => klOpen(b.dataset.kl))); }
+function klBindDetail(root) {
+  const k = klGet(TK.ksel); if (!k) return;
+  root.querySelectorAll('[data-klclose]').forEach(b => b.addEventListener('click', () => { if (history.state && history.state.kl) history.back(); else klClose(); }));
+  root.querySelectorAll('[data-klshow]').forEach(b => b.addEventListener('click', () => { const pw = b.parentElement.querySelector('.kl-pw'); const show = pw.textContent.startsWith('•'); pw.textContent = show ? pw.dataset.pw : '••••••••'; b.textContent = show ? L('Sembunyikan', 'Hide') : L('Lihat', 'Show'); }));
+  root.querySelectorAll('[data-gores]').forEach(b => b.addEventListener('click', () => { S.view = 'hasil'; ls.set('mengapa:admin:view', 'hasil'); S.src = 'all'; S.tab = 'all'; S.sel = b.dataset.gores; render(); }));
+  root.querySelectorAll('[data-klres]').forEach(b => b.addEventListener('click', () => { S.kl = { slug: k.klien, nama: k.nama, toks: k.tokens || [] }; S.view = 'hasil'; ls.set('mengapa:admin:view', 'hasil'); S.src = 'all'; S.tab = 'all'; S.sel = ''; window.scrollTo(0, 0); render(); }));
+  root.querySelectorAll('[data-klnewtok]').forEach(b => b.addEventListener('click', () => {
+    const j = b.dataset.klnewtok;
+    tkModal({ type: 'create', step: 2, jenis: j, mode: 'acak', jumlah: 1, awalan: j === 'personal' ? 'MGP' : '', kode: j === 'klien' ? klSuggestCode(k.klien) : '', kuota: '', batasi: false, preset: '', berlaku: '', klien: k.klien, label: '', catatan: '', err: '' });
+  }));
+  root.querySelectorAll('[data-klpass]').forEach(b => b.addEventListener('click', () => {
+    const np = klPass();
+    tkConfirm({ title: L('Buat password baru?', 'Create a new password?'), msg: L(`Password baru untuk ${esc(k.nama)}: <b class="mono">${esc(np)}</b><br>Password lama langsung tidak berlaku. Kirim password baru ini ke klien.`, `New password for ${esc(k.nama)}: <b class="mono">${esc(np)}</b><br>The old password stops working right away. Send the new one to the client.`),
+      ok: L('Pakai password ini', 'Use this password'), fn: async () => { tkModal(null); const j = await tkCall({ op: 'klien_update', klien: k.klien, fields: { password: np } }, L('Password baru tersimpan', 'New password saved')); if (j) render(); } });
+  }));
+  const file = root.querySelector('#klfile'), drop = root.querySelector('#kldrop');
+  if (file) file.addEventListener('change', () => { if (file.files[0]) klUpload(k, file.files[0]); });
+  if (drop) {
+    ['dragenter', 'dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+    ['dragleave', 'drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+    drop.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) klUpload(k, f); });
+  }
+  root.querySelectorAll('[data-kllogodel]').forEach(b => b.addEventListener('click', () => tkConfirm({ title: L('Hapus logo?', 'Remove logo?'), msg: L('Dashboard klien akan menampilkan inisial nama sebagai gantinya.', 'The client dashboard will show the name initials instead.'), ok: L('Hapus logo', 'Remove'), danger: true,
+    fn: async () => { tkModal(null); const j = await tkCall({ op: 'logo', klien: k.klien, image: '', old: k.logo }, L('Logo dihapus', 'Logo removed')); if (j) render(); } })));
+  const f = root.querySelector('#kledit');
+  if (f) f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const fields = {}, el = f.elements;
+    if (el.nama.value.trim() !== k.nama) fields.nama = el.nama.value.trim();
+    if (el.username.value.trim() !== k.username) fields.username = el.username.value.trim();
+    if (el.catatan.value !== k.catatan) fields.catatan = el.catatan.value;
+    if (!Object.keys(fields).length) { toast(L('Tidak ada yang berubah', 'Nothing changed')); return; }
+    if (fields.nama === '' || fields.username === '') { toast(L('Nama dan username tidak boleh kosong', 'Name and username can\'t be empty')); return; }
+    const j = await tkCall({ op: 'klien_update', klien: k.klien, fields }, L('Perubahan disimpan', 'Changes saved')); if (j) render();
+  });
+  root.querySelectorAll('[data-klstat]').forEach(b => b.addEventListener('click', () => {
+    const to = b.dataset.klstat, nt = klToks(k).filter(t => tkStat(t) !== 'off').length;
+    if (to === 'aktif') return (async () => { const j = await tkCall({ op: 'klien_update', klien: k.klien, fields: { status: 'aktif' } }, L('Klien aktif kembali', 'Client active again')); if (j) render(); })();
+    tkConfirm({ title: L('Nonaktifkan klien?', 'Deactivate client?'), msg: L(`${esc(k.nama)} tidak akan bisa login ke dashboard sampai diaktifkan kembali. Data dan hasil tes tetap tersimpan.`, `${esc(k.nama)} won't be able to sign in until activated again. Data and results stay saved.`),
+      check: nt ? { label: L(`Nonaktifkan juga ${nt} token milik klien ini (peserta tidak bisa tes lagi)`, `Also deactivate this client's ${nt} tokens (participants can no longer take the test)`), checked: false } : null,
+      ok: L('Nonaktifkan', 'Deactivate'), fn: async () => { const ck = document.getElementById('tkcheck'); const also = !!(ck && ck.checked); tkModal(null); const j = await tkCall({ op: 'klien_update', klien: k.klien, fields: { status: 'nonaktif' }, nonaktifToken: also }, L('Klien dinonaktifkan', 'Client deactivated')); if (j) render(); } });
+  }));
+  root.querySelectorAll('[data-kldel]').forEach(b => b.addEventListener('click', () => tkConfirm({ title: L('Hapus klien?', 'Delete client?'), danger: true,
+    msg: L(`${esc(k.nama)} dihapus dari tab Klien dan alamat mengapa.me/${esc(k.klien)} tidak bisa dibuka lagi. Token dan hasil tes tidak ikut terhapus.`, `${esc(k.nama)} is removed from the Klien tab and mengapa.me/${esc(k.klien)} stops working. Tokens and results are kept.`),
+    ok: L('Hapus klien', 'Delete client'), fn: async () => { tkModal(null); const j = await tkCall({ op: 'klien_delete', klien: k.klien }, L('Klien dihapus', 'Client deleted')); if (j) { TK.ksel = ''; render(); } } })));
+}
+function klSuggestCode(slug) {
+  const d = new Date(), base = `${slug.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 30)}-${MON()[d.getMonth()].toUpperCase().slice(0, 3)}${String(d.getFullYear()).slice(2)}`;
+  let c = base, n = 2; while ((TK.list || []).some(t => t.token.toLowerCase() === c.toLowerCase())) c = `${base}-${n++}`;
+  return c;
+}
+function klBind() {
+  bindCommon($app);
+  if (!tkAuthed()) return tkBindLock();
+  const q = document.getElementById('klq');
+  if (q) q.addEventListener('input', () => { TK.kq = q.value; const xs = klVisible(); document.getElementById('kllist').innerHTML = klListHtml(xs); document.getElementById('klcount').textContent = L(`${xs.length} dari ${TK.clients.length} klien`, `${xs.length} of ${TK.clients.length} clients`); klBindList(); });
+  $app.querySelectorAll('[data-klnew]').forEach(b => b.addEventListener('click', () => tkModal({ type: 'klien', step: 1, nama: '', klien: '', username: '', password: klPass(), catatan: '' })));
+  $app.querySelectorAll('[data-tkretry]').forEach(b => b.addEventListener('click', tkLoad));
+  klBindList();
+  const d = document.getElementById('kldetail'); if (d) klBindDetail(d);
+  tkBindModal();
+}
 
 /* ===== tim.js ===== */
 /* Dashboard Mengapa: membaca hasil tes dari Google Sheet (lewat /api/admin). ID/EN. */
@@ -3474,7 +3817,8 @@ const session = {
 
 const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '',
   limit: 80, src: 'new', sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
-S.view = !SLUG && ls.get('mengapa:admin:view') === 'token' ? 'token' : 'hasil';
+S.clientLogo = SLUG ? ls.get(SKEY + ':logo') || '' : ''; S.found = null;
+S.view = !SLUG && ['token', 'klien'].includes(ls.get('mengapa:admin:view')) ? ls.get('mengapa:admin:view') : 'hasil';
 TK.sort = ls.get('mengapa:admin:tksort') || 'new';
 const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
 const testName = k => ({ lengkap: L('Tes Karakter Lengkap', 'Full Character Test'), mini: L('Tes Karakter Mini', 'Mini Character Test'), mindset: L('Tes Growth Mindset', 'Growth Mindset Test') })[k];
@@ -3567,7 +3911,7 @@ async function api(body) {
 }
 async function load() {
   S.loading = true; S.err = ''; render();
-  try { const j = await api({ action: 'data', session: S.session }); S.rows = j; S.at = j.at; if (j.nama) { S.clientName = j.nama; ls.set(SKEY + ':nama', j.nama); } rebuild(); }
+  try { const j = await api({ action: 'data', session: S.session }); S.rows = j; S.at = j.at; if (j.nama) { S.clientName = j.nama; ls.set(SKEY + ':nama', j.nama); } if (SLUG) { S.clientLogo = j.logo || ''; ls.set(SKEY + ':logo', S.clientLogo); } rebuild(); }
   catch (e) { S.err = e.message; }
   S.loading = false; render();
 }
@@ -3610,7 +3954,7 @@ function base() {
     && [...S.f].every(k => { const f = F.find(f => f.k === k); return !f || f.test(x); })
     && (!S.temps.size || domOf(x).some(k => S.temps.has(k)))
     && (!S.cats.size || (x.gm && S.cats.has(x.gm.category)))
-    && x.t >= t0 && x.t <= t1);
+    && x.t >= t0 && x.t <= t1 && (!S.kl || S.kl.toks.includes(x.token)));
 }
 function sorted(arr) {
   const d = S.dir, name = (a, b) => String(a.name).localeCompare(String(b.name), 'id', { sensitivity: 'base' });
@@ -3633,7 +3977,7 @@ const countText = n => L(`${n} dari ${srcTotal()} hasil`, `${n} of ${srcTotal()}
 
 /* ---------- tampilan ---------- */
 const mengapaLogo = `<span class="brand"><img src="${LOGO_ICON}" alt="" height="30"><img src="${LOGO_WORD}" alt="Mengapa" height="17"></span>`;
-const clientLogo = () => `<img class="client-logo" src="/logo-klien/${encodeURIComponent(SLUG)}.png" alt="${esc(S.clientName || CLIENT)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'client-name',textContent:this.alt}))">`;
+const clientLogo = () => S.clientLogo ? `<img class="client-logo" src="${esc(S.clientLogo)}" alt="${esc(S.clientName || CLIENT)}">` : `<img class="client-logo" src="/logo-klien/${encodeURIComponent(SLUG)}.png" alt="${esc(S.clientName || CLIENT)}" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'client-name',textContent:this.alt}))">`;
 const logoHtml = mengapaLogo;
 const headLogo = () => SLUG ? `${clientLogo()}<span class="by">${L('bersama', 'with')} ${mengapaLogo}</span>` : mengapaLogo;
 const langToggle = () => `<div class="lang" role="group" aria-label="${L('Bahasa', 'Language')}"><button data-lang="id" aria-pressed="${LANG === 'id'}">ID</button><button data-lang="en" aria-pressed="${LANG === 'en'}">EN</button></div>`;
@@ -3887,9 +4231,9 @@ function breakdown(B) {
 }
 
 function headHtml() {
-  const tkv = S.view === 'token';
+  const tkv = S.view === 'token' || S.view === 'klien';
   return `    <header class="bar-top">
-      ${headLogo()}${SLUG ? '<span class="tag">Dashboard</span>' : `<nav class="viewtabs" aria-label="${L('Tampilan', 'View')}"><button data-view="hasil" aria-pressed="${!tkv}">${L('Hasil tes', 'Test results')}</button><button data-view="token" aria-pressed="${tkv}">${L('Kelola token', 'Manage tokens')}</button></nav>`}
+      ${headLogo()}${SLUG ? '<span class="tag">Dashboard</span>' : `<nav class="viewtabs" aria-label="${L('Tampilan', 'View')}"><button data-view="hasil" aria-pressed="${S.view === 'hasil'}">${L('Hasil tes', 'Test results')}</button><button data-view="token" aria-pressed="${S.view === 'token'}">${L('Kelola Token', 'Tokens')}</button><button data-view="klien" aria-pressed="${S.view === 'klien'}">${L('Kelola Klien', 'Clients')}</button></nav>`}
       <span class="grow"></span>
       ${langToggle()}
       <div class="dash-actions">
@@ -3902,15 +4246,15 @@ function headHtml() {
 }
 function tokenShell() {
   return `
-  <div class="shell tkv${TK.sel && TK.list && TK.list.some(t => t.token === TK.sel) ? ' has-sel' : ''}">
+  <div class="shell tkv${S.view === 'klien' ? (TK.ksel && klGet(TK.ksel) ? ' has-sel' : '') : TK.sel && TK.list && TK.list.some(t => t.token === TK.sel) ? ' has-sel' : ''}">
 ${headHtml()}
-    ${tkApp()}
+    ${S.view === 'klien' ? klApp() : tkApp()}
     ${dashFoot()}
   </div>`;
 }
 
 function app() {
-  if (!SLUG && S.view === 'token') return tokenShell();
+  if (!SLUG && (S.view === 'token' || S.view === 'klien')) return tokenShell();
   const items = visible(), sel = S.items.find(x => x.key === S.sel), B = base();
   const c = k => B.filter(x => k === 'all' || x.kind === k).length;
   const week = B.filter(x => Date.now() - x.t < 7 * 864e5).length;
@@ -3936,6 +4280,7 @@ ${headHtml()}
           <div class="seg"${SLUG || S.src === 'old' ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : ({ lengkap: L('Tes Lengkap', 'Full test'), mini: L('Tes Mini', 'Mini test'), mindset: L('Tes Mindset', 'Mindset test') })[k]}<small>${c(k)}</small></button>`).join('')}</div>
           <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             <input id="q" type="search" placeholder="${SLUG ? L('Cari nama, kode, token…', 'Search name, code, token…') : L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
+          ${S.kl ? `<div class="pills"><button class="pillx" data-klclear>${L('Klien', 'Client')}: ${esc(S.kl.nama)}${ICON.x}</button></div>` : ''}
           ${toolsHtml(B)}
         </div>
         <div class="list" id="list">${listHtml(items)}</div>
@@ -4017,6 +4362,11 @@ function bindList() {
 
 function render() {
   document.title = SLUG ? `Dashboard · ${S.clientName || CLIENT}` : 'Dashboard · Mengapa';
+  if (SLUG && S.found === false) {
+    document.title = 'Halaman tidak ditemukan · Mengapa';
+    $app.innerHTML = `<main class="login"><div class="login-card nf"><div class="login-top">${mengapaLogo}${langToggle()}</div><h1>${L('Halaman tidak ditemukan', 'Page not found')}</h1><p class="muted">${L(`Alamat mengapa.me/${esc(CLIENT)} tidak terdaftar atau sudah tidak aktif. Cek lagi link yang kamu terima.`, `The address mengapa.me/${esc(CLIENT)} isn't registered or is no longer active. Please check the link you received.`)}</p><a class="btn block" href="/">${L('Ke beranda Mengapa', 'Go to Mengapa home')}</a></div></main>`;
+    bindCommon($app); return;
+  }
   if (!S.session) {
     $app.innerHTML = login();
     bindCommon($app);
@@ -4032,7 +4382,7 @@ function render() {
       btn.disabled = true; btn.textContent = L('Memeriksa…', 'Checking…'); er.hidden = true;
       try {
         const j = await api({ action: 'login', user: f.elements.user.value, pass: f.elements.pass.value });
-        S.session = j.session; session.set(j.session, j.hours || 12); S.err = ''; load();
+        S.session = j.session; session.set(j.session, j.hours || 12); S.err = ''; if (SLUG && j.nama) { S.clientName = j.nama; S.clientLogo = j.logo || ''; ls.set(SKEY + ':nama', j.nama); ls.set(SKEY + ':logo', S.clientLogo); } load();
       } catch (err) { er.hidden = false; er.textContent = err.message; btn.disabled = false; btn.textContent = L('Masuk', 'Sign in'); }
     });
     return;
@@ -4041,21 +4391,22 @@ function render() {
   if (!render.keepLimit) S.limit = 80;
   const tkFocused = document.activeElement && document.activeElement.id === 'tkq';
   $app.innerHTML = app();
-  const tkv = !SLUG && S.view === 'token';
+  const tkv = !SLUG && (S.view === 'token' || S.view === 'klien');
   $app.querySelector('[data-act=reload]').addEventListener('click', () => { if (tkv) { load(); tkLoad(); } else load(); });
   $app.querySelector('[data-act=csv]').addEventListener('click', () => tkv ? tkCsv() : csv());
   $app.querySelector('[data-act=logout]').addEventListener('click', logout);
   $app.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => {
     if (S.view === b.dataset.view) return;
     S.view = b.dataset.view; ls.set('mengapa:admin:view', S.view); window.scrollTo(0, 0);
-    if (S.view === 'token' && !TK.list && !TK.loading && tkAuthed()) tkLoad(); else render();
+    if (S.view !== 'hasil' && !TK.list && !TK.loading && tkAuthed()) tkLoad(); else render();
   }));
   if (tkv) {
-    tkBind();
+    if (S.view === 'klien') klBind(); else tkBind();
     if (tkFocused) { const q = document.getElementById('tkq'); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }
     return;
   }
   bindCommon($app); bindList();
+  $app.querySelectorAll('[data-klclear]').forEach(b => b.addEventListener('click', () => { S.kl = null; render(); }));
   $app.querySelectorAll('[data-src]').forEach(b => b.addEventListener('click', () => { S.src = b.dataset.src; if (S.src === 'old') S.tab = 'all'; S.sel = ''; render(); }));
   $app.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { S.tab = b.dataset.tab; render(); }));
   const tog = (set, v) => { set.has(v) ? set.delete(v) : set.add(v); render(); };
@@ -4087,9 +4438,13 @@ function closeDetail() {
   sh.classList.remove('has-sel'); $app.querySelectorAll('.it.on').forEach(x => x.classList.remove('on'));
   const d = document.getElementById('detail'); if (d) d.innerHTML = detail(null);
 }
-window.addEventListener('popstate', () => { if (S.view === 'token' && TK.sel) tkClose(); else if (S.sel) closeDetail(); });
+window.addEventListener('popstate', () => { if (S.view === 'klien' && TK.ksel) klClose(); else if (S.view === 'token' && TK.sel) tkClose(); else if (S.sel) closeDetail(); });
+if (SLUG && !S.session) {
+  api({ action: 'info' }).then(j => { S.found = true; S.clientName = j.nama || S.clientName; S.clientLogo = j.logo || ''; ls.set(SKEY + ':nama', S.clientName); ls.set(SKEY + ':logo', S.clientLogo); render(); })
+    .catch(e => { if (e.message === 'notfound') { S.found = false; render(); } });
+}
 render();
-if (S.session) { load(); if (S.view === 'token' && tkAuthed()) tkLoad(); }
+if (S.session) { load(); if (S.view !== 'hasil' && tkAuthed()) tkLoad(); }
 
 </script>
 </body>

@@ -1,0 +1,9 @@
+{
+  "name": "mengapa-tes",
+  "private": true,
+  "description": "Mengapa web app: halaman statis + Vercel Functions di folder api",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@vercel/blob": "^2.9.0"
+  }
+}

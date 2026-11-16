@@ -44,7 +44,10 @@ const SHEET_PK = 'PandanganKerja';
 const SHEET_TOKEN = 'Token';
 const SHEET_KLIEN = 'Klien';
 const SHEET_LAMA = 'Lama'; // hasil dari web app lama (impor sekali)
-const KLIEN_HEADERS = ['klien', 'nama', 'username', 'password', 'token', 'catatan'];
+const KLIEN_HEADERS = ['klien', 'nama', 'username', 'password', 'token', 'catatan', 'status', 'logo', 'dibuat'];
+// Alamat yang tidak boleh dipakai sebagai alamat dashboard klien (mengapa.me/<alamat>)
+const KLIEN_RESERVED = ['admin', 'api', 'assets', 'klien', 'tim', 'layanan', 'index', 'pandangan-kerja', 'pandangan-kerja-hasil', 'logo-klien', 'apps-script',
+  'robots', 'sitemap', 'favicon', 'public-workshops', 'private-workshops', 'tes', 'test', 'dashboard', 'login', 'mengapa', 'www', 'hasil', 'token'];
 const TOKEN_HEADERS = ['token', 'status', 'catatan', 'dibuat', 'mulai_dipakai', 'selesai', 'id_hasil', 'sesi', 'jenis', 'kuota', 'berlaku_sampai', 'label', 'dipakai_kali'];
 const TZ = 'Asia/Jakarta';
 const NOTIF_EMAIL = 'mengapa.me@gmail.com';
@@ -66,6 +69,9 @@ function doPost(e) {
     if (data.action === 'token_create') return json_(tokenCreate_(data));
     if (data.action === 'token_update') return json_(tokenUpdate_(data));
     if (data.action === 'token_delete') return json_(tokenDelete_(data));
+    if (data.action === 'klien_create') { const r = klienCreate_(data.data || {}); if (!r.ok) return json_(r); const o = tokenList_(); o.created_klien = r.klien; return json_(o); }
+    if (data.action === 'klien_update') return json_(klienUpdate_(data));
+    if (data.action === 'klien_delete') return json_(klienDelete_(data));
 
     const row = data.row || {};
     const pk = row.jenis_tes === 'pandangan';
@@ -174,8 +180,10 @@ function klienMap_() {
   sh.getRange(2, 1, sh.getLastRow() - 1, KLIEN_HEADERS.length).getValues().forEach(function (r, i) {
     const slug = String(r[0] || '').trim();
     if (!slug) return;
-    out.list.push({ klien: slug, nama: String(r[1] || slug), row: i + 2 });
-    String(r[4] || '').split(/[,;\n]/).map(function (t) { return t.trim(); }).filter(String).forEach(function (t) { out.byToken[t] = slug; });
+    const toks = String(r[4] || '').split(/[,;\n]/).map(function (t) { return t.trim(); }).filter(String);
+    out.list.push({ klien: slug, nama: String(r[1] || slug), username: String(r[2] || ''), password: String(r[3] || ''), tokens: toks,
+      catatan: String(r[5] || ''), status: String(r[6] || '').toLowerCase().trim() === 'nonaktif' ? 'nonaktif' : 'aktif', logo: String(r[7] || ''), dibuat: iso_(r[8]), row: i + 2 });
+    toks.forEach(function (t) { out.byToken[t] = slug; });
   });
   return out;
 }
@@ -280,7 +288,7 @@ function tokenList_() {
       id_hasil: String(r[6] || ''), jenis: String(r[TC.jenis - 1]), kuota: num_(r[TC.kuota - 1]), berlaku: ymd_(r[TC.berlaku_sampai - 1]),
       label: String(r[TC.label - 1] || ''), dipakai: num_(r[TC.dipakai_kali - 1]), klien: km.byToken[t] || '' };
   });
-  return { ok: true, tokens: tokens, klien: km.list.map(function (k) { return { klien: k.klien, nama: k.nama }; }), today: today_() };
+  return { ok: true, tokens: tokens, klien: km.list.map(function (k) { return { klien: k.klien, nama: k.nama, username: k.username, password: k.password, catatan: k.catatan, status: k.status, logo: k.logo, dibuat: k.dibuat, tokens: k.tokens }; }), today: today_() };
 }
 
 function setKlienToken_(token, slug) {
@@ -300,6 +308,11 @@ function setKlienToken_(token, slug) {
 }
 
 function tokenCreate_(d) {
+  if (d.klien_baru && d.jenis !== 'admin') {
+    const kb = klienCreate_(d.klien_baru);
+    if (!kb.ok) return kb;
+    d.klien = kb.klien; d.created_klien = kb.klien;
+  }
   const jenis = ['personal', 'klien', 'admin'].indexOf(d.jenis) >= 0 ? d.jenis : '';
   if (!jenis) return { ok: false, error: 'Jenis token tidak dikenal' };
   const slug = jenis === 'admin' ? '' : String(d.klien || '').trim();
@@ -341,7 +354,7 @@ function tokenCreate_(d) {
     const cur = String(sh.getRange(k.row, 5).getValue() || '').split(/[,;\n]/).map(function (t) { return t.trim(); }).filter(String);
     sh.getRange(k.row, 5).setValue(cur.concat(codes).join(', '));
   }
-  const out = tokenList_(); out.created = codes; return out;
+  const out = tokenList_(); out.created = codes; if (d.created_klien) out.created_klien = d.created_klien; return out;
 }
 
 function tokenUpdate_(d) {
@@ -369,6 +382,51 @@ function tokenUpdate_(d) {
   });
   if (!n) return { ok: false, error: 'Token tidak ditemukan' };
   const out = tokenList_(); out.updated = n; return out;
+}
+
+/* ---------- kelola klien ---------- */
+function slugOk_(slug) { return /^[A-Za-z0-9][A-Za-z0-9-]{1,38}[A-Za-z0-9]$/.test(slug); }
+function klienCreate_(k) {
+  const slug = String(k.klien || '').trim(), nama = String(k.nama || '').trim().slice(0, 80);
+  if (!nama) return { ok: false, error: 'Isi nama klien' };
+  if (!slugOk_(slug)) return { ok: false, error: 'Alamat 3 sampai 40 karakter: huruf, angka, atau strip (tidak di awal/akhir)' };
+  if (KLIEN_RESERVED.indexOf(slug.toLowerCase()) >= 0) return { ok: false, error: 'Alamat ' + slug + ' tidak bisa dipakai' };
+  const km = klienMap_();
+  if (km.list.some(function (x) { return x.klien.toLowerCase() === slug.toLowerCase(); })) return { ok: false, error: 'Alamat ' + slug + ' sudah dipakai klien lain' };
+  const user = String(k.username || '').trim().slice(0, 60) || ('admin_' + slug.toLowerCase());
+  const pass = String(k.password || '').trim();
+  if (pass.length < 6) return { ok: false, error: 'Password minimal 6 karakter' };
+  const sh = getKlienSheet_();
+  const r = KLIEN_HEADERS.map(function () { return ''; });
+  r[0] = slug; r[1] = nama; r[2] = user; r[3] = pass; r[5] = String(k.catatan || '').slice(0, 300); r[6] = 'aktif'; r[8] = new Date();
+  sh.getRange(sh.getLastRow() + 1, 1, 1, KLIEN_HEADERS.length).setValues([r]);
+  return { ok: true, klien: slug };
+}
+function klienUpdate_(d) {
+  const km = klienMap_(), k = km.list.filter(function (x) { return x.klien.toLowerCase() === String(d.klien || '').toLowerCase(); })[0];
+  if (!k) return { ok: false, error: 'Klien tidak ditemukan' };
+  const sh = getKlienSheet_(), f = d.fields || {}, col = function (h) { return KLIEN_HEADERS.indexOf(h) + 1; };
+  if ('nama' in f) { const v = String(f.nama || '').trim().slice(0, 80); if (!v) return { ok: false, error: 'Nama klien tidak boleh kosong' }; sh.getRange(k.row, col('nama')).setValue(v); }
+  if ('username' in f) { const v = String(f.username || '').trim().slice(0, 60); if (!v) return { ok: false, error: 'Username tidak boleh kosong' }; sh.getRange(k.row, col('username')).setValue(v); }
+  if ('password' in f) { const v = String(f.password || '').trim(); if (v.length < 6) return { ok: false, error: 'Password minimal 6 karakter' }; sh.getRange(k.row, col('password')).setValue(v); }
+  if ('catatan' in f) sh.getRange(k.row, col('catatan')).setValue(String(f.catatan || '').slice(0, 300));
+  if ('logo' in f) sh.getRange(k.row, col('logo')).setValue(String(f.logo || '').slice(0, 500));
+  if ('status' in f) {
+    const st = f.status === 'nonaktif' ? 'nonaktif' : 'aktif';
+    sh.getRange(k.row, col('status')).setValue(st);
+    if (st === 'nonaktif' && d.nonaktifToken && k.tokens.length) {
+      const rd = readTokens_(), want = {}; k.tokens.forEach(function (t) { want[t] = true; });
+      rd.vals.forEach(function (r, i) { if (want[normToken_(r[0])]) rd.sh.getRange(i + 2, TC.status).setValue('nonaktif'); });
+    }
+  }
+  return tokenList_();
+}
+function klienDelete_(d) {
+  const km = klienMap_(), k = km.list.filter(function (x) { return x.klien.toLowerCase() === String(d.klien || '').toLowerCase(); })[0];
+  if (!k) return { ok: false, error: 'Klien tidak ditemukan' };
+  if (k.status !== 'nonaktif') return { ok: false, error: 'Nonaktifkan klien dulu sebelum dihapus' };
+  getKlienSheet_().deleteRow(k.row);
+  const out = tokenList_(); out.deleted_klien = k.klien; out.old_logo = k.logo; return out;
 }
 
 function tokenDelete_(d) {
@@ -483,6 +541,8 @@ function setup() {
 //   nama     = nama yang tampil, contoh HK Gold
 //   username / password = untuk login klien
 //   token    = token milik klien, boleh lebih dari satu dipisah koma. Klien hanya melihat hasil dari token ini.
+//   status   = aktif / nonaktif (nonaktif = klien tidak bisa login) · logo = URL logo · dibuat = tanggal dibuat
+//   Paling mudah dikelola lewat dashboard admin > Kelola Klien. Dashboard klien otomatis aktif di mengapa.me/<klien>.
 function getKlienSheet_() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sh = ss.getSheetByName(SHEET_KLIEN);
@@ -491,6 +551,12 @@ function getKlienSheet_() {
     sh.getRange(1, 1, 1, KLIEN_HEADERS.length).setValues([KLIEN_HEADERS]).setFontWeight('bold');
     sh.setFrozenRows(1);
     sh.getRange(1, 1, sh.getMaxRows(), KLIEN_HEADERS.length).setNumberFormat('@');
+  }
+  // kolom baru (status, logo, dibuat) ditambahkan otomatis di kanan
+  const head = sh.getRange(1, 1, 1, Math.max(1, Math.min(sh.getMaxColumns(), KLIEN_HEADERS.length))).getValues()[0];
+  if (head.length < KLIEN_HEADERS.length || KLIEN_HEADERS.some(function (h, i) { return head[i] !== h; })) {
+    if (sh.getMaxColumns() < KLIEN_HEADERS.length) sh.insertColumnsAfter(sh.getMaxColumns(), KLIEN_HEADERS.length - sh.getMaxColumns());
+    sh.getRange(1, 1, 1, KLIEN_HEADERS.length).setValues([KLIEN_HEADERS]).setFontWeight('bold');
   }
   return sh;
 }
