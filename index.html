@@ -1000,6 +1000,16 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 .ptop { flex-wrap: nowrap; } .ptop .tokbtn { flex: none; }
 .plan .tagp, .ptop .tokbtn { height: 30px; box-sizing: border-box; display: inline-flex; align-items: center; padding-top: 0; padding-bottom: 0; }
 
+/* ===== Karakter 12 kombinasi (badan penuh) ===== */
+.char-stage { width: min(100%, 260px); margin: 10px auto 6px; border-radius: 28px; display: grid; place-items: center; padding: 14px 0 6px; animation: pop .7s var(--ease) both; }
+.char-stage .char-art { display: block; width: 72%; height: auto; }
+.cx-stage { height: 272px; }
+.cx-slide .char-art { width: 132px; height: 145px; transition: transform .8s var(--ease), filter .8s var(--ease); transform: translateY(14px) scale(.9); filter: blur(6px); }
+.cx-slide.on .char-art { transform: none; filter: none; transition-delay: .1s; }
+.cx-slide.out .char-art { transform: translateY(-10px) scale(1.04); filter: blur(6px); transition-duration: .5s; }
+@media (prefers-reduced-motion: reduce) { .char-stage { animation: none; } .cx-slide .char-art, .cx-slide.out .char-art { transform: none !important; filter: none !important; } }
+@media print { .char-stage { animation: none; width: 200px; } }
+
 </style>
 </head>
 <body>
@@ -1963,10 +1973,10 @@ function analyze(answers, cfg = CONFIG) {
   const list = arr => arr.map(name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
   const ties = [];
   if (tieType === 'dominan_seri') {
-    ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi polamu bisa terbaca sebagai ${combo.name} atau ${COMBOS[s + p].name}. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so your pattern can be read as ${combo.name} or ${COMBOS[s + p].name}. `) +
+    ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi kamu bisa terbaca sebagai ${combo.name} maupun ${COMBOS[s + p].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so you can be read as ${combo.name} as well as ${COMBOS[s + p].name}. That’s normal, because how we act can shift with the situation. `) +
       (sc.s[p] > sc.s[s] ? L(`${combo.name} kami tampilkan lebih dulu karena kekuatan ${name(p)} yang kamu pilih lebih banyak.`, `We show ${combo.name} first because you picked more ${name(p)} strengths.`) : L('Urutan di halaman ini hanya urutan tampil.', 'The order on this page is display order only.')));
   } else if (tieType === 'sekunder_seri') {
-    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya. Polamu bisa juga terbaca sebagai ${COMBOS[p + coSecondary.find(k => k !== s)].name}.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either. Your pattern can also be read as ${COMBOS[p + coSecondary.find(k => k !== s)].name}.`));
+    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya dan kamu bisa juga terbaca sebagai ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and you can also be read as ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
   } else if (tieType === 'tiga_terbawah_sama') {
     ties.push(L(`${name(p)} jelas dominan, tapi tiga sisi lainnya punya skor sama (${sc.t[s]}). Sisi sekundermu belum menonjol, jadi ${name(s)} di sini hanya urutan tampil.`, `${name(p)} is clearly primary, but the other three sides have the same score (${sc.t[s]}). Your secondary side doesn’t stand out yet, so ${name(s)} here is display order only.`));
   } else if (tieType === 'tiga_teratas_sama') {
@@ -2114,20 +2124,51 @@ function tmark(k, size = 40) {
 }
 
 // Ilustrasi kombinasi gaya v2: tanda dominan besar + tanda sekunder di pojok
-function comboArt(p, s, size = 220, uid = 'a') {
-  const P = TEMPS[p], S = TEMPS[s];
-  return `
-  <svg class="combo-art" width="${size}" height="${size}" viewBox="0 0 200 200" role="img" aria-label="${p === s ? L(`Ilustrasi ${P.name}`, `${P.name} illustration`) : L(`Ilustrasi ${P.name} dan ${S.name}`, `${P.name} and ${S.name} illustration`)}">
-    <circle cx="100" cy="104" r="88" fill="${PASTEL[p]}"/>
-    <circle cx="100" cy="104" r="58" fill="#fff"/>
-    <g transform="translate(62 66) scale(.76)">${GLYPH[p](P.color, P.deep)}</g>
-    ${p === s ? '' : `<g transform="translate(160 42)">
-      <circle cx="0" cy="0" r="36" fill="${PASTEL[s]}" stroke="#fff" stroke-width="6"/>
-      <circle cx="0" cy="0" r="23" fill="#fff"/>
-      <g transform="translate(-17 -17) scale(.34)">${GLYPH[s](S.color, S.deep)}</g>
-    </g>`}
-  </svg>`;
+/* ---------------- Karakter 12 kombinasi ----------------
+   Postur dan warna badan dari temperamen dominan (p), elemen di atas kepala dari temperamen kedua (s). */
+const CHEAD = { S: '#F0D570', C: '#EDA58E', M: '#9CC9DB', P: '#B3D58F' };
+const CBG = { S: '#FBF6E2', C: '#FCEDE7', M: '#EAF4F7', P: '#EEF6E6' };
+let _cid = 0;
+function crown(k, hx = 100, hy = 98, rot = 0) {
+  if (!k) return '';
+  const g = inner => `<g transform="translate(${hx - 100} ${hy - 98}) rotate(${rot} ${hx} ${hy})">${inner}</g>`;
+  if (k === 'C') return g(`<g transform="translate(100 74) scale(.6)"><path d="M0 -62 C9 -48 26 -38 26 -18 A26 26 0 0 1 -26 -18 C-26 -30 -19 -37 -13 -42 C-12 -33 -8 -28 -3 -26 C-4 -40 -8 -50 0 -62 Z" fill="${PASTEL.C}"/></g>`);
+  if (k === 'S') {
+    let rays = '';
+    for (let a = -90; a <= 90; a += 30) rays += `<rect x="-3.2" y="-36" width="6.4" height="11" rx="3.2" transform="rotate(${a})" fill="#EBC94E"/>`;
+    return g(`<g transform="translate(100 58) scale(.62)">${rays}<circle r="20" fill="${PASTEL.S}"/></g>`);
+  }
+  if (k === 'M') return g(`<g transform="translate(100 62)"><path d="M-22 8 h44 a10 10 0 0 0 0 -20 a16 16 0 0 0 -30 -3 a12 12 0 0 0 -14 23 z" fill="${PASTEL.M}"/></g>`);
+  return g(`<g transform="translate(100 76)"><path d="M0 0 V-14" stroke="#BCDB9C" stroke-width="3.2" stroke-linecap="round"/><path d="M0 -12 C-4 -24 -16 -28 -24 -24 C-20 -14 -10 -10 0 -12 Z" fill="${PASTEL.P}"/><path d="M0 -14 C4 -28 16 -32 24 -28 C20 -18 10 -12 0 -14 Z" fill="#BCDB9C"/></g>`);
 }
+const STAND = 'M60 210 C60 152 74 122 100 122 C126 122 140 152 140 210 Z';
+const limb = (d, k, w = 13) => `<path d="${d}" fill="none" stroke="${PASTEL[k]}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+const shade = (rx = 46) => `<ellipse cx="100" cy="211" rx="${rx}" ry="5" fill="#1D1D1D" opacity=".06"/>`;
+function pose(d, s) {
+  const head = (x, y) => `<circle cx="${x}" cy="${y}" r="23" fill="${CHEAD[d]}"/>`;
+  if (d === 'S') return shade() + `<path d="${STAND}" fill="${PASTEL[d]}"/>` + limb('M68 150 C54 140 48 124 46 104', d) + limb('M134 150 C146 160 150 172 150 184', d) + head(100, 98) + crown(s);
+  if (d === 'C') return shade() + `<path d="${STAND}" fill="${PASTEL[d]}"/>` + limb('M68 148 C52 156 52 174 66 180', d) + limb('M132 150 C146 148 160 144 174 137', d) + head(100, 96) + crown(s, 100, 96);
+  if (d === 'M') return shade() + `<path d="M64 210 C60 168 66 140 92 132 C112 126 132 138 138 160 C141 176 140 194 140 210 Z" fill="${PASTEL[d]}"/>` + head(118, 114) + crown(s, 118, 114, 8);
+  return shade(58) + limb('M70 168 C58 180 52 192 50 205', d, 12) + limb('M130 168 C142 180 148 192 150 205', d, 12)
+    + `<path d="M64 204 C62 168 78 148 100 148 C122 148 138 168 136 204 Z" fill="${PASTEL[d]}"/>`
+    + `<path d="M70 204 C70 194 84 192 100 196 C116 192 130 194 130 204 Z" fill="${CHEAD[d]}" opacity=".7"/>` + head(96, 124) + crown(s, 96, 124, -12);
+}
+function charLabel(p, s) {
+  const P = TEMPS[p], key = p + (s || '');
+  return s && COMBOS[key] ? `${COMBOS[key].name}: ${P.name} + ${TEMPS[s].name}` : P.name;
+}
+/* Badan penuh, untuk tampilan besar. s kosong = tanpa elemen kepala (hasil Tes Mini). */
+function charArt(p, s, size = 220) {
+  return `<svg class="char-art" width="${size}" height="${Math.round(size * 1.1)}" viewBox="0 0 200 220" role="img" aria-label="${esc_(charLabel(p, s))}">${pose(p, s)}</svg>`;
+}
+/* Setengah badan dalam lingkaran, untuk ikon kecil. */
+function comboArt(p, s, size = 220) {
+  const id = 'cc' + (++_cid);
+  const top = p === s ? null : s;
+  return `<svg class="combo-art" width="${size}" height="${size}" viewBox="28 22 144 144" role="img" aria-label="${esc_(charLabel(p, top))}"><defs><clipPath id="${id}"><circle cx="100" cy="94" r="72"/></clipPath></defs>
+    <circle cx="100" cy="94" r="72" fill="${CBG[p]}"/><g clip-path="url(#${id})"><path d="${STAND}" fill="${PASTEL[p]}"/><circle cx="100" cy="98" r="23" fill="${CHEAD[p]}"/>${crown(top)}</g></svg>`;
+}
+const esc_ = t => String(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 /* ---------------- Kartu share 1080 x 1920 (IG Story) ---------------- */
 function svgToImage(svg) {
@@ -2192,9 +2233,9 @@ async function shareCard(result) {
   const { W, cv, ctx } = await cardBase(mini ? L('Tes Karakter Mini', 'Mini Character Test') : L('Tes Karakter Lengkap', 'Full Character Test'));
 
   // kartu utama berwarna pastel dominan
-  ctx.fillStyle = PASTEL[p]; roundRect(ctx, 60, 262, W - 120, 1000, 64); ctx.fill();
-  const art = await svgToImage(comboArt(p, s, 560, 'share'));
-  ctx.drawImage(art, (W - 560) / 2, 300, 560, 560);
+  ctx.fillStyle = CBG[p]; roundRect(ctx, 60, 262, W - 120, 1000, 64); ctx.fill();
+  const art = await svgToImage(charArt(p, mini ? null : s, 480));
+  ctx.drawImage(art, (W - 480) / 2, 318, 480, 528);
   ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(29,29,29,.6)'; ctx.font = `700 28px ${SANS}`; ctx.letterSpacing = '5px';
   ctx.fillText(mini ? L('TEMPERAMEN DOMINAN', 'PRIMARY TEMPERAMENT') : `${P.name.toUpperCase()} + ${S.name.toUpperCase()}`, W / 2 + 2, 930);
   ctx.letterSpacing = '0px';
@@ -2538,7 +2579,7 @@ function home() {
         <h2>${L('12 kombinasi karakter. <em>Kamu yang mana?</em>', '12 character blends. <em>Which one are you?</em>')}</h2>
         <div class="cx" aria-hidden="true">
           <div class="cx-stage">
-            ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}">${comboArt(c[0], c[1], 132, 'cx' + i)}<figcaption><b>${COMBOS[c].name}</b><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
+            ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}">${charArt(c[0], c[1], 132)}<figcaption><b>${COMBOS[c].name}</b><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
           </div>
           <div class="cx-meta"><span class="cx-bar"><i></i></span></div>
         </div>
@@ -3061,7 +3102,7 @@ function mresult() {
 
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil Tes Karakter Mini ${nick}`, `${nick}’s Mini Character Test result`) : L('Hasil Tes Karakter Mini', 'Your Mini Character Test result')}</div>
-        ${comboArt(p, p, 210, 'mr')}
+        <div class="char-stage" style="background:${CBG[p]}">${charArt(p, null, 190)}</div>
         <div class="eyebrow" style="margin-top:6px">Temperamen dominanmu</div>
         <h1>${P.name}</h1>
         <div class="en">${P.title}</div>
@@ -3165,7 +3206,7 @@ function result() {
 
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil ${nick}`, `${nick}’s result`) : L('Hasil kamu', 'Your result')}</div>
-        ${comboArt(p, s, 230, 'r')}
+        <div class="char-stage" style="background:${CBG[p]}">${charArt(p, s, 200)}</div>
         <h1>${combo.name}<button class="info-i no-print" data-act="allcombos" aria-label="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}" title="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}">i</button></h1>
         ${combo.en ? `<div class="en">${combo.en}</div>` : ''}
         <p class="tagline">${esc(combo.tagline)}</p>
