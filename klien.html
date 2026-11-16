@@ -1663,6 +1663,11 @@ body.tk-busy { cursor: progress; }
 .busy-box b { font-size: 16px; margin-top: 8px; } .busy-box small { color: var(--muted, #6b6b66); font-size: 13px; }
 .busy-spin { width: 34px; height: 34px; border-radius: 50%; border: 4px solid rgba(0,0,0,.12); border-top-color: #1D1D1D; animation: busyspin .8s linear infinite; }
 @keyframes busyspin { to { transform: rotate(360deg); } }
+@media (max-width: 640px) {
+  .seg { grid-template-columns: auto repeat(3, 1fr); }
+  .seg button { flex-direction: column; gap: 1px; padding: 8px 6px; white-space: nowrap; font-size: 12.5px; line-height: 1.25; }
+  .seg button small { font-size: 11px; }
+}
 
 </style>
 </head>
@@ -1692,7 +1697,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.8.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.8.2', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
