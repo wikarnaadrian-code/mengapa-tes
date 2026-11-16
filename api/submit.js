@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
     const mindset = row.jenis_tes === 'mindset';
     const pk = row.jenis_tes === 'pandangan'; // Tes Pandangan Kerja (khusus HK Gold)
     for (const k of (pk ? ['id', 'nama', 'jabatan', 'jawaban'] : ['id', 'nama', 'tanggal_lahir', 'jawaban'])) if (!row[k]) return res.status(400).json({ ok: false, error: 'kurang: ' + k });
-    if (!(pk ? /^[1-5]{24}$/ : mindset ? /^[1-5]{15}$/ : mini ? /^[SCMP]{10}$/ : /^[SCMP]{40}$/).test(String(row.jawaban))) return res.status(400).json({ ok: false, error: 'jawaban' });
+    if (!(pk ? /^[1-5]{24}[1-4]{3}$/ : mindset ? /^[1-5]{15}$/ : mini ? /^[SCMP]{10}$/ : /^[SCMP]{40}$/).test(String(row.jawaban))) return res.status(400).json({ ok: false, error: 'jawaban' });
     if (!mini && !mindset && !pk && !normToken(row.token)) return res.status(200).json({ ok: false, error: 'token' });
 
     // Bersihkan: hanya teks/angka pendek, cegah formula spreadsheet (=, +, -, @)

@@ -1321,6 +1321,85 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .pka-chips button { flex: 0 0 auto; }
 }
 
+/* ============ Dua bagian ============ */
+.pk-meta { gap: 6px; }
+.pk-parts { display: grid; gap: 12px; }
+.pk-parts > div { display: flex; gap: 12px; align-items: flex-start; }
+.pk-parts i { flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-weight: 800; font-size: 14px; background: #1D1D1D; color: #FFFFFF; margin-top: 1px; }
+.pk-parts span { font-size: 14.5px; line-height: 1.5; color: var(--ink-2); }
+.pk-parts b { display: block; color: var(--ink); font-size: 15px; }
+.pk-how > p { margin-bottom: 16px; }
+
+.pk-wq { font-size: clamp(24px, 6vw, 30px) !important; }
+.pk-story { background: #FFFFFF; border: 0; margin-top: 10px; }
+.pk-story p { margin: 0; font-size: 16px; line-height: 1.65; color: var(--ink-2); }
+
+.pk-inter { flex: 1; display: flex; flex-direction: column; }
+.pk-inter-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 10px 0 40px; }
+.pk-inter-body h2 { margin: 8px 0 10px; }
+.pk-inter-body .lead { margin: 0 0 18px; }
+.pk-check { width: 54px; height: 54px; border-radius: 50%; background: #E2EBD6; color: #3F5524; display: grid; place-items: center; margin-bottom: 16px; animation: pop .6s var(--ease) both; }
+
+/* hasil */
+.pk-h1 { font-size: clamp(36px, 9vw, 56px) !important; margin-top: 10px !important; }
+.pk-h1 span { color: #B5B5B0; font-weight: 500; }
+.pk-h1 em { font-style: normal; }
+.pkr .res-hero .tagline { font-style: normal; max-width: 30em; }
+.pk-duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 22px auto 0; max-width: 720px; text-align: left; }
+.pk-duo .pk-box { width: auto; margin: 0; padding: 20px 20px 18px; }
+.pk-box-h { font-size: 15px; font-weight: 800; margin-bottom: 14px; line-height: 1.3; }
+.pk-box-h span { display: block; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(29,29,29,.55); margin-bottom: 2px; }
+.pk-bar-top b em { font-style: normal; }
+.pk-combo { margin-top: 12px; background: #1D1D1D; color: #FFFFFF; border: 0; }
+.pk-combo h2 { font-size: clamp(22px, 5vw, 28px); color: #FFFFFF; }
+.pk-combo p { margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,.82); }
+.pk-part { margin-top: 40px; }
+.pk-part-tag { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; background: #1D1D1D; color: #FFFFFF; border-radius: 999px; padding: 6px 12px; }
+.pk-sub { margin-top: 20px; }
+.pk-sub h2 { margin: 8px 0 10px; }
+.pk-part .pk-dims { margin-top: 18px; }
+.pk-dim-h b em { font-style: normal; }
+@media (max-width: 640px) { .pk-duo { grid-template-columns: 1fr; } }
+@media print { .pk-combo { background: #F0F0EE; color: var(--ink); } .pk-combo h2 { color: var(--ink); } .pk-combo p { color: var(--ink-2); } .pk-duo { grid-template-columns: 1fr 1fr; } }
+.pk-h1 em { font-weight: inherit; color: inherit; font-family: inherit; }
+
+/* dashboard: dua bagian */
+.pka-sec { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); margin: 18px 0 10px; }
+.pka-sec small { font-weight: 600; letter-spacing: .02em; text-transform: none; color: var(--muted); margin-left: 6px; font-size: 12.5px; }
+.pka-kpi.three { grid-template-columns: repeat(3, 1fr); }
+.pka-kpi em, .pka-row em em, .pka-t em, .pka-chips em { font-style: normal; }
+.pka-row span em { font-style: normal; }
+.pka-x th, .pka-x td { text-align: center; }
+.pka-x td:first-child, .pka-x th:first-child { text-align: left; }
+.pka-x th.num { color: var(--c); }
+.pka-cell { all: unset; box-sizing: border-box; display: grid; place-items: center; width: 100%; min-width: 84px; min-height: 52px; border-radius: 12px; cursor: pointer; background: rgba(29,29,29, calc(var(--a) * .16 + .03)); }
+.pka-cell:not([disabled]):hover { outline: 2px solid #1D1D1D; }
+.pka-cell[disabled] { cursor: default; background: #F7F7F5; color: #C9C9C4; }
+.pka-cell b { font-size: 18px; line-height: 1.1; }
+.pka-cell small { font-size: 11.5px; color: var(--muted); }
+.pka-chl { flex: 0 0 auto; align-self: center; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); width: 78px; }
+.pka-chips + .pka-chips { margin-top: 6px; }
+.pka-ori[style] { background: color-mix(in srgb, var(--c) 16%, #FFFFFF); color: color-mix(in srgb, var(--c) 70%, #1D1D1D); }
+.pka-ans-wo { grid-column: 1 / -1; padding-top: 14px; border-top: 1px solid rgba(0,0,0,.08); }
+.pka-ans-wo > b { font-size: 14px; }
+.pka-wo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; }
+.pka-wo-i { background: #FFFFFF; border-radius: 14px; padding: 10px 12px; display: grid; gap: 2px; opacity: .75; }
+.pka-wo-i.on { opacity: 1; box-shadow: inset 0 0 0 2px var(--c); }
+.pka-wo-i span { font-size: 12.5px; color: var(--muted); }
+.pka-wo-i span em { font-style: normal; font-weight: 800; color: var(--c); }
+.pka-wo-i strong { font-size: 15px; }
+.pka-wo-i small { font-size: 12px; color: var(--muted); }
+@media (max-width: 900px) { .pka-kpi.three { grid-template-columns: 1fr 1fr 1fr; } }
+@media (max-width: 640px) {
+  .pka-kpi.three { grid-template-columns: 1fr; }
+  .pka-wo { grid-template-columns: 1fr; }
+  .pka-chl { width: auto; margin-right: 2px; }
+  .pka-people .c-dom { grid-column: 1 / -1; }
+  .pka-people .c-ori { grid-column: 1 / 3; margin-top: 4px; }
+  .pka-people .c-time { grid-row: auto; }
+}
+.res-hero .pk-h1 em { font-weight: inherit; color: inherit; font-family: inherit; font-style: normal; }
+
 </style>
 </head>
 <body>
@@ -2739,27 +2818,95 @@ const pkLevel = v => v >= 4 ? 'Kuat' : v >= 3 ? 'Sedang' : 'Rendah';
 const pkNum = v => Number(v).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pkDomName = ds => ds.map(d => PK_DIMS[d].name).join(' & ');
 
+/* ============ Bagian 2: orientasi kerja (Job, Career, Calling) ============
+   Berdasarkan Wrzesniewski, McCauley, Rozin & Schwartz (1997). Peserta menilai seberapa mirip dirinya
+   dengan tiga gambaran orang. Skala asli 4 tingkat (0 sampai 3). Kategori = gambaran dengan nilai tertinggi;
+   kalau seri, ditampilkan sebagai kombinasi (di paper asli, yang seri tidak digolongkan). */
+const WO_SCALE = ['Sama sekali tidak mirip saya', 'Sedikit mirip saya', 'Agak mirip saya', 'Sangat mirip saya'];
+const WO_ORDER = ['J', 'R', 'C'];
+const WO_ITEMS = [
+  { d: 'J', who: 'A', p: 'A bekerja terutama untuk mendapatkan uang yang cukup supaya bisa menjalani hidupnya di luar pekerjaan. Kalau keuangannya sudah aman, A tidak akan meneruskan pekerjaan di bidang ini dan lebih memilih melakukan hal lain. Bagi A, pekerjaan pada dasarnya adalah kebutuhan hidup, seperti bernapas atau tidur. A sering berharap jam kerja cepat berlalu, dan sangat menantikan akhir pekan serta liburan. Kalau bisa mengulang hidup, A mungkin tidak akan memilih bidang kerja yang sama, dan tidak akan menyarankan teman atau anaknya masuk ke bidang ini. A sangat menantikan masa pensiun.' },
+  { d: 'R', who: 'B', p: 'B pada dasarnya menikmati pekerjaannya, tapi tidak berencana berada di posisi yang sama lima tahun lagi. B berencana naik ke posisi yang lebih tinggi dan sudah punya beberapa target jabatan yang ingin dicapai. Kadang pekerjaannya terasa membuang waktu, tapi B tahu ia harus bekerja dengan baik sekarang supaya bisa naik. B sangat menantikan promosi. Bagi B, promosi berarti pengakuan atas kerja kerasnya dan tanda bahwa ia berhasil unggul dibanding rekan kerjanya.' },
+  { d: 'C', who: 'C', p: 'Pekerjaan adalah salah satu bagian terpenting dalam hidup C, dan C sangat senang berada di bidang kerjanya. Karena pekerjaan sangat lekat dengan siapa dirinya, pekerjaan sering menjadi hal pertama yang C ceritakan tentang dirinya. C cenderung membawa pekerjaan ke rumah, bahkan saat liburan. Banyak teman C berasal dari tempat kerja, dan C ikut dalam kelompok atau kegiatan yang berhubungan dengan pekerjaannya. C mencintai pekerjaannya karena yakin pekerjaan itu membuat dunia menjadi lebih baik, dan akan menyarankan teman serta anaknya masuk ke bidang ini. C akan sangat kecewa kalau harus berhenti bekerja, dan tidak terlalu menantikan masa pensiun.' },
+];
+const WO_DIMS = {
+  J: {
+    name: 'Job', col: 'job', sub: 'Kerja sebagai sumber penghasilan', color: '#B8901C', soft: '#F5ECCB',
+    short: 'Pekerjaan terutama dilihat sebagai cara memenuhi kebutuhan hidup dan membiayai hal-hal penting di luar kerja.',
+    about: 'Bagi kamu, pekerjaan terutama adalah cara untuk memenuhi kebutuhan dan membiayai hidup yang kamu pedulikan di luar kerja: keluarga, hobi, atau rencana pribadi. Ini pandangan yang realistis dan sangat umum. Energi dan makna hidupmu lebih banyak datang dari luar pekerjaan.',
+    strengths: ['Jelas soal tujuan bekerja dan tidak mudah terbawa drama kantor', 'Bisa memisahkan urusan kerja dan kehidupan pribadi', 'Bertanggung jawab memenuhi kebutuhan diri dan keluarga'],
+    watch: 'Kalau pekerjaan hanya terasa sebagai kewajiban, hari kerja bisa terasa panjang dan semangat mudah turun. Coba temukan satu atau dua bagian pekerjaan yang bisa kamu nikmati atau banggakan.',
+    reflect: 'Bagian mana dari pekerjaanmu sekarang yang paling bisa kamu nikmati, walaupun sedikit? Apa yang membuat hari kerja terasa lebih ringan?',
+  },
+  R: {
+    name: 'Career', col: 'career', sub: 'Kerja sebagai jalan untuk naik', color: '#7D5BC0', soft: '#E9E1F6',
+    short: 'Pekerjaan dilihat sebagai jalur untuk maju: naik jabatan, mendapat pengakuan, dan meningkatkan pencapaian.',
+    about: 'Bagi kamu, pekerjaan adalah jalur untuk bertumbuh dan naik. Kamu punya target, ingin posisi yang lebih tinggi, dan melihat promosi sebagai tanda keberhasilan. Kerja keras sekarang kamu anggap investasi untuk posisi berikutnya.',
+    strengths: ['Punya target yang jelas dan dorongan kuat untuk berprestasi', 'Mau belajar hal baru supaya bisa naik', 'Terdorong menunjukkan hasil kerja yang terlihat'],
+    watch: 'Kalau jalur naik terasa lambat atau tertutup, kekecewaan bisa datang cepat. Hati-hati juga supaya semangat bersaing tidak mengganggu kerja sama dengan rekan.',
+    reflect: 'Posisi atau peran apa yang kamu incar 2 sampai 3 tahun lagi? Kemampuan apa yang perlu kamu kuasai untuk sampai ke sana, dan siapa yang bisa membantumu?',
+  },
+  C: {
+    name: 'Calling', col: 'calling', sub: 'Kerja sebagai panggilan', color: '#2A8F83', soft: '#D7EEEA',
+    short: 'Pekerjaan dilihat sebagai bagian penting dari diri dan hidup, sesuatu yang bermakna dan berdampak bagi orang lain.',
+    about: 'Bagi kamu, pekerjaan adalah bagian penting dari siapa dirimu. Kamu menikmati bidang kerjamu, merasa pekerjaan ini bermakna, dan yakin apa yang kamu lakukan memberi dampak baik bagi orang lain.',
+    strengths: ['Bekerja dengan sepenuh hati dan bangga pada pekerjaannya', 'Menularkan semangat dan makna kerja ke orang sekitar', 'Tetap termotivasi walaupun tidak selalu ada imbalan langsung'],
+    watch: 'Saat pekerjaan menjadi bagian besar dari identitas, batas antara kerja dan hidup mudah kabur. Jaga waktu istirahat dan hubungan di luar kerja supaya tidak kelelahan.',
+    reflect: 'Apa yang membuat pekerjaanmu terasa bermakna? Bagaimana kamu menjaga semangat itu tanpa mengorbankan istirahat dan keluarga?',
+  },
+};
+
+// Nilai 1 sampai 4 disimpan per gambaran, skor = nilai - 1 (0 sampai 3, sesuai skala asli)
+function woAnalyze(vals) {
+  const sc = {}; WO_ORDER.forEach((d, i) => { const v = Number(vals[i]); sc[d] = v >= 1 && v <= 4 ? v - 1 : 0; });
+  const top = Math.max(...WO_ORDER.map(d => sc[d])), sum = WO_ORDER.reduce((s, d) => s + sc[d], 0);
+  const dominant = top > 0 ? WO_ORDER.filter(d => sc[d] === top) : [];
+  const pct = {}; WO_ORDER.forEach(d => { pct[d] = sum ? Math.round(sc[d] / sum * 100) : 0; });
+  const fix = 100 - WO_ORDER.reduce((s, d) => s + pct[d], 0); if (sum && fix) { const k = WO_ORDER.reduce((a, b) => sc[b] > sc[a] ? b : a); pct[k] += fix; }
+  return { sc, top, sum, pct, dominant };
+}
+const woDomName = ds => ds.length ? ds.map(d => WO_DIMS[d].name).join(' + ') : 'Belum terlihat';
+const WO_LEVEL = v => ['Tidak mirip', 'Sedikit mirip', 'Agak mirip', 'Sangat mirip'][v] || '';
+
+// Gabungan komitmen (A, B, N) × orientasi (J, R, C)
+const PK_COMBO = {
+  AJ: { t: 'Sayang tempatnya, kerja untuk hidup', p: 'Kamu terikat secara emosional dengan perusahaan, tapi pekerjaannya sendiri lebih kamu lihat sebagai cara memenuhi kebutuhan. Yang membuatmu betah kemungkinan besar orang-orangnya dan suasananya, bukan isi pekerjaannya. Supaya semangatmu tidak hanya bergantung pada suasana, coba temukan bagian pekerjaan yang bisa kamu nikmati.' },
+  AR: { t: 'Setia sambil ingin naik', p: 'Kamu sayang perusahaan ini dan ingin bertumbuh di dalamnya. Kombinasi ini sangat kuat selama jalur naiknya terlihat jelas. Kalau jalur karier terasa buntu, kekecewaannya bisa lebih dalam karena kamu sudah terikat. Bicarakan rencana kariermu dengan atasan sejak awal.' },
+  AC: { t: 'Tempat dan pekerjaannya sama-sama bermakna', p: 'Kamu merasa memiliki perusahaan ini dan menganggap pekerjaanmu bermakna. Ini kombinasi yang paling selaras dan biasanya membuat orang bekerja sepenuh hati. Yang perlu dijaga adalah batasnya, supaya dedikasi yang besar tidak berubah jadi kelelahan.' },
+  BJ: { t: 'Bertahan karena perlu, kerja demi penghasilan', p: 'Kamu bertahan karena pertimbangan praktis, dan memandang pekerjaan sebagai sumber penghasilan. Ini cara pandang yang rasional dan jujur. Tapi motivasimu jadi sangat bergantung pada imbalan, sehingga tawaran yang sedikit lebih baik bisa terasa menggoda. Coba cari alasan bertahan lain, misalnya kemampuan yang ingin kamu kuasai atau orang yang ingin kamu dukung.' },
+  BR: { t: 'Menghitung langkah ke atas', p: 'Kamu bertahan karena hitungan untung rugi, sambil tetap ingin naik. Selama perusahaan ini memberi jalan untuk maju, kamu akan berusaha keras. Kalau peluang naik terasa lebih besar di tempat lain, kamu cenderung mempertimbangkannya. Bicarakan jalur kariermu dengan atasan supaya kamu tahu apa yang perlu dicapai di sini.' },
+  BC: { t: 'Cinta bidangnya, bertahan karena keadaan', p: 'Kamu mencintai pekerjaanmu dan merasa bidang ini bermakna, tapi bertahan di perusahaan ini lebih karena pertimbangan praktis. Keterikatanmu lebih kuat pada bidang kerjanya daripada pada perusahaannya. Coba lihat apa yang membuat tempat ini juga layak untuk kamu perjuangkan.' },
+  NJ: { t: 'Setia karena balas budi, kerja untuk hidup', p: 'Kamu merasa wajib setia karena kebaikan perusahaan, sementara pekerjaannya sendiri lebih kamu lihat sebagai sumber nafkah. Kamu bisa diandalkan, tapi hati-hati dengan rasa sungkan yang membuatmu memendam keluhan atau kelelahan. Sampaikan kebutuhanmu dengan jujur.' },
+  NR: { t: 'Loyal sambil membangun karier', p: 'Kamu merasa wajib setia dan juga ingin naik. Selama kariermu bisa bertumbuh di sini, dua hal ini saling menguatkan. Tantangannya muncul kalau langkah karier berikutnya ada di luar. Saat itu rasa bersalah bisa membuatmu ragu. Bicarakan harapan kariermu secara terbuka.' },
+  NC: { t: 'Terpanggil sekaligus merasa berutang budi', p: 'Kamu menganggap pekerjaanmu bermakna dan merasa punya kewajiban moral pada perusahaan. Dedikasimu tinggi. Yang perlu dijaga: kamu bisa sulit menolak permintaan dan lupa menjaga diri sendiri. Loyalitas yang sehat tetap memberi ruang untuk istirahat dan berkata tidak.' },
+};
+
 /* ===== pk.js ===== */
-/* ============ MENGAPA × HK GOLD · Tes Pandangan Kerja (peserta) ============ */
+/* ============ MENGAPA × HK GOLD · Tes Pandangan Kerja (peserta) ============
+   Bagian 1: alasan bertahan (komitmen afektif, berkelanjutan, normatif), 24 pernyataan skala 1-5.
+   Bagian 2: cara memandang pekerjaan (Job, Career, Calling), 3 gambaran skala 4 tingkat. */
 
 
 
 {
-const KEY = 'mengapa:pk:v2', QKEY = 'mengapa:pk:queue2', N = PK_ITEMS.length;
+const KEY = 'mengapa:pk:v3', QKEY = 'mengapa:pk:queue3';
+const N1 = PK_ITEMS.length, N2 = WO_ITEMS.length, N = N1 + N2;
 const $app = document.getElementById('app');
 const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* abaikan */ } },
 };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const fresh = () => ({ screen: 'intro', profile: {}, answers: Array(N).fill(null), index: 0, startedAt: null, result: null });
+const fresh = () => ({ screen: 'intro', profile: {}, answers: Array(N).fill(null), index: 0, interSeen: false, startedAt: null, result: null });
 let st = Object.assign(fresh(), store.get(KEY) || {});
 if (!Array.isArray(st.answers) || st.answers.length !== N) st.answers = Array(N).fill(null);
+if (st.result && (!Array.isArray(st.result.answers) || st.result.answers.length !== N)) st.result = null;
 const save = () => store.set(KEY, st);
 const answered = () => st.answers.filter(Boolean).length;
 const fmtDate = d => new Date(d).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
 const fmtTime = d => new Date(d).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 const first = n => (n || '').trim().split(/\s+/)[0] || '';
+const split = ans => ({ p1: ans.slice(0, N1), p2: ans.slice(N1) });
 function makeId() {
   const a = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ', r = crypto.getRandomValues(new Uint8Array(6));
   return 'HKP-' + Array.from(r, x => a[x % a.length]).join('');
@@ -2775,7 +2922,24 @@ const DL = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="
 
 const brand = () => `<div class="pk-brand"><span class="brand"><img class="li" src="${LOGO_ICON}" alt="" /><img class="lw" src="${LOGO_WORD}" alt="Mengapa" /></span><span class="pk-x">×</span><img class="pk-hk" src="/logo-klien/hkgold.png" alt="HK Gold" onerror="this.replaceWith(Object.assign(document.createElement('b'),{className:'pk-hkname',textContent:'HK Gold'}))"></div>`;
 const foot = () => `<footer class="foot wrap"><span class="tag">dari "mengapa" jadi tahu harus apa</span>© ${new Date().getFullYear()} Mengapa untuk HK Gold</footer>`;
-const fx = s => esc(s).replace(/\bContinuance\b/g, '<em>Continuance</em>');
+const fx = s => esc(s).replace(/\b(Continuance|Job|Career|Calling)\b/g, '<em>$1</em>');
+const woName = d => `<em>${WO_DIMS[d].name}</em>`;
+
+/* ---------- ringkasan hasil (dipakai halaman hasil & gambar) ---------- */
+function summarize(r) {
+  const { p1, p2 } = split(r.answers);
+  const a = pkAnalyze(p1), o = woAnalyze(p2);
+  const kTitle = a.dominant.length === 3 ? 'Komitmen Seimbang' : a.dominant.map(d => PK_DIMS[d].name).join(' & ');
+  const oTitle = o.dominant.length === 0 ? 'Belum terlihat' : o.dominant.length === 3 ? 'Ketiganya' : o.dominant.map(d => WO_DIMS[d].name).join(' + ');
+  const why = a.dominant.length === 3 ? 'karena ingin, perlu, dan merasa seharusnya'
+    : a.dominant.map(d => d === 'A' ? 'karena ingin' : d === 'B' ? 'karena perlu' : 'karena merasa seharusnya').join(' sekaligus ');
+  const view = o.dominant.length === 0 ? 'belum punya gambaran yang paling mirip dengan cara kamu memandang pekerjaan'
+    : o.dominant.length === 3 ? 'memandang pekerjaan dari ketiga sisi: penghasilan, jenjang karier, dan makna'
+    : 'memandang pekerjaan sebagai ' + o.dominant.map(d => ({ J: 'sumber penghasilan', R: 'jalan untuk naik', C: 'panggilan' })[d]).join(' sekaligus ');
+  const combos = a.dominant.length < 3 && o.dominant.length && o.dominant.length < 3
+    ? a.dominant.flatMap(k => o.dominant.map(w => PK_COMBO[k + w])) : [];
+  return { a, o, kTitle, oTitle, sentence: `Kamu bertahan ${why}, dan ${view}.`, combos };
+}
 
 /* ---------- layar ---------- */
 function intro() {
@@ -2786,13 +2950,16 @@ function intro() {
       <div class="top">${brand()}</div>
       <div class="hero pk-hero">
         <h1>Tes Pandangan Kerja</h1>
-        <p class="lead">Kenali alasan utama yang membuatmu bertahan di pekerjaanmu sekarang: karena ingin, karena harus, atau karena merasa seharusnya.</p>
-        <div class="pk-meta"><span>${N} pernyataan</span><span>±5 menit</span><span>Hasil langsung</span></div>
+        <p class="lead">Kenali alasan utama yang membuatmu bertahan di tempat kerja sekarang, dan cara kamu memandang pekerjaan itu sendiri.</p>
+        <div class="pk-meta"><span>2 bagian</span><span>${N} pertanyaan</span><span>±6 menit</span><span>Hasil langsung</span></div>
       </div>
       <div class="card flat pk-how">
         <b>Cara mengisi</b>
-        <p>Pilih jawaban yang paling menggambarkan perasaanmu <b>saat ini</b>, bukan yang menurutmu ideal. Tidak ada jawaban benar atau salah.</p>
-        <ol class="pk-scale">${PK_SCALE.map((s, i) => `<li><i>${i + 1}</i>${s}</li>`).join('')}</ol>
+        <p>Jawab sesuai yang kamu rasakan <b>saat ini</b>, bukan yang menurutmu ideal. Tidak ada jawaban benar atau salah.</p>
+        <div class="pk-parts">
+          <div><i>1</i><span><b>Bagian 1 · ${N1} pernyataan</b>Pilih seberapa setuju kamu, dari 1 (sangat tidak setuju) sampai 5 (sangat setuju).</span></div>
+          <div><i>2</i><span><b>Bagian 2 · ${N2} gambaran singkat</b>Baca cerita tentang seseorang, lalu pilih seberapa mirip orang itu dengan dirimu.</span></div>
+        </div>
       </div>
       <div class="actions pk-go">
         ${started ? `<button class="btn" data-act="resume">Lanjutkan tes (${answered()}/${N}) ${ARROW}</button>` : `<button class="btn" data-act="start">Mulai tes ${ARROW}</button>`}
@@ -2834,21 +3001,29 @@ function profile() {
   </section>`;
 }
 
-function test() {
-  const i = Math.min(st.index, N - 1), it = PK_ITEMS[i];
-  return `
-  <section class="screen pk">
-    <div class="testbar"><div class="wrap">
+function testbar(i) {
+  const part = i < N1 ? 1 : 2, pos = part === 1 ? i + 1 : i - N1 + 1, of = part === 1 ? N1 : N2;
+  return `<div class="testbar"><div class="wrap">
       <div class="row">
         <button class="iconbtn" data-act="prev" aria-label="Sebelumnya">${ARROW_L}</button>
-        <span class="section-tag">Pandangan Kerja</span>
-        <span class="count">${i + 1}<span> / ${N}</span></span>
+        <span class="section-tag">Bagian ${part} dari 2</span>
+        <span class="count">${pos}<span> / ${of}</span></span>
       </div>
       <div class="track" role="progressbar" aria-valuemin="0" aria-valuemax="${N}" aria-valuenow="${answered()}"><i style="width:${answered() / N * 100}%"></i></div>
-    </div></div>
+    </div></div>`;
+}
+
+function test() {
+  const i = Math.min(st.index, N - 1);
+  const nextLink = st.answers[i] && i < N - 1 && st.answers[i + 1] ? `<button class="linkbtn" data-act="skipnext">Berikutnya</button>` : '<span></span>';
+  if (i < N1) {
+    const it = PK_ITEMS[i];
+    return `
+  <section class="screen pk">
+    ${testbar(i)}
     <div class="wrap" style="flex:1">
       <div class="question">
-        <div class="eyebrow">Pernyataan ${i + 1} dari ${N}</div>
+        <div class="eyebrow">Pernyataan ${i + 1} dari ${N1}</div>
         <h2 class="gm-q">${esc(it.q)}</h2>
         <p>Pilih yang paling menggambarkan perasaanmu saat ini.</p>
       </div>
@@ -2858,8 +3033,45 @@ function test() {
             <span class="pk-n">${k + 1}</span><span>${label}</span>
           </button>`).join('')}
       </div>
-      <div class="testfoot"><span>Jawab jujur, hasil langsung keluar</span>
-        ${st.answers[i] && i < N - 1 && answered() > i ? `<button class="linkbtn" data-act="skipnext">Berikutnya</button>` : '<span></span>'}</div>
+      <div class="testfoot"><span>Jawab jujur, hasil langsung keluar</span>${nextLink}</div>
+    </div>
+  </section>`;
+  }
+  const j = i - N1, it = WO_ITEMS[j];
+  return `
+  <section class="screen pk">
+    ${testbar(i)}
+    <div class="wrap" style="flex:1">
+      <div class="question">
+        <div class="eyebrow">Gambaran ${j + 1} dari ${N2}</div>
+        <h2 class="gm-q pk-wq">Seberapa mirip kamu dengan ${it.who}?</h2>
+      </div>
+      <div class="card flat pk-story"><p>${esc(it.p)}</p></div>
+      <div class="likert" role="radiogroup" aria-label="Seberapa mirip">
+        ${WO_SCALE.map((label, k) => `
+          <button class="lk${st.answers[i] === k + 1 ? ' sel' : ''}" role="radio" aria-checked="${st.answers[i] === k + 1}" data-v="${k + 1}">
+            <span class="pk-n">${k + 1}</span><span>${label}</span>
+          </button>`).join('')}
+      </div>
+      <div class="testfoot"><span>Baca sampai selesai, lalu pilih</span>${nextLink}</div>
+    </div>
+  </section>`;
+}
+
+function inter() {
+  return `
+  <section class="screen pk">
+    <div class="wrap pk-inter">
+      <div class="top">${brand()}</div>
+      <div class="pk-inter-body">
+        <div class="pk-check" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <div class="eyebrow">Bagian 1 selesai</div>
+        <h2>Bagian 2 dari 2</h2>
+        <p class="lead">Sekarang tentang cara kamu memandang pekerjaan secara umum. Kamu akan membaca ${N2} gambaran singkat tentang seseorang. Pilih seberapa mirip orang itu dengan dirimu.</p>
+        <ol class="pk-scale">${WO_SCALE.map((s, k) => `<li><i>${k + 1}</i>${s}</li>`).join('')}</ol>
+        <div class="actions pk-go"><button class="btn" data-act="part2">Lanjut ke Bagian 2 ${ARROW}</button></div>
+        <p class="pk-center"><button class="linkbtn" data-act="backp1">Kembali ke Bagian 1</button></p>
+      </div>
     </div>
   </section>`;
 }
@@ -2872,59 +3084,92 @@ function calc() {
   </div></section>`;
 }
 
-const bars = (a, cls = '') => `<div class="pk-bars ${cls}">${PK_ORDER.map(d => {
+const kBars = a => `<div class="pk-bars">${PK_ORDER.map(d => {
   const D = PK_DIMS[d], v = a.avg[d], on = a.dominant.includes(d);
   return `<div class="pk-bar${on ? ' on' : ''}" style="--c:${D.color}">
     <div class="pk-bar-top"><b>${D.name}</b>${on ? '<em class="tg pk-tg">Paling tinggi</em>' : ''}<strong>${pkNum(v)}</strong></div>
     <div class="pk-rail"><i style="width:${Math.max(4, v / 5 * 100)}%"></i></div>
     <small>"${D.quote}" · ${pkLevel(v)}</small>
   </div>`; }).join('')}</div>`;
+const oBars = o => `<div class="pk-bars">${WO_ORDER.map(d => {
+  const D = WO_DIMS[d], v = o.sc[d], on = o.dominant.includes(d);
+  return `<div class="pk-bar${on ? ' on' : ''}" style="--c:${D.color}">
+    <div class="pk-bar-top"><b><em>${D.name}</em></b>${on ? '<em class="tg pk-tg">Paling mirip</em>' : ''}<strong>${o.pct[d]}%</strong></div>
+    <div class="pk-rail"><i style="width:${Math.max(4, v / 3 * 100)}%"></i></div>
+    <small>${D.sub} · ${WO_LEVEL(v)}</small>
+  </div>`; }).join('')}</div>`;
+const detailCard = (X, foreign) => `
+        <div class="card flat pk-dl">
+          <div><b>Kekuatanmu</b><ul>${X.strengths.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
+          <div><b>Perlu diperhatikan</b><p>${esc(X.watch)}</p></div>
+          <div><b>Bahan refleksi</b><p>${esc(X.reflect)}</p></div>
+        </div>`;
 
 function result() {
   const r = st.result;
   if (!r) return intro();
-  const a = pkAnalyze(r.answers), dom = a.dominant, D = PK_DIMS[dom[0]], tie = dom.length > 1;
-  const nick = esc(first(r.profile.name));
-  const all3 = dom.length === 3, title = all3 ? 'Komitmen Seimbang' : tie ? dom.map(d => PK_DIMS[d].name).join(' & ') : D.full;
-  const quote = all3 ? '"Saya ingin, harus, dan merasa seharusnya bertahan"' : tie ? dom.map(d => `"${PK_DIMS[d].quote}"`).join(' dan ') : `"${D.quote}"`;
+  const S = summarize(r), { a, o } = S, nick = esc(first(r.profile.name));
+  const kTie = a.dominant.length > 1, oTie = o.dominant.length > 1;
+  const kSoft = kTie ? '#EFEDE8' : PK_DIMS[a.dominant[0]].soft, oSoft = o.dominant.length === 1 ? WO_DIMS[o.dominant[0]].soft : '#EFEDE8';
   return `
   <section class="screen pk pkr">
     <div class="wrap wide">
       <div class="top">${brand()}</div>
       <div class="res-hero">
         <div class="eyebrow">${nick ? `Hasil Pandangan Kerja ${nick}` : 'Hasil Pandangan Kerja'}</div>
-        <div class="pk-box" style="--soft:${tie ? '#E9E7E2' : D.soft}">${bars(a)}</div>
-        <div class="pk-kind">Komitmen paling menonjol</div>
-        <h1>${esc(title)}</h1>
-        <p class="tagline">${esc(quote)}</p>
+        <h1 class="pk-h1">${esc(S.kTitle)} <span>×</span> ${o.dominant.length && o.dominant.length < 3 ? o.dominant.map(d => woName(d)).join(' + ') : esc(S.oTitle)}</h1>
+        <p class="tagline">${esc(S.sentence)}</p>
+        <div class="pk-duo">
+          <div class="pk-box" style="--soft:${kSoft}"><div class="pk-box-h"><span>Bagian 1</span>Alasan kamu bertahan</div>${kBars(a)}</div>
+          <div class="pk-box" style="--soft:${oSoft}"><div class="pk-box-h"><span>Bagian 2</span>Cara kamu memandang pekerjaan</div>${oBars(o)}</div>
+        </div>
         <div class="meta-line">Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}</div>
       </div>
 
-      ${tie ? `<p class="note pk-tie">Skor tertinggimu seri di ${dom.length} komitmen (${pkNum(a.top)}). Artinya, alasanmu bertahan sama kuatnya dari ${dom.length === 3 ? 'ketiga sisi' : 'kedua sisi ini'}.</p>` : ''}
-
-      ${dom.map(d => { const X = PK_DIMS[d]; return `
+      ${S.combos.length ? `
       <div class="block">
-        <div class="eyebrow">${X.full}${X.foreign ? ` (${fx(X.foreign)})` : ''}</div>
-        <h2>Kamu bertahan karena ${d === 'A' ? 'ingin' : d === 'B' ? 'perlu' : 'merasa seharusnya'}</h2>
-        <p class="prose">${fx(X.about)}</p>
-        <div class="card flat pk-dl">
-          <div><b>Kekuatanmu</b><ul>${X.strengths.map(s => `<li>${esc(s)}</li>`).join('')}</ul></div>
-          <div><b>Perlu diperhatikan</b><p>${esc(X.watch)}</p></div>
-          <div><b>Bahan refleksi</b><p>${esc(X.reflect)}</p></div>
-        </div>
-      </div>`; }).join('')}
+        <div class="eyebrow">Gabungan kedua bagian</div>
+        ${S.combos.map(c => `<div class="card pk-combo"><h2>${esc(c.t)}</h2><p>${esc(c.p)}</p></div>`).join('')}
+      </div>` : ''}
 
-      <div class="block">
-        <div class="eyebrow">Tiga dimensi komitmen</div>
-        <h2>Cara membaca skormu</h2>
-        <p class="prose">Setiap orang punya ketiga jenis komitmen ini dengan kadar yang berbeda. Skor adalah rata-rata dari 8 pernyataan per dimensi, dengan rentang 1 sampai 5.</p>
+      <div class="block pk-part">
+        <div class="pk-part-tag">Bagian 1 · Alasan kamu bertahan</div>
+        ${kTie ? `<p class="note pk-tie">Skor tertinggimu seri di ${a.dominant.length} komitmen (${pkNum(a.top)}). Alasanmu bertahan sama kuatnya dari ${a.dominant.length === 3 ? 'ketiga sisi' : 'kedua sisi ini'}.</p>` : ''}
+        ${a.dominant.map(d => { const X = PK_DIMS[d]; return `
+        <div class="pk-sub">
+          <div class="eyebrow">${X.full}${X.foreign ? ` (${fx(X.foreign)})` : ''}</div>
+          <h2>Kamu bertahan karena ${d === 'A' ? 'ingin' : d === 'B' ? 'perlu' : 'merasa seharusnya'}</h2>
+          <p class="prose">${fx(X.about)}</p>
+          ${detailCard(X)}
+        </div>`; }).join('')}
         <div class="card pk-dims">${PK_ORDER.map(d => { const X = PK_DIMS[d], v = a.avg[d]; return `
-          <div class="pk-dim${dom.includes(d) ? ' on' : ''}" style="--c:${X.color};--soft:${X.soft}">
+          <div class="pk-dim${a.dominant.includes(d) ? ' on' : ''}" style="--c:${X.color};--soft:${X.soft}">
             <div class="pk-dim-h"><span class="pk-dot"></span><b>${X.name}${X.foreign ? ` (${fx(X.foreign)})` : ''}</b><strong>${pkNum(v)}</strong></div>
             <p class="pk-q">"${X.quote}"</p>
             <p>${esc(X.short)}</p>
           </div>`; }).join('')}
-          <p class="small muted pk-lv">Kuat: 4,00 ke atas · Sedang: 3,00 sampai 3,99 · Rendah: di bawah 3,00</p>
+          <p class="small muted pk-lv">Skor = rata-rata 8 pernyataan per dimensi (1 sampai 5). Kuat: 4,00 ke atas · Sedang: 3,00 sampai 3,99 · Rendah: di bawah 3,00</p>
+        </div>
+      </div>
+
+      <div class="block pk-part">
+        <div class="pk-part-tag">Bagian 2 · Cara kamu memandang pekerjaan</div>
+        ${o.dominant.length === 0 ? `<div class="pk-sub"><h2>Belum ada gambaran yang mirip denganmu</h2><p class="prose">Kamu menilai ketiga gambaran sama sekali tidak mirip dengan dirimu. Bisa jadi cara kamu memandang pekerjaan tidak cocok dengan ketiga pola ini, atau sedang berubah. Ini bahan yang bagus untuk didiskusikan.</p></div>`
+        : `${oTie ? `<p class="note pk-tie">Kamu menilai ${o.dominant.length === 3 ? 'ketiga' : 'dua'} gambaran sama miripnya. Cara kamu memandang pekerjaan adalah kombinasi ${o.dominant.map(d => WO_DIMS[d].name).join(' dan ')}.</p>` : ''}
+        ${o.dominant.map(d => { const X = WO_DIMS[d]; return `
+        <div class="pk-sub">
+          <div class="eyebrow"><em>${X.name}</em> · ${X.sub}</div>
+          <h2>${({ J: 'Kerja untuk memenuhi kebutuhan hidup', R: 'Kerja untuk terus naik', C: 'Kerja sebagai bagian dari dirimu' })[d]}</h2>
+          <p class="prose">${esc(X.about)}</p>
+          ${detailCard(X)}
+        </div>`; }).join('')}`}
+        <div class="card pk-dims">${WO_ORDER.map(d => { const X = WO_DIMS[d], v = o.sc[d]; return `
+          <div class="pk-dim${o.dominant.includes(d) ? ' on' : ''}" style="--c:${X.color};--soft:${X.soft}">
+            <div class="pk-dim-h"><span class="pk-dot"></span><b><em>${X.name}</em> · ${X.sub}</b><strong>${o.pct[d]}%</strong></div>
+            <p class="pk-q">Penilaianmu: ${WO_LEVEL(v).toLowerCase()} (${v} dari 3)</p>
+            <p>${esc(X.short)}</p>
+          </div>`; }).join('')}
+          <p class="small muted pk-lv">Persen = porsi tiap cara pandang dibanding total penilaianmu di Bagian 2. Cara pandang terhadap pekerjaan bisa berubah seiring usia, kebutuhan hidup, dan pengalaman kerja.</p>
         </div>
       </div>
 
@@ -2937,13 +3182,13 @@ function result() {
         <div class="share-row one"><button class="btn ghost" data-act="again">Ulangi tes</button></div>
       </div>
 
-      <p class="small muted" style="margin-top:28px">Tes ini adalah alat refleksi berdasarkan model tiga komponen komitmen organisasi (Meyer &amp; Allen), bukan alat penilaian kinerja. Hasilnya menggambarkan perasaanmu saat ini dan bisa berubah seiring waktu.</p>
+      <p class="small muted" style="margin-top:28px">Tes ini adalah alat refleksi, bukan alat penilaian kinerja. Bagian 1 berdasarkan model tiga komponen komitmen organisasi (Meyer &amp; Allen). Bagian 2 berdasarkan kerangka <em>Job</em>, <em>Career</em>, dan <em>Calling</em> (Wrzesniewski, McCauley, Rozin &amp; Schwartz, 1997). Hasilnya menggambarkan perasaanmu saat ini dan bisa berubah seiring waktu.</p>
     </div>
     ${foot()}
   </section>`;
 }
 
-const SCREENS = { intro, profile, test, calc, result };
+const SCREENS = { intro, profile, test, inter, calc, result };
 function render() {
   $app.innerHTML = (SCREENS[st.screen] || intro)();
   (BIND[st.screen] || (() => {}))();
@@ -2956,18 +3201,23 @@ function go(s, push = true) {
 }
 window.addEventListener('popstate', e => {
   const s = (e.state && e.state.s) || 'intro';
-  if (st.screen === 'test' && s !== 'test' && st.index > 0) { st.index--; history.pushState({ s: 'test' }, ''); render(); return; }
+  if (st.screen === 'test' && s !== 'test' && st.index > 0) {
+    if (st.index === N1) { st.interSeen = false; go('inter', true); return; }
+    st.index--; history.pushState({ s: 'test' }, ''); render(); return;
+  }
+  if (st.screen === 'inter') { st.index = N1 - 1; history.pushState({ s: 'test' }, ''); st.screen = 'test'; save(); render(); return; }
   if (s === 'test' && !st.profile.name) { go('intro', false); return; }
   if (s === 'result' && !st.result) { go('intro', false); return; }
   st.screen = s === 'calc' ? 'result' : s; save(); render();
 });
 const on = (act, fn) => $app.querySelectorAll(`[data-act="${act}"]`).forEach(el => el.addEventListener('click', e => fn(el, e)));
+const resetAnswers = () => { st.answers = Array(N).fill(null); st.index = 0; st.interSeen = false; st.startedAt = null; };
 
 const BIND = {
   intro() {
     on('start', () => go('profile'));
-    on('resume', () => go(st.profile.name ? 'test' : 'profile'));
-    on('restart', () => { st.answers = Array(N).fill(null); st.index = 0; st.startedAt = null; go('profile'); });
+    on('resume', () => go(!st.profile.name ? 'profile' : st.index >= N1 && !st.interSeen ? 'inter' : 'test'));
+    on('restart', () => { resetAnswers(); go('profile'); });
     on('lastresult', () => go('result'));
   },
   profile() {
@@ -2987,22 +3237,35 @@ const BIND = {
     });
   },
   test() {
-    on('prev', () => { if (st.index > 0) { st.index--; save(); render(); } else go('profile'); });
-    on('skipnext', () => { st.index = Math.min(N - 1, st.index + 1); save(); render(); });
+    on('prev', () => {
+      if (st.index === N1) { st.interSeen = false; save(); go('inter'); return; }
+      if (st.index > 0) { st.index--; save(); render(); } else go('profile');
+    });
+    on('skipnext', () => {
+      const ni = Math.min(N - 1, st.index + 1);
+      if (ni === N1 && !st.interSeen) { st.index = ni; save(); go('inter'); return; }
+      st.index = ni; save(); render();
+    });
     $app.querySelectorAll('.lk').forEach(b => b.addEventListener('click', () => {
       if (b.dataset.busy) return;
       $app.querySelectorAll('.lk').forEach(x => { x.dataset.busy = 1; x.classList.toggle('sel', x === b); });
       st.answers[st.index] = Number(b.dataset.v); save();
       setTimeout(() => {
         const next = st.answers.findIndex(v => !v);
-        if (next === -1) finish();
-        else { st.index = st.index < N - 1 && !st.answers[st.index + 1] ? st.index + 1 : next; save(); render(); }
+        if (next === -1) { finish(); return; }
+        const ni = st.index < N - 1 && !st.answers[st.index + 1] ? st.index + 1 : next;
+        st.index = ni; save();
+        if (ni >= N1 && !st.interSeen) go('inter'); else render();
       }, 230);
     }));
   },
+  inter() {
+    on('part2', () => { st.interSeen = true; const n = st.answers.findIndex((v, k) => k >= N1 && !v); st.index = n === -1 ? N1 : n; save(); go('test'); });
+    on('backp1', () => { st.index = N1 - 1; save(); go('test'); });
+  },
   result() {
     on('pdf', () => window.print());
-    on('again', () => { st.answers = Array(N).fill(null); st.index = 0; st.startedAt = null; go('profile'); });
+    on('again', () => { resetAnswers(); go('profile'); });
     on('share', async btn => {
       btn.disabled = true;
       try { const blob = await pkCard(st.result); await deliver(blob, 'hasil-pandangan-kerja.png'); }
@@ -3015,20 +3278,21 @@ const BIND = {
 function finish() {
   const now = Date.now();
   const r = { id: makeId(), answers: [...st.answers], profile: { ...st.profile }, startedAt: st.startedAt, finishedAt: now };
-  st.result = r; st.answers = Array(N).fill(null); st.index = 0; st.startedAt = null; save();
+  st.result = r; resetAnswers(); save();
   go('calc', false);
   submit(payload(r));
   setTimeout(() => { history.replaceState({ s: 'result' }, ''); go('result', false); }, 1300);
 }
 function payload(r) {
-  const a = pkAnalyze(r.answers), d = new Date(r.finishedAt), pad = n => String(n).padStart(2, '0');
+  const { p1, p2 } = split(r.answers), a = pkAnalyze(p1), o = woAnalyze(p2), d = new Date(r.finishedAt), pad = n => String(n).padStart(2, '0');
   return { hp: r.profile.hp || 0, row: {
     id: r.id, jenis_tes: 'pandangan', waktu_iso: d.toISOString(),
     tanggal_tes: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`, jam_tes: `${pad(d.getHours())}:${pad(d.getMinutes())}`,
     nama: r.profile.name, jabatan: r.profile.job,
     afektif: a.avg.A, berkelanjutan: a.avg.B, normatif: a.avg.N, dominan: pkDomName(a.dominant),
+    job: o.sc.J, career: o.sc.R, calling: o.sc.C, orientasi: woDomName(o.dominant),
     jawaban: r.answers.join(''), durasi_detik: r.startedAt ? Math.round((r.finishedAt - r.startedAt) / 1000) : '',
-    versi_tes: 'hk-pandangan-v2', perangkat: navigator.userAgent.slice(0, 180),
+    versi_tes: 'hk-pandangan-v3', perangkat: navigator.userAgent.slice(0, 180),
   } };
 }
 async function post(p) {
@@ -3050,31 +3314,36 @@ async function flush() {
 /* ---------- gambar hasil (PNG 1080×1920) ---------- */
 async function pkCard(r) {
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
-  const a = pkAnalyze(r.answers), dom = a.dominant, D = PK_DIMS[dom[0]];
+  const S = summarize(r), { a, o } = S;
   const { W, cv, ctx } = await cardBase('Tes Pandangan Kerja');
-  ctx.fillStyle = dom.length > 1 ? '#E9E7E2' : D.soft; roundRect(ctx, 60, 290, W - 120, 640, 64); ctx.fill();
-  const x0 = 140, bw = W - 280;
-  PK_ORDER.forEach((d, i) => {
-    const X = PK_DIMS[d], v = a.avg[d], onn = dom.includes(d), y = 420 + i * 175;
-    ctx.globalAlpha = onn ? 1 : .55;
-    ctx.textAlign = 'left'; ctx.fillStyle = '#1D1D1D'; ctx.font = `800 40px ${SANS}`; ctx.fillText(X.name, x0, y);
-    ctx.textAlign = 'right'; ctx.font = `800 44px ${SANS}`; ctx.fillText(pkNum(v), x0 + bw, y);
-    ctx.fillStyle = 'rgba(255,255,255,.85)'; roundRect(ctx, x0, y + 26, bw, 34, 17); ctx.fill();
-    ctx.fillStyle = onn ? X.color : 'rgba(29,29,29,.28)'; roundRect(ctx, x0, y + 26, Math.max(34, bw * v / 5), 34, 17); ctx.fill();
-    ctx.globalAlpha = 1;
-  });
-  ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(29,29,29,.55)'; ctx.font = `700 26px ${SANS}`; ctx.letterSpacing = '4px';
-  ctx.fillText('KOMITMEN PALING MENONJOL', W / 2, 1075); ctx.letterSpacing = '0px';
-  const title = dom.length === 3 ? 'Komitmen Seimbang' : dom.length > 1 ? dom.map(d => PK_DIMS[d].name).join(' & ') : D.full;
-  ctx.fillStyle = '#1D1D1D'; let fs = 104; ctx.font = `800 ${fs}px ${SANS}`;
-  while (ctx.measureText(title).width > 920 && fs > 56) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
-  ctx.letterSpacing = '-3px'; ctx.fillText(title, W / 2, 1200); ctx.letterSpacing = '0px';
-  const qline = dom.length === 3 ? '"Ingin, harus, dan seharusnya"' : dom.length > 1 ? dom.map(d => `"${PK_DIMS[d].quote}"`).join(' · ') : `"${D.quote}"`;
-  let qs = 44; ctx.font = `600 ${qs}px ${SANS}`; while (ctx.measureText(qline).width > 940 && qs > 28) { qs -= 2; ctx.font = `600 ${qs}px ${SANS}`; }
-  ctx.fillStyle = '#2F2F2F';
-  ctx.fillText(qline, W / 2, 1290);
-  ctx.font = `500 36px ${SANS}`; ctx.fillStyle = '#555';
-  wrap(ctx, dom.length > 1 ? 'Alasanmu bertahan sama kuatnya dari beberapa sisi.' : D.short, 840).slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, 1395 + i * 54));
+  // judul
+  ctx.textAlign = 'center'; ctx.fillStyle = '#1D1D1D';
+  const title = `${S.kTitle} × ${S.oTitle}`;
+  let fs = 92; ctx.font = `800 ${fs}px ${SANS}`; while (ctx.measureText(title).width > 940 && fs > 52) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
+  ctx.letterSpacing = '-3px'; ctx.fillText(title, W / 2, 330); ctx.letterSpacing = '0px';
+  ctx.font = `500 34px ${SANS}`; ctx.fillStyle = '#444';
+  const lines = wrap(ctx, S.sentence, 900).slice(0, 3); lines.forEach((l, i) => ctx.fillText(l, W / 2, 400 + i * 48));
+  // dua kotak
+  const group = (y0, soft, label, rows) => {
+    ctx.fillStyle = soft; roundRect(ctx, 60, y0, W - 120, 520, 56); ctx.fill();
+    ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(29,29,29,.55)'; ctx.font = `700 24px ${SANS}`; ctx.letterSpacing = '3px';
+    ctx.fillText(label.toUpperCase(), 130, y0 + 76); ctx.letterSpacing = '0px';
+    const x0 = 130, bw = W - 260;
+    rows.forEach((rw, i) => {
+      const y = y0 + 160 + i * 120;
+      ctx.globalAlpha = rw.on ? 1 : .55;
+      ctx.textAlign = 'left'; ctx.fillStyle = '#1D1D1D'; ctx.font = `800 36px ${SANS}`; ctx.fillText(rw.name, x0, y);
+      ctx.textAlign = 'right'; ctx.font = `800 38px ${SANS}`; ctx.fillText(rw.label, x0 + bw, y);
+      ctx.fillStyle = 'rgba(255,255,255,.85)'; roundRect(ctx, x0, y + 20, bw, 28, 14); ctx.fill();
+      ctx.fillStyle = rw.on ? rw.color : 'rgba(29,29,29,.28)'; roundRect(ctx, x0, y + 20, Math.max(28, bw * rw.f), 28, 14); ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+  };
+  const yTop = 400 + lines.length * 48 + 30;
+  group(yTop, a.dominant.length > 1 ? '#EFEDE8' : PK_DIMS[a.dominant[0]].soft, 'Bagian 1 · Alasan bertahan',
+    PK_ORDER.map(d => ({ name: PK_DIMS[d].name, label: pkNum(a.avg[d]), f: a.avg[d] / 5, on: a.dominant.includes(d), color: PK_DIMS[d].color })));
+  group(yTop + 550, o.dominant.length === 1 ? WO_DIMS[o.dominant[0]].soft : '#EFEDE8', 'Bagian 2 · Cara memandang pekerjaan',
+    WO_ORDER.map(d => ({ name: WO_DIMS[d].name, label: o.pct[d] + '%', f: o.sc[d] / 3, on: o.dominant.includes(d), color: WO_DIMS[d].color })));
   cardFoot(ctx, W, `${first(r.profile.name) || 'Peserta'} · ${fmtDate(r.finishedAt)}`);
   return new Promise(res => cv.toBlob(res, 'image/png', 0.95));
 }
@@ -3088,7 +3357,7 @@ async function deliver(blob, filename) {
 
 /* ---------- mulai ---------- */
 if (st.screen === 'calc') st.screen = st.result ? 'result' : 'intro';
-if (st.screen === 'test' && !st.profile.name) st.screen = 'intro';
+if ((st.screen === 'test' || st.screen === 'inter') && !st.profile.name) st.screen = 'intro';
 if (st.screen === 'result' && !st.result) st.screen = 'intro';
 if (st.screen === 'profile') st.screen = 'intro';
 history.replaceState({ s: st.screen }, '');
