@@ -1288,7 +1288,7 @@ body { background: var(--bg); }
 .brk h5 { margin: 0 0 8px; font-size: 11.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .brk h5 small { font-size: 10.5px; letter-spacing: 0; text-transform: none; font-weight: 600; color: #A3A3A3; margin-left: 4px; }
 .brk ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
-.brk li { display: grid; grid-template-columns: 22px minmax(0, 9.5em) 1fr 2.2em; align-items: center; gap: 8px; font-size: 13px; }
+.brk li { display: grid; grid-template-columns: 22px minmax(0, 9.5em) 1fr 1.8em 2.9em; align-items: center; gap: 8px; font-size: 13px; }
 .brk li .tmark { width: 22px; height: 22px; }
 .bdot { width: 12px; height: 12px; border-radius: 50%; justify-self: center; }
 .bn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
@@ -1305,6 +1305,7 @@ body { background: var(--bg); }
 /* karakter badan penuh di detail */
 .hero-char { border-radius: 24px; display: grid; place-items: center; padding: 10px 14px 4px; }
 .hero-char .char-art { display: block; }
+.brk li em { font-style: normal; text-align: right; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 
 </style>
 </head>
@@ -3001,7 +3002,8 @@ const fmtMed = s => s < 60 ? `${Math.round(s)} ${L('dtk', 's')}` : `${Math.floor
 
 /* Ringkasan: jumlah per jenis tes, per karakter dominan, per kategori mindset */
 function breakdown(B) {
-  const row = (ic, name, n, tot, color) => `<li>${ic}<span class="bn">${name}</span><span class="bbar"><i style="width:${tot ? Math.round(n / tot * 100) : 0}%;background:${color}"></i></span><b>${n}</b></li>`;
+  const pc = (n, tot) => tot ? Math.round(n / tot * 100) : 0;
+  const row = (ic, name, n, tot, color) => `<li>${ic}<span class="bn">${name}</span><span class="bbar"><i style="width:${pc(n, tot)}%;background:${color}"></i></span><b>${n}</b><em>${pc(n, tot)}%</em></li>`;
   const kinds = [['lengkap', L('Tes Lengkap', 'Full test'), '#CDE5B0'], ['mini', L('Tes Mini', 'Mini test'), '#F7E48E'], ['mindset', L('Tes Mindset', 'Mindset test'), '#BDE1EA']];
   const nk = k => B.filter(x => x.kind === k).length;
   const ch = B.filter(x => (x.kind === 'lengkap' || x.kind === 'mini') && x.p);
@@ -3011,7 +3013,9 @@ function breakdown(B) {
   return `<section class="brk">
     <div><h5>${L('Jenis tes', 'Test type')}</h5><ul>${kinds.map(([k, n, c]) => row(dot(c), n, nk(k), B.length, c)).join('')}</ul>
       <p class="bdur"><b>${L('Waktu pengerjaan (median)', 'Completion time (median)')}</b>${kinds.map(([k, n]) => { const m = medDur(B, k); return `<span>${n}: ${m ? fmtMed(m.v) : '–'}${m ? ` <i>(${m.n})</i>` : ''}</span>`; }).join('')}</p></div>
-    <div><h5>${L('Karakter dominan', 'Primary temperament')} <small>${L('Lengkap + Mini', 'Full + Mini')}</small></h5><ul>${ORDER.map(k => row(tmark(k, 22), TEMPS[k].name, ch.filter(x => x.p === k).length, ch.length, P[k])).join('')}</ul></div>
+    <div><h5>${L('Karakter dominan', 'Primary temperament')} <small>${L('Lengkap + Mini', 'Full + Mini')}</small></h5><ul>${ORDER.map(k => row(tmark(k, 22), TEMPS[k].name, ch.filter(x => x.p === k).length, ch.length, P[k])).join('')}</ul>
+      ${(() => { const fl = B.filter(x => x.kind === 'lengkap' && x.p && x.s); const op = fl.filter(x => ['SM', 'MS', 'CP', 'PC'].includes(x.p + x.s)).length;
+        return fl.length ? `<p class="bdur"><b>${L('Kombinasi berlawanan', 'Opposite blends')}</b><span>${op} ${L('dari', 'of')} ${fl.length} ${L('hasil Tes Lengkap', 'Full test results')} · ${pc(op, fl.length)}%</span></p>` : ''; })()}</div>
     <div><h5>Growth mindset</h5><ul>${Object.entries(GM_CATEGORIES).map(([k, c], i) => row(dot(['#F6C1AE', '#F7E48E', '#CDE5B0'][i]), c.name, gm.filter(x => x.gm.category === k).length, gm.length, ['#F6C1AE', '#F7E48E', '#CDE5B0'][i])).join('')}</ul></div>
   </section>`;
 }
@@ -3037,10 +3041,10 @@ function app() {
       ${S.src === 'old' ? `<p class="srcnote">${L('Hasil dari web app lama, sebelum November 2026. Tidak dihitung di data web baru.', 'Results from the old web app, before November 2026. Not counted in the new web app data.')}</p>` : ''}</div>` : ''}
     <section class="stats${SLUG ? ' five' : ''}">
       <div><b>${B.length}</b><span>${filtered ? L('Hasil sesuai filter', 'Matching results') : L('Total tes', 'Total tests')}</span></div>
-      ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${B.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}</span></div>`).join('') + '</section><section hidden>' : ''}
-      <div><b>${week}</b><span>${L('7 hari terakhir', 'Last 7 days')}</span></div>
-      <div><b>${B.filter(x => x.flag).length}</b><span>${L('Perlu follow up', 'Needs follow-up')}</span></div>
-      <div><b>${B.filter(x => x.wa).length}</b><span>${L('Ada WhatsApp', 'Has WhatsApp')}</span></div>
+      ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${B.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}${B.length ? ` · ${Math.round(B.filter(x => x.p === k).length / B.length * 100)}%` : ''}</span></div>`).join('') + '</section><section hidden>' : ''}
+      <div><b>${week}</b><span>${L('7 hari terakhir', 'Last 7 days')}${B.length ? ` · ${Math.round((week) / B.length * 100)}%` : ''}</span></div>
+      <div><b>${B.filter(x => x.flag).length}</b><span>${L('Perlu follow up', 'Needs follow-up')}${B.length ? ` · ${Math.round((B.filter(x => x.flag).length) / B.length * 100)}%` : ''}</span></div>
+      <div><b>${B.filter(x => x.wa).length}</b><span>${L('Ada WhatsApp', 'Has WhatsApp')}${B.length ? ` · ${Math.round((B.filter(x => x.wa).length) / B.length * 100)}%` : ''}</span></div>
     </section>
     ${SLUG ? '' : breakdown(B)}
     <div class="main">
