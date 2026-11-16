@@ -142,7 +142,12 @@
     },
     {
       "source": "/:slug((?!(?:admin|api|assets|klien|tim|hkgold|layanan|index|pandangan-kerja|pandangan-kerja-hasil|logo-klien|apps-script|robots|sitemap|favicon|README)$)[A-Za-z0-9][A-Za-z0-9-]{1,38}[A-Za-z0-9])",
-      "destination": "/klien"
+      "destination": "/api/klienpage?slug=:slug"
     }
-  ]
+  ],
+  "functions": {
+    "api/klienpage.js": {
+      "includeFiles": "klien.html"
+    }
+  }
 }

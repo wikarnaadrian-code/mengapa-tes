@@ -1668,7 +1668,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.7.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.7.1', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3825,6 +3825,7 @@ const session = {
 const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '',
   limit: 80, src: 'new', sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
 S.clientLogo = SLUG ? ls.get(SKEY + ':logo') || '' : ''; S.found = null;
+{ const K = SLUG && window.__KLIEN; if (K) { S.found = !!K.found; if (K.found) { S.clientName = K.nama || S.clientName; S.clientLogo = K.logo || ''; ls.set(SKEY + ':nama', S.clientName); ls.set(SKEY + ':logo', S.clientLogo); } } }
 S.view = !SLUG && ['token', 'klien'].includes(ls.get('mengapa:admin:view')) ? ls.get('mengapa:admin:view') : 'hasil';
 TK.sort = ls.get('mengapa:admin:tksort') || 'new';
 const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
@@ -4374,6 +4375,9 @@ function render() {
     $app.innerHTML = `<main class="login"><div class="login-card nf"><div class="login-top">${mengapaLogo}${langToggle()}</div><h1>${L('Halaman tidak ditemukan', 'Page not found')}</h1><p class="muted">${L(`Alamat mengapa.me/${esc(CLIENT)} tidak terdaftar atau sudah tidak aktif. Cek lagi link yang kamu terima.`, `The address mengapa.me/${esc(CLIENT)} isn't registered or is no longer active. Please check the link you received.`)}</p><a class="btn block" href="/">${L('Ke beranda Mengapa', 'Go to Mengapa home')}</a></div></main>`;
     bindCommon($app); return;
   }
+  if (SLUG && !S.session && S.found === null && !S.clientName) {
+    $app.innerHTML = `<main class="login"><div class="empty"><span class="spin"></span></div></main>`; return;
+  }
   if (!S.session) {
     $app.innerHTML = login();
     bindCommon($app);
@@ -4446,9 +4450,9 @@ function closeDetail() {
   const d = document.getElementById('detail'); if (d) d.innerHTML = detail(null);
 }
 window.addEventListener('popstate', () => { if (S.view === 'klien' && TK.ksel) klClose(); else if (S.view === 'token' && TK.sel) tkClose(); else if (S.sel) closeDetail(); });
-if (SLUG && !S.session) {
+if (SLUG && !S.session && S.found === null) {
   api({ action: 'info' }).then(j => { S.found = true; S.clientName = j.nama || S.clientName; S.clientLogo = j.logo || ''; ls.set(SKEY + ':nama', S.clientName); ls.set(SKEY + ':logo', S.clientLogo); render(); })
-    .catch(e => { if (e.message === 'notfound') { S.found = false; render(); } });
+    .catch(e => { S.found = e.message === 'notfound' ? false : true; render(); });
 }
 render();
 if (S.session) { load(); if (S.view !== 'hasil' && tkAuthed()) tkLoad(); }
