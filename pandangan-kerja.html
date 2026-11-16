@@ -1355,6 +1355,7 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .pk-combo p { margin: 10px 0 0; font-size: 15.5px; line-height: 1.6; color: rgba(255,255,255,.82); }
 .pk-part { margin-top: 40px; }
 .pk-part-tag { display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; background: #1D1D1D; color: #FFFFFF; border-radius: 999px; padding: 6px 12px; }
+.pk-part-title { margin: 12px 0 0; font-size: clamp(20px, 5vw, 24px); letter-spacing: -.02em; }
 .pk-sub { margin-top: 20px; }
 .pk-sub h2 { margin: 8px 0 10px; }
 .pk-part .pk-dims { margin-top: 18px; }
@@ -1427,7 +1428,7 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .pkr .pk-part + .pk-part { border-top: 1px solid var(--line); padding-top: 40px; margin-top: 56px; }
 .pkr .pk-tie { max-width: none; text-align: left; font-size: 16px; }
 .pkr > .wrap > .block:not(.pk-part):not(.no-print) { max-width: 680px; margin-left: auto; margin-right: auto; }
-@media (max-width: 640px) { .pk-sum { grid-template-columns: 1fr; } .pkr .pk-part { margin-top: 48px; } }
+@media (max-width: 640px) { .pk-sum { grid-template-columns: 1fr; } .pkr .pk-part { margin-top: 40px; } .pkr .pk-part + .pk-part { margin-top: 36px; padding-top: 28px; } }
 .pka-kpi.one { grid-template-columns: 1fr; margin-bottom: 4px; }
 .pka-kpi.one .pka-card { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
 .pka-kpi.one .pka-card small { flex: 0 0 auto; }
@@ -2787,7 +2788,7 @@ function plantSvg(total, cls = 'plant') {
 
 /* ===== pkdata.js ===== */
 /* Versi Tes Pandangan Kerja, terpisah dari versi web app utama */
-const PK_VERSION = '2.0.1';
+const PK_VERSION = '2.0.2';
 /* ============ Tes Pandangan Kerja (khusus HK Gold) · isi tes ============ */
 const PK_SCALE = ['Sangat tidak setuju', 'Tidak setuju', 'Netral / ragu-ragu', 'Setuju', 'Sangat setuju'];
 const PK_SCALE_SHORT = ['STS', 'TS', 'N', 'S', 'SS'];
@@ -2910,7 +2911,7 @@ function woAnalyze(vals) {
   const top = Math.max(...WO_ORDER.map(d => sc[d])), sum = WO_ORDER.reduce((s, d) => s + sc[d], 0);
   const dominant = top > 0 ? WO_ORDER.filter(d => sc[d] === top) : [];
   const pct = {}; WO_ORDER.forEach(d => { pct[d] = sum ? Math.round(sc[d] / sum * 100) : 0; });
-  const fix = 100 - WO_ORDER.reduce((s, d) => s + pct[d], 0); if (sum && fix) { const k = WO_ORDER.reduce((a, b) => sc[b] > sc[a] ? b : a); pct[k] += fix; }
+  const fix = 100 - WO_ORDER.reduce((s, d) => s + pct[d], 0); const free = WO_ORDER.filter(d => !dominant.includes(d)); if (sum && fix && free.length) { const k = free.reduce((a, b) => sc[b] > sc[a] ? b : a); pct[k] += fix; } else if (sum && fix && dominant.length === 1) pct[dominant[0]] += fix;
   return { sc, top, sum, pct, dominant };
 }
 const woDomName = ds => ds.length ? ds.map(d => WO_DIMS[d].name).join(' + ') : 'Belum terlihat';
@@ -2972,6 +2973,8 @@ const brand = () => `<div class="pk-brand"><span class="brand"><img class="li" s
 const foot = () => `<footer class="foot wrap"><span class="tag">dari "mengapa" jadi tahu harus apa</span>© ${new Date().getFullYear()} Mengapa · <a href="https://instagram.com/mengapa.me" target="_blank" rel="noopener">@mengapa.me</a><span class="ver">Tes Pandangan Kerja v${PK_VERSION}</span></footer>`;
 const fx = s => esc(s).replace(/\b(Continuance|Job|Career|Calling)\b/g, '<em>$1</em>');
 const woName = d => `<em>${WO_DIMS[d].name}</em>`;
+
+const pkJoin = l => l.length < 2 ? l.join('') : l.slice(0, -1).join(', ') + (l.length > 2 ? ', dan ' : ' dan ') + l[l.length - 1];
 
 /* ---------- ringkasan hasil (dipakai halaman hasil & gambar) ---------- */
 function summarize(r) {
@@ -3194,7 +3197,7 @@ function result() {
       </div>` : ''}
 
       <div class="block pk-part">
-        <div class="pk-part-tag">Bagian 1 · Alasan kamu bertahan</div>
+        <div class="pk-part-tag">Bagian 1</div><h2 class="pk-part-title">Alasan kamu bertahan</h2>
         ${kTie ? `<p class="note pk-tie">Skor tertinggimu seri di ${a.dominant.length} komitmen (${pkNum(a.top)}). Alasanmu bertahan sama kuatnya dari ${a.dominant.length === 3 ? 'ketiga sisi' : 'kedua sisi ini'}.</p>` : ''}
         ${a.dominant.map(d => { const X = PK_DIMS[d]; return `
         <div class="pk-sub">
@@ -3214,9 +3217,9 @@ function result() {
       </div>
 
       <div class="block pk-part">
-        <div class="pk-part-tag">Bagian 2 · Cara kamu memandang pekerjaan</div>
+        <div class="pk-part-tag">Bagian 2</div><h2 class="pk-part-title">Cara kamu memandang pekerjaan</h2>
         ${o.dominant.length === 0 ? `<div class="pk-sub"><h2>Belum ada gambaran yang mirip denganmu</h2><p class="prose">Kamu menilai ketiga gambaran sama sekali tidak mirip dengan dirimu. Bisa jadi cara kamu memandang pekerjaan tidak cocok dengan ketiga pola ini, atau sedang berubah. Ini bahan yang bagus untuk didiskusikan.</p></div>`
-        : `${oTie ? `<p class="note pk-tie">Kamu menilai ${o.dominant.length === 3 ? 'ketiga' : 'dua'} gambaran sama miripnya. Cara kamu memandang pekerjaan adalah kombinasi ${o.dominant.map(d => WO_DIMS[d].name).join(' dan ')}.</p>` : ''}
+        : `${oTie ? `<p class="note pk-tie">Kamu menilai ${o.dominant.length === 3 ? 'ketiga' : 'dua'} gambaran sama miripnya. Cara kamu memandang pekerjaan adalah kombinasi ${pkJoin(o.dominant.map(d => WO_DIMS[d].name))}.</p>` : ''}
         ${o.dominant.map(d => { const X = WO_DIMS[d]; return `
         <div class="pk-sub">
           <div class="eyebrow"><em>${X.name}</em> · ${X.sub}</div>
