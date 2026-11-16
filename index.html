@@ -1626,7 +1626,7 @@ const UI = {
   'Berdasarkan kesan publik dan contoh yang sering dipakai dalam pembahasan temperamen, bukan hasil tes mereka.': 'Based on public impressions and examples often used when discussing temperaments, not their actual test results.',
   'Berikutnya': 'Next',
   'Biasanya bersinar di': 'Usually shines in',
-  'Bisa juga terbaca sebagai': 'Can also be read as',
+  'Kamu juga cocok dengan': 'You also fit',
   'Blind spot dan pemicu fixed mindset-mu': 'Your blind spots and fixed mindset triggers',
   'Blind spot pola pikirmu': 'Your mindset blind spots',
   'Buka tes': 'Open test',
@@ -1973,10 +1973,10 @@ function analyze(answers, cfg = CONFIG) {
   const list = arr => arr.map(name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
   const ties = [];
   if (tieType === 'dominan_seri') {
-    ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi kamu bisa terbaca sebagai ${combo.name} maupun ${COMBOS[s + p].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so you can be read as ${combo.name} as well as ${COMBOS[s + p].name}. That’s normal, because how we act can shift with the situation. `) +
+    ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi kamu cocok dengan ${combo.name} maupun ${COMBOS[s + p].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so you can be read as ${combo.name} as well as ${COMBOS[s + p].name}. That’s normal, because how we act can shift with the situation. `) +
       (sc.s[p] > sc.s[s] ? L(`${combo.name} kami tampilkan lebih dulu karena kekuatan ${name(p)} yang kamu pilih lebih banyak.`, `We show ${combo.name} first because you picked more ${name(p)} strengths.`) : L('Urutan di halaman ini hanya urutan tampil.', 'The order on this page is display order only.')));
   } else if (tieType === 'sekunder_seri') {
-    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya dan kamu bisa juga terbaca sebagai ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and you can also be read as ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
+    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya dan kamu juga cocok dengan ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and you can also be read as ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
   } else if (tieType === 'tiga_terbawah_sama') {
     ties.push(L(`${name(p)} jelas dominan, tapi tiga sisi lainnya punya skor sama (${sc.t[s]}). Sisi sekundermu belum menonjol, jadi ${name(s)} di sini hanya urutan tampil.`, `${name(p)} is clearly primary, but the other three sides have the same score (${sc.t[s]}). Your secondary side doesn’t stand out yet, so ${name(s)} here is display order only.`));
   } else if (tieType === 'tiga_teratas_sama') {
@@ -3091,7 +3091,7 @@ function mresult() {
   const a = miniAnalyze(r.answers), p = a.primary, P = TEMPS[p], prof = MINI_PROFILE[p];
   const nick = esc(nickname(r.profile.name));
   const list = arr => arr.map(k => TEMPS[k].name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
-  const tieNote = a.top.length === 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Kamu bisa terbaca sebagai keduanya, dan Tes Karakter Lengkap memberi gambaran yang lebih utuh.`, `${list(a.top)} are equally strong in the mini test. You can be read as both, and the Full Character Test gives a fuller picture.`)
+  const tieNote = a.top.length === 2 ? L(`Skor ${list(a.top)} sama kuat. Kamu punya keduanya, dan Tes Karakter Lengkap memberi gambaran yang lebih utuh.`, `${list(a.top)} are equally strong. You have both, and the Full Character Test gives a fuller picture.`)
     : a.top.length > 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Polamu belum terlihat jelas dari 10 pertanyaan, dan Tes Karakter Lengkap akan memperjelasnya.`, `${list(a.top)} are equally strong in the mini test. Ten questions aren’t enough to see your pattern clearly, and the Full Character Test will clarify it.`) : '';
   const trio = ORDER.filter(k => k !== p).map(k => p + k);
   const wa = waLink(L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Tes Karakter Mini (${fmtDate(r.finishedAt)}).\nHasil: ${P.name}.\nKode hasil: ${r.id}\n\nSaya ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm ${r.profile.name}. I just finished the Mini Character Test (${fmtDate(r.finishedAt)}).\nResult: ${P.name}.\nResult code: ${r.id}\n\nI'd like to take the Full Character Test. How do I get a token?`));
@@ -3216,7 +3216,7 @@ function result() {
         </div>
         <div class="meta-line">${L(`Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}`, `Taken on ${fmtDate(r.finishedAt)} at ${fmtTime(r.finishedAt)}`)}${durMin ? L(` · selesai dalam ${durMin} menit`, ` · finished in ${durMin} min`) : ''}</div>
         ${a.ties.map(t => `<div class="note">${esc(t)}</div>`).join('')}
-        ${showAlts ? `<div class="alts"><span class="eyebrow">Bisa juga terbaca sebagai</span>${a.alts.map(c => `
+        ${showAlts ? `<div class="alts"><span class="eyebrow">Kamu juga cocok dengan</span>${a.alts.map(c => `
           <div class="alt">${comboArt(c[0], c[1], 64, 'alt')}<div><b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><p>${esc(COMBOS[c].tagline)}</p></div></div>`).join('')}</div>` : ''}
       </div>
 

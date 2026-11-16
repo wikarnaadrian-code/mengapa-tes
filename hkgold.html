@@ -1917,7 +1917,7 @@ const UI = {
   'Berdasarkan kesan publik dan contoh yang sering dipakai dalam pembahasan temperamen, bukan hasil tes mereka.': 'Based on public impressions and examples often used when discussing temperaments, not their actual test results.',
   'Berikutnya': 'Next',
   'Biasanya bersinar di': 'Usually shines in',
-  'Bisa juga terbaca sebagai': 'Can also be read as',
+  'Kamu juga cocok dengan': 'You also fit',
   'Blind spot dan pemicu fixed mindset-mu': 'Your blind spots and fixed mindset triggers',
   'Blind spot pola pikirmu': 'Your mindset blind spots',
   'Buka tes': 'Open test',
@@ -2264,10 +2264,10 @@ function analyze(answers, cfg = CONFIG) {
   const list = arr => arr.map(name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
   const ties = [];
   if (tieType === 'dominan_seri') {
-    ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi kamu bisa terbaca sebagai ${combo.name} maupun ${COMBOS[s + p].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so you can be read as ${combo.name} as well as ${COMBOS[s + p].name}. That’s normal, because how we act can shift with the situation. `) +
+    ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi kamu cocok dengan ${combo.name} maupun ${COMBOS[s + p].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so you can be read as ${combo.name} as well as ${COMBOS[s + p].name}. That’s normal, because how we act can shift with the situation. `) +
       (sc.s[p] > sc.s[s] ? L(`${combo.name} kami tampilkan lebih dulu karena kekuatan ${name(p)} yang kamu pilih lebih banyak.`, `We show ${combo.name} first because you picked more ${name(p)} strengths.`) : L('Urutan di halaman ini hanya urutan tampil.', 'The order on this page is display order only.')));
   } else if (tieType === 'sekunder_seri') {
-    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya dan kamu bisa juga terbaca sebagai ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and you can also be read as ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
+    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya dan kamu juga cocok dengan ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and you can also be read as ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
   } else if (tieType === 'tiga_terbawah_sama') {
     ties.push(L(`${name(p)} jelas dominan, tapi tiga sisi lainnya punya skor sama (${sc.t[s]}). Sisi sekundermu belum menonjol, jadi ${name(s)} di sini hanya urutan tampil.`, `${name(p)} is clearly primary, but the other three sides have the same score (${sc.t[s]}). Your secondary side doesn’t stand out yet, so ${name(s)} here is display order only.`));
   } else if (tieType === 'tiga_teratas_sama') {
@@ -2862,7 +2862,7 @@ function detailLengkap(x) {
     <section class="hero" style="--soft:${P.soft}">
       <div class="hero-art">${comboArt(a.primary, a.secondary, 132, 'd' + x.id)}</div>
       <div><small class="eyebrow">${P.name} + ${Sx.name}</small><h2>${esc(a.combo.name)}</h2><p class="muted">${esc(a.combo.tagline)}</p>
-        ${a.alts.length ? `<p class="note">${L('Bisa juga terbaca sebagai', 'Can also be read as')}: ${a.alts.map(k => COMBOS[k].name).join(', ')}</p>` : ''}</div>
+        ${a.alts.length ? `<p class="note">${L('Juga cocok dengan', 'Also fits')}: ${a.alts.map(k => COMBOS[k].name).join(', ')}</p>` : ''}</div>
     </section>
     ${!SLUG && a.flags.length ? `<section class="box warn"><h3>${L('Perlu follow up', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul class="flaglist">${a.flags.map(f => `<li><b>${esc(f.internal)}</b><span>${esc(FLAG_BASIS()[f.code] || '')}</span></li>`).join('')}</ul></section>` : ''}
     <section class="box"><h3>${L('Gambaran singkat', 'Quick profile')}</h3>
