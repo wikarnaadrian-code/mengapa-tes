@@ -32,7 +32,7 @@
       ]
     },
     {
-      "source": "/(admin|klien)(.html)?",
+      "source": "/(admin|klien|tim|hkgold|HKGold|HKGOLD|HkGold)(.html)?",
       "headers": [
         {
           "key": "X-Robots-Tag",

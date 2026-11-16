@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /klien
+Disallow: /tim
+Disallow: /hkgold
+Disallow: /HKGold
+Disallow: /HKGOLD
+Disallow: /HkGold
+Disallow: /api/
+
+Sitemap: https://www.mengapa.me/sitemap.xml
