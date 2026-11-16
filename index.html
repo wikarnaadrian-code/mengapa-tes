@@ -1021,6 +1021,9 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 @media print { .stickycta { display: none !important; } }
 
 </style>
+<!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-HQQGG0CMC1"></script>
+  <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-HQQGG0CMC1');</script>
 </head>
 <body>
   <div id="app" aria-live="polite"></div>
@@ -2419,8 +2422,11 @@ const stepper = n => { const total = state.mode === 'full' ? 3 : 2; return `<div
 
 /* ---------- navigasi ---------- */
 const backOf = sc => ({ services: 'home', token: 'home', consent: state.mode === 'full' ? 'token' : 'home', gmresult: 'home', profile: 'consent', guide: 'profile', result: 'home', mresult: 'home' })[sc];
+/* ---------- Google Analytics: hanya data perilaku, tanpa nama atau nomor ---------- */
+function ga(ev, p = {}) { try { if (!state.preview && typeof window.gtag === 'function') window.gtag('event', ev, p); } catch (e) { /* abaikan */ } }
 function go(screen, push = true) {
   state.screen = screen; save();
+  ga('lihat_layar', { layar: screen });
   if (push) history.pushState({ s: screen }, '');
   render();
   window.scrollTo(0, 0);
@@ -3443,10 +3449,10 @@ const bind = {
       btn.disabled = true; err.hidden = true;
       const r = await checkToken(tok);
       btn.disabled = false;
-      if (!r.ok) { err.hidden = false; err.textContent = tr(MSG[r.reason] || MSG.server); return; }
+      if (!r.ok) { ga('token_gagal', { alasan: r.reason || 'server' }); err.hidden = false; err.textContent = tr(MSG[r.reason] || MSG.server); return; }
       if (state.token !== tok) resetFull();
       state.mode = 'full'; state.token = tok; state.tokenOk = true; state.preview = !!r.preview;
-      save();
+      save(); ga('token_valid');
       const n = state.answers.findIndex(x => !x);
       if (answered() > 0 && agreed('full') && state.startedAt) { state.index = n === -1 ? 39 : n; go('test'); }
       else go('consent');
@@ -3456,7 +3462,7 @@ const bind = {
     on('back', () => history.back());
     on('next', () => {
       if (!state.tokenOk) { go('token'); return; }
-      if (!state.startedAt) state.startedAt = Date.now();
+      if (!state.startedAt) { state.startedAt = Date.now(); ga('mulai_tes', { jenis: 'lengkap' }); }
       const n = state.answers.findIndex(x => !x);
       state.index = n === -1 ? 0 : n; save(); go('test');
     });
@@ -3496,8 +3502,8 @@ const bind = {
       };
       state.consent = { ...state.consent, guardian: minor ? true : null, contact: !!wa };
       save();
-      if (state.mode === 'mini') { if (!state.miniStartedAt) state.miniStartedAt = Date.now(); go('mtest'); return; }
-      if (state.mode === 'gm') { if (!state.gmStartedAt) state.gmStartedAt = Date.now(); go('gmtest'); return; }
+      if (state.mode === 'mini') { if (!state.miniStartedAt) { state.miniStartedAt = Date.now(); ga('mulai_tes', { jenis: 'mini' }); } go('mtest'); return; }
+      if (state.mode === 'gm') { if (!state.gmStartedAt) { state.gmStartedAt = Date.now(); ga('mulai_tes', { jenis: 'mindset' }); } go('gmtest'); return; }
       go('guide');
     });
   },
@@ -3559,8 +3565,8 @@ const bind = {
   },
   gmresult() {
     on('home', () => go('home'));
-    on('pdf', () => window.print());
-    on('share', async btn => {
+    on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
+    on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       btn.disabled = true;
       try {
         const r = state.gmResult, a = analyzeMindset(r.answers), cat = GM_CATEGORIES[a.category];
@@ -3574,10 +3580,10 @@ const bind = {
   },
   mresult() {
     on('home', () => go('home'));
-    on('pdf', () => window.print());
+    on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('full', () => go('token'));
     on('again', () => { state.mode = 'mini'; resetMini(); save(); go('consent'); });
-    on('share', async btn => {
+    on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       btn.disabled = true;
       try {
         const r = state.miniResult, a = miniAnalyze(r.answers), P = TEMPS[a.primary];
@@ -3601,8 +3607,8 @@ const bind = {
       new IntersectionObserver(([e]) => { endSeen = e.isIntersecting || e.boundingClientRect.top < 0; upd(); }).observe(end);
     }
     on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.primary + a.secondary, btn); });
-    on('pdf', () => window.print());
-    on('share', async btn => {
+    on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
+    on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       btn.disabled = true;
       try {
         const r = state.result, a = analyze(r.answers);
@@ -3661,6 +3667,7 @@ function finish() {
     startedAt: state.startedAt, finishedAt: now, meta: { ...state.meta }, token: state.token,
   };
   const preview = state.preview;
+  try { ga('selesai_tes', { jenis: 'lengkap', hasil: analyze(r.answers).combo.name }); } catch (e) { /* abaikan */ }
   state.result = r; state.tokenOk = false; state.token = ''; state.preview = false; state.calcNext = 'result';
   resetFull(); clearConsent('full'); save();
   go('calc', false);
@@ -3672,6 +3679,7 @@ function finishGm() {
   const now = Date.now();
   const r = { id: makeId(), answers: [...state.gmAnswers], profile: { ...state.profile }, consent: { ...state.consent },
     startedAt: state.gmStartedAt, finishedAt: now, meta: { ...state.meta } };
+  try { ga('selesai_tes', { jenis: 'mindset', hasil: analyzeMindset(r.answers).category }); } catch (e) { /* abaikan */ }
   state.gmResult = r; state.calcNext = 'gmresult'; resetGm(); clearConsent('gm'); save();
   go('calc', false);
   submit(withLang('id', () => buildGmPayload(r)));
@@ -3712,6 +3720,7 @@ function finishMini() {
     id: makeId(), answers: [...state.miniAnswers], profile: { ...state.profile }, consent: { ...state.consent },
     startedAt: state.miniStartedAt, finishedAt: now, meta: { ...state.meta },
   };
+  try { ga('selesai_tes', { jenis: 'mini', hasil: ({ S: 'Sanguinis', C: 'Koleris', M: 'Melankolis', P: 'Plegmatis' })[miniAnalyze(r.answers).primary] }); } catch (e) { /* abaikan */ }
   state.miniResult = r; state.calcNext = 'mresult'; resetMini(); clearConsent('mini'); save();
   go('calc', false);
   submit(withLang('id', () => buildMiniPayload(r)));
@@ -3847,6 +3856,11 @@ if (/^\/layanan\/?$/i.test(location.pathname) || location.hash === '#layanan') s
 if (URL_TOKEN && !(state.tokenOk && state.token === URL_TOKEN)) state.screen = 'token';
 history.replaceState({ s: state.screen }, '');
 render();
+ga('lihat_layar', { layar: state.screen });
+document.addEventListener('click', e => {
+  const a = e.target.closest && e.target.closest('a[href*="wa.me"]');
+  if (a) ga('klik_whatsapp', { posisi: state.screen + (a.classList.contains('stickycta') ? '_melayang' : '') });
+}, true);
 setTimeout(flush, 1500);
 window.addEventListener('online', flush);
 
