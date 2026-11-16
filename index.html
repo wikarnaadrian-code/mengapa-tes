@@ -1169,7 +1169,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.4.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.4.2', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3179,11 +3179,6 @@ function gmresult() {
         <h1>${cat.name}</h1>
         <div class="en">${cat.en}</div>
         <p class="tagline">${esc(cat.tagline)}</p>
-        <div class="gm-spec" role="img" aria-label="${L(`Posisimu: ${cat.name}, skor ${a.total} dari 100`, `Your position: ${cat.name}, score ${a.total} of 100`)}">
-          <div class="gs-track"><span class="gs-pin" style="left:${Math.min(97, Math.max(3, a.total))}%"><i>${L('Kamu', 'You')}</i></span></div>
-          <div class="gs-labels">${Object.values(GM_CATEGORIES).map(c => `<span class="${c === cat ? 'on' : ''}">${c.name}</span>`).join('')}</div>
-          <div class="gs-ticks"><span>0</span><span>50</span><span>75</span><span>100</span></div>
-        </div>
         <div class="meta-line">${L(`Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}`, `Taken on ${fmtDate(r.finishedAt)} at ${fmtTime(r.finishedAt)}`)}</div>
       </div>
 
