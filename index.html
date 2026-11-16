@@ -2146,10 +2146,10 @@ const limb = (d, k, w = 13) => `<path d="${d}" fill="none" stroke="${PASTEL[k]}"
 const shade = (rx = 46) => `<ellipse cx="100" cy="211" rx="${rx}" ry="5" fill="#1D1D1D" opacity=".06"/>`;
 function pose(d, s) {
   const head = (x, y) => `<circle cx="${x}" cy="${y}" r="23" fill="${CHEAD[d]}"/>`;
-  if (d === 'S') return shade() + `<path d="${STAND}" fill="${PASTEL[d]}"/>` + limb('M68 150 C54 140 48 124 46 104', d) + limb('M134 150 C146 160 150 172 150 184', d) + head(100, 98) + crown(s);
-  if (d === 'C') return shade() + `<path d="${STAND}" fill="${PASTEL[d]}"/>` + limb('M68 148 C52 156 52 174 66 180', d) + limb('M132 150 C146 148 160 144 174 137', d) + head(100, 96) + crown(s, 100, 96);
+  if (d === 'S') return shade() + `<path d="${STAND}" fill="${PASTEL[d]}"/>` + limb('M86 136 C68 138 54 128 48 104', d) + limb('M114 136 C134 142 146 160 148 184', d) + head(100, 98) + crown(s);
+  if (d === 'C') return shade() + `<path d="${STAND}" fill="${PASTEL[d]}"/>` + limb('M88 138 C58 140 40 162 64 182', d) + limb('M112 140 C134 144 156 142 174 136', d) + head(100, 96) + crown(s, 100, 96);
   if (d === 'M') return shade() + `<path d="M64 210 C60 168 66 140 92 132 C112 126 132 138 138 160 C141 176 140 194 140 210 Z" fill="${PASTEL[d]}"/>` + head(118, 114) + crown(s, 118, 114, 8);
-  return shade(58) + limb('M70 168 C58 180 52 192 50 205', d, 12) + limb('M130 168 C142 180 148 192 150 205', d, 12)
+  return shade(58) + limb('M88 160 C68 170 54 188 50 205', d, 12) + limb('M112 160 C132 170 146 188 150 205', d, 12)
     + `<path d="M64 204 C62 168 78 148 100 148 C122 148 138 168 136 204 Z" fill="${PASTEL[d]}"/>`
     + `<path d="M70 204 C70 194 84 192 100 196 C116 192 130 194 130 204 Z" fill="${CHEAD[d]}" opacity=".7"/>` + head(96, 124) + crown(s, 96, 124, -12);
 }
