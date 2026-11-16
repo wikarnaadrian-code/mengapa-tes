@@ -44,6 +44,10 @@ const SHEET_PK = 'PandanganKerja';
 const SHEET_TOKEN = 'Token';
 const SHEET_KLIEN = 'Klien';
 const SHEET_LAMA = 'Lama'; // hasil dari web app lama (impor sekali)
+const SHEET_SAMPAH = 'Sampah'; // hasil tes yang dihapus dari dashboard admin, terhapus permanen setelah 30 hari
+const SAMPAH_HEADERS = ['dihapus', 'tab_asal', 'id', 'nama', 'jenis_tes', 'data'];
+const SAMPAH_HARI = 30;
+const SAMPAH_TABS = ['Hasil', 'Mini', 'Mindset', 'Lama'];
 const KLIEN_HEADERS = ['klien', 'nama', 'username', 'password', 'token', 'catatan', 'status', 'logo', 'dibuat'];
 // Alamat yang tidak boleh dipakai sebagai alamat dashboard klien (mengapa.me/<alamat>)
 const KLIEN_RESERVED = ['admin', 'api', 'assets', 'klien', 'tim', 'layanan', 'index', 'pandangan-kerja', 'pandangan-kerja-hasil', 'logo-klien', 'apps-script',
@@ -69,6 +73,10 @@ function doPost(e) {
     if (data.action === 'token_create') return json_(tokenCreate_(data));
     if (data.action === 'token_update') return json_(tokenUpdate_(data));
     if (data.action === 'token_delete') return json_(tokenDelete_(data));
+    if (data.action === 'trash_move') return json_(trashMove_(data.items || []));
+    if (data.action === 'trash_restore') return json_(trashRestore_(data.items || []));
+    if (data.action === 'trash_delete') return json_(trashDelete_(data.items || [], !!data.all));
+    if (data.action === 'trash_list') { purgeSampah_(); return json_({ ok: true, sampah: sampahRows_() }); }
     if (data.action === 'klien_create') { const r = klienCreate_(data.data || {}); if (!r.ok) return json_(r); const o = tokenList_(); o.created_klien = r.klien; return json_(o); }
     if (data.action === 'klien_update') return json_(klienUpdate_(data));
     if (data.action === 'klien_delete') return json_(klienDelete_(data));
@@ -513,6 +521,7 @@ function buat10Token() { Logger.log(buatToken_(10, 'MGP', 'dibuat dari editor').
  *   GET .../exec?token=READ_TOKEN&tab=mindset  -> hasil Growth Mindset Test
  *   GET .../exec?token=READ_TOKEN&tab=lama     -> hasil tes dari web app lama
  *   GET .../exec?token=READ_TOKEN&tab=pandangan -> hasil Tes Pandangan Kerja (HK Gold)
+ *   GET .../exec?token=READ_TOKEN&tab=sampah   -> isi Sampah (hasil tes yang dihapus)
  *   tambahkan &ref=febe atau &id=MGP-XXXXXX untuk filter
  */
 function doGet(e) {
@@ -520,6 +529,8 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   if (!token || p.token !== token) return json_({ ok: true, service: 'mengapa-tes' });
 
+  if (!p.tab) { try { const lk = LockService.getScriptLock(); if (lk.tryLock(5000)) { try { purgeSampah_(); } finally { lk.releaseLock(); } } } catch (err) { /* pembersihan gagal: tidak apa-apa */ } }
+  if (p.tab === 'sampah') return json_({ ok: true, rows: sampahRows_() });
   const sheet = p.tab === 'klien' ? getKlienSheet_() : getSheet_(p.tab === 'mini' ? SHEET_MINI : p.tab === 'mindset' ? SHEET_MINDSET : p.tab === 'lama' ? SHEET_LAMA : p.tab === 'pandangan' ? SHEET_PK : SHEET_HASIL);
   const values = sheet.getDataRange().getDisplayValues();
   const headers = values.shift() || [];
@@ -529,9 +540,105 @@ function doGet(e) {
   return json_({ ok: true, count: rows.length, rows: rows });
 }
 
+/* ---------------- SAMPAH (hasil tes yang dihapus) ----------------
+ * Dari dashboard admin, hasil tes dipindah ke tab "Sampah" (isi lengkap disimpan di kolom data).
+ * Pulihkan = dikembalikan ke tab asalnya. Hapus permanen = hilang. Otomatis terhapus setelah 30 hari
+ * (dibersihkan setiap dashboard dibuka; jalankan pasangPembersihHarian sekali kalau mau terjadwal tiap hari).
+ */
+function getSampahSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_SAMPAH);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_SAMPAH);
+    sh.getRange(1, 1, 1, SAMPAH_HEADERS.length).setValues([SAMPAH_HEADERS]).setFontWeight('bold');
+    sh.setFrozenRows(1);
+    sh.getRange(1, 2, sh.getMaxRows(), 5).setNumberFormat('@');
+  }
+  return sh;
+}
+function cellOut_(v) { return Object.prototype.toString.call(v) === '[object Date]' ? (isNaN(v) ? '' : v.toISOString()) : v; }
+function sampahRows_() {
+  const sh = getSampahSheet_(), n = sh.getLastRow() - 1;
+  if (n < 1) return [];
+  return sh.getRange(2, 1, n, SAMPAH_HEADERS.length).getValues().map(function (r) {
+    return { dihapus: iso_(r[0]), tab_asal: String(r[1]), id: String(r[2]), nama: String(r[3]), jenis_tes: String(r[4]), data: String(r[5]) };
+  });
+}
+function trashMove_(items) {
+  const byTab = {};
+  items.forEach(function (it) { const t = String(it.tab || ''), id = String(it.id || ''); if (SAMPAH_TABS.indexOf(t) >= 0 && id) (byTab[t] = byTab[t] || {})[id] = true; });
+  const sam = getSampahSheet_(), now = new Date(), out = [];
+  let moved = 0;
+  Object.keys(byTab).forEach(function (tab) {
+    const sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(tab);
+    if (!sh || sh.getLastRow() < 2) return;
+    const vals = sh.getRange(1, 1, sh.getLastRow(), sh.getLastColumn()).getValues(), head = vals[0].map(String), idc = head.indexOf('id');
+    if (idc < 0) return;
+    const rows = [];
+    for (let i = 1; i < vals.length; i++) {
+      const id = String(vals[i][idc]);
+      if (!byTab[tab][id]) continue;
+      const o = {}; head.forEach(function (h, j) { if (h) o[h] = cellOut_(vals[i][j]); });
+      out.push([now, tab, id, String(o.nama || ''), String(o.jenis_tes || ''), JSON.stringify(o)]);
+      rows.push(i + 1);
+    }
+    rows.reverse().forEach(function (r) { sh.deleteRow(r); });
+    moved += rows.length;
+  });
+  if (out.length) sam.getRange(sam.getLastRow() + 1, 1, out.length, SAMPAH_HEADERS.length).setValues(out);
+  return { ok: true, moved: moved, sampah: sampahRows_() };
+}
+function trashRestore_(items) {
+  const want = {}; items.forEach(function (it) { want[String(it.tab) + '|' + String(it.id)] = true; });
+  const sam = getSampahSheet_(), n = sam.getLastRow() - 1, del = [];
+  let restored = 0;
+  if (n > 0) {
+    const vals = sam.getRange(2, 1, n, SAMPAH_HEADERS.length).getValues();
+    vals.forEach(function (r, i) {
+      const tab = String(r[1]), id = String(r[2]);
+      if (!want[tab + '|' + id]) return;
+      let o; try { o = JSON.parse(String(r[5])); } catch (e) { return; }
+      const sh = getSheet_(tab);
+      let head = sh.getLastColumn() ? sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].filter(String) : [];
+      const idc = head.indexOf('id') + 1;
+      const dup = idc && sh.getLastRow() > 1 && sh.getRange(2, idc, sh.getLastRow() - 1, 1).createTextFinder(id).matchEntireCell(true).findNext();
+      if (!dup) {
+        const missing = Object.keys(o).filter(function (k) { return head.indexOf(k) === -1; });
+        if (missing.length) { sh.getRange(1, head.length + 1, 1, missing.length).setValues([missing]).setFontWeight('bold'); head = head.concat(missing); formatTextColumns_(sh, head); }
+        sh.appendRow(head.map(function (h) { return o[h] === undefined || o[h] === null ? '' : o[h]; }));
+      }
+      del.push(i + 2); restored++;
+    });
+    del.reverse().forEach(function (r) { sam.deleteRow(r); });
+  }
+  return { ok: true, restored: restored, sampah: sampahRows_() };
+}
+function trashDelete_(items, all) {
+  const want = {}; items.forEach(function (it) { want[String(it.tab) + '|' + String(it.id)] = true; });
+  const sam = getSampahSheet_(), n = sam.getLastRow() - 1, del = [];
+  if (n > 0) sam.getRange(2, 1, n, 3).getValues().forEach(function (r, i) { if (all || want[String(r[1]) + '|' + String(r[2])]) del.push(i + 2); });
+  del.reverse().forEach(function (r) { sam.deleteRow(r); });
+  return { ok: true, deleted: del.length, sampah: sampahRows_() };
+}
+function purgeSampah_() {
+  const sam = getSampahSheet_(), n = sam.getLastRow() - 1;
+  if (n < 1) return 0;
+  const batas = Date.now() - SAMPAH_HARI * 864e5, del = [];
+  sam.getRange(2, 1, n, 1).getValues().forEach(function (r, i) { const t = r[0] instanceof Date ? r[0].getTime() : Date.parse(r[0]); if (t && t < batas) del.push(i + 2); });
+  del.reverse().forEach(function (r) { sam.deleteRow(r); });
+  return del.length;
+}
+/** Opsional: jalankan sekali dari editor supaya Sampah dibersihkan otomatis setiap hari jam 3 pagi. */
+function pasangPembersihHarian() {
+  ScriptApp.getProjectTriggers().forEach(function (t) { if (t.getHandlerFunction() === 'bersihkanSampah') ScriptApp.deleteTrigger(t); });
+  ScriptApp.newTrigger('bersihkanSampah').timeBased().everyDays(1).atHour(3).create();
+  Logger.log('Pembersih Sampah harian terpasang.');
+}
+function bersihkanSampah() { const lk = LockService.getScriptLock(); lk.waitLock(20000); try { Logger.log(purgeSampah_() + ' hasil dihapus permanen dari Sampah.'); } finally { lk.releaseLock(); } }
+
 /** Jalankan sekali dari editor untuk menyiapkan tab & izin. */
 function setup() {
-  getTokenSheet_(); getKlienSheet_(); getSheet_(SHEET_HASIL); getSheet_(SHEET_MINI); getSheet_(SHEET_MINDSET); getSheet_(SHEET_PK);
+  getTokenSheet_(); getKlienSheet_(); getSampahSheet_(); getSheet_(SHEET_HASIL); getSheet_(SHEET_MINI); getSheet_(SHEET_MINDSET); getSheet_(SHEET_PK);
   Logger.log('Tab siap. Secret terpasang: ' +
     (PropertiesService.getScriptProperties().getProperty('SHEET_SECRET') ? 'YA' : 'BELUM, isi di Project Settings'));
 }

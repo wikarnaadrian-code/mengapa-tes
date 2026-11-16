@@ -108,12 +108,33 @@ module.exports = async (req, res) => {
     if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
     if (!readToken) return res.status(500).json({ ok: false, error: 'READ_TOKEN belum diisi di Vercel' });
     try {
-      const [baru, mini, mindset, lama] = await Promise.all([readTab(url, readToken, ''), readTab(url, readToken, 'mini'), readTab(url, readToken, 'mindset'), readTab(url, readToken, 'lama').catch(() => []), readTab(url, readToken, 'klien').catch(() => [])]);
-      return res.status(200).json({ ok: true, hasil: [...baru, ...lama.filter(r => r.sumber_data === 'web lama')], mini, mindset, at: new Date().toISOString() });
+      const baru = await readTab(url, readToken, ''); // dibaca dulu: sekalian membersihkan Sampah yang lewat 30 hari
+      const [mini, mindset, lama, sampah] = await Promise.all([readTab(url, readToken, 'mini'), readTab(url, readToken, 'mindset'), readTab(url, readToken, 'lama').catch(() => []), readTab(url, readToken, 'sampah').catch(() => null)]);
+      // Apps Script lama belum kenal tab=sampah (membalas isi tab Hasil): anggap belum didukung
+      const okSampah = Array.isArray(sampah) && sampah.every(r => r && 'tab_asal' in r && 'data' in r);
+      return res.status(200).json({ ok: true, hasil: [...baru, ...lama.filter(r => r.sumber_data === 'web lama')], mini, mindset, sampah: okSampah ? sampah : null, at: new Date().toISOString() });
     } catch (e) {
       return res.status(502).json({ ok: false, error: String(e.message || e) });
     }
   }
+  // Sampah hasil tes (admin). Pindah & pulihkan cukup sesi admin; hapus permanen wajib sesi kelola (password lagi).
+  if (body.action === 'trash') {
+    const sess = readSession(body.session, key);
+    if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
+    const ops = { move: 'trash_move', restore: 'trash_restore', delete: 'trash_delete', list: 'trash_list' };
+    const action = ops[body.op];
+    if (!action) return res.status(400).json({ ok: false, error: 'op' });
+    if (body.op === 'delete') { const tks = readSession(body.tksession, key); if (!tks || tks.c || !tks.tk) return res.status(403).json({ ok: false, error: 'tk' }); }
+    const items = (Array.isArray(body.items) ? body.items : []).slice(0, 2000).map(it => ({ tab: String((it && it.tab) || ''), id: String((it && it.id) || '') })).filter(it => ['Hasil', 'Mini', 'Mindset', 'Lama'].includes(it.tab) && it.id);
+    if (body.op !== 'list' && !items.length && !(body.op === 'delete' && body.all)) return res.status(400).json({ ok: false, error: 'Tidak ada hasil yang dipilih' });
+    try {
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ secret: key, action, items, all: body.op === 'delete' && !!body.all }), redirect: 'follow' });
+      let j; try { j = JSON.parse(await r.text()); } catch (e) { throw new Error('Apps Script tidak membalas JSON'); }
+      if (!Array.isArray(j.sampah)) throw new Error(j.error === 'unauthorized' ? 'SHEET_SECRET di Vercel beda dengan di Apps Script' : 'Apps Script belum diperbarui. Tempel Code.gs terbaru lalu deploy ulang.');
+      return res.status(200).json(j);
+    } catch (e) { return res.status(502).json({ ok: false, error: String(e.message || e) }); }
+  }
+
   // Kelola token: wajib masukkan password admin lagi. Hasilnya sesi khusus token, berlaku 15 menit.
   if (body.action === 'tokauth') {
     const sess = readSession(body.session, key);

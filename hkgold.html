@@ -1641,6 +1641,31 @@ body.tk-busy { cursor: progress; }
   .kl-login > div > b { flex: 1; min-width: 0; }
 }
 
+/* ============ Sampah ============ */
+.srcbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.trashbtn { display: inline-flex; align-items: center; gap: 7px; border: 0; background: #FFFFFF; border-radius: 999px; padding: 8px 14px; font-size: 13.5px; font-weight: 700; color: var(--muted); cursor: pointer; margin-left: auto; }
+.trashbtn small { font-size: 11.5px; opacity: .75; font-weight: 600; }
+.trashbtn[aria-pressed="true"] { background: #4A3A36; color: #FFFFFF; }
+.trashnote { flex-basis: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; background: #EFE7E4; border-radius: 18px; padding: 12px 16px; }
+.trashnote p { margin: 0; font-size: 13.5px; color: #4A3A36; }
+.trashnote .btn.sm { min-height: 36px; height: 36px; padding: 0 14px; font-size: 13px; width: auto; flex: 0 0 auto; background: #FFFFFF; }
+.rbulk:empty { display: none; }
+.rselrow { display: flex; justify-content: flex-end; padding: 6px 14px 0; }
+.rselrow button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; color: var(--muted); font-size: 12.5px; font-weight: 700; cursor: pointer; padding: 4px 6px; border-radius: 8px; }
+.rselrow button:hover { background: var(--tint); color: var(--ink); }
+.tk-bulkbar button[disabled] { opacity: .4; cursor: default; }
+.list .tk-row .it { grid-template-columns: 44px 1fr auto auto; padding-left: 4px; }
+.tleft { font-weight: 700; color: var(--muted); white-space: nowrap; } .tleft.soon { color: #B04A39; }
+.btn.rtrash { display: inline-flex; align-items: center; gap: 7px; }
+.box.trashbox { background: #EFE7E4; }
+.trashbox > p { display: flex; gap: 10px; align-items: flex-start; margin: 0 !important; color: #4A3A36; }
+.trashbox > p svg { flex: 0 0 auto; margin-top: 2px; }
+.toast.undo { display: flex; align-items: center; gap: 14px; padding: 10px 10px 10px 20px; }
+.toast.undo button { border: 0; background: rgba(255,255,255,.16); color: #FFFFFF; border-radius: 999px; padding: 7px 14px; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+.toast.undo button:hover { background: rgba(255,255,255,.26); }
+@media (max-width: 767px) { .trashbtn { margin-left: 0; } .trashnote { flex-direction: column; align-items: stretch; } }
+@media (max-width: 520px) { .tk-bulkbar { gap: 4px; padding: 8px 6px 8px 12px; font-size: 12.5px; } .tk-bulkbar button { padding: 6px 9px; font-size: 12px; } }
+
 </style>
 </head>
 <body data-client="1">
@@ -1669,7 +1694,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.7.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.8.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3282,7 +3307,11 @@ function tkModalHtml() {
   if (!m) return '';
   const J = tkJ(), x = `<button class="tk-mx" data-tkm="close" aria-label="${L('Tutup', 'Close')}">${ICON.x}</button>`;
   let body = '';
-  if (m.type === 'confirm') {
+  if (m.type === 'unlock') {
+    body = `<div class="tk-lockic">🔒</div><h2>${L('Masukkan password admin', 'Enter the admin password')}</h2><p class="muted">${esc(m.why || '')} ${L('Berlaku 15 menit.', 'Valid for 15 minutes.')}</p>
+      <form id="tkunlock" class="tk-cform"><input class="input" type="password" id="tkupw" autocomplete="current-password" placeholder="${L('Password admin', 'Admin password')}" required>${m.err ? `<p class="tk-merr">${esc(m.err)}</p>` : ''}
+      <div class="tk-mact"><button class="btn ghost sm" type="button" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm" type="submit">${L('Lanjut', 'Continue')}</button></div></form>`;
+  } else if (m.type === 'confirm') {
     body = `<h2>${m.title}</h2><p>${m.msg}</p>${m.check ? `<label class="tk-check"><input type="checkbox" id="tkcheck"${m.check.checked ? ' checked' : ''}> <span>${m.check.label}</span></label>` : ''}<div class="tk-mact">${(m.extra || []).map((b, i) => `<button class="btn ghost sm" data-tkm="extra${i}">${b.label}</button>`).join('')}<button class="btn ghost sm" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm${m.danger ? ' danger' : ''}" data-tkm="ok">${m.ok}</button></div>`;
   } else if (m.type === 'klien' && m.step === 1) {
     body = `<h2>${L('Tambah klien', 'New client')}</h2><p class="muted">${L('Dashboard klien langsung aktif setelah dibuat.', 'The client dashboard is live right after creating.')}</p>
@@ -3340,6 +3369,7 @@ function tkModalHtml() {
 }
 function tkModal(m) { if (m) m.anim = !TK.modal || TK.modal.type !== m.type; TK.modal = m; const el = document.getElementById('tkm'); if (el) { el.innerHTML = tkModalHtml(); tkBindModal(); } }
 function tkConfirm(o) { tkModal({ type: 'confirm', ...o }); }
+function tkRequireAuth(fn, why) { if (tkAuthed()) return fn(); tkModal({ type: 'unlock', fn, why }); }
 
 function tkReadForm(f) {
   const m = TK.modal; if (!f || !m) return;
@@ -3490,6 +3520,19 @@ function tkBindModal() {
   root.querySelectorAll('[data-klshow]').forEach(b => b.addEventListener('click', () => { const pw = b.parentElement.querySelector('.kl-pw'); const show = pw.textContent.startsWith('•'); pw.textContent = show ? pw.dataset.pw : '••••••••'; b.textContent = show ? L('Sembunyikan', 'Hide') : L('Lihat', 'Show'); }));
   root.querySelectorAll('[data-klregen]').forEach(b => b.addEventListener('click', () => { const i = b.parentElement.querySelector('input'); i.value = klPass(); i.dispatchEvent(new Event('input', { bubbles: true })); }));
   root.querySelectorAll('[data-klmtok]').forEach(b => b.addEventListener('click', () => { const slug = m.slug; tkModal({ type: 'create', step: 2, jenis: 'klien', mode: 'acak', jumlah: 1, awalan: '', kode: klSuggestCode(slug), kuota: '', batasi: false, preset: '', berlaku: '', klien: slug, label: '', catatan: '', err: '' }); }));
+  const uf = root.querySelector('#tkunlock');
+  if (uf) {
+    const pw = root.querySelector('#tkupw'); if (pw) pw.focus();
+    uf.addEventListener('submit', async e => {
+      e.preventDefault(); const btn = uf.querySelector('[type=submit]'); btn.disabled = true; btn.textContent = L('Memeriksa…', 'Checking…');
+      try {
+        const j = await api({ action: 'tokauth', session: S.session, pass: pw.value });
+        TK.auth = { s: j.tksession, exp: Date.now() + (j.minutes || 15) * 60e3 - 30e3 };
+        try { sessionStorage.setItem(TK_AKEY, JSON.stringify(TK.auth)); } catch (e2) { /* abaikan */ }
+        const fn = m.fn; TK.modal = null; fn();
+      } catch (err) { m.err = err.message === 'Password salah' ? L('Password salah.', 'Wrong password.') : err.message; tkModal(m); }
+    });
+  }
   const kf = root.querySelector('#klcreate');
   if (kf) {
     kf.addEventListener('input', e => klReadFields(kf, m, e.target));
@@ -3825,7 +3868,7 @@ const session = {
 
 const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '',
   limit: 80, src: 'new', sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
-S.clientLogo = SLUG ? ls.get(SKEY + ':logo') || '' : ''; S.found = null;
+S.clientLogo = SLUG ? ls.get(SKEY + ':logo') || '' : ''; S.found = null; S.trash = []; S.trashOk = false; S.pick = new Set(); S.selMode = false;
 { const K = SLUG && window.__KLIEN; if (K) { S.found = !!K.found; if (K.found) { S.clientName = K.nama || S.clientName; S.clientLogo = K.logo || ''; ls.set(SKEY + ':nama', S.clientName); ls.set(SKEY + ':logo', S.clientLogo); } } }
 S.view = !SLUG && ['token', 'klien'].includes(ls.get('mengapa:admin:view')) ? ls.get('mengapa:admin:view') : 'hasil';
 TK.sort = ls.get('mengapa:admin:tksort') || 'new';
@@ -3908,6 +3951,57 @@ function rebuild() {
   if (!S.rows) return;
   S.items = [...S.rows.hasil.map(r => normRow(r, 'lengkap')), ...S.rows.mini.map(r => normRow(r, 'mini')), ...S.rows.mindset.map(r => normRow(r, 'mindset'))]
     .filter(x => x.id).sort((a, b) => b.t - a.t);
+  S.trashOk = !SLUG && Array.isArray(S.rows.sampah);
+  S.trash = (S.trashOk ? S.rows.sampah : []).map(r => {
+    let d; try { d = JSON.parse(r.data); } catch (e) { return null; }
+    const kind = r.tab_asal === 'Mini' ? 'mini' : r.tab_asal === 'Mindset' ? 'mindset' : 'lengkap';
+    const it = normRow(d, kind); it.tab = r.tab_asal; it.trashed = Date.parse(r.dihapus) || Date.now(); it.key = `trash:${r.tab_asal}:${it.id}`; it.raw = d;
+    return it;
+  }).filter(x => x && x.id).sort((a, b) => b.trashed - a.trashed);
+  if (S.src === 'trash' && !S.trashOk) S.src = 'new';
+}
+const itemTab = x => x.tab || (x.legacy ? 'Lama' : ({ lengkap: 'Hasil', mini: 'Mini', mindset: 'Mindset' })[x.kind]);
+const pool = () => S.src === 'trash' ? S.trash : S.items;
+const findItem = k => S.items.find(x => x.key === k) || S.trash.find(x => x.key === k);
+const daysLeft = x => Math.max(0, 30 - Math.floor((Date.now() - x.trashed) / 864e5));
+const rowsOf = tab => tab === 'Mini' ? S.rows.mini : tab === 'Mindset' ? S.rows.mindset : S.rows.hasil;
+async function trashApi(body) { return api({ action: 'trash', session: S.session, ...body }); }
+async function trashMove(xs) {
+  const items = xs.map(x => ({ tab: itemTab(x), id: x.id }));
+  try {
+    const j = await trashApi({ op: 'move', items });
+    items.forEach(it => { const a = rowsOf(it.tab), i = a.findIndex(r => String(r.id) === it.id); if (i >= 0) a.splice(i, 1); });
+    S.rows.sampah = j.sampah; rebuild(); S.sel = ''; S.pick.clear(); S.selMode = false; render();
+    toastUndo(L(`${items.length} hasil dipindahkan ke Sampah`, `${items.length} results moved to Trash`), () => trashRestore(items, true));
+  } catch (e) { toast(e.message); }
+}
+async function trashRestore(items, undo) {
+  try {
+    const before = S.rows.sampah || [];
+    const j = await trashApi({ op: 'restore', items });
+    items.forEach(it => { const r = before.find(s => s.tab_asal === it.tab && String(s.id) === it.id); if (!r) return; try { const d = JSON.parse(r.data), a = rowsOf(it.tab); if (!a.some(x => String(x.id) === it.id)) a.push(d); } catch (e) { /* abaikan */ } });
+    S.rows.sampah = j.sampah; rebuild(); S.sel = ''; S.pick.clear(); S.selMode = false; render();
+    toast(undo ? L('Dibatalkan, hasil dikembalikan', 'Undone, results restored') : L(`${j.restored} hasil dipulihkan`, `${j.restored} results restored`));
+  } catch (e) { toast(e.message); }
+}
+function trashDelete(xs, all) {
+  const n = all ? S.trash.length : xs.length;
+  tkRequireAuth(() => tkConfirm({ title: all ? L('Kosongkan Sampah?', 'Empty Trash?') : L('Hapus permanen?', 'Delete permanently?'), danger: true,
+    msg: L(`${n} hasil tes akan dihapus permanen dari Google Sheet dan tidak bisa dipulihkan lagi.`, `${n} test results will be permanently deleted from the Google Sheet and can't be restored.`),
+    ok: L('Hapus permanen', 'Delete permanently'), fn: async () => {
+      tkModal(null);
+      try {
+        const j = await trashApi({ op: 'delete', all: !!all, items: all ? [] : xs.map(x => ({ tab: itemTab(x), id: x.id })), tksession: TK.auth && TK.auth.s });
+        S.rows.sampah = j.sampah; rebuild(); S.sel = ''; S.pick.clear(); S.selMode = false; render(); toast(L(`${j.deleted} hasil dihapus permanen`, `${j.deleted} results permanently deleted`));
+      } catch (e) { if (e.message === 'tk') { tkLock(); trashDelete(xs, all); } else toast(e.message); }
+    } }), L('Diperlukan untuk menghapus permanen.', 'Required to delete permanently.'));
+}
+function toastUndo(m, fn) {
+  document.querySelectorAll('.toast').forEach(t => t.remove());
+  const t = Object.assign(document.createElement('div'), { className: 'toast undo' });
+  t.innerHTML = `<span>${esc(m)}</span><button type="button">${L('Batalkan', 'Undo')}</button>`;
+  t.querySelector('button').addEventListener('click', () => { t.remove(); fn(); });
+  document.body.appendChild(t); setTimeout(() => t.remove(), 7000);
 }
 
 /* ---------- API ---------- */
@@ -3959,7 +4053,7 @@ const domOf = x => x.kind === 'mini' ? (x.top || []) : x.p ? [x.p] : [];
 const scoreOf = x => x.a ? x.a.scores.t[x.p] : x.mini ? x.mini[x.p] : x.gm ? x.gm.total : -1;
 function base() {
   const q = S.q.trim().toLowerCase(), F = FILTERS(), [t0, t1] = rangeBounds();
-  return S.items.filter(x => (S.src === 'all' || (S.src === 'old') === !!x.legacy) && (!q || q.split(/\s+/).every(w => x.hay.includes(w)))
+  return pool().filter(x => (S.src === 'all' || S.src === 'trash' || (S.src === 'old') === !!x.legacy) && (!q || q.split(/\s+/).every(w => x.hay.includes(w)))
     && [...S.f].every(k => { const f = F.find(f => f.k === k); return !f || f.test(x); })
     && (!S.temps.size || domOf(x).some(k => S.temps.has(k)))
     && (!S.cats.size || (x.gm && S.cats.has(x.gm.category)))
@@ -3981,7 +4075,7 @@ const KORDER = ['lengkap', 'mini', 'mindset'];
 const visible = () => sorted(base().filter(x => S.tab === 'all' || x.kind === S.tab));
 const rangeOn = () => S.range !== 'all' && (S.range !== 'custom' || S.from || S.to);
 const activeCount = () => S.temps.size + S.cats.size + S.f.size + (rangeOn() ? 1 : 0);
-const srcTotal = () => S.items.filter(x => S.src === 'all' || (S.src === 'old') === !!x.legacy).length;
+const srcTotal = () => pool().filter(x => S.src === 'all' || S.src === 'trash' || (S.src === 'old') === !!x.legacy).length;
 const countText = n => L(`${n} dari ${srcTotal()} hasil`, `${n} of ${srcTotal()} results`);
 
 /* ---------- tampilan ---------- */
@@ -4017,6 +4111,16 @@ function avatar(x, size = 44) {
   return `<span class="av">${esc(initials(x.name))}</span>`;
 }
 
+function rBulkHtml(items) {
+  const tv = S.src === 'trash';
+  if (!S.selMode) return items.length ? `<div class="rselrow"><button data-rsel>${ICON.check}${L('Pilih', 'Select')}</button></div>` : '';
+  const n = S.pick.size;
+  return `<div class="tk-bulkbar"><b>${L(`${n} dipilih`, `${n} selected`)}</b>
+    <button data-rb="all">${L('Pilih semua', 'Select all')} (${Math.min(items.length, S.limit)})</button>
+    ${tv ? `<button data-rb="restore"${n ? '' : ' disabled'}>${L('Pulihkan', 'Restore')}</button><button data-rb="purge" class="danger"${n ? '' : ' disabled'}>${L('Hapus permanen', 'Delete permanently')}</button>`
+      : `<button data-rb="trash" class="danger"${n ? '' : ' disabled'}>${L('Pindahkan ke Sampah', 'Move to Trash')}</button>`}
+    <button data-rb="cancel" class="x" aria-label="${L('Selesai memilih', 'Done selecting')}">${ICON.x}</button></div>`;
+}
 function listHtml(items) {
   const all = items;
   if (S.loading && !S.items.length) return `<div class="empty"><span class="spin"></span>${L('Memuat data…', 'Loading data…')}</div>`;
@@ -4030,12 +4134,12 @@ function listHtml(items) {
   items.forEach(x => {
     const dk = groupOf(x);
     if (dk && dk !== last) { out += `${last ? '</section>' : ''}<section class="grp"><div class="day">${groupLabel(dk, x)}</div>`; last = dk; }
-    out += `<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
+    out += `${S.selMode ? `<div class="tk-row${S.pick.has(x.key) ? ' picked' : ''}"><label class="tk-ck"><input type="checkbox" data-rpick="${esc(x.key)}"${S.pick.has(x.key) ? ' checked' : ''}></label>` : ''}<button class="it${S.sel === x.key ? ' on' : ''}" data-key="${esc(x.key)}">
       ${avatar(x)}
       <span class="it-main"><b>${esc(x.name)}</b><small>${SLUG ? (x.age ? `${esc(x.age)} ${L('tahun', 'years')}` : '') : `${yrsShort(x.age)}<em class="kind k-${x.kind}">${kindName(x.kind)}</em>`}${x.legacy ? `<em class="old">${L('Arsip', 'Archive')}</em>` : ''}${!SLUG && x.token ? ' · ' + esc(x.token) : ''}</small></span>
       <span class="it-res"><b>${esc(x.title)}${!SLUG && x.p && x.s ? ` <span class="code2">(${ab(x.p)}${ab(x.s)})</span>` : ''}</b>${x.subHtml || `<small>${esc(x.sub)}</small>`}</span>
-      <span class="it-meta">${S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Prioritas follow up', 'Follow-up priority')}: ${levelName(x.flag)}"></i>` : ''}</span>
-    </button>`;
+      <span class="it-meta">${x.trashed ? `<span class="tleft${daysLeft(x) <= 3 ? ' soon' : ''}">${L(`${daysLeft(x)} hr lagi`, `${daysLeft(x)}d left`)}</span>` : S.sort === 'date' ? fmtTime(x.t) : fmtDate(x.t)}${x.flag ? `<i class="dot ${x.flag === 'Tinggi' ? 'hi' : ''}" title="${L('Prioritas follow up', 'Follow-up priority')}: ${levelName(x.flag)}"></i>` : ''}</span>
+    </button>${S.selMode ? '</div>' : ''}`;
   });
   out += last ? '</section>' : '';
   if (total > items.length) out += `<button class="more" id="more">${L(`Tampilkan ${Math.min(80, total - items.length)} lagi`, `Show ${Math.min(80, total - items.length)} more`)} <small>(${items.length}/${total})</small></button>`;
@@ -4164,7 +4268,9 @@ function detail(x) {
     <div class="d-actions">
       ${SLUG ? '' : x.wa ? `<a class="btn wa" href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp ${esc(waPretty(x.wa))}</a>` : `<span class="nowa">${L('Tidak mengisi WhatsApp', 'No WhatsApp number given')}</span>`}
       <button class="btn ghost" data-copy="${esc(x.id)}">${L('Salin kode', 'Copy code')} ${esc(x.id)}</button>
+      ${SLUG || x.trashed || !S.trashOk ? '' : `<button class="btn ghost danger rtrash" data-rtrash>${ICON.trash}${L('Pindahkan ke Sampah', 'Move to Trash')}</button>`}
     </div>
+    ${x.trashed ? `<div class="box trashbox"><p>${ICON.trash}<span>${L(`Di Sampah sejak ${fmtDate(x.trashed)}, ${fmtTime(x.trashed)}. Terhapus permanen dalam <b>${daysLeft(x)} hari</b>.`, `In Trash since ${fmtDate(x.trashed)}, ${fmtTime(x.trashed)}. Permanently deleted in <b>${daysLeft(x)} days</b>.`)}</span></p><div class="tk-zoneact"><button class="btn sm" data-rrestore>${L('Pulihkan', 'Restore')}</button><button class="btn ghost sm danger" data-rpurge>${L('Hapus permanen', 'Delete permanently')}</button></div></div>` : ''}
     ${x.legacy ? `<div class="box legacy small"><p>${L('Diambil di <b>web app lama</b>. Skor, kombinasi, dan sifat yang dipilih tetap akurat. Urutan jawaban per soal dan durasi tidak tersimpan di versi lama.', 'Taken on the <b>old web app</b>. Scores, combination, and selected traits are accurate. Per-question order and duration were not stored in the old version.')}</p></div>` : ''}
     ${x.tooFast ? `<div class="box warn small"><p>${L(`Dikerjakan sangat cepat (${fmtDur(x.dur)}). Hasil mungkin kurang akurat.`, `Completed very quickly (${fmtDur(x.dur)}). The result may be less accurate.`)}</p></div>` : ''}
     ${body}
@@ -4177,6 +4283,8 @@ function detail(x) {
 }
 
 const ICON = {
+  trash: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>',
+  check: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 12.5l2.7 2.7L16 9.5"/></svg>',
   sortUp: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20V4"/><path d="M3 8l4-4 4 4"/><path d="M14 6h7M14 12h5M14 18h3"/></svg>',
   sortDown: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16"/><path d="M3 16l4 4 4-4"/><path d="M14 6h3M14 12h5M14 18h7"/></svg>',
   filter: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18M6 12h12M10 19h4"/></svg>',
@@ -4264,7 +4372,7 @@ ${headHtml()}
 
 function app() {
   if (!SLUG && (S.view === 'token' || S.view === 'klien')) return tokenShell();
-  const items = visible(), sel = S.items.find(x => x.key === S.sel), B = base();
+  const items = visible(), sel = findItem(S.sel), B = base(), tv = S.src === 'trash';
   const c = k => B.filter(x => k === 'all' || x.kind === k).length;
   const week = B.filter(x => Date.now() - x.t < 7 * 864e5).length;
   const filtered = activeCount() > 0 || S.q.trim();
@@ -4273,31 +4381,34 @@ function app() {
   <div class="shell${sel ? ' has-sel' : ''}">
 ${headHtml()}
     ${S.err ? `<div class="banner">${esc(S.err)}</div>` : ''}
-    ${nOld ? `<div class="srcbar"><div class="src" role="tablist">${[['new', L('Web baru', 'New web app'), nNew], ['old', L('Arsip<span class="hm"> web lama</span>', 'Archive<span class="hm"> (old web app)</span>'), nOld], ['all', L('Semua', 'All'), nNew + nOld]].map(o => `<button data-src="${o[0]}" aria-pressed="${S.src === o[0]}">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>
+    ${nOld || S.trashOk ? `<div class="srcbar"><div class="src" role="tablist">${[['new', L('Web baru', 'New web app'), nNew], ...(nOld ? [['old', L('Arsip<span class="hm"> web lama</span>', 'Archive<span class="hm"> (old web app)</span>'), nOld], ['all', L('Semua', 'All'), nNew + nOld]] : [])].map(o => `<button data-src="${o[0]}" aria-pressed="${S.src === o[0]}">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>${S.trashOk ? `<button class="trashbtn" data-src="trash" aria-pressed="${tv}">${ICON.trash}<span>${L('Sampah', 'Trash')}</span><small>${S.trash.length}</small></button>` : ''}
+      ${tv ? `<div class="trashnote"><p>${L('Hasil di Sampah tidak dihitung di statistik dan tidak tampil di dashboard klien. Terhapus permanen otomatis 30 hari setelah dipindahkan.', 'Results in Trash are excluded from stats and client dashboards. They are permanently deleted 30 days after being moved.')}</p>${S.trash.length ? `<button class="btn ghost sm danger" data-trashempty>${L('Kosongkan Sampah', 'Empty Trash')}</button>` : ''}</div>` : ''}
       ${S.src === 'old' ? `<p class="srcnote">${L('Hasil dari web app lama, sebelum November 2026. Tidak dihitung di data web baru.', 'Results from the old web app, before November 2026. Not counted in the new web app data.')}</p>` : ''}</div>` : ''}
-    <section class="stats${SLUG ? ' five' : ''}">
+    <section class="stats${SLUG ? ' five' : ''}"${tv ? ' hidden' : ''}>
       <div><b>${B.length}</b><span>${filtered ? L('Hasil sesuai filter', 'Matching results') : L('Total tes', 'Total tests')}</span></div>
       ${SLUG ? ORDER.map(k => `<div style="--c:${TEMPS[k].color}"><b>${B.filter(x => x.p === k).length}</b><span>${L('Dominan', 'Primary')} ${TEMPS[k].name}${B.length ? ` · ${Math.round(B.filter(x => x.p === k).length / B.length * 100)}%` : ''}</span></div>`).join('') + '</section><section hidden>' : ''}
       <div><b>${week}</b><span>${L('7 hari terakhir', 'Last 7 days')}${B.length ? ` · ${Math.round((week) / B.length * 100)}%` : ''}</span></div>
       <div><b>${B.filter(x => x.flag).length}</b><span>${L('Perlu follow up', 'Needs follow-up')}${B.length ? ` · ${Math.round((B.filter(x => x.flag).length) / B.length * 100)}%` : ''}</span></div>
       <div><b>${B.filter(x => x.wa).length}</b><span>${L('Ada WhatsApp', 'Has WhatsApp')}${B.length ? ` · ${Math.round((B.filter(x => x.wa).length) / B.length * 100)}%` : ''}</span></div>
     </section>
-    ${SLUG ? '' : breakdown(B)}
+    ${SLUG || tv ? '' : breakdown(B)}
     <div class="main">
       <aside class="list-pane">
         <div class="tools">
-          <div class="seg"${SLUG || S.src === 'old' ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : ({ lengkap: L('Tes Lengkap', 'Full test'), mini: L('Tes Mini', 'Mini test'), mindset: L('Tes Mindset', 'Mindset test') })[k]}<small>${c(k)}</small></button>`).join('')}</div>
+          <div class="seg"${SLUG || S.src === 'old' || tv ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : ({ lengkap: L('Tes Lengkap', 'Full test'), mini: L('Tes Mini', 'Mini test'), mindset: L('Tes Mindset', 'Mindset test') })[k]}<small>${c(k)}</small></button>`).join('')}</div>
           <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             <input id="q" type="search" placeholder="${SLUG ? L('Cari nama, kode, token…', 'Search name, code, token…') : L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
           ${S.kl ? `<div class="pills"><button class="pillx" data-klclear>${L('Klien', 'Client')}: ${esc(S.kl.nama)}${ICON.x}</button></div>` : ''}
           ${toolsHtml(B)}
         </div>
+        ${SLUG ? '' : `<div class="rbulk" id="rbulk">${rBulkHtml(items)}</div>`}
         <div class="list" id="list">${listHtml(items)}</div>
         <div class="foot-row"><p class="count">${countText(items.length)}</p>${!SLUG ? `<p class="legend">${L('Prioritas follow up', 'Follow-up priority')}:<span><i class="dot hi"></i>${L('Tinggi', 'High')}</span><span><i class="dot"></i>${L('Sedang', 'Medium')}</span></p>` : ''}</div>
       </aside>
       <article class="detail" id="detail">${detail(sel)}</article>
     </div>
     ${dashFoot()}
+    ${SLUG ? '' : `<div id="tkm">${tkModalHtml()}</div>`}
   </div>`;
 }
 
@@ -4336,6 +4447,9 @@ function bindCommon(root) {
     try { await navigator.clipboard.writeText(b.dataset.copy); toast(L('Disalin', 'Copied')); } catch (e) { toast(b.dataset.copy); }
   }));
   root.querySelectorAll('[data-act=close]').forEach(b => b.addEventListener('click', closeDetail));
+  root.querySelectorAll('[data-rtrash]').forEach(b => b.addEventListener('click', () => { const x = findItem(S.sel); if (x) { if (history.state && history.state.d) history.back(); trashMove([x]); } }));
+  root.querySelectorAll('[data-rrestore]').forEach(b => b.addEventListener('click', () => { const x = findItem(S.sel); if (x) trashRestore([{ tab: itemTab(x), id: x.id }]); }));
+  root.querySelectorAll('[data-rpurge]').forEach(b => b.addEventListener('click', () => { const x = findItem(S.sel); if (x) trashDelete([x]); }));
   root.querySelectorAll('[data-gotok]').forEach(b => b.addEventListener('click', () => {
     S.view = 'token'; ls.set('mengapa:admin:view', 'token'); TK.sel = b.dataset.gotok; TK.fs = 'all'; TK.fj = 'all'; TK.fk = ''; TK.fl = ''; TK.q = ''; window.scrollTo(0, 0);
     if (!TK.list && tkAuthed()) tkLoad(); else render();
@@ -4352,7 +4466,23 @@ function renderList() {
   bindList();
 }
 let _io = null;
+function bindBulk() {
+  const el = document.getElementById('rbulk'); if (!el) return;
+  el.innerHTML = rBulkHtml(visible());
+  el.querySelectorAll('[data-rsel]').forEach(b => b.addEventListener('click', () => { S.selMode = true; S.pick.clear(); renderList(); }));
+  el.querySelectorAll('[data-rb]').forEach(b => b.addEventListener('click', () => {
+    const op = b.dataset.rb, xs = [...S.pick].map(findItem).filter(Boolean);
+    if (op === 'cancel') { S.selMode = false; S.pick.clear(); return renderList(); }
+    if (op === 'all') { visible().slice(0, S.limit).forEach(x => S.pick.add(x.key)); return renderList(); }
+    if (!xs.length) return;
+    if (op === 'trash') return trashMove(xs);
+    if (op === 'restore') return trashRestore(xs.map(x => ({ tab: itemTab(x), id: x.id })));
+    if (op === 'purge') return trashDelete(xs);
+  }));
+}
 function bindList() {
+  $app.querySelectorAll('[data-rpick]').forEach(c => c.addEventListener('change', () => { c.checked ? S.pick.add(c.dataset.rpick) : S.pick.delete(c.dataset.rpick); c.closest('.tk-row').classList.toggle('picked', c.checked); bindBulk(); }));
+  bindBulk();
   const more = document.getElementById('more');
   if (_io) { _io.disconnect(); _io = null; }
   if (more) {
@@ -4363,7 +4493,7 @@ function bindList() {
   $app.querySelectorAll('.it').forEach(b => b.addEventListener('click', () => {
     S.sel = b.dataset.key;
     $app.querySelectorAll('.it.on').forEach(x => x.classList.remove('on')); b.classList.add('on');
-    const d = document.getElementById('detail'); d.innerHTML = detail(S.items.find(x => x.key === S.sel)); d.scrollTop = 0;
+    const d = document.getElementById('detail'); d.innerHTML = detail(findItem(S.sel)); d.scrollTop = 0;
     document.querySelector('.shell').classList.add('has-sel'); bindCommon(d);
     if (matchMedia('(max-width: 767px)').matches) history.pushState({ d: 1 }, '');
   }));
@@ -4419,7 +4549,9 @@ function render() {
   }
   bindCommon($app); bindList();
   $app.querySelectorAll('[data-klclear]').forEach(b => b.addEventListener('click', () => { S.kl = null; render(); }));
-  $app.querySelectorAll('[data-src]').forEach(b => b.addEventListener('click', () => { S.src = b.dataset.src; if (S.src === 'old') S.tab = 'all'; S.sel = ''; render(); }));
+  $app.querySelectorAll('[data-src]').forEach(b => b.addEventListener('click', () => { S.src = b.dataset.src; if (S.src === 'old' || S.src === 'trash') S.tab = 'all'; S.sel = ''; S.pick.clear(); S.selMode = false; render(); }));
+  $app.querySelectorAll('[data-trashempty]').forEach(b => b.addEventListener('click', () => trashDelete([], true)));
+  if (!SLUG) tkBindModal();
   $app.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { S.tab = b.dataset.tab; render(); }));
   const tog = (set, v) => { set.has(v) ? set.delete(v) : set.add(v); render(); };
   $app.querySelectorAll('[data-f]').forEach(b => b.addEventListener('click', () => tog(S.f, b.dataset.f)));
