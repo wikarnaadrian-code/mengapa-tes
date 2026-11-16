@@ -1041,6 +1041,10 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 .figure .ini.has-ic svg { display: block; }
 
 
+/* tombol melayang versi Tes Mini (bukan WhatsApp, jadi charcoal) */
+.stickycta.dark { background: var(--ink); border: 0; font: inherit; font-size: 14px; cursor: pointer; padding: 11px 14px 11px 18px; }
+.stickycta.dark svg { width: 18px; height: 18px; }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -3110,7 +3114,7 @@ function gmresult() {
           <div class="eyebrow">Lanjutkan perjalananmu</div>
           <h2 style="margin:8px 0 12px">Pola pikir tidak terbentuk sendiri</h2>
           <p>Cara kita merespons gagal dan kritik banyak dipengaruhi karakter dan pengalaman yang membentuk kita, termasuk dari masa kecil. Tes Karakter Lengkap membantu melihat akarnya, dan sesi coaching membantu mengubah polanya.</p>
-          ${contactRow(waFull, 'Tanya Tes Karakter Lengkap atau sesi coaching lewat:')}
+          <div class="endcta">${contactRow(waFull, 'Tanya Tes Karakter Lengkap atau sesi coaching lewat:')}</div>
           ${codeNote(r.id)}
         </div>
       </div>
@@ -3120,7 +3124,8 @@ ${resultActions(true)}
       <p class="small muted" style="margin-top:28px">Tes ini adalah alat refleksi diri berdasarkan konsep growth mindset (Carol Dweck), bukan tes psikologi klinis. Semua orang punya campuran fixed dan growth mindset, dan campurannya bisa berubah.</p>
     </div>
     ${foot()}
-  </section>`;
+  </section>
+  <a class="stickycta no-print" href="${waFull}" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">${waIcon()}<span>${L('Mau bahas hasilmu? <b>Chat via WhatsApp</b>', 'Want to talk it through? <b>Chat on WhatsApp</b>')}</span></a>`;
 }
 
 /* ============ TES MINI ============ */
@@ -3228,7 +3233,7 @@ function mresult() {
           <h2 style="margin:8px 0 12px">Lihat gambaran utuhnya</h2>
           <p style="margin-bottom:12px">Dominanmu baru satu bagian. Tes Karakter Lengkap menunjukkan kombinasi, kekuatan, dan kelemahanmu di keempat sisi.</p>
           <ul class="locks">${FULL_BENEFITS.map(x => `<li>${lockIcon()}<span>${esc(x)}</span></li>`).join('')}</ul>
-          ${contactRow(wa, 'Dapatkan token lewat:')}
+          <div class="endcta">${contactRow(wa, 'Dapatkan token lewat:')}</div>
           ${codeNote(r.id)}
           <button class="btn block inv" style="margin-top:14px" data-act="full">Saya sudah punya token</button>
         </div>
@@ -3239,7 +3244,8 @@ ${resultActions(true)}
       <p class="small muted" style="margin-top:36px">Tes Karakter Mini adalah alat refleksi diri singkat berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Hasilnya indikasi awal dan bisa berbeda dari tes lengkap.</p>
     </div>
     ${foot()}
-  </section>`;
+  </section>
+  <button class="stickycta dark no-print" data-act="stickyfull" aria-hidden="true" tabindex="-1"><span>${L('Mau hasil lengkapnya? <b>Ikut Tes Lengkap</b>', 'Want the full picture? <b>Take the Full Test</b>')}</span>${ARROW}</button>`;
 }
 const lockIcon = () => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
 
@@ -3629,6 +3635,7 @@ const bind = {
   },
   gmresult() {
     on('home', () => go('home'));
+    bindSticky();
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       btn.disabled = true;
@@ -3644,6 +3651,8 @@ const bind = {
   },
   mresult() {
     on('home', () => go('home'));
+    bindSticky();
+    on('stickyfull', () => { ga('klik_cta_melayang', { layar: 'mresult' }); const c = $app.querySelector('.endcta'); c && c.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('full', () => go('token'));
     on('again', () => { state.mode = 'mini'; resetMini(); save(); go('consent'); });
@@ -3662,14 +3671,7 @@ const bind = {
   calc() {},
   result() {
     on('home', () => go('home'));
-    // tombol WhatsApp melayang: muncul setelah lewat bagian atas, hilang saat ajakan konsultasi asli terlihat
-    const sc = $app.querySelector('.stickycta'), hero = $app.querySelector('.res-hero'), end = $app.querySelector('.endcta');
-    if (sc && hero && end && 'IntersectionObserver' in window) {
-      let pastHero = false, endSeen = false;
-      const upd = () => { const on = pastHero && !endSeen; sc.classList.toggle('on', on); sc.setAttribute('aria-hidden', String(!on)); sc.tabIndex = on ? 0 : -1; };
-      new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; upd(); }).observe(hero);
-      new IntersectionObserver(([e]) => { endSeen = e.isIntersecting || e.boundingClientRect.top < 0; upd(); }).observe(end);
-    }
+    bindSticky();
     on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.tieType === 'dominan_seri' ? [a.primary + a.secondary, a.secondary + a.primary] : a.primary + a.secondary, btn); });
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
@@ -3696,6 +3698,15 @@ async function deliverImage(blob, filename) {
     setTimeout(() => URL.revokeObjectURL(url), 4000);
     toast('Gambar tersimpan.');
   }
+}
+// tombol melayang di halaman hasil: muncul setelah lewat bagian atas, hilang saat ajakan asli di bawah terlihat
+function bindSticky() {
+  const sc = $app.querySelector('.stickycta'), hero = $app.querySelector('.res-hero'), end = $app.querySelector('.endcta');
+  if (!(sc && hero && end && 'IntersectionObserver' in window)) return;
+  let pastHero = false, endSeen = false;
+  const upd = () => { const on = pastHero && !endSeen; sc.classList.toggle('on', on); sc.setAttribute('aria-hidden', String(!on)); sc.tabIndex = on ? 0 : -1; };
+  new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; upd(); }).observe(hero);
+  new IntersectionObserver(([e]) => { endSeen = e.isIntersecting || e.boundingClientRect.top < 0; upd(); }).observe(end);
 }
 function on(act, fn) { $app.querySelectorAll(`[data-act="${act}"]`).forEach(el => el.addEventListener('click', e => fn(el, e))); }
 
