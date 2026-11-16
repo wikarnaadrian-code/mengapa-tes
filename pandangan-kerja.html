@@ -1261,6 +1261,18 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .pka-status { width: 100%; order: 9; }
 }
 
+/* pilihan jawaban: lingkaran bernomor ukuran sama */
+.pk .lk { gap: 14px; }
+.pk-n { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-size: 14px; font-weight: 800; background: #F0F0EE; color: var(--ink); transition: background .18s, color .18s; }
+.pk .lk.sel .pk-n { background: var(--ink); color: #FFFFFF; }
+
+/* tabel dashboard: kolom angka lebar tetap, rata tengah */
+.pka-t { table-layout: auto; }
+.pka-t th.num, .pka-t td.num { text-align: center; width: 118px; }
+.pka-t th.num button { display: block; width: 100%; text-align: center; }
+.pka-people th:nth-child(1), .pka-people td:nth-child(1) { min-width: 160px; }
+.pka-people th:nth-child(2), .pka-people td:nth-child(2) { min-width: 120px; }
+
 </style>
 </head>
 <body>
@@ -1290,7 +1302,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.4.2', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.4.3', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2605,20 +2617,32 @@ function plantSvg(total, cls = 'plant') {
 const PK_SCALE = ['Sangat tidak setuju', 'Tidak setuju', 'Netral / ragu-ragu', 'Setuju', 'Sangat setuju'];
 const PK_SCALE_SHORT = ['STS', 'TS', 'N', 'S', 'SS'];
 
-// d = dimensi: A (afektif) untuk nomor 1, 4, 7, 10 · B (berkelanjutan) 2, 5, 8, 11 · N (normatif) 3, 6, 9, 12
-const PK_ITEMS = [
-  { d: 'A', q: 'Saya merasa nilai-nilai pribadi saya sangat selaras dengan nilai-nilai dan visi perusahaan ini.' },
-  { d: 'B', q: 'Terlalu banyak hal dalam hidup saya yang akan terganggu jika saya memutuskan keluar dari perusahaan saat ini.' },
-  { d: 'N', q: 'Saya merasa memiliki kewajiban moral untuk tetap bekerja di sini karena perusahaan telah memberikan banyak kesempatan pada saya.' },
-  { d: 'A', q: 'Saya memiliki keterikatan emosional yang kuat dan bangga menjadi bagian dari organisasi ini.' },
-  { d: 'B', q: 'Kerugian finansial dan fasilitas yang saya tanggung akan terlalu besar jika saya meninggalkan pekerjaan ini sekarang.' },
-  { d: 'N', q: 'Saya merasa tidak enak atau "berutang budi" jika harus meninggalkan perusahaan yang sudah berinvestasi pada pengembangan diri saya.' },
-  { d: 'A', q: 'Masalah yang dihadapi perusahaan ini terasa seperti masalah saya sendiri.' },
-  { d: 'B', q: 'Bertahan di perusahaan ini adalah kebutuhan rasional karena mencari pekerjaan lain saat ini sangat berisiko atau sulit.' },
-  { d: 'N', q: 'Perusahaan ini telah sangat baik kepada saya, sehingga tidak etis bagi saya untuk keluar dalam waktu dekat.' },
-  { d: 'A', q: 'Saya betul-betul ingin menghabiskan sisa karier saya di perusahaan ini.' },
-  { d: 'B', q: 'Saya merasa pilihan untuk keluar dari perusahaan ini memerlukan pengorbanan personal yang terlalu tinggi.' },
-  { d: 'N', q: 'Walaupun ada tawaran lain yang menarik, saya merasa seharusnya tetap loyal pada organisasi ini.' },
+// d = dimensi: A afektif, B berkelanjutan, N normatif · k = nomor asli di daftar per bagian (8 per dimensi)
+const PK_ITEMS = [ // urutan acak yang dikunci (sama untuk semua peserta), tidak ada dua dimensi sama berurutan
+  { d: 'A', k: 'A2', q: "Saya benar-benar merasa seolah-olah masalah organisasi ini adalah masalah saya sendiri." },
+  { d: 'B', k: 'B7', q: "Jujur saja, alasan utama saya bertahan di sini saat ini adalah karena faktor kebutuhan praktis (finansial/keamanan)." },
+  { d: 'N', k: 'N8', q: "Sekalipun saya ditawari tempat lain yang lebih menjanjikan, saya tetap merasa harus bertahan di sini karena rasa tanggung jawab." },
+  { d: 'B', k: 'B3', q: "Saat ini, bertahan di organisasi ini lebih merupakan keharusan daripada pilihan." },
+  { d: 'N', k: 'N2', q: "Saya diajar untuk percaya bahwa seseorang harus selalu setia kepada perusahaan tempatnya bekerja." },
+  { d: 'A', k: 'A7', q: "Saya merasa bangga menceritakan kepada orang lain tentang apa yang dicapai organisasi ini." },
+  { d: 'B', k: 'B4', q: "Kalaupun saya mau mencari tempat lain, tidak banyak pilihan yang keadaannya sebagus di sini saat ini." },
+  { d: 'N', k: 'N6', q: "Loyalitas kepada tempat kerja adalah hal yang sangat penting menurut saya pribadi." },
+  { d: 'B', k: 'B1', q: "Akan sangat sulit bagi saya untuk meninggalkan organisasi saya saat ini, bahkan jika saya ingin melakukannya." },
+  { d: 'N', k: 'N1', q: "Saya pikir orang zaman sekarang terlalu mudah berpindah-pindah perusahaan." },
+  { d: 'A', k: 'A6', q: "Saya merasa seperti berada di rumah sendiri di organisasi ini." },
+  { d: 'B', k: 'B8', q: "Meninggalkan organisasi ini saat ini akan membuat situasi hidup saya menjadi jauh lebih sulit." },
+  { d: 'A', k: 'A3', q: "Saya merasa seperti bagian dari \"keluarga\" di organisasi ini." },
+  { d: 'B', k: 'B2', q: "Terlalu banyak hal dalam hidup saya yang akan berantakan jika saya memutuskan untuk keluar dari organisasi ini sekarang." },
+  { d: 'N', k: 'N7', q: "Saya merasa memiliki kewajiban moral yang besar untuk tetap bekerja di tempat ini." },
+  { d: 'B', k: 'B5', q: "Rasanya terlalu banyak kerugian secara pribadi yang harus saya tanggung jika saya meninggalkan organisasi ini sekarang." },
+  { d: 'A', k: 'A4', q: "Saya merasa memiliki keterikatan emosional yang kuat dengan organisasi ini." },
+  { d: 'N', k: 'N5', q: "Organisasi ini sudah terlalu banyak berjasa dan berinvestasi pada diri saya, jadi saya harus membalasnya dengan bertahan." },
+  { d: 'A', k: 'A1', q: "Saya akan sangat senang menghabiskan sisa karier saya di organisasi ini." },
+  { d: 'N', k: 'N3', q: "Bahkan jika hal itu menguntungkan bagi saya, rasanya tidak etis kalau saya meninggalkan organisasi ini sekarang." },
+  { d: 'A', k: 'A5', q: "Organisasi ini memiliki arti tersendiri yang sangat penting bagi saya pribadi." },
+  { d: 'N', k: 'N4', q: "Saya akan merasa bersalah jika meninggalkan organisasi saya saat ini." },
+  { d: 'B', k: 'B6', q: "Saya merasa terikat untuk bertahan karena apa yang akan saya lepaskan jika saya keluar dari sini terlalu besar." },
+  { d: 'A', k: 'A8', q: "Saya merasa sangat terlibat dan peduli dengan nasib organisasi ini ke depannya." },
 ];
 
 const PK_ORDER = ['A', 'B', 'N'];
@@ -2652,7 +2676,7 @@ const PK_DIMS = {
   },
 };
 
-// Rata-rata per dimensi (skala 1 sampai 5), dominan = rata-rata tertinggi (bisa lebih dari satu kalau seri)
+// Rata-rata per dimensi dari 8 pernyataan (skala 1 sampai 5), dominan = rata-rata tertinggi (bisa lebih dari satu kalau seri)
 function pkAnalyze(answers) {
   const avg = {};
   PK_ORDER.forEach(d => {
@@ -2673,7 +2697,7 @@ const pkDomName = ds => ds.map(d => PK_DIMS[d].name).join(' & ');
 
 
 {
-const KEY = 'mengapa:pk:v1', QKEY = 'mengapa:pk:queue', N = PK_ITEMS.length;
+const KEY = 'mengapa:pk:v2', QKEY = 'mengapa:pk:queue2', N = PK_ITEMS.length;
 const $app = document.getElementById('app');
 const store = {
   get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } },
@@ -2716,7 +2740,7 @@ function intro() {
         <div class="eyebrow">Workshop HK Gold</div>
         <h1>Tes Pandangan Kerja</h1>
         <p class="lead">Kenali alasan utama yang membuatmu bertahan di pekerjaanmu sekarang: karena ingin, karena harus, atau karena merasa seharusnya.</p>
-        <div class="pk-meta"><span>12 pernyataan</span><span>±3 menit</span><span>Hasil langsung</span></div>
+        <div class="pk-meta"><span>${N} pernyataan</span><span>±5 menit</span><span>Hasil langsung</span></div>
       </div>
       <div class="card flat pk-how">
         <b>Cara mengisi</b>
@@ -2784,7 +2808,7 @@ function test() {
       <div class="likert" role="radiogroup" aria-label="Tingkat persetujuan">
         ${PK_SCALE.map((label, k) => `
           <button class="lk${st.answers[i] === k + 1 ? ' sel' : ''}" role="radio" aria-checked="${st.answers[i] === k + 1}" data-v="${k + 1}">
-            <span class="lk-dot" style="--s:${0.55 + k * 0.12}"></span><span>${label}</span>
+            <span class="pk-n">${k + 1}</span><span>${label}</span>
           </button>`).join('')}
       </div>
       <div class="testfoot"><span>Jawab jujur, hasil langsung keluar</span>
@@ -2846,7 +2870,7 @@ function result() {
       <div class="block">
         <div class="eyebrow">Tiga dimensi komitmen</div>
         <h2>Cara membaca skormu</h2>
-        <p class="prose">Setiap orang punya ketiga jenis komitmen ini dengan kadar yang berbeda. Skor adalah rata-rata dari 4 pernyataan per dimensi, dengan rentang 1 sampai 5.</p>
+        <p class="prose">Setiap orang punya ketiga jenis komitmen ini dengan kadar yang berbeda. Skor adalah rata-rata dari 8 pernyataan per dimensi, dengan rentang 1 sampai 5.</p>
         <div class="card pk-dims">${PK_ORDER.map(d => { const X = PK_DIMS[d], v = a.avg[d]; return `
           <div class="pk-dim${dom.includes(d) ? ' on' : ''}" style="--c:${X.color};--soft:${X.soft}">
             <div class="pk-dim-h"><span class="pk-dot"></span><b>${X.name}${X.foreign ? ` (${fx(X.foreign)})` : ''}</b><strong>${pkNum(v)}</strong></div>
@@ -2957,7 +2981,7 @@ function payload(r) {
     nama: r.profile.name, jabatan: r.profile.job,
     afektif: a.avg.A, berkelanjutan: a.avg.B, normatif: a.avg.N, dominan: pkDomName(a.dominant),
     jawaban: r.answers.join(''), durasi_detik: r.startedAt ? Math.round((r.finishedAt - r.startedAt) / 1000) : '',
-    versi_tes: 'hk-pandangan-v1', perangkat: navigator.userAgent.slice(0, 180),
+    versi_tes: 'hk-pandangan-v2', perangkat: navigator.userAgent.slice(0, 180),
   } };
 }
 async function post(p) {
