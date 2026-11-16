@@ -1164,9 +1164,9 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 
 .pk-dl { margin-top: 16px; display: grid; gap: 16px; background: #FFFFFF; border: 0; }
 .pk-dl > div + div { padding-top: 16px; border-top: 1px solid rgba(0,0,0,.07); }
-.pk-dl b { font-size: 15px; display: block; margin-bottom: 4px; }
-.pk-dl p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
-.pk-dl ul { margin: 2px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+.pk-dl b { font-size: 16px; display: block; margin-bottom: 4px; }
+.pk-dl p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.pk-dl ul { margin: 2px 0 0; padding-left: 20px; font-size: 16px; line-height: 1.55; color: var(--ink-2); }
 .pk-dl li + li { margin-top: 3px; }
 
 .pk-dims { margin-top: 16px; display: grid; gap: 0; }
@@ -1398,6 +1398,35 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .pka-people .c-time { grid-row: auto; }
 }
 .res-hero .pk-h1 em { font-weight: inherit; color: inherit; font-family: inherit; font-style: normal; }
+
+/* ringkasan kesimpulan */
+.pk-sum { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto 0; max-width: 560px; text-align: left; }
+.pk-sum-b { background: var(--soft); border-radius: 20px; padding: 14px 16px 16px; }
+.pk-sum-b > span { display: block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(29,29,29,.55); margin-bottom: 8px; }
+.pk-sum-b > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.pk-sum-b b { font-size: 16px; font-weight: 800; background: rgba(255,255,255,.7); border-radius: 999px; padding: 4px 12px; line-height: 1.3; }
+.pk-h1 { font-size: clamp(30px, 7.5vw, 46px) !important; line-height: 1.12 !important; max-width: 16em; margin-left: auto !important; margin-right: auto !important; }
+.pkr .res-hero .tagline { margin-top: 18px; }
+.pk-combo h2 { margin: 0; }
+.pk-combo h2 + p { margin-top: 10px; }
+.pk-combo p { font-size: 16px; }
+.pk-combo > p:first-child { margin-top: 0; }
+
+/* kenali ketiganya + lebar baca + jarak bab */
+.pk-dims > .eyebrow { margin: 0 0 4px; }
+.pk-dim p { font-size: 16px; line-height: 1.55; }
+.pk-dim-s { font-size: 13px; color: #8A8A85; margin: 2px 0 6px 22px; }
+.pk-dim-h strong small { display: block; font-size: 12px; font-weight: 600; color: #8A8A85; text-align: right; margin-top: 1px; }
+.pk-dim-h strong { text-align: right; line-height: 1.15; }
+.pk-dim .pk-dim-s + p, .pk-dim-h + p { margin-left: 22px; }
+.pk-dim .pk-dim-s:empty { display: none; }
+.pk-dim-h b { font-size: 17px; }
+.pkr .pk-part { max-width: 680px; margin-left: auto; margin-right: auto; margin-top: 64px; padding-top: 0; }
+.pkr .pk-part .pk-part-tag { margin-bottom: 4px; }
+.pkr .pk-part + .pk-part { border-top: 1px solid var(--line); padding-top: 40px; margin-top: 56px; }
+.pkr .pk-tie { max-width: none; text-align: left; font-size: 16px; }
+.pkr > .wrap > .block:not(.pk-part):not(.no-print) { max-width: 680px; margin-left: auto; margin-right: auto; }
+@media (max-width: 640px) { .pk-sum { grid-template-columns: 1fr; } .pkr .pk-part { margin-top: 48px; } }
 
 </style>
 </head>

@@ -1165,9 +1165,9 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 
 .pk-dl { margin-top: 16px; display: grid; gap: 16px; background: #FFFFFF; border: 0; }
 .pk-dl > div + div { padding-top: 16px; border-top: 1px solid rgba(0,0,0,.07); }
-.pk-dl b { font-size: 15px; display: block; margin-bottom: 4px; }
-.pk-dl p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
-.pk-dl ul { margin: 2px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.55; color: var(--ink-2); }
+.pk-dl b { font-size: 16px; display: block; margin-bottom: 4px; }
+.pk-dl p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-2); }
+.pk-dl ul { margin: 2px 0 0; padding-left: 20px; font-size: 16px; line-height: 1.55; color: var(--ink-2); }
 .pk-dl li + li { margin-top: 3px; }
 
 .pk-dims { margin-top: 16px; display: grid; gap: 0; }
@@ -1399,6 +1399,35 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .pka-people .c-time { grid-row: auto; }
 }
 .res-hero .pk-h1 em { font-weight: inherit; color: inherit; font-family: inherit; font-style: normal; }
+
+/* ringkasan kesimpulan */
+.pk-sum { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px auto 0; max-width: 560px; text-align: left; }
+.pk-sum-b { background: var(--soft); border-radius: 20px; padding: 14px 16px 16px; }
+.pk-sum-b > span { display: block; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(29,29,29,.55); margin-bottom: 8px; }
+.pk-sum-b > div { display: flex; flex-wrap: wrap; gap: 6px; }
+.pk-sum-b b { font-size: 16px; font-weight: 800; background: rgba(255,255,255,.7); border-radius: 999px; padding: 4px 12px; line-height: 1.3; }
+.pk-h1 { font-size: clamp(30px, 7.5vw, 46px) !important; line-height: 1.12 !important; max-width: 16em; margin-left: auto !important; margin-right: auto !important; }
+.pkr .res-hero .tagline { margin-top: 18px; }
+.pk-combo h2 { margin: 0; }
+.pk-combo h2 + p { margin-top: 10px; }
+.pk-combo p { font-size: 16px; }
+.pk-combo > p:first-child { margin-top: 0; }
+
+/* kenali ketiganya + lebar baca + jarak bab */
+.pk-dims > .eyebrow { margin: 0 0 4px; }
+.pk-dim p { font-size: 16px; line-height: 1.55; }
+.pk-dim-s { font-size: 13px; color: #8A8A85; margin: 2px 0 6px 22px; }
+.pk-dim-h strong small { display: block; font-size: 12px; font-weight: 600; color: #8A8A85; text-align: right; margin-top: 1px; }
+.pk-dim-h strong { text-align: right; line-height: 1.15; }
+.pk-dim .pk-dim-s + p, .pk-dim-h + p { margin-left: 22px; }
+.pk-dim .pk-dim-s:empty { display: none; }
+.pk-dim-h b { font-size: 17px; }
+.pkr .pk-part { max-width: 680px; margin-left: auto; margin-right: auto; margin-top: 64px; padding-top: 0; }
+.pkr .pk-part .pk-part-tag { margin-bottom: 4px; }
+.pkr .pk-part + .pk-part { border-top: 1px solid var(--line); padding-top: 40px; margin-top: 56px; }
+.pkr .pk-tie { max-width: none; text-align: left; font-size: 16px; }
+.pkr > .wrap > .block:not(.pk-part):not(.no-print) { max-width: 680px; margin-left: auto; margin-right: auto; }
+@media (max-width: 640px) { .pk-sum { grid-template-columns: 1fr; } .pkr .pk-part { margin-top: 48px; } }
 
 </style>
 </head>
@@ -2938,7 +2967,16 @@ function summarize(r) {
     : 'memandang pekerjaan sebagai ' + o.dominant.map(d => ({ J: 'sumber penghasilan', R: 'jalan untuk naik', C: 'panggilan' })[d]).join(' sekaligus ');
   const combos = a.dominant.length < 3 && o.dominant.length && o.dominant.length < 3
     ? a.dominant.flatMap(k => o.dominant.map(w => PK_COMBO[k + w])) : [];
-  return { a, o, kTitle, oTitle, sentence: `Kamu bertahan ${why}, dan ${view}.`, combos };
+  const kNames = a.dominant.length === 3 ? ['Seimbang'] : a.dominant.map(d => PK_DIMS[d].name);
+  const oNames = o.dominant.length === 0 ? ['Belum terlihat'] : o.dominant.length === 3 ? ['Ketiganya'] : o.dominant.map(d => WO_DIMS[d].name);
+  const single = a.dominant.length === 1 && o.dominant.length === 1;
+  const kTie = a.dominant.length > 1, oTie = o.dominant.length !== 1;
+  const headline = single ? PK_COMBO[a.dominant[0] + o.dominant[0]].t
+    : kTie && oTie ? 'Pandanganmu cukup seimbang'
+    : kTie ? 'Alasanmu bertahan datang dari beberapa sisi'
+    : o.dominant.length === 0 ? 'Cara kamu memandang pekerjaan belum terlihat jelas'
+    : 'Cara kamu memandang pekerjaan punya beberapa sisi';
+  return { a, o, kTitle, oTitle, kNames, oNames, single, headline, sentence: `Kamu bertahan ${why}, dan ${view}.`, combos };
 }
 
 /* ---------- layar ---------- */
@@ -3117,7 +3155,11 @@ function result() {
       <div class="top">${brand()}</div>
       <div class="res-hero">
         <div class="eyebrow">${nick ? `Hasil Pandangan Kerja ${nick}` : 'Hasil Pandangan Kerja'}</div>
-        <h1 class="pk-h1">${esc(S.kTitle)} <span>×</span> ${o.dominant.length && o.dominant.length < 3 ? o.dominant.map(d => woName(d)).join(' + ') : esc(S.oTitle)}</h1>
+        <h1 class="pk-h1">${esc(S.headline)}</h1>
+        <div class="pk-sum">
+          <div class="pk-sum-b" style="--soft:${kSoft}"><span>Alasan bertahan</span><div>${S.kNames.map(n => `<b>${esc(n)}</b>`).join('')}</div></div>
+          <div class="pk-sum-b" style="--soft:${oSoft}"><span>Cara memandang kerja</span><div>${S.oNames.map(n => `<b>${esc(n)}</b>`).join('')}</div></div>
+        </div>
         <p class="tagline">${esc(S.sentence)}</p>
         <div class="pk-duo">
           <div class="pk-box" style="--soft:${kSoft}"><div class="pk-box-h"><span>Bagian 1</span>Alasan kamu bertahan</div>${kBars(a)}</div>
@@ -3129,7 +3171,7 @@ function result() {
       ${S.combos.length ? `
       <div class="block">
         <div class="eyebrow">Gabungan kedua bagian</div>
-        ${S.combos.map(c => `<div class="card pk-combo"><h2>${esc(c.t)}</h2><p>${esc(c.p)}</p></div>`).join('')}
+        ${S.combos.map(c => `<div class="card pk-combo">${S.single ? '' : `<h2>${esc(c.t)}</h2>`}<p>${esc(c.p)}</p></div>`).join('')}
       </div>` : ''}
 
       <div class="block pk-part">
@@ -3142,10 +3184,10 @@ function result() {
           <p class="prose">${fx(X.about)}</p>
           ${detailCard(X)}
         </div>`; }).join('')}
-        <div class="card pk-dims">${PK_ORDER.map(d => { const X = PK_DIMS[d], v = a.avg[d]; return `
+        <div class="card pk-dims"><div class="eyebrow">Kenali ketiganya</div>${PK_ORDER.map(d => { const X = PK_DIMS[d], v = a.avg[d]; return `
           <div class="pk-dim${a.dominant.includes(d) ? ' on' : ''}" style="--c:${X.color};--soft:${X.soft}">
-            <div class="pk-dim-h"><span class="pk-dot"></span><b>${X.name}${X.foreign ? ` (${fx(X.foreign)})` : ''}</b><strong>${pkNum(v)}</strong></div>
-            <p class="pk-q">"${X.quote}"</p>
+            <div class="pk-dim-h"><span class="pk-dot"></span><b>${X.name}</b><strong>${pkNum(v)}<small>${pkLevel(v)}</small></strong></div>
+            ${X.foreign ? `<div class="pk-dim-s">${fx(X.foreign)}</div>` : ''}
             <p>${esc(X.short)}</p>
           </div>`; }).join('')}
           <p class="small muted pk-lv">Skor = rata-rata 8 pernyataan per dimensi (1 sampai 5). Kuat: 4,00 ke atas · Sedang: 3,00 sampai 3,99 · Rendah: di bawah 3,00</p>
@@ -3163,10 +3205,10 @@ function result() {
           <p class="prose">${esc(X.about)}</p>
           ${detailCard(X)}
         </div>`; }).join('')}`}
-        <div class="card pk-dims">${WO_ORDER.map(d => { const X = WO_DIMS[d], v = o.sc[d]; return `
+        <div class="card pk-dims"><div class="eyebrow">Kenali ketiganya</div>${WO_ORDER.map(d => { const X = WO_DIMS[d], v = o.sc[d]; return `
           <div class="pk-dim${o.dominant.includes(d) ? ' on' : ''}" style="--c:${X.color};--soft:${X.soft}">
-            <div class="pk-dim-h"><span class="pk-dot"></span><b><em>${X.name}</em> · ${X.sub}</b><strong>${o.pct[d]}%</strong></div>
-            <p class="pk-q">Penilaianmu: ${WO_LEVEL(v).toLowerCase()} (${v} dari 3)</p>
+            <div class="pk-dim-h"><span class="pk-dot"></span><b><em>${X.name}</em></b><strong>${o.pct[d]}%<small>${WO_LEVEL(v)}</small></strong></div>
+            <div class="pk-dim-s">${X.sub}</div>
             <p>${esc(X.short)}</p>
           </div>`; }).join('')}
           <p class="small muted pk-lv">Persen = porsi tiap cara pandang dibanding total penilaianmu di Bagian 2. Cara pandang terhadap pekerjaan bisa berubah seiring usia, kebutuhan hidup, dan pengalaman kerja.</p>
@@ -3318,19 +3360,27 @@ async function pkCard(r) {
   const { W, cv, ctx } = await cardBase('Tes Pandangan Kerja');
   // judul
   ctx.textAlign = 'center'; ctx.fillStyle = '#1D1D1D';
-  const title = `${S.kTitle} × ${S.oTitle}`;
-  let fs = 92; ctx.font = `800 ${fs}px ${SANS}`; while (ctx.measureText(title).width > 940 && fs > 52) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
-  ctx.letterSpacing = '-3px'; ctx.fillText(title, W / 2, 330); ctx.letterSpacing = '0px';
-  ctx.font = `500 34px ${SANS}`; ctx.fillStyle = '#444';
-  const lines = wrap(ctx, S.sentence, 900).slice(0, 3); lines.forEach((l, i) => ctx.fillText(l, W / 2, 400 + i * 48));
+  let fs = 84; ctx.font = `800 ${fs}px ${SANS}`; let tl = wrap(ctx, S.headline, 940);
+  while (tl.length > 2 && fs > 56) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; tl = wrap(ctx, S.headline, 940); }
+  ctx.letterSpacing = '-2px'; tl.slice(0, 2).forEach((l, i) => ctx.fillText(l, W / 2, 310 + i * (fs + 8))); ctx.letterSpacing = '0px';
+  const tEnd = 310 + (Math.min(tl.length, 2) - 1) * (fs + 8);
+  // dua kotak ringkas
+  const bw2 = (W - 120 - 20) / 2, by = tEnd + 50;
+  [['Alasan bertahan', S.kNames, a.dominant.length === 1 ? PK_DIMS[a.dominant[0]].soft : '#EFEDE8'], ['Cara memandang kerja', S.oNames, o.dominant.length === 1 ? WO_DIMS[o.dominant[0]].soft : '#EFEDE8']].forEach(([lb, nm, soft], i) => {
+    const bx = 60 + i * (bw2 + 20); ctx.fillStyle = soft; roundRect(ctx, bx, by, bw2, 150, 36); ctx.fill();
+    ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(29,29,29,.55)'; ctx.font = `700 22px ${SANS}`; ctx.letterSpacing = '2px'; ctx.fillText(lb.toUpperCase(), bx + 32, by + 50); ctx.letterSpacing = '0px';
+    ctx.fillStyle = '#1D1D1D'; ctx.font = `800 40px ${SANS}`; const nt = nm.join(' + '); let f2 = 40; while (ctx.measureText(nt).width > bw2 - 64 && f2 > 26) { f2 -= 2; ctx.font = `800 ${f2}px ${SANS}`; } ctx.fillText(nt, bx + 32, by + 112);
+  });
+  ctx.textAlign = 'center'; ctx.font = `500 32px ${SANS}`; ctx.fillStyle = '#444';
+  const lines = wrap(ctx, S.sentence, 900).slice(0, 3); lines.forEach((l, i) => ctx.fillText(l, W / 2, by + 150 + 56 + i * 44));
   // dua kotak
   const group = (y0, soft, label, rows) => {
-    ctx.fillStyle = soft; roundRect(ctx, 60, y0, W - 120, 520, 56); ctx.fill();
+    ctx.fillStyle = soft; roundRect(ctx, 60, y0, W - 120, 450, 52); ctx.fill();
     ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(29,29,29,.55)'; ctx.font = `700 24px ${SANS}`; ctx.letterSpacing = '3px';
     ctx.fillText(label.toUpperCase(), 130, y0 + 76); ctx.letterSpacing = '0px';
     const x0 = 130, bw = W - 260;
     rows.forEach((rw, i) => {
-      const y = y0 + 160 + i * 120;
+      const y = y0 + 150 + i * 110;
       ctx.globalAlpha = rw.on ? 1 : .55;
       ctx.textAlign = 'left'; ctx.fillStyle = '#1D1D1D'; ctx.font = `800 36px ${SANS}`; ctx.fillText(rw.name, x0, y);
       ctx.textAlign = 'right'; ctx.font = `800 38px ${SANS}`; ctx.fillText(rw.label, x0 + bw, y);
@@ -3339,10 +3389,10 @@ async function pkCard(r) {
       ctx.globalAlpha = 1;
     });
   };
-  const yTop = 400 + lines.length * 48 + 30;
+  const yTop = by + 150 + 56 + lines.length * 44 + 10;
   group(yTop, a.dominant.length > 1 ? '#EFEDE8' : PK_DIMS[a.dominant[0]].soft, 'Bagian 1 · Alasan bertahan',
     PK_ORDER.map(d => ({ name: PK_DIMS[d].name, label: pkNum(a.avg[d]), f: a.avg[d] / 5, on: a.dominant.includes(d), color: PK_DIMS[d].color })));
-  group(yTop + 550, o.dominant.length === 1 ? WO_DIMS[o.dominant[0]].soft : '#EFEDE8', 'Bagian 2 · Cara memandang pekerjaan',
+  group(yTop + 480, o.dominant.length === 1 ? WO_DIMS[o.dominant[0]].soft : '#EFEDE8', 'Bagian 2 · Cara memandang pekerjaan',
     WO_ORDER.map(d => ({ name: WO_DIMS[d].name, label: o.pct[d] + '%', f: o.sc[d] / 3, on: o.dominant.includes(d), color: WO_DIMS[d].color })));
   cardFoot(ctx, W, `${first(r.profile.name) || 'Peserta'} · ${fmtDate(r.finishedAt)}`);
   return new Promise(res => cv.toBlob(res, 'image/png', 0.95));
