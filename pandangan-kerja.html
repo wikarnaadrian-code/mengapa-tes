@@ -1274,6 +1274,53 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .pka-people th:nth-child(1), .pka-people td:nth-child(1) { min-width: 160px; }
 .pka-people th:nth-child(2), .pka-people td:nth-child(2) { min-width: 120px; }
 
+/* filter atas (memotong seluruh dashboard) dan toolbar daftar peserta yang menempel */
+.pka-flabel { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+.pka-filters select.input { flex: 0 1 260px; }
+.pka-tools { position: sticky; top: 0; z-index: 4; background: #FFFFFF; margin: -18px -20px 0; padding: 16px 20px 12px; border-radius: 22px 22px 0 0; }
+.pka-tools.stuck { border-radius: 0; box-shadow: 0 6px 14px -10px rgba(0,0,0,.25); }
+.pka-tools-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.pka-q { width: min(100%, 320px) !important; flex: 0 1 320px; min-height: 42px; padding: 9px 14px; font-size: 15px; background: #F5F5F3; border-color: transparent; }
+.pka-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.pka-chips button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: #F0F0EE; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.pka-chips button small { opacity: .6; font-weight: 600; }
+.pka-chips button[aria-pressed="true"] { background: #1D1D1D; color: #FFFFFF; }
+.pka-chips .pk-dot { width: 9px; height: 9px; }
+.pka-people thead th { background: #FFFFFF; }
+@media (min-width: 900px) {
+  .pka-people-wrap { overflow: visible; }
+  .pka-people thead th { position: sticky; top: var(--th-top, 0px); z-index: 3; }
+}
+@media (max-width: 520px) { .pka-tools { margin: -18px -16px 0; padding: 14px 16px 10px; } .pka-q { width: 100% !important; flex: 1 1 100%; } }
+
+/* HP: daftar peserta jadi kartu */
+@media (max-width: 640px) {
+  .pka-people-wrap { overflow: visible; margin: 8px 0 0; }
+  .pka-people, .pka-people tbody { display: block; }
+  .pka-people thead { display: none; }
+  .pka-people tr.pka-p { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px 8px; padding: 12px 10px; border-bottom: 1px solid rgba(0,0,0,.07); border-radius: 14px; }
+  .pka-people tr.pka-p td { border: 0; padding: 0; background: transparent !important; }
+  .pka-people .c-name { grid-column: 1 / 3; }
+  .pka-people .c-time { grid-column: 3; text-align: right; font-size: 12px; }
+  .pka-people .c-job { grid-column: 1 / -1; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .pka-people td.num { width: auto; text-align: left; font-size: 16px; background: #F5F5F3 !important; border-radius: 10px; padding: 6px 10px; }
+  .pka-people td.num::before { content: attr(data-l); display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  .pka-people .c-dom { grid-column: 1 / 3; margin-top: 8px; }
+  .pka-people .c-time { margin-top: 8px; align-self: center; }
+  .pka-people tr.pka-p:hover, .pka-people tr.pka-p.open { background: #F7F7F5; }
+  .pka-people tr.pka-detail { display: block; }
+  .pka-people tr.pka-detail td { display: block; border-radius: 14px; }
+  .pka-people tr:not(.pka-p):not(.pka-detail) { display: block; }
+  .pka-people tr:not(.pka-p):not(.pka-detail) td { display: block; border: 0; }
+}
+@media (max-width: 640px) {
+  .pka-tools-h h2 { font-size: 17px; }
+  .pka-q { min-height: 40px; }
+  .pka-chips { flex-wrap: nowrap; overflow-x: auto; margin: 10px -16px 0; padding: 0 16px 2px; scrollbar-width: none; }
+  .pka-chips::-webkit-scrollbar { display: none; }
+  .pka-chips button { flex: 0 0 auto; }
+}
+
 </style>
 </head>
 <body>
