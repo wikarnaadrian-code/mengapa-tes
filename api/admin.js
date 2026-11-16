@@ -104,6 +104,44 @@ module.exports = async (req, res) => {
       return res.status(502).json({ ok: false, error: String(e.message || e) });
     }
   }
+  // Kelola token: wajib masukkan password admin lagi. Hasilnya sesi khusus token, berlaku 60 menit.
+  if (body.action === 'tokauth') {
+    const sess = readSession(body.session, key);
+    if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
+    if (!adminPass || !safeEq(String(body.pass || ''), adminPass)) { await wait(900); return res.status(200).json({ ok: false, error: 'Password salah' }); }
+    const payload = Buffer.from(JSON.stringify({ u: sess.u, c: '', tk: 1, exp: Date.now() + 60 * 60e3 })).toString('base64url');
+    return res.status(200).json({ ok: true, tksession: payload + '.' + sign(payload, key), minutes: 60 });
+  }
+
+  // Kelola token: khusus admin Mengapa, dengan sesi khusus token
+  if (body.action === 'token') {
+    const sess = readSession(body.session, key);
+    if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
+    const tks = readSession(body.tksession, key);
+    if (!tks || tks.c || !tks.tk) return res.status(403).json({ ok: false, error: 'tk' });
+    const ops = { list: 'token_list', create: 'token_create', update: 'token_update', delete: 'token_delete' };
+    const action = ops[body.op];
+    if (!action) return res.status(400).json({ ok: false, error: 'op' });
+    const pick = o => Object.fromEntries(Object.entries(o || {}).filter(([k]) => ['jenis', 'kode', 'jumlah', 'awalan', 'kuota', 'berlaku', 'label', 'catatan', 'klien'].includes(k)));
+    const payload = { secret: key, action };
+    if (body.op === 'create') Object.assign(payload, pick(body.data));
+    if (body.op === 'update' || body.op === 'delete') {
+      payload.tokens = (Array.isArray(body.tokens) ? body.tokens : []).map(t => String(t || '').trim()).filter(Boolean).slice(0, 1000);
+      if (!payload.tokens.length) return res.status(400).json({ ok: false, error: 'Tidak ada token yang dipilih' });
+    }
+    if (body.op === 'update') { payload.op = ['aktif', 'nonaktif', 'set'].includes(body.mode) ? body.mode : ''; payload.fields = body.fields && typeof body.fields === 'object' ? body.fields : {}; if (!payload.op) return res.status(400).json({ ok: false, error: 'mode' }); }
+    try {
+      const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload), redirect: 'follow' });
+      const t = await r.text();
+      let j; try { j = JSON.parse(t); } catch (e) { throw new Error('Apps Script tidak membalas JSON'); }
+      if (j.error === 'unauthorized') throw new Error('SHEET_SECRET di Vercel beda dengan di Apps Script');
+      if (!j.tokens && (j.ok !== false || j.error === 'token')) throw new Error('Apps Script belum diperbarui. Tempel Code.gs terbaru lalu deploy ulang.');
+      return res.status(200).json({ ...j, at: new Date().toISOString() });
+    } catch (e) {
+      return res.status(502).json({ ok: false, error: String(e.message || e) });
+    }
+  }
+
   // Tes Pandangan Kerja HK Gold: admin Mengapa, atau sesi klien HKGold
   if (body.action === 'pandangan') {
     const sess = readSession(body.session, key);

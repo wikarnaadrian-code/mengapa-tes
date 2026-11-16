@@ -1434,6 +1434,155 @@ footer.dash-foot { padding: 32px 0 10px; }
 @media (max-width: 767px) { .dash-actions { gap: 6px; } .dash-actions .upd { font-size: 12px; margin-right: 0; } .dash-actions .btn.sm.outbtn { padding: 0 11px; font-size: 13px; } }
 @media (max-width: 380px) { .dash-actions { flex-wrap: wrap; } .dash-actions .upd { flex: 0 0 100%; } }
 
+/* ============ Kelola token ============ */
+.viewtabs { display: flex; background: #FFFFFF; border-radius: 999px; padding: 4px; gap: 2px; }
+.viewtabs button { border: 0; background: transparent; border-radius: 999px; padding: 7px 14px; font-size: 13.5px; font-weight: 700; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.viewtabs button[aria-pressed="true"] { background: var(--ink); color: #FFFFFF; }
+@media (max-width: 767px) { .viewtabs { order: 5; width: 100%; } .viewtabs button { flex: 1; } }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .02em; }
+body.tk-busy { cursor: progress; }
+.tk-wait { min-height: 40vh; display: grid; place-content: center; }
+
+.tk-kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 10px; }
+.tk-kpi { text-align: left; border: 0; background: #FFFFFF; border-radius: 22px; padding: 12px 16px; cursor: pointer; box-shadow: inset 0 0 0 2px transparent; transition: box-shadow .15s; }
+.tk-kpi b { display: block; font-family: var(--serif); font-size: 28px; font-weight: 600; line-height: 1.1; }
+.tk-kpi span { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+.tk-kpi i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); flex: 0 0 auto; }
+.tk-kpi:hover { box-shadow: inset 0 0 0 2px var(--line); }
+.tk-kpi.on { box-shadow: inset 0 0 0 2px var(--ink); }
+.tk-alerts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; background: #FBEFD9; border-radius: 18px; padding: 10px 14px; margin-bottom: 10px; font-size: 13px; }
+.tk-alerts > span { font-size: 15px; }
+.tk-alerts button { border: 0; background: rgba(255,255,255,.7); border-radius: 999px; padding: 5px 11px; font-size: 12.5px; font-weight: 600; color: #6B4E05; cursor: pointer; }
+.tk-batches { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 2px; scrollbar-width: thin; }
+.tk-batch { flex: 0 0 240px; text-align: left; border: 0; background: #FFFFFF; border-radius: 20px; padding: 12px 14px; display: grid; gap: 6px; cursor: pointer; box-shadow: inset 0 0 0 2px transparent; }
+.tk-batch.on { box-shadow: inset 0 0 0 2px var(--ink); }
+.tk-bh { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.tk-bh b { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tk-bh small, .tk-bend { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+.tk-bn { font-size: 13px; } .tk-bn em { font-style: normal; color: var(--muted); font-size: 12px; }
+.tk-batch .rail { height: 7px; } .tk-batch .rail i { background: var(--ink); }
+
+.tk-top { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+.tk-new { min-height: 42px; height: 42px; padding: 0 16px; font-size: 14px; width: auto; white-space: nowrap; }
+.tk-filters { grid-template-columns: 1fr 1fr 1fr; }
+.tk-filters .sortsel span { display: none; }
+.tkv .seg button small { font-size: 11px; }
+.tk-bulk:empty { display: none; }
+.tk-all { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); padding: 8px 18px 4px; cursor: pointer; }
+.tk-bulkbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; background: var(--ink); color: #FFFFFF; padding: 8px 10px 8px 16px; font-size: 13px; }
+.tk-bulkbar b { margin-right: auto; }
+.tk-bulkbar button { border: 0; background: rgba(255,255,255,.14); color: #FFFFFF; border-radius: 999px; padding: 6px 11px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.tk-bulkbar button.danger { background: #C25B4A; }
+.tk-bulkbar button.x { background: transparent; padding: 4px; display: grid; place-items: center; }
+.tk-row { display: grid; grid-template-columns: 30px 1fr; align-items: center; border-radius: 14px; }
+.tk-row.picked { background: #F1ECDF; }
+.tk-ck { display: grid; place-items: center; height: 100%; cursor: pointer; padding-left: 4px; }
+.tk-ck input, .tk-all input { width: 17px; height: 17px; accent-color: #1D1D1D; cursor: pointer; }
+.tk-it { grid-template-columns: 1fr auto; padding-left: 4px; }
+.tk-it .it-main b { font-size: 14px; }
+.tk-jd { display: inline-block; width: 8px; height: 8px; border-radius: 3px; background: var(--c); margin-right: 5px; vertical-align: 0; }
+.tk-jd.big { width: 14px; height: 14px; border-radius: 4px; margin-right: 10px; vertical-align: 1px; }
+.tk-meta { display: grid; justify-items: end; gap: 3px; min-width: 0; max-width: 170px; text-align: right; }
+.tk-meta small { font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.tk-st { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.tk-st::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+.tk-warn { color: #C25B4A; font-weight: 700; }
+
+.tk-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace !important; font-size: 26px !important; letter-spacing: .01em; word-break: break-all; }
+.tk-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.tk-chip { background: var(--soft); color: var(--ink); border-radius: 999px; padding: 3px 10px; font-size: 12.5px; font-weight: 700; }
+.tk-share .btn { min-height: 40px; height: 40px; padding: 0 16px; font-size: 13.5px; background: var(--tint); border: 0; }
+.tk-share .btn:hover { background: #E8E8E4; }
+.box.tk-use { background: var(--soft); }
+.tk-usep { margin: 0 !important; font-size: 14.5px; }
+.tk-usep.small { margin-top: 8px !important; font-size: 13px; color: var(--ink-2); }
+.tk-usen { display: flex; align-items: baseline; gap: 8px; }
+.tk-usen b { font-family: var(--serif); font-size: 40px; font-weight: 600; line-height: 1; }
+.tk-usen span { font-size: 14px; color: var(--ink-2); }
+.tk-rail { margin-top: 10px; height: 10px; background: rgba(255,255,255,.75); }
+.box h3 small { font-size: 12px; color: var(--faint); letter-spacing: 0; margin-left: 4px; }
+.tk-hist { display: grid; gap: 2px; }
+.tk-hist button { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 12px; text-align: left; border: 0; background: transparent; border-radius: 12px; padding: 8px 10px; cursor: pointer; }
+.tk-hist button:hover { background: #FFFFFF; }
+.tk-hist b { font-size: 14px; } .tk-hist span { grid-column: 1; font-size: 12.5px; color: var(--muted); }
+.tk-hist small { grid-column: 2; grid-row: 1 / 3; align-self: center; font-size: 12px; color: var(--faint); white-space: nowrap; }
+.tk-form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tk-form label, .tk-f { display: grid; gap: 5px; align-content: start; }
+.tk-form label > span, .tk-fl { font-size: 12.5px; font-weight: 700; color: var(--ink-2); }
+.tk-fl em { font-style: normal; font-weight: 500; color: var(--faint); }
+.tk-form small, .tk-f small { font-size: 12px; color: var(--muted); }
+.tk-form .full { grid-column: 1 / -1; }
+.tk-form .input, .tk-cform .input { min-height: 44px; padding: 10px 14px; font-size: 15px; border-radius: 12px; background: #FFFFFF; width: 100%; box-sizing: border-box; }
+.tk-form textarea.input { min-height: 0; resize: vertical; font-family: inherit; }
+.tk-formact { display: flex; justify-content: flex-end; }
+.tk-zoneact { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.btn.danger { background: #C25B4A; color: #FFFFFF; border-color: #C25B4A; }
+.btn.ghost.danger { background: transparent; color: #B04A39; box-shadow: inset 0 0 0 1.5px #E3B5AC; }
+.tk-zone .btn.sm, .tk-formact .btn.sm, .tk-mact .btn.sm { min-height: 40px; height: 40px; padding: 0 16px; font-size: 13.5px; width: auto; }
+
+/* jendela */
+.tk-ov { position: fixed; inset: 0; z-index: 50; background: rgba(20,20,18,.42); display: grid; place-items: center; padding: 20px; }
+.tk-ov.anim { animation: tkfade .18s ease both; }
+.tk-ov.anim .tk-modal { animation: enter .25s var(--ease) both; }
+@keyframes tkfade { from { opacity: 0; } }
+.tk-modal { position: relative; width: min(100%, 560px); max-height: calc(100svh - 40px); overflow-y: auto; background: var(--bg); border-radius: 28px; padding: 26px 26px 22px; box-shadow: 0 24px 60px rgba(0,0,0,.18); }
+.tk-modal.small { width: min(100%, 440px); }
+.tk-modal h2 { font-family: var(--serif); font-weight: 600; font-size: 26px; margin: 0 0 6px; line-height: 1.2; padding-right: 36px; }
+.tk-modal > p, .tk-modal .muted { margin: 0 0 14px; font-size: 14.5px; }
+.tk-mx { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; border: 0; background: #FFFFFF; display: grid; place-items: center; cursor: pointer; }
+.tk-back { border: 0; background: none; color: var(--muted); font-size: 13.5px; font-weight: 600; padding: 0; margin-bottom: 8px; cursor: pointer; }
+.tk-types { display: grid; gap: 10px; }
+.tk-types button { display: grid; grid-template-columns: 14px 1fr; column-gap: 12px; text-align: left; border: 0; background: #FFFFFF; border-radius: 20px; padding: 16px 18px; cursor: pointer; box-shadow: inset 0 0 0 2px transparent; transition: box-shadow .15s, background .15s; }
+.tk-types button:hover { background: var(--soft); box-shadow: inset 0 0 0 2px var(--c); }
+.tk-types i { grid-row: 1 / 3; width: 14px; height: 14px; border-radius: 4px; background: var(--c); margin-top: 4px; }
+.tk-types b { font-size: 16px; } .tk-types span { font-size: 13.5px; color: var(--ink-2); line-height: 1.45; margin-top: 2px; }
+.tk-cform { display: grid; gap: 14px; margin-top: 10px; }
+.tk-two { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; }
+.tk-mode { grid-template-columns: 1fr 1fr; background: #FFFFFF; }
+.tk-f .chips button { background: #FFFFFF; }
+.tk-f .chips button[aria-pressed="true"] { background: var(--ink); color: #FFFFFF; }
+.tk-merr { margin: 0; background: #F6DBD6; color: #7C2419; border-radius: 12px; padding: 10px 12px; font-size: 13.5px; }
+.tk-mact { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.tk-mact.wrap { flex-wrap: wrap; }
+.tk-ok { width: 44px; height: 44px; border-radius: 50%; background: #2F9E6B; color: #FFFFFF; display: grid; place-items: center; font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+.tk-made { max-height: 260px; overflow-y: auto; background: #FFFFFF; border-radius: 16px; padding: 6px; margin: 10px 0 12px; display: grid; }
+.tk-made div { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; border-radius: 10px; }
+.tk-made div + div { border-top: 1px solid var(--tint); }
+.tk-made button { border: 0; background: var(--tint); border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 600; cursor: pointer; }
+/* kunci */
+.tk-lockwrap { min-height: 55vh; display: grid; place-items: center; padding: 20px 0; }
+.tk-lock { width: min(100%, 380px); background: #FFFFFF; border-radius: 28px; padding: 28px 26px; display: grid; gap: 12px; text-align: center; }
+.tk-lockic { font-size: 30px; }
+.tk-lock h2 { font-family: var(--serif); font-weight: 600; font-size: 24px; margin: 0; }
+.tk-lock p { margin: 0; font-size: 14px; }
+.tk-lock .input { min-height: 48px; padding: 12px 14px; font-size: 16px; border-radius: 14px; background: var(--tint); text-align: center; }
+.tk-lock .err { color: #B04A39; font-size: 13.5px; }
+
+@media (max-width: 1000px) { .tk-kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 767px) {
+  .tk-kpis { display: flex; overflow-x: auto; margin: 0 -14px 10px; padding: 0 14px; }
+  .tk-kpi { flex: 0 0 auto; min-width: 128px; }
+  .tk-batch { flex-basis: 220px; }
+  .tk-form, .tk-two { grid-template-columns: 1fr; }
+  .tk-ov { align-items: end; padding: 0; }
+  .tk-modal { width: 100%; max-height: 92svh; border-radius: 28px 28px 0 0; padding: 22px 18px 24px; }
+  .tk-mact { flex-wrap: wrap; } .tk-mact .btn.sm { flex: 1; }
+  .tk-meta { max-width: 140px; }
+}
+.tkv .list-pane, .tkv .tools > * { min-width: 0; }
+.tk-top { grid-template-columns: minmax(0, 1fr) auto; }
+.tkv .seg { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tk-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.tk-row { grid-template-columns: 30px minmax(0, 1fr); }
+.tk-it { grid-template-columns: minmax(0, 1fr) auto; }
+@media (max-width: 520px) {
+  .tk-filters { grid-template-columns: 1fr 1fr; } .tk-filters .sortsel:last-child { grid-column: 1 / -1; }
+  .tk-new { padding: 0 12px; font-size: 13.5px; }
+  .tkv .seg button { font-size: 12.5px; padding: 7px 2px; }
+  .tk-meta { max-width: 128px; }
+  .tk-alerts button { text-align: left; }
+}
+
 </style>
 </head>
 <body>
@@ -1462,7 +1611,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.5.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.6.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2236,6 +2385,8 @@ const UI = {
   'Tingkat persetujuan': 'Level of agreement',
   'Token ini sudah dipakai. Satu token hanya berlaku untuk satu kali tes.': 'This token has already been used. Each token is valid for one test only.',
   'Token ini sudah tidak aktif. Hubungi tim Mengapa.': 'This token is no longer active. Please contact the Mengapa team.',
+  'Masa berlaku token ini sudah habis. Hubungi tim Mengapa atau pihak yang memberi token.': 'This token has expired. Please contact the Mengapa team or whoever gave you the token.',
+  'Kuota token ini sudah terpakai semua. Hubungi tim Mengapa atau pihak yang memberi token.': 'This token has reached its limit. Please contact the Mengapa team or whoever gave you the token.',
   'Tes Karakter Lengkap memakai token dari tim Mengapa. Satu token berlaku untuk satu kali tes.': 'The Full Character Test requires a token from the Mengapa team. Each token is valid for one test.',
   'Token tidak ditemukan. Cek lagi penulisannya ya.': 'Token not found. Please check the spelling.',
   'Tidak bisa memeriksa token. Cek koneksi internet lalu coba lagi.': 'Could not check the token. Check your internet connection and try again.',
@@ -2772,6 +2923,531 @@ function plantSvg(total, cls = 'plant') {
   return `<svg class="${cls}" viewBox="0 0 120 104" aria-hidden="true" data-stage="${st}">${parts[st]}</svg>`;
 }
 
+/* ===== tok.js ===== */
+/* Kelola token: bagian dashboard admin Mengapa (tidak tampil di dashboard klien).
+   Dibundel SEBELUM tim.js; memakai S, L, esc, api, render, toast, fmtDate, fmtTime, CONFIG dari tim.js saat dipanggil. */
+
+const TK = { auth: null, authErr: '', list: null, clients: [], today: '', at: '', loading: false, busy: false, err: '', q: '', fj: 'all', fs: 'all', fk: '', fl: '', sort: 'new', sel: '', pick: new Set(), modal: null, hm: {} };
+
+function tkJ() {
+  return {
+    personal: { name: L('Token Personal', 'Personal Token'), short: 'Personal', c: '#4F86BF', soft: '#DFE9F5',
+      desc: L('Satu orang, satu kali tes. Bisa dibuat banyak sekaligus.', 'One person, one test. Can be created in bulk.') },
+    klien: { name: L('Token Klien', 'Client Token'), short: L('Klien', 'Client'), c: '#B8892A', soft: '#F5EBCF',
+      desc: L('Satu kode untuk satu perusahaan atau acara. Hasilnya masuk ke dashboard klien.', 'One code for a company or event. Results go to the client dashboard.') },
+    admin: { name: L('Token Admin', 'Admin Token'), short: 'Admin', c: '#7B5EA7', soft: '#E9E1F4',
+      desc: L('Untuk tim Mengapa mencoba tes. Tanpa batas dan tanpa email notifikasi.', 'For the Mengapa team to try the test. Unlimited, no email notifications.') },
+  };
+}
+function tkS() {
+  return {
+    ready: { name: L('Siap dipakai', 'Ready'), c: '#2F9E6B' },
+    busy: { name: L('Sedang dikerjakan', 'In progress'), c: '#D49B1F' },
+    done: { name: L('Selesai', 'Used'), c: '#77776F' },
+    full: { name: L('Kuota habis', 'Quota used up'), c: '#D9822B' },
+    exp: { name: L('Kedaluwarsa', 'Expired'), c: '#C25B4A' },
+    off: { name: L('Nonaktif', 'Inactive'), c: '#A9A9A3' },
+  };
+}
+const tkHist = t => TK.hm[t.token] || [];
+const tkUsed = t => Math.max(t.dipakai || 0, tkHist(t).length);
+function tkStat(t) {
+  if (t.status === 'nonaktif') return 'off';
+  if (t.berlaku && TK.today && TK.today > t.berlaku) return 'exp';
+  if (t.jenis === 'personal') return t.status === 'dipakai' ? 'busy' : t.status === 'selesai' ? 'done' : 'ready';
+  return t.kuota > 0 && tkUsed(t) >= t.kuota ? 'full' : 'ready';
+}
+const tkLeft = t => t.berlaku && TK.today ? Math.round((Date.parse(t.berlaku) - Date.parse(TK.today)) / 864e5) : null;
+const tkSoon = t => { const d = tkLeft(t), s = tkStat(t); return d !== null && d >= 0 && d <= 7 && (s === 'ready' || s === 'busy'); };
+const tkStale = t => tkStat(t) === 'busy' && t.mulai && Date.now() - Date.parse(t.mulai) > 864e5;
+const tkLow = t => t.jenis !== 'personal' && t.kuota > 0 && tkStat(t) === 'ready' && t.kuota - tkUsed(t) <= Math.max(2, Math.ceil(t.kuota * 0.1));
+const tkClient = slug => { const c = TK.clients.find(x => x.klien.toLowerCase() === String(slug || '').toLowerCase()); return c ? c.nama : slug || ''; };
+const tkDate = ymd => ymd ? fmtDate(ymd + 'T00:00:00') : '';
+const tkShort = ymd => { if (!ymd) return ''; const d = new Date(ymd + 'T00:00:00'); return `${d.getDate()} ${MON()[d.getMonth()]}${d.getFullYear() !== new Date().getFullYear() ? ' ' + String(d.getFullYear()).slice(2) : ''}`; };
+const tkLink = code => `${String(CONFIG.site || 'https://www.mengapa.me').replace(/\/+$/, '')}/?token=${encodeURIComponent(code)}`;
+const tkPct = (a, b) => b ? Math.round(a / b * 100) : 0;
+function tkWa(t) {
+  const link = tkLink(t.token), one = t.jenis === 'personal', until = t.berlaku ? tkDate(t.berlaku) : '';
+  return L(`Halo! Kamu diundang mengikuti Tes Karakter Lengkap dari Mengapa.\n\nKlik link ini untuk mulai (token sudah otomatis terisi):\n${link}\n\nToken: ${t.token}\n${one ? 'Token ini berlaku untuk satu kali tes.\n' : ''}${until ? `Berlaku sampai ${until}.\n` : ''}Tesnya sekitar 10 menit dan hasilnya langsung keluar.`,
+    `Hi! You're invited to take the Mengapa Full Character Test.\n\nOpen this link to start (the token is filled in for you):\n${link}\n\nToken: ${t.token}\n${one ? 'This token is valid for one test.\n' : ''}${until ? `Valid until ${until}.\n` : ''}The test takes about 10 minutes and you get your result right away.`);
+}
+function tkUsage(t) {
+  const n = tkUsed(t);
+  if (t.jenis === 'personal') { const h = tkHist(t)[0]; return h ? esc(h.name) : tkStat(t) === 'busy' ? L('sedang dikerjakan', 'in progress') : L('belum dipakai', 'not used yet'); }
+  return t.kuota ? L(`${n} dari ${t.kuota} tes`, `${n} of ${t.kuota} tests`) : L(`${n} tes`, `${n} tests`);
+}
+
+/* ---------- kunci: password admin lagi ---------- */
+const TK_AKEY = 'mengapa:admin:tk';
+function tkAuthed() {
+  if (!TK.auth) { try { TK.auth = JSON.parse(sessionStorage.getItem(TK_AKEY) || 'null'); } catch (e) { TK.auth = null; } }
+  if (TK.auth && TK.auth.exp > Date.now()) return true;
+  TK.auth = null; try { sessionStorage.removeItem(TK_AKEY); } catch (e) { /* abaikan */ }
+  return false;
+}
+function tkLock(msg) { TK.auth = null; TK.list = null; TK.authErr = msg || ''; try { sessionStorage.removeItem(TK_AKEY); } catch (e) { /* abaikan */ } }
+function tkLockHtml() {
+  return `<div class="tk-lockwrap"><form class="tk-lock" id="tklock">
+    <div class="tk-lockic">🔒</div>
+    <h2>${L('Kelola token dilindungi', 'Token management is protected')}</h2>
+    <p class="muted">${L('Masukkan password admin sekali lagi untuk membuka halaman ini. Berlaku 60 menit atau sampai tab browser ditutup.', 'Enter the admin password again to open this page. Valid for 60 minutes or until the browser tab is closed.')}</p>
+    <input class="input" type="password" id="tkpw" autocomplete="current-password" placeholder="${L('Password admin', 'Admin password')}" required>
+    <p class="err" id="tklerr"${TK.authErr ? '' : ' hidden'}>${esc(TK.authErr)}</p>
+    <button class="btn" id="tklbtn" type="submit">${L('Buka', 'Unlock')}</button>
+  </form></div>`;
+}
+function tkBindLock() {
+  const f = document.getElementById('tklock'); if (!f) return;
+  const pw = document.getElementById('tkpw'); if (pw && !matchMedia('(pointer:coarse)').matches) pw.focus();
+  f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const btn = document.getElementById('tklbtn'), er = document.getElementById('tklerr');
+    btn.disabled = true; btn.textContent = L('Memeriksa…', 'Checking…'); er.hidden = true;
+    try {
+      const j = await api({ action: 'tokauth', session: S.session, pass: pw.value });
+      TK.auth = { s: j.tksession, exp: Date.now() + (j.minutes || 60) * 60e3 - 30e3 }; TK.authErr = '';
+      try { sessionStorage.setItem(TK_AKEY, JSON.stringify(TK.auth)); } catch (e2) { /* abaikan */ }
+      tkLoad();
+    } catch (err) { er.hidden = false; er.textContent = err.message === 'Password salah' ? L('Password salah.', 'Wrong password.') : err.message; btn.disabled = false; btn.textContent = L('Buka', 'Unlock'); pw.select(); }
+  });
+}
+
+/* ---------- data ---------- */
+function tkSet(j) {
+  TK.list = j.tokens || []; TK.clients = j.klien || []; TK.today = j.today || ''; TK.at = j.at || new Date().toISOString();
+  const have = new Set(TK.list.map(t => t.token));
+  [...TK.pick].forEach(c => { if (!have.has(c)) TK.pick.delete(c); });
+  if (TK.sel && !have.has(TK.sel)) TK.sel = '';
+}
+async function tkLoad() {
+  TK.loading = true; TK.err = ''; render();
+  if (!tkAuthed()) { TK.loading = false; return render(); }
+  try { tkSet(await api({ action: 'token', op: 'list', session: S.session, tksession: TK.auth.s })); }
+  catch (e) { if (e.message === 'tk') tkLock(L('Sesi kelola token berakhir. Masukkan password lagi.', 'Token session ended. Enter the password again.')); else TK.err = e.message; }
+  TK.loading = false; render();
+}
+async function tkCall(body, msg) {
+  if (TK.busy) return null;
+  TK.busy = true; document.body.classList.add('tk-busy');
+  if (!tkAuthed()) { tkLock(L('Sesi kelola token berakhir. Masukkan password lagi.', 'Token session ended. Enter the password again.')); TK.modal = null; render(); return null; }
+  try { const j = await api({ action: 'token', session: S.session, tksession: TK.auth.s, ...body }); tkSet(j); if (msg) toast(typeof msg === 'function' ? msg(j) : msg); return j; }
+  catch (e) { if (e.message === 'tk') { tkLock(L('Sesi kelola token berakhir. Masukkan password lagi.', 'Token session ended. Enter the password again.')); TK.modal = null; render(); } else toast(e.message); return null; }
+  finally { TK.busy = false; document.body.classList.remove('tk-busy'); }
+}
+
+/* ---------- daftar ---------- */
+function tkVisible() {
+  const q = TK.q.trim().toLowerCase();
+  const xs = (TK.list || []).filter(t => (TK.fj === 'all' || t.jenis === TK.fj)
+    && (TK.fs === 'all' || (TK.fs === 'soon' ? tkSoon(t) : TK.fs === 'stale' ? tkStale(t) : TK.fs === 'blocked' ? ['off', 'exp', 'full'].includes(tkStat(t)) : tkStat(t) === TK.fs))
+    && (!TK.fk || (TK.fk === '-' ? !t.klien : t.klien.toLowerCase() === TK.fk.toLowerCase())) && (!TK.fl || t.label === TK.fl)
+    && (!q || [t.token, t.catatan, t.label, tkClient(t.klien), ...tkHist(t).map(x => x.name)].join(' ').toLowerCase().includes(q)));
+  const by = {
+    new: (a, b) => String(b.dibuat).localeCompare(String(a.dibuat)) || a.token.localeCompare(b.token),
+    code: (a, b) => a.token.localeCompare(b.token),
+    exp: (a, b) => (a.berlaku || '9999').localeCompare(b.berlaku || '9999') || a.token.localeCompare(b.token),
+    used: (a, b) => tkUsed(b) - tkUsed(a) || a.token.localeCompare(b.token),
+    last: (a, b) => String(b.selesai || '').localeCompare(String(a.selesai || '')) || a.token.localeCompare(b.token),
+  };
+  return xs.sort(by[TK.sort] || by.new);
+}
+function tkRow(t) {
+  const J = tkJ()[t.jenis] || tkJ().personal, st = tkS()[tkStat(t)], d = tkLeft(t);
+  const exp = t.berlaku ? ` · <span class="${d !== null && d <= 7 && d >= 0 ? 'tk-warn' : ''}">${d !== null && d < 0 ? L('lewat', 'ended') : L('s.d.', 'until')} ${tkShort(t.berlaku)}</span>` : '';
+  return `<div class="tk-row${TK.pick.has(t.token) ? ' picked' : ''}">
+    <label class="tk-ck" title="${L('Pilih', 'Select')}"><input type="checkbox" data-tkpick="${esc(t.token)}"${TK.pick.has(t.token) ? ' checked' : ''}></label>
+    <button class="it tk-it${TK.sel === t.token ? ' on' : ''}" data-tk="${esc(t.token)}">
+      <span class="it-main"><b class="mono">${esc(t.token)}</b><small><i class="tk-jd" style="--c:${J.c}"></i>${J.short}${t.klien ? ' · ' + esc(tkClient(t.klien)) : ''}${t.label ? ' · ' + esc(t.label) : ''}</small></span>
+      <span class="tk-meta"><span class="tk-st" style="--c:${st.c}">${st.name}</span><small>${tkUsage(t)}${exp}</small></span>
+    </button></div>`;
+}
+function tkListHtml(xs) {
+  if (TK.loading && !TK.list) return `<div class="empty"><span class="spin"></span>${L('Memuat token…', 'Loading tokens…')}</div>`;
+  if (!xs.length) return `<div class="empty">${(TK.list || []).length ? L('Tidak ada token yang cocok dengan pencarian atau filter.', 'No tokens match your search or filters.') : L('Belum ada token. Klik "Buat token" untuk mulai.', 'No tokens yet. Click "New token" to start.')}</div>`;
+  return xs.slice(0, 400).map(tkRow).join('') + (xs.length > 400 ? `<p class="empty small">${L(`Menampilkan 400 dari ${xs.length}. Persempit dengan pencarian atau filter.`, `Showing 400 of ${xs.length}. Narrow down with search or filters.`)}</p>` : '');
+}
+function tkBulkHtml(xs) {
+  if (TK.pick.size) return `<div class="tk-bulkbar"><b>${L(`${TK.pick.size} dipilih`, `${TK.pick.size} selected`)}</b>
+    <button data-tkb="copy">${L('Salin kode', 'Copy codes')}</button><button data-tkb="on">${L('Aktifkan', 'Activate')}</button><button data-tkb="off">${L('Nonaktifkan', 'Deactivate')}</button><button data-tkb="del" class="danger">${L('Hapus', 'Delete')}</button>
+    <button data-tkb="clear" class="x" aria-label="${L('Batal pilih', 'Clear selection')}">${ICON.x}</button></div>`;
+  return xs.length ? `<label class="tk-all"><input type="checkbox" id="tkall"> ${L(`Pilih semua yang tampil (${Math.min(xs.length, 400)})`, `Select all shown (${Math.min(xs.length, 400)})`)}</label>` : '';
+}
+const tkCount = xs => L(`${xs.length} dari ${(TK.list || []).length} token`, `${xs.length} of ${(TK.list || []).length} tokens`);
+
+/* ---------- detail ---------- */
+function tkDetail(t) {
+  if (!t) return `<div class="pick"><span>🔑</span><p>${L('Pilih token untuk melihat detail, riwayat pemakaian, dan aksinya.', 'Select a token to see its details, usage history, and actions.')}</p></div>`;
+  const J = tkJ()[t.jenis] || tkJ().personal, sk = tkStat(t), st = tkS()[sk], h = tkHist(t), n = tkUsed(t), d = tkLeft(t);
+  const row = (k, v) => v ? `<div><dt>${k}</dt><dd>${v}</dd></div>` : '';
+  const dt = v => v ? `${fmtDate(v)}, ${fmtTime(v)}` : '';
+  const labels = [...new Set((TK.list || []).map(x => x.label).filter(Boolean))].sort();
+  let use;
+  if (t.jenis === 'personal') {
+    use = sk === 'busy' ? L(`Sedang dikerjakan sejak ${dt(t.mulai)}. Kalau peserta ganti HP atau browser, klik <b>Aktifkan kembali</b> supaya token bisa dipakai lagi dari awal.`, `In progress since ${dt(t.mulai)}. If the participant switched phone or browser, click <b>Activate again</b> so the token can be used from the start.`)
+      : sk === 'done' ? L(`Sudah dipakai${h[0] ? ` oleh <b>${esc(h[0].name)}</b>` : ''}${t.selesai ? ` pada ${dt(t.selesai)}` : ''}.`, `Used${h[0] ? ` by <b>${esc(h[0].name)}</b>` : ''}${t.selesai ? ` on ${dt(t.selesai)}` : ''}.`)
+      : sk === 'ready' ? L('Belum dipakai. Kirim link undangan ke peserta.', 'Not used yet. Send the invitation link to the participant.')
+      : sk === 'exp' ? L('Masa berlakunya sudah lewat. Perpanjang tanggalnya kalau masih mau dipakai.', 'It has expired. Extend the date if it should still be usable.')
+      : L('Token ini dinonaktifkan dan tidak bisa dipakai.', 'This token is deactivated and cannot be used.');
+    use = `<p class="tk-usep">${use}</p>`;
+  } else {
+    use = `<div class="tk-usen"><b>${n}</b><span>${t.kuota ? L(`dari ${t.kuota} kuota`, `of ${t.kuota} quota`) : L('tes, tanpa batas kuota', 'tests, no quota limit')}</span></div>
+      ${t.kuota ? `<div class="rail tk-rail"><i style="width:${Math.min(100, tkPct(n, t.kuota))}%;background:${sk === 'full' ? tkS().full.c : J.c}"></i></div><p class="tk-usep small">${sk === 'full' ? L('Kuota habis. Tambah kuota kalau masih ada peserta.', 'Quota used up. Add more if there are more participants.') : L(`Sisa ${t.kuota - n} peserta.`, `${t.kuota - n} left.`)}</p>` : ''}
+      ${sk === 'exp' ? `<p class="tk-usep small">${L('Masa berlakunya sudah lewat. Perpanjang tanggalnya kalau masih mau dipakai.', 'It has expired. Extend the date if it should still be usable.')}</p>` : sk === 'off' ? `<p class="tk-usep small">${L('Token ini dinonaktifkan dan tidak bisa dipakai.', 'This token is deactivated and cannot be used.')}</p>` : ''}`;
+  }
+  const off = sk === 'off';
+  return `
+    <div class="d-head">
+      <button class="iconbtn only-m" data-tkclose aria-label="${L('Kembali', 'Back')}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <div class="d-title"><h1 class="mono tk-code">${esc(t.token)}</h1><p class="tk-tags"><span class="tk-chip" style="--c:${J.c};--soft:${J.soft}">${J.name}</span><span class="tk-st" style="--c:${st.c}">${st.name}</span></p></div>
+    </div>
+    <div class="d-actions tk-share">
+      <button class="btn ghost" data-copy="${esc(t.token)}">${L('Salin token', 'Copy token')}</button>
+      <button class="btn ghost" data-copy="${esc(tkLink(t.token))}">${L('Salin link undangan', 'Copy invite link')}</button>
+      <button class="btn ghost" data-copy="${esc(tkWa(t))}">${L('Salin pesan WhatsApp', 'Copy WhatsApp message')}</button>
+    </div>
+    <section class="box tk-use" style="--soft:${J.soft}">${use}</section>
+    <section class="box"><h3>${L('Detail', 'Details')}</h3><dl class="kv">
+      ${row(L('Jenis', 'Type'), J.name)}${row(L('Klien', 'Client'), esc(tkClient(t.klien)))}${row(L('Label batch', 'Batch label'), esc(t.label))}
+      ${row(L('Berlaku sampai', 'Valid until'), t.berlaku ? `${tkDate(t.berlaku)} <span class="muted">· ${d < 0 ? L('sudah lewat', 'ended') : d === 0 ? L('hari ini terakhir', 'last day today') : L(`${d} hari lagi`, `${d} days left`)}</span>` : L('Tanpa batas', 'No end date'))}
+      ${t.jenis === 'klien' ? row(L('Kuota', 'Quota'), t.kuota ? L(`${t.kuota} peserta`, `${t.kuota} participants`) : L('Tanpa batas', 'Unlimited')) : ''}
+      ${row(L('Dibuat', 'Created'), dt(t.dibuat))}${row(L('Mulai dipakai', 'First used'), dt(t.mulai))}${row(L(t.jenis === 'personal' ? 'Selesai' : 'Terakhir dipakai', t.jenis === 'personal' ? 'Finished' : 'Last used'), dt(t.selesai))}
+      ${row(L('Catatan', 'Notes'), esc(t.catatan))}
+    </dl></section>
+    <section class="box"><h3>${L('Riwayat pemakaian', 'Usage history')} <small>${h.length}</small></h3>
+      ${h.length ? `<div class="tk-hist">${h.slice(0, 60).map(x => `<button data-gores="${esc(x.key)}"><b>${esc(x.name)}</b><span>${esc(x.title)}</span><small>${fmtDate(x.t)}, ${fmtTime(x.t)}</small></button>`).join('')}</div>${h.length > 60 ? `<p class="small muted">${L(`dan ${h.length - 60} lainnya. Cari nama token ini di halaman Hasil tes.`, `and ${h.length - 60} more. Search this token on the Results page.`)}</p>` : ''}`
+        : `<p class="small muted">${L('Belum ada hasil tes yang masuk dengan token ini.', 'No test results with this token yet.')}</p>`}
+    </section>
+    <section class="box"><h3>${L('Ubah', 'Edit')}</h3>
+      <form class="tk-form" id="tkedit">
+        ${t.jenis === 'klien' ? `<label><span>${L('Kuota peserta', 'Participant quota')}</span><input class="input" type="number" min="0" name="kuota" value="${t.kuota || ''}" placeholder="${L('Kosongkan untuk tanpa batas', 'Leave empty for unlimited')}"></label>` : ''}
+        <label><span>${L('Berlaku sampai', 'Valid until')}</span><input class="input" type="date" name="berlaku" value="${esc(t.berlaku)}"><small>${L('Kosongkan untuk tanpa batas.', 'Leave empty for no end date.')}</small></label>
+        ${t.jenis !== 'admin' ? `<label><span>${L('Klien', 'Client')}</span><select class="input" name="klien">${t.jenis === 'personal' ? `<option value="">${L('Tanpa klien', 'No client')}</option>` : ''}${TK.clients.map(c => `<option value="${esc(c.klien)}"${c.klien.toLowerCase() === t.klien.toLowerCase() ? ' selected' : ''}>${esc(c.nama)}</option>`).join('')}</select></label>` : ''}
+        <label><span>${L('Label batch', 'Batch label')}</span><input class="input" name="label" value="${esc(t.label)}" list="tklabels" maxlength="60" placeholder="${L('Contoh: Workshop Nov', 'e.g. November workshop')}"></label>
+        <label class="full"><span>${L('Catatan', 'Notes')}</span><textarea class="input" name="catatan" rows="2" maxlength="300">${esc(t.catatan)}</textarea></label>
+        <datalist id="tklabels">${labels.map(l => `<option value="${esc(l)}">`).join('')}</datalist>
+        <div class="full tk-formact"><button class="btn sm" type="submit">${L('Simpan perubahan', 'Save changes')}</button></div>
+      </form>
+    </section>
+    <section class="box tk-zone"><h3>${L('Status token', 'Token status')}</h3>
+      <p class="small muted">${off ? L('Aktifkan kembali supaya token bisa dipakai lagi.', 'Activate it again so the token can be used.') : t.jenis === 'personal' && sk !== 'ready' ? L('Aktifkan kembali untuk mereset token ini supaya bisa dipakai lagi dari awal.', 'Activate again to reset this token so it can be used from the start.') : L('Nonaktifkan untuk menghentikan pemakaian token ini tanpa menghapus riwayatnya.', 'Deactivate to stop this token from being used without deleting its history.')}</p>
+      <div class="tk-zoneact">
+        ${off || (t.jenis === 'personal' && (sk === 'busy' || sk === 'done')) ? `<button class="btn sm" data-tkone="on">${L('Aktifkan kembali', 'Activate again')}</button>` : ''}
+        ${off ? '' : `<button class="btn ghost sm" data-tkone="off">${L('Nonaktifkan', 'Deactivate')}</button>`}
+        <button class="btn ghost sm danger" data-tkone="del">${L('Hapus token', 'Delete token')}</button>
+      </div>
+    </section>`;
+}
+
+/* ---------- ringkasan ---------- */
+function tkSummary() {
+  const all = TK.list || [], n = all.length, c = k => all.filter(t => tkStat(t) === k).length;
+  const blocked = all.filter(t => ['off', 'exp', 'full'].includes(tkStat(t))).length;
+  const card = (k, v, label, color) => `<button class="tk-kpi${TK.fs === k ? ' on' : ''}" data-tkfs="${k}"${color ? ` style="--c:${color}"` : ''}><b>${v}</b><span>${color ? '<i></i>' : ''}${label}${k !== 'all' && n ? ` · ${tkPct(v, n)}%` : ''}</span></button>`;
+  const S2 = tkS();
+  const soon = all.filter(tkSoon), stale = all.filter(tkStale), low = all.filter(tkLow);
+  const alerts = [
+    soon.length ? `<button data-tkfs="soon">${L(`${soon.length} token kedaluwarsa dalam 7 hari`, `${soon.length} tokens expire within 7 days`)}</button>` : '',
+    stale.length ? `<button data-tkfs="stale">${L(`${stale.length} token sedang dikerjakan lebih dari sehari (mungkin peserta ganti HP)`, `${stale.length} tokens in progress for over a day (participant may have switched phone)`)}</button>` : '',
+    ...low.slice(0, 3).map(t => `<button data-tk="${esc(t.token)}">${L(`Kuota ${esc(t.token)} tinggal ${t.kuota - tkUsed(t)} dari ${t.kuota}`, `${esc(t.token)} has ${t.kuota - tkUsed(t)} of ${t.kuota} quota left`)}</button>`),
+  ].filter(Boolean);
+  // batch per label
+  const groups = {};
+  all.forEach(t => { if (t.label) (groups[t.label] = groups[t.label] || []).push(t); });
+  const batches = Object.entries(groups).map(([lb, ts]) => {
+    let used = 0, cap = 0, open = false;
+    ts.forEach(t => { if (t.jenis === 'personal') { cap += 1; used += tkStat(t) === 'done' ? 1 : 0; } else { used += tkUsed(t); if (t.kuota) cap += t.kuota; else open = true; } });
+    const last = ts.map(t => t.dibuat).sort().pop() || '';
+    const ends = ts.map(t => t.berlaku).filter(Boolean).sort().pop();
+    return { lb, ts, used, cap: open ? 0 : cap, last, ends };
+  }).sort((a, b) => String(b.last).localeCompare(String(a.last)));
+  return `
+    <section class="tk-kpis">
+      ${card('all', n, L('Total token', 'Total tokens'))}
+      ${card('ready', c('ready'), S2.ready.name, S2.ready.c)}
+      ${card('busy', c('busy'), S2.busy.name, S2.busy.c)}
+      ${card('done', c('done'), S2.done.name, S2.done.c)}
+      ${card('blocked', blocked, L('Tidak bisa dipakai', 'Not usable'), S2.off.c)}
+    </section>
+    ${alerts.length ? `<div class="tk-alerts"><span>${ICON.alert || '⚠'}</span>${alerts.join('')}</div>` : ''}
+    ${batches.length ? `<section class="tk-batches">${batches.map(b => `<button class="tk-batch${TK.fl === b.lb ? ' on' : ''}" data-tkfl="${esc(b.lb)}">
+        <span class="tk-bh"><b>${esc(b.lb)}</b><small>${b.ts.length} token</small></span>
+        <span class="tk-bn">${b.cap ? L(`${b.used} dari ${b.cap} sudah tes`, `${b.used} of ${b.cap} tested`) : L(`${b.used} sudah tes`, `${b.used} tested`)}${b.cap ? ` <em>${tkPct(b.used, b.cap)}%</em>` : ''}</span>
+        ${b.cap ? `<span class="rail"><i style="width:${Math.min(100, tkPct(b.used, b.cap))}%"></i></span>` : ''}
+        ${b.ends ? `<small class="tk-bend">${L('Berlaku s.d.', 'Valid until')} ${tkDate(b.ends)}</small>` : ''}
+      </button>`).join('')}</section>` : ''}`;
+}
+
+/* ---------- tampilan utama ---------- */
+function tkApp() {
+  if (!tkAuthed()) return tkLockHtml();
+  TK.hm = {};
+  S.items.forEach(x => { if (x.kind === 'lengkap' && x.token) (TK.hm[x.token] = TK.hm[x.token] || []).push(x); });
+  Object.values(TK.hm).forEach(a => a.sort((p, q) => q.t - p.t));
+  if (!TK.list) return `${TK.err ? `<div class="banner">${esc(TK.err)}</div>` : ''}<div class="empty tk-wait">${TK.err ? `<button class="btn sm" data-tkretry>${L('Coba lagi', 'Try again')}</button>` : `<span class="spin"></span>${L('Memuat token…', 'Loading tokens…')}`}</div>`;
+  const xs = tkVisible(), sel = TK.list.find(t => t.token === TK.sel), J = tkJ(), all = TK.list;
+  const cnt = k => all.filter(t => k === 'all' || t.jenis === k).length;
+  const opt = (v, label, cur) => `<option value="${esc(v)}"${cur === v ? ' selected' : ''}>${label}</option>`;
+  const S2 = tkS();
+  return `
+    ${TK.err ? `<div class="banner">${esc(TK.err)}</div>` : ''}
+    ${tkSummary()}
+    <div class="main">
+      <aside class="list-pane">
+        <div class="tools">
+          <div class="tk-top">
+            <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+              <input id="tkq" type="search" placeholder="${L('Cari token, catatan, label, peserta…', 'Search token, notes, label, participant…')}" value="${esc(TK.q)}" autocomplete="off"></div>
+            <button class="btn sm tk-new" data-tknew>+ ${L('Buat token', 'New token')}</button>
+          </div>
+          <div class="seg">${['all', 'personal', 'klien', 'admin'].map(k => `<button data-tkfj="${k}" aria-pressed="${TK.fj === k}">${k === 'all' ? L('Semua', 'All') : J[k].short} <small>${cnt(k)}</small></button>`).join('')}</div>
+          <div class="toolrow tk-filters">
+            <label class="sortsel"><span>Status</span><select id="tkfs" aria-label="Status">${opt('all', L('Semua status', 'All statuses'), TK.fs)}${Object.entries(S2).map(([k, v]) => opt(k, v.name, TK.fs)).join('')}${opt('blocked', L('Tidak bisa dipakai', 'Not usable'), TK.fs)}${opt('soon', L('Kedaluwarsa ≤ 7 hari', 'Expires ≤ 7 days'), TK.fs)}${opt('stale', L('Dikerjakan > 1 hari', 'In progress > 1 day'), TK.fs)}</select></label>
+            <label class="sortsel"><span>${L('Klien', 'Client')}</span><select id="tkfk" aria-label="${L('Klien', 'Client')}">${opt('', L('Semua klien', 'All clients'), TK.fk)}${TK.clients.map(c => opt(c.klien, esc(c.nama), TK.fk)).join('')}${opt('-', L('Tanpa klien', 'No client'), TK.fk)}</select></label>
+            <label class="sortsel"><span>${L('Urutkan', 'Sort')}</span><select id="tksort" aria-label="${L('Urutkan', 'Sort')}">${opt('new', L('Terbaru dibuat', 'Newest'), TK.sort)}${opt('last', L('Terakhir dipakai', 'Last used'), TK.sort)}${opt('exp', L('Berlaku paling dekat', 'Ending soonest'), TK.sort)}${opt('used', L('Paling banyak dipakai', 'Most used'), TK.sort)}${opt('code', L('Kode A-Z', 'Code A-Z'), TK.sort)}</select></label>
+          </div>
+          ${TK.fl ? `<div class="pills"><button class="pillx" data-tkfl="${esc(TK.fl)}">${L('Batch', 'Batch')}: ${esc(TK.fl)}${ICON.x}</button></div>` : ''}
+        </div>
+        <div class="tk-bulk" id="tkbulk">${tkBulkHtml(xs)}</div>
+        <div class="list" id="tklist">${tkListHtml(xs)}</div>
+        <p class="count" id="tkcount">${tkCount(xs)}</p>
+      </aside>
+      <article class="detail" id="tkdetail">${tkDetail(sel)}</article>
+    </div>
+    <div id="tkm">${tkModalHtml()}</div>`;
+}
+
+/* ---------- jendela buat token & konfirmasi ---------- */
+function tkPlus(days) { const d = new Date(Date.parse(TK.today || new Date().toISOString().slice(0, 10)) + days * 864e5); return d.toISOString().slice(0, 10); }
+function tkModalHtml() {
+  const m = TK.modal;
+  if (!m) return '';
+  const J = tkJ(), x = `<button class="tk-mx" data-tkm="close" aria-label="${L('Tutup', 'Close')}">${ICON.x}</button>`;
+  let body = '';
+  if (m.type === 'confirm') {
+    body = `<h2>${m.title}</h2><p>${m.msg}</p><div class="tk-mact">${(m.extra || []).map((b, i) => `<button class="btn ghost sm" data-tkm="extra${i}">${b.label}</button>`).join('')}<button class="btn ghost sm" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm${m.danger ? ' danger' : ''}" data-tkm="ok">${m.ok}</button></div>`;
+  } else if (m.step === 1) {
+    body = `<h2>${L('Buat token', 'New token')}</h2><p class="muted">${L('Pilih jenis token yang mau dibuat.', 'Choose the type of token.')}</p>
+      <div class="tk-types">${['personal', 'klien', 'admin'].map(k => `<button data-tktype="${k}" style="--c:${J[k].c};--soft:${J[k].soft}"><i></i><b>${J[k].name}</b><span>${J[k].desc}</span></button>`).join('')}</div>`;
+  } else if (m.step === 2) {
+    const j = m.jenis, preset = m.preset;
+    const until = `<div class="tk-f"><span class="tk-fl">${L('Masa berlaku', 'Validity')}</span>
+        <div class="chips">${[['', L('Tanpa batas', 'No end date')], ['7', L('7 hari', '7 days')], ['30', L('30 hari', '30 days')], ['90', L('90 hari', '90 days')], ['custom', L('Pilih tanggal', 'Pick a date')]].map(([v, l]) => `<button type="button" data-tkpreset="${v}" aria-pressed="${preset === v}">${l}</button>`).join('')}</div>
+        ${preset === 'custom' ? `<input class="input" type="date" name="berlaku" value="${esc(m.berlaku)}" min="${esc(TK.today)}">` : m.berlaku ? `<small>${L('Berlaku sampai', 'Valid until')} ${tkDate(m.berlaku)}</small>` : ''}</div>`;
+    const klienSel = req => TK.clients.length ? `<label class="tk-f"><span class="tk-fl">${L('Klien', 'Client')}${req ? '' : ` <em>${L('opsional', 'optional')}</em>`}</span><select class="input" name="klien">${req ? `<option value="">${L('Pilih klien…', 'Choose a client…')}</option>` : `<option value="">${L('Tanpa klien (hasil hanya di dashboard Mengapa)', 'No client (results only in the Mengapa dashboard)')}</option>`}${TK.clients.map(c => `<option value="${esc(c.klien)}"${m.klien === c.klien ? ' selected' : ''}>${esc(c.nama)}</option>`).join('')}</select>${req ? '' : `<small>${L('Kalau dipilih, hasil tes dengan token ini juga muncul di dashboard klien tersebut.', 'If chosen, results with these tokens also show up in that client\'s dashboard.')}</small>`}</label>`
+      : req ? `<p class="tk-merr">${L('Belum ada klien. Tambahkan klien dulu di tab Klien di Google Sheet.', 'No clients yet. Add one first in the Klien tab of the Google Sheet.')}</p>` : '';
+    const labels = [...new Set((TK.list || []).map(t => t.label).filter(Boolean))].sort();
+    const label = `<label class="tk-f"><span class="tk-fl">${L('Label batch', 'Batch label')} <em>${L('opsional', 'optional')}</em></span><input class="input" name="label" value="${esc(m.label)}" list="tklabels2" maxlength="60" placeholder="${L('Contoh: Workshop Nov', 'e.g. November workshop')}"><datalist id="tklabels2">${labels.map(l => `<option value="${esc(l)}">`).join('')}</datalist><small>${L('Untuk mengelompokkan token dan melihat progresnya.', 'Groups tokens so you can track progress.')}</small></label>`;
+    const note = `<label class="tk-f"><span class="tk-fl">${L('Catatan', 'Notes')} <em>${L('opsional', 'optional')}</em></span><input class="input" name="catatan" value="${esc(m.catatan)}" maxlength="300" placeholder="${j === 'personal' ? L('Contoh: nama pembeli, tanggal bayar', 'e.g. buyer name, payment date') : ''}"></label>`;
+    const code = (ph, help) => `<label class="tk-f"><span class="tk-fl">${L('Kode token', 'Token code')}${j === 'admin' ? ` <em>${L('opsional', 'optional')}</em>` : ''}</span><input class="input mono" name="kode" value="${esc(m.kode)}" maxlength="40" placeholder="${ph}" autocapitalize="characters" spellcheck="false">${help ? `<small>${help}</small>` : ''}</label>`;
+    let f = '';
+    if (j === 'personal') {
+      f = `<div class="seg tk-mode"><button type="button" data-tkmode="acak" aria-pressed="${m.mode === 'acak'}">${L('Buat acak', 'Random codes')}</button><button type="button" data-tkmode="kode" aria-pressed="${m.mode === 'kode'}">${L('Tulis kode sendiri', 'Custom code')}</button></div>
+        ${m.mode === 'acak' ? `<div class="tk-two"><label class="tk-f"><span class="tk-fl">${L('Jumlah token', 'How many')}</span><input class="input" type="number" name="jumlah" min="1" max="500" value="${esc(m.jumlah)}"></label>
+          <label class="tk-f"><span class="tk-fl">${L('Awalan', 'Prefix')}</span><input class="input mono" name="awalan" value="${esc(m.awalan)}" maxlength="20" placeholder="MGP"><small>${L('Contoh hasil', 'Example')}: <b class="mono">${esc((m.awalan || 'MGP').replace(/[^A-Za-z0-9_.\-]/g, '') || 'MGP')}-7K2QXA</b></small></label></div>`
+        : code(L('Contoh: budi-2026', 'e.g. budi-2026'), L('Huruf besar dan kecil dibedakan saat peserta mengetik. Link undangan menghindari salah ketik.', 'Upper and lower case matter when typed. The invite link avoids typos.'))}
+        ${until}${klienSel(false)}${label}${note}`;
+    } else if (j === 'klien') {
+      f = `${klienSel(true)}${code(L('Contoh: HKGOLD-NOV26', 'e.g. HKGOLD-NOV26'), L('Satu kode ini dibagikan ke semua peserta.', 'This one code is shared with every participant.'))}
+        <div class="tk-f"><span class="tk-fl">${L('Kuota peserta', 'Participant quota')}</span>
+          <div class="seg tk-mode"><button type="button" data-tkquota="0" aria-pressed="${!m.batasi}">${L('Tanpa batas', 'Unlimited')}</button><button type="button" data-tkquota="1" aria-pressed="${!!m.batasi}">${L('Batasi', 'Limit')}</button></div>
+          ${m.batasi ? `<input class="input" type="number" name="kuota" min="1" value="${esc(m.kuota)}" placeholder="${L('Contoh: 40', 'e.g. 40')}"><small>${L('Setelah kuota terpakai, token otomatis ditolak.', 'Once the quota is used, the token is refused automatically.')}</small>` : ''}</div>
+        ${until}${label}${note}`;
+    } else {
+      f = `${code('ADMIN-XXXXXX', L('Kosongkan untuk kode acak.', 'Leave empty for a random code.'))}${until}${note}`;
+    }
+    body = `<button class="tk-back" data-tkm="back">‹ ${L('Ganti jenis', 'Change type')}</button><h2><i class="tk-jd big" style="--c:${J[j].c}"></i>${J[j].name}</h2>
+      <form id="tkcreate" class="tk-cform" novalidate>${f}${m.err ? `<p class="tk-merr">${esc(m.err)}</p>` : ''}
+        <div class="tk-mact"><button class="btn ghost sm" type="button" data-tkm="close">${L('Batal', 'Cancel')}</button><button class="btn sm" type="submit">${j === 'personal' && m.mode === 'acak' && Number(m.jumlah) > 1 ? L(`Buat ${m.jumlah} token`, `Create ${m.jumlah} tokens`) : L('Buat token', 'Create token')}</button></div></form>`;
+  } else if (m.step === 3) {
+    const codes = m.created || [], one = codes.length === 1, t0 = one ? (TK.list || []).find(t => t.token === codes[0]) : null;
+    body = `<div class="tk-ok">✓</div><h2>${one ? L('Token dibuat', 'Token created') : L(`${codes.length} token dibuat`, `${codes.length} tokens created`)}</h2>
+      <div class="tk-made">${codes.map(c => `<div><b class="mono">${esc(c)}</b><button data-copy="${esc(c)}">${L('Salin', 'Copy')}</button></div>`).join('')}</div>
+      <div class="tk-mact wrap">
+        ${one && t0 ? `<button class="btn ghost sm" data-copy="${esc(tkWa(t0))}">${L('Salin pesan WhatsApp', 'Copy WhatsApp message')}</button><button class="btn ghost sm" data-copy="${esc(tkLink(codes[0]))}">${L('Salin link', 'Copy link')}</button>`
+          : `<button class="btn ghost sm" data-copy="${esc(codes.join('\n'))}">${L('Salin semua kode', 'Copy all codes')}</button><button class="btn ghost sm" data-copy="${esc(codes.map(c => `${c}  ${tkLink(c)}`).join('\n'))}">${L('Salin semua link', 'Copy all links')}</button><button class="btn ghost sm" data-tkm="csv">${L('Unduh CSV', 'Download CSV')}</button>`}
+        <button class="btn sm" data-tkm="done">${L('Selesai', 'Done')}</button></div>`;
+  }
+  return `<div class="tk-ov${m.anim ? ' anim' : ''}" data-tkm="bg"><div class="tk-modal${m.type === 'confirm' ? ' small' : ''}" role="dialog" aria-modal="true">${x}${body}</div></div>`;
+}
+function tkModal(m) { if (m) m.anim = !TK.modal || TK.modal.type !== m.type; TK.modal = m; const el = document.getElementById('tkm'); if (el) { el.innerHTML = tkModalHtml(); tkBindModal(); } }
+function tkConfirm(o) { tkModal({ type: 'confirm', ...o }); }
+
+function tkReadForm(f) {
+  const m = TK.modal; if (!f || !m) return;
+  ['kode', 'jumlah', 'awalan', 'kuota', 'berlaku', 'klien', 'label', 'catatan'].forEach(k => { if (f.elements[k]) m[k] = f.elements[k].value; });
+}
+async function tkSubmitCreate(f) {
+  const m = TK.modal; tkReadForm(f); m.err = '';
+  const kode = String(m.kode || '').trim().replace(/\s+/g, '');
+  const bad = msg => { m.err = msg; tkModal(m); };
+  if ((m.jenis === 'klien' || (m.jenis === 'personal' && m.mode === 'kode') || (m.jenis === 'admin' && kode)) && !/^[A-Za-z0-9_.\-]{3,40}$/.test(kode)) return bad(kode ? L('Kode 3 sampai 40 karakter: huruf, angka, titik, strip, atau garis bawah.', 'Code must be 3 to 40 characters: letters, numbers, dot, dash, or underscore.') : L('Isi kode tokennya dulu.', 'Enter the token code first.'));
+  if (kode && (TK.list || []).some(t => t.token.toLowerCase() === kode.toLowerCase()) && !(m.jenis === 'personal' && m.mode === 'acak')) return bad(L(`Kode ${kode} sudah dipakai token lain.`, `Code ${kode} is already used by another token.`));
+  if (m.jenis === 'personal' && m.mode === 'acak' && !(Number(m.jumlah) >= 1 && Number(m.jumlah) <= 500)) return bad(L('Jumlah token 1 sampai 500.', 'Number of tokens must be 1 to 500.'));
+  if (m.jenis === 'klien' && !m.klien) return bad(L('Pilih kliennya dulu.', 'Choose the client first.'));
+  if (m.jenis === 'klien' && m.batasi && !(Number(m.kuota) >= 1)) return bad(L('Isi kuota minimal 1, atau pilih Tanpa batas.', 'Enter a quota of at least 1, or choose Unlimited.'));
+  if (m.preset === 'custom' && !m.berlaku) return bad(L('Pilih tanggal berlakunya.', 'Pick the end date.'));
+  const data = { jenis: m.jenis, berlaku: m.berlaku || '', label: m.label || '', catatan: m.catatan || '' };
+  if (m.jenis === 'personal') { if (m.mode === 'acak') { data.jumlah = Number(m.jumlah); data.awalan = m.awalan; } else data.kode = kode; data.klien = m.klien || ''; }
+  if (m.jenis === 'klien') { data.kode = kode; data.klien = m.klien; data.kuota = m.batasi ? Number(m.kuota) : 0; }
+  if (m.jenis === 'admin') { if (kode) data.kode = kode; else data.awalan = 'ADMIN'; }
+  const btn = f.querySelector('[type=submit]'); if (btn) { btn.disabled = true; btn.textContent = L('Membuat…', 'Creating…'); }
+  const j = await tkCall({ op: 'create', data });
+  if (!j || j.ok === false) { m.err = (j && j.error) || L('Gagal membuat token.', 'Could not create the token.'); return tkModal(m); }
+  TK.modal = { type: 'create', step: 3, created: j.created || [], anim: false };
+  if ((j.created || []).length === 1) TK.sel = j.created[0];
+  render();
+}
+
+/* ---------- aksi ---------- */
+function tkAsk(op, codes) {
+  const ts = (TK.list || []).filter(t => codes.includes(t.token)), n = ts.length, one = n === 1 ? ts[0].token : '';
+  const name = one ? `<b class="mono">${esc(one)}</b>` : L(`${n} token`, `${n} tokens`);
+  const run = async (mode, extraMsg) => {
+    tkModal(null);
+    const j = mode === 'del' ? await tkCall({ op: 'delete', tokens: codes }, L(`${n} token dihapus`, `${n} tokens deleted`))
+      : await tkCall({ op: 'update', mode: mode === 'on' ? 'aktif' : 'nonaktif', tokens: codes }, extraMsg);
+    if (j) { if (mode === 'del') codes.forEach(c => TK.pick.delete(c)); render(); }
+  };
+  if (op === 'on') {
+    const reset = ts.filter(t => t.jenis === 'personal' && ['busy', 'done'].includes(tkStat(t))).length;
+    return tkConfirm({ title: L('Aktifkan kembali?', 'Activate again?'), msg: L(`${name} akan bisa dipakai lagi.`, `${name} will be usable again.`) + (reset ? ' ' + L(`${reset} token personal di antaranya akan direset, jadi bisa dipakai untuk satu tes baru dari awal. Hasil yang sudah masuk tetap tersimpan.`, `${reset} personal tokens among them will be reset for one new test from the start. Existing results stay saved.`) : ''),
+      ok: L('Aktifkan', 'Activate'), fn: () => run('on', L(`${n} token aktif kembali`, `${n} tokens active again`)) });
+  }
+  if (op === 'off') return tkConfirm({ title: L('Nonaktifkan token?', 'Deactivate token?'), msg: L(`${name} tidak akan bisa dipakai lagi sampai diaktifkan kembali. Riwayat dan hasil tes tetap tersimpan.`, `${name} can't be used until activated again. History and results stay saved.`),
+    ok: L('Nonaktifkan', 'Deactivate'), fn: () => run('off', L(`${n} token dinonaktifkan`, `${n} tokens deactivated`)) });
+  if (op === 'del') {
+    const used = ts.filter(t => tkUsed(t) > 0 || ['busy', 'done'].includes(tkStat(t))).length;
+    return tkConfirm({ title: L('Hapus token?', 'Delete token?'), danger: true,
+      msg: L(`${name} akan dihapus permanen dari tab Token${ts.some(t => t.klien) ? ' dan dari daftar token klien' : ''}.`, `${name} will be permanently removed from the Token tab${ts.some(t => t.klien) ? ' and from the client token list' : ''}.`)
+        + (used ? ' ' + L(`<b>${used === n && n === 1 ? 'Token ini' : used + ' token'} sudah pernah dipakai.</b> Hasil tesnya tidak ikut terhapus, tapi riwayat tokennya hilang dan dashboard klien tidak lagi menampilkan hasilnya. Sebaiknya nonaktifkan saja.`, `<b>${used === n && n === 1 ? 'This token has' : used + ' tokens have'} been used.</b> Results stay, but the token history is lost and client dashboards will no longer show those results. Deactivating is safer.`) : ''),
+      ok: L('Hapus', 'Delete'), extra: used ? [{ label: L('Nonaktifkan saja', 'Deactivate instead'), fn: () => run('off', L(`${n} token dinonaktifkan`, `${n} tokens deactivated`)) }] : [], fn: () => run('del') });
+  }
+}
+function tkCsv(codes) {
+  const rows = codes ? (TK.list || []).filter(t => codes.includes(t.token)) : tkVisible();
+  if (!rows.length) { toast(L('Tidak ada token untuk diunduh', 'No tokens to download')); return; }
+  const q = v => { const t = String(v == null ? '' : v); return /[;"\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  const J = tkJ(), S2 = tkS();
+  const head = [L('Token', 'Token'), L('Link undangan', 'Invite link'), L('Jenis', 'Type'), 'Status', L('Klien', 'Client'), L('Label', 'Label'), L('Kuota', 'Quota'), L('Dipakai', 'Used'), L('Berlaku sampai', 'Valid until'), L('Catatan', 'Notes'), L('Dibuat', 'Created'), L('Terakhir dipakai', 'Last used'), L('Peserta terakhir', 'Last participant')];
+  const d = v => v ? new Date(v).toISOString().slice(0, 10) : '';
+  const lines = [head.map(q).join(';')].concat(rows.map(t => [t.token, tkLink(t.token), J[t.jenis] ? J[t.jenis].name : t.jenis, S2[tkStat(t)].name, tkClient(t.klien), t.label, t.jenis === 'personal' ? 1 : t.kuota || L('tanpa batas', 'unlimited'), tkUsed(t), t.berlaku, t.catatan, d(t.dibuat), d(t.selesai), (tkHist(t)[0] || {}).name || ''].map(q).join(';')));
+  const blob = new Blob(['﻿' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+  const n = new Date(), stamp = `${n.getFullYear()}${String(n.getMonth() + 1).padStart(2, '0')}${String(n.getDate()).padStart(2, '0')}`;
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `mengapa-token-${stamp}.csv` });
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  toast(L(`${rows.length} token diunduh`, `${rows.length} tokens downloaded`));
+}
+
+/* ---------- event ---------- */
+function tkOpen(code) {
+  TK.sel = code;
+  $app.querySelectorAll('.tk-it.on').forEach(x => x.classList.remove('on'));
+  const b = $app.querySelector(`.tk-it[data-tk="${CSS.escape(code)}"]`); if (b) b.classList.add('on');
+  const d = document.getElementById('tkdetail');
+  if (d) { d.innerHTML = tkDetail((TK.list || []).find(t => t.token === code)); d.scrollTop = 0; bindCommon(d); tkBindDetail(d); }
+  const sh = document.querySelector('.shell'); if (sh) sh.classList.add('has-sel');
+  if (matchMedia('(max-width: 767px)').matches) history.pushState({ tk: 1 }, '');
+}
+function tkClose() { TK.sel = ''; const sh = document.querySelector('.shell'); if (sh) sh.classList.remove('has-sel'); const d = document.getElementById('tkdetail'); if (d) d.innerHTML = tkDetail(null); $app.querySelectorAll('.tk-it.on').forEach(x => x.classList.remove('on')); }
+function tkRenderList() {
+  const xs = tkVisible();
+  document.getElementById('tklist').innerHTML = tkListHtml(xs);
+  document.getElementById('tkcount').textContent = tkCount(xs);
+  document.getElementById('tkbulk').innerHTML = tkBulkHtml(xs);
+  tkBindList();
+}
+function tkBindList() {
+  $app.querySelectorAll('#tklist [data-tk]').forEach(b => b.addEventListener('click', () => tkOpen(b.dataset.tk)));
+  $app.querySelectorAll('[data-tkpick]').forEach(c => c.addEventListener('change', () => {
+    c.checked ? TK.pick.add(c.dataset.tkpick) : TK.pick.delete(c.dataset.tkpick);
+    c.closest('.tk-row').classList.toggle('picked', c.checked);
+    const xs = tkVisible(); document.getElementById('tkbulk').innerHTML = tkBulkHtml(xs); tkBindBulk();
+  }));
+  tkBindBulk();
+}
+function tkBindBulk() {
+  const all = document.getElementById('tkall');
+  if (all) all.addEventListener('change', () => { tkVisible().slice(0, 400).forEach(t => TK.pick.add(t.token)); tkRenderList(); });
+  $app.querySelectorAll('[data-tkb]').forEach(b => b.addEventListener('click', async () => {
+    const op = b.dataset.tkb, codes = [...TK.pick];
+    if (op === 'clear') { TK.pick.clear(); return tkRenderList(); }
+    if (op === 'copy') { try { await navigator.clipboard.writeText(codes.join('\n')); toast(L(`${codes.length} kode disalin`, `${codes.length} codes copied`)); } catch (e) { toast(codes.join(' ')); } return; }
+    tkAsk(op, codes);
+  }));
+}
+function tkBindDetail(root) {
+  root.querySelectorAll('[data-tkclose]').forEach(b => b.addEventListener('click', () => { if (history.state && history.state.tk) history.back(); else tkClose(); }));
+  root.querySelectorAll('[data-tkone]').forEach(b => b.addEventListener('click', () => tkAsk(b.dataset.tkone, [TK.sel])));
+  root.querySelectorAll('[data-gores]').forEach(b => b.addEventListener('click', () => { S.view = 'hasil'; ls.set('mengapa:admin:view', 'hasil'); S.src = 'all'; S.tab = 'all'; S.sel = b.dataset.gores; render(); const it = $app.querySelector(`.it[data-key="${CSS.escape(b.dataset.gores)}"]`); if (it) it.scrollIntoView({ block: 'center' }); }));
+  const f = root.querySelector('#tkedit');
+  if (f) f.addEventListener('submit', async e => {
+    e.preventDefault();
+    const t = (TK.list || []).find(x => x.token === TK.sel); if (!t) return;
+    const fields = {}, el = f.elements;
+    if (el.catatan && el.catatan.value !== t.catatan) fields.catatan = el.catatan.value;
+    if (el.label && el.label.value.trim() !== t.label) fields.label = el.label.value.trim();
+    if (el.berlaku && el.berlaku.value !== t.berlaku) fields.berlaku = el.berlaku.value;
+    if (el.kuota && Number(el.kuota.value || 0) !== Number(t.kuota || 0)) fields.kuota = Number(el.kuota.value || 0);
+    if (el.klien && el.klien.value.toLowerCase() !== t.klien.toLowerCase()) fields.klien = el.klien.value;
+    if (!Object.keys(fields).length) { toast(L('Tidak ada yang berubah', 'Nothing changed')); return; }
+    const btn = f.querySelector('[type=submit]'); btn.disabled = true; btn.textContent = L('Menyimpan…', 'Saving…');
+    const j = await tkCall({ op: 'update', mode: 'set', tokens: [t.token], fields }, L('Perubahan disimpan', 'Changes saved'));
+    if (j) render(); else { btn.disabled = false; btn.textContent = L('Simpan perubahan', 'Save changes'); }
+  });
+}
+function tkBindModal() {
+  const root = document.getElementById('tkm'); if (!root || !TK.modal) return;
+  bindCommon(root);
+  const m = TK.modal, f = root.querySelector('#tkcreate');
+  root.querySelectorAll('[data-tkm]').forEach(b => b.addEventListener('click', e => {
+    const a = b.dataset.tkm;
+    if (a === 'bg' && e.target !== b) return;
+    if (a === 'close' || a === 'bg') return tkModal(null);
+    if (a === 'done') { TK.modal = null; return render(); }
+    if (a === 'back') { tkReadForm(f); m.step = 1; return tkModal(m); }
+    if (a === 'ok') return m.fn && m.fn();
+    if (a.startsWith('extra')) return m.extra[Number(a.slice(5))].fn();
+    if (a === 'csv') return tkCsv(m.created);
+  }));
+  root.querySelectorAll('[data-tktype]').forEach(b => b.addEventListener('click', () => {
+    const j = b.dataset.tktype;
+    if (m.jenis !== j) Object.assign(m, { jenis: j, mode: 'acak', jumlah: 1, awalan: j === 'personal' ? 'MGP' : '', kode: '', kuota: '', batasi: false, preset: '', berlaku: '', klien: TK.fk && TK.fk !== '-' ? TK.fk : '', label: TK.fl || '', catatan: '', err: '' });
+    m.step = 2; tkModal(m);
+    const first = document.querySelector('#tkcreate input:not([type=hidden]), #tkcreate select'); if (first && !matchMedia('(pointer:coarse)').matches) first.focus();
+  }));
+  root.querySelectorAll('[data-tkmode]').forEach(b => b.addEventListener('click', () => { tkReadForm(f); m.mode = b.dataset.tkmode; m.err = ''; tkModal(m); }));
+  root.querySelectorAll('[data-tkquota]').forEach(b => b.addEventListener('click', () => { tkReadForm(f); m.batasi = b.dataset.tkquota === '1'; tkModal(m); }));
+  root.querySelectorAll('[data-tkpreset]').forEach(b => b.addEventListener('click', () => {
+    tkReadForm(f); const v = b.dataset.tkpreset; m.preset = v;
+    m.berlaku = v === '' ? '' : v === 'custom' ? (m.berlaku || tkPlus(30)) : tkPlus(Number(v));
+    tkModal(m);
+  }));
+  if (f) {
+    f.addEventListener('input', () => { tkReadForm(f); if (m.jenis === 'personal' && m.mode === 'acak') { const s = f.querySelector('[type=submit]'); if (s) s.textContent = Number(m.jumlah) > 1 ? L(`Buat ${m.jumlah} token`, `Create ${m.jumlah} tokens`) : L('Buat token', 'Create token'); const ex = f.querySelector('small b.mono'); if (ex) ex.textContent = ((m.awalan || 'MGP').replace(/[^A-Za-z0-9_.\-]/g, '') || 'MGP') + '-7K2QXA'; } });
+    f.addEventListener('submit', e => { e.preventDefault(); tkSubmitCreate(f); });
+  }
+}
+function tkBind() {
+  bindCommon($app);
+  if (!tkAuthed()) return tkBindLock();
+  const on = (id, ev, fn) => { const el = document.getElementById(id); if (el) el.addEventListener(ev, fn); };
+  const q = document.getElementById('tkq');
+  if (q) q.addEventListener('input', () => { TK.q = q.value; tkRenderList(); });
+  on('tkfs', 'change', e => { TK.fs = e.target.value; render(); });
+  on('tkfk', 'change', e => { TK.fk = e.target.value; render(); });
+  on('tksort', 'change', e => { TK.sort = e.target.value; ls.set('mengapa:admin:tksort', TK.sort); render(); });
+  $app.querySelectorAll('[data-tkfj]').forEach(b => b.addEventListener('click', () => { TK.fj = b.dataset.tkfj; render(); }));
+  $app.querySelectorAll('[data-tkfs]').forEach(b => b.addEventListener('click', () => { TK.fs = TK.fs === b.dataset.tkfs && b.dataset.tkfs !== 'all' ? 'all' : b.dataset.tkfs; render(); }));
+  $app.querySelectorAll('[data-tkfl]').forEach(b => b.addEventListener('click', () => { TK.fl = TK.fl === b.dataset.tkfl ? '' : b.dataset.tkfl; render(); }));
+  $app.querySelectorAll('.tk-alerts [data-tk]').forEach(b => b.addEventListener('click', () => tkOpen(b.dataset.tk)));
+  $app.querySelectorAll('[data-tknew]').forEach(b => b.addEventListener('click', () => tkModal({ type: 'create', step: 1 })));
+  $app.querySelectorAll('[data-tkretry]').forEach(b => b.addEventListener('click', tkLoad));
+  tkBindList();
+  const d = document.getElementById('tkdetail'); if (d) tkBindDetail(d);
+  tkBindModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && TK.modal) tkModal(null); });
+
 /* ===== tim.js ===== */
 /* Dashboard Mengapa: membaca hasil tes dari Google Sheet (lewat /api/admin). ID/EN. */
 
@@ -2798,6 +3474,8 @@ const session = {
 
 const S = { clientName: ls.get(SKEY + ':nama') || '', session: session.get(), rows: null, items: [], at: '', tab: 'all', q: '', f: new Set(), sel: '', loading: false, err: '',
   limit: 80, src: 'new', sort: ls.get('mengapa:admin:sort') || 'date', dir: Number(ls.get('mengapa:admin:dir')) || -1, temps: new Set(), cats: new Set(), range: 'all', from: '', to: '', panel: false };
+S.view = !SLUG && ls.get('mengapa:admin:view') === 'token' ? 'token' : 'hasil';
+TK.sort = ls.get('mengapa:admin:tksort') || 'new';
 const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
 const testName = k => ({ lengkap: L('Tes Karakter Lengkap', 'Full Character Test'), mini: L('Tes Karakter Mini', 'Mini Character Test'), mindset: L('Tes Growth Mindset', 'Growth Mindset Test') })[k];
 const levelName = v => v === 'Tinggi' ? L('Tinggi', 'High') : v === 'Sedang' ? L('Sedang', 'Medium') : v;
@@ -2893,7 +3571,7 @@ async function load() {
   catch (e) { S.err = e.message; }
   S.loading = false; render();
 }
-function logout() { session.clear(); S.session = ''; S.rows = null; S.items = []; S.sel = ''; render(); }
+function logout() { tkLock(); TK.sel = ''; TK.pick.clear(); session.clear(); S.session = ''; S.rows = null; S.items = []; S.sel = ''; render(); }
 
 /* ---------- filter & urutan ---------- */
 const FILTERS = () => SLUG ? [] : [
@@ -3140,7 +3818,7 @@ function detail(x) {
     ${SLUG ? '' : shownToParticipant(x)}
     <section class="box"><h3>${L('Data peserta', 'Participant details')}</h3><dl class="kv">
       ${row(L('Tanggal lahir', 'Date of birth'), esc(x.dob))}${row(L('Usia', 'Age'), yrs(x.age))}${row(L('Orang tua/wali', 'Parent/guardian'), esc(x.guardian))}
-      ${row('WhatsApp', x.wa ? `<a href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${esc(waPretty(x.wa))}</a>` : '')}${row('Token', esc(x.token))}${row(L('Durasi', 'Duration'), fmtDur(x.dur))}
+      ${row('WhatsApp', x.wa ? `<a href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">${esc(waPretty(x.wa))}</a>` : '')}${row('Token', x.token && !SLUG ? `<button class="linkbtn mono" data-gotok="${esc(x.token)}" title="${L('Buka di Kelola token', 'Open in Manage tokens')}">${esc(x.token)}</button>` : esc(x.token))}${row(L('Durasi', 'Duration'), fmtDur(x.dur))}
       ${row(L('Tahu dari', 'Heard from'), esc(x.src))}${row('Ref', esc(x.ref))}${row('UTM', esc(x.utm))}${row(L('Lokasi', 'Location'), esc(x.place))}${row(L('Kode hasil', 'Result code'), `<span class="mono">${esc(x.id)}</span>`)}
     </dl></section>`;
 }
@@ -3208,7 +3886,31 @@ function breakdown(B) {
   </section>`;
 }
 
+function headHtml() {
+  const tkv = S.view === 'token';
+  return `    <header class="bar-top">
+      ${headLogo()}${SLUG ? '<span class="tag">Dashboard</span>' : `<nav class="viewtabs" aria-label="${L('Tampilan', 'View')}"><button data-view="hasil" aria-pressed="${!tkv}">${L('Hasil tes', 'Test results')}</button><button data-view="token" aria-pressed="${tkv}">${L('Kelola token', 'Manage tokens')}</button></nav>`}
+      <span class="grow"></span>
+      ${langToggle()}
+      <div class="dash-actions">
+        <span class="upd">${tkv ? (TK.loading ? L('Memuat…', 'Loading…') : TK.at ? `${L('Diperbarui', 'Updated')} ${fmtTime(TK.at)}` : '') : S.loading ? L('Memuat…', 'Loading…') : S.at ? `${L('Diperbarui', 'Updated')} ${fmtTime(S.at)}` : ''}</span>
+        <button class="btn ghost sm outbtn" data-act="reload"${S.loading || TK.loading ? ' disabled' : ''}>${L('Muat ulang', 'Reload')}</button>
+        <button class="btn ghost sm outbtn" data-act="csv">${L('Unduh CSV', 'Download CSV')}</button>
+        <button class="btn ghost sm outbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
+      </div>
+    </header>`;
+}
+function tokenShell() {
+  return `
+  <div class="shell tkv${TK.sel && TK.list && TK.list.some(t => t.token === TK.sel) ? ' has-sel' : ''}">
+${headHtml()}
+    ${tkApp()}
+    ${dashFoot()}
+  </div>`;
+}
+
 function app() {
+  if (!SLUG && S.view === 'token') return tokenShell();
   const items = visible(), sel = S.items.find(x => x.key === S.sel), B = base();
   const c = k => B.filter(x => k === 'all' || x.kind === k).length;
   const week = B.filter(x => Date.now() - x.t < 7 * 864e5).length;
@@ -3216,17 +3918,7 @@ function app() {
   const nOld = S.items.filter(x => x.legacy).length, nNew = S.items.length - nOld;
   return `
   <div class="shell${sel ? ' has-sel' : ''}">
-    <header class="bar-top">
-      ${headLogo()}<span class="tag">Dashboard</span>
-      <span class="grow"></span>
-      ${langToggle()}
-      <div class="dash-actions">
-        <span class="upd">${S.loading ? L('Memuat…', 'Loading…') : S.at ? `${L('Diperbarui', 'Updated')} ${fmtTime(S.at)}` : ''}</span>
-        <button class="btn ghost sm outbtn" data-act="reload"${S.loading ? ' disabled' : ''}>${L('Muat ulang', 'Reload')}</button>
-        <button class="btn ghost sm outbtn" data-act="csv">${L('Unduh CSV', 'Download CSV')}</button>
-        <button class="btn ghost sm outbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
-      </div>
-    </header>
+${headHtml()}
     ${S.err ? `<div class="banner">${esc(S.err)}</div>` : ''}
     ${nOld ? `<div class="srcbar"><div class="src" role="tablist">${[['new', L('Web baru', 'New web app'), nNew], ['old', L('Arsip<span class="hm"> web lama</span>', 'Archive<span class="hm"> (old web app)</span>'), nOld], ['all', L('Semua', 'All'), nNew + nOld]].map(o => `<button data-src="${o[0]}" aria-pressed="${S.src === o[0]}">${o[1]}<small>${o[2]}</small></button>`).join('')}</div>
       ${S.src === 'old' ? `<p class="srcnote">${L('Hasil dari web app lama, sebelum November 2026. Tidak dihitung di data web baru.', 'Results from the old web app, before November 2026. Not counted in the new web app data.')}</p>` : ''}</div>` : ''}
@@ -3290,6 +3982,10 @@ function bindCommon(root) {
     try { await navigator.clipboard.writeText(b.dataset.copy); toast(L('Disalin', 'Copied')); } catch (e) { toast(b.dataset.copy); }
   }));
   root.querySelectorAll('[data-act=close]').forEach(b => b.addEventListener('click', closeDetail));
+  root.querySelectorAll('[data-gotok]').forEach(b => b.addEventListener('click', () => {
+    S.view = 'token'; ls.set('mengapa:admin:view', 'token'); TK.sel = b.dataset.gotok; TK.fs = 'all'; TK.fj = 'all'; TK.fk = ''; TK.fl = ''; TK.q = ''; window.scrollTo(0, 0);
+    if (!TK.list && tkAuthed()) tkLoad(); else render();
+  }));
   root.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => {
     if (b.dataset.lang === LANG) return;
     setLang(b.dataset.lang); ls.set(LKEY, LANG); rebuild(); render();
@@ -3343,11 +4039,23 @@ function render() {
   }
   const qFocused = document.activeElement && document.activeElement.id === 'q';
   if (!render.keepLimit) S.limit = 80;
+  const tkFocused = document.activeElement && document.activeElement.id === 'tkq';
   $app.innerHTML = app();
-  bindCommon($app); bindList();
-  $app.querySelector('[data-act=reload]').addEventListener('click', load);
-  $app.querySelector('[data-act=csv]').addEventListener('click', csv);
+  const tkv = !SLUG && S.view === 'token';
+  $app.querySelector('[data-act=reload]').addEventListener('click', () => { if (tkv) { load(); tkLoad(); } else load(); });
+  $app.querySelector('[data-act=csv]').addEventListener('click', () => tkv ? tkCsv() : csv());
   $app.querySelector('[data-act=logout]').addEventListener('click', logout);
+  $app.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => {
+    if (S.view === b.dataset.view) return;
+    S.view = b.dataset.view; ls.set('mengapa:admin:view', S.view); window.scrollTo(0, 0);
+    if (S.view === 'token' && !TK.list && !TK.loading && tkAuthed()) tkLoad(); else render();
+  }));
+  if (tkv) {
+    tkBind();
+    if (tkFocused) { const q = document.getElementById('tkq'); if (q) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); } }
+    return;
+  }
+  bindCommon($app); bindList();
   $app.querySelectorAll('[data-src]').forEach(b => b.addEventListener('click', () => { S.src = b.dataset.src; if (S.src === 'old') S.tab = 'all'; S.sel = ''; render(); }));
   $app.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => { S.tab = b.dataset.tab; render(); }));
   const tog = (set, v) => { set.has(v) ? set.delete(v) : set.add(v); render(); };
@@ -3379,9 +4087,9 @@ function closeDetail() {
   sh.classList.remove('has-sel'); $app.querySelectorAll('.it.on').forEach(x => x.classList.remove('on'));
   const d = document.getElementById('detail'); if (d) d.innerHTML = detail(null);
 }
-window.addEventListener('popstate', () => { if (S.sel) closeDetail(); });
+window.addEventListener('popstate', () => { if (S.view === 'token' && TK.sel) tkClose(); else if (S.sel) closeDetail(); });
 render();
-if (S.session) load();
+if (S.session) { load(); if (S.view === 'token' && tkAuthed()) tkLoad(); }
 
 </script>
 </body>

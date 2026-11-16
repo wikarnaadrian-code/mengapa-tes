@@ -24,14 +24,17 @@
  *  Kalau gagal kirim (misalnya kuota habis), data tetap tersimpan di Sheet.
  *  Untuk mematikan notifikasi: ubah NOTIF_EMAIL jadi '' lalu deploy ulang.
  *
- * CARA BIKIN TOKEN:
- *  a) Manual / custom: ketik token di kolom A tab "Token", bebas (contoh Magelang_OCIE atau budi-2026). Tanpa spasi.
- *     Case sensitive: peserta harus mengetik huruf besar/kecil persis sama (Magelang_OCIE beda dengan magelang_ocie).
- *     Kolom status boleh dikosongkan. Kolom catatan bebas (nama pembeli, tanggal bayar, dll).
- *  b) Banyak sekaligus: buka Sheet di laptop, menu "Mengapa" > "Buat token baru".
- *  Status "tim" = token internal untuk testing, tidak pernah habis (hasilnya tetap tersimpan di tab Hasil dengan token itu).
- *  Status: (kosong)/aktif = belum dipakai · dipakai = tes sedang dikerjakan · selesai = sudah dipakai · nonaktif = dibatalkan.
- *  Peserta ganti HP di tengah tes? Ubah status token itu kembali jadi "aktif".
+ * KELOLA TOKEN: paling mudah lewat dashboard admin (mengapa.me/admin > Kelola token).
+ *  Tiga jenis token (kolom "jenis" di tab Token):
+ *   personal = satu orang, satu kali tes. Status: aktif > dipakai (sedang dikerjakan) > selesai.
+ *   klien    = satu kode untuk banyak orang (perusahaan/acara). Kuota opsional. Hasil masuk ke dashboard klien
+ *              lewat kolom token di tab Klien. Tanpa email notifikasi.
+ *   admin    = untuk tim Mengapa mencoba tes. Tanpa batas, tanpa email notifikasi.
+ *  Kolom lain: kuota (kosong = tanpa batas), berlaku_sampai (YYYY-MM-DD, kosong = tanpa batas),
+ *  label (nama batch, contoh "Workshop Nov"), dipakai_kali (jumlah tes yang sudah masuk).
+ *  Status "nonaktif" = token dimatikan. Token lama berstatus "tim" otomatis dibaca sebagai token admin/klien.
+ *  Menu "Mengapa" di Sheet tetap bisa dipakai untuk membuat token personal banyak sekaligus.
+ *  Huruf besar/kecil harus sama persis saat peserta mengetik token (atau pakai link undangan ?token=KODE).
  */
 
 const SHEET_HASIL = 'Hasil';
@@ -42,7 +45,8 @@ const SHEET_TOKEN = 'Token';
 const SHEET_KLIEN = 'Klien';
 const SHEET_LAMA = 'Lama'; // hasil dari web app lama (impor sekali)
 const KLIEN_HEADERS = ['klien', 'nama', 'username', 'password', 'token', 'catatan'];
-const TOKEN_HEADERS = ['token', 'status', 'catatan', 'dibuat', 'mulai_dipakai', 'selesai', 'id_hasil', 'sesi'];
+const TOKEN_HEADERS = ['token', 'status', 'catatan', 'dibuat', 'mulai_dipakai', 'selesai', 'id_hasil', 'sesi', 'jenis', 'kuota', 'berlaku_sampai', 'label', 'dipakai_kali'];
+const TZ = 'Asia/Jakarta';
 const NOTIF_EMAIL = 'mengapa.me@gmail.com';
 const DASHBOARD_URL = 'https://www.mengapa.me/admin';
 const TEXT_COLUMNS = ['id', 'token', 'whatsapp', 'tanggal_lahir', 'tanggal_tes', 'jam_tes', 'jawaban', 'kode_kombinasi'];
@@ -58,6 +62,10 @@ function doPost(e) {
   lock.waitLock(20000);
   try {
     if (data.action === 'token') return json_(startToken_(data.token, data.session));
+    if (data.action === 'token_list') return json_(tokenList_());
+    if (data.action === 'token_create') return json_(tokenCreate_(data));
+    if (data.action === 'token_update') return json_(tokenUpdate_(data));
+    if (data.action === 'token_delete') return json_(tokenDelete_(data));
 
     const row = data.row || {};
     const pk = row.jenis_tes === 'pandangan';
@@ -148,31 +156,74 @@ function tesNotifikasi() {
 /* ---------------- TOKEN ---------------- */
 function normToken_(v) { return String(v || '').trim().replace(/\s+/g, ''); }
 function tokenKey_(v) { return normToken_(v); } // case sensitive: huruf besar/kecil harus sama persis
+const TC = {}; TOKEN_HEADERS.forEach(function (h, i) { TC[h] = i + 1; }); // nomor kolom per nama
+function today_() { return Utilities.formatDate(new Date(), TZ, 'yyyy-MM-dd'); }
+function ymd_(v) {
+  if (!v) return '';
+  if (Object.prototype.toString.call(v) === '[object Date]') return isNaN(v) ? '' : Utilities.formatDate(v, TZ, 'yyyy-MM-dd');
+  const m = String(v).trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  return m ? m[1] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[3]).slice(-2) : '';
+}
+function iso_(v) { return Object.prototype.toString.call(v) === '[object Date]' && !isNaN(v) ? v.toISOString() : String(v || ''); }
+function num_(v) { const n = parseInt(v, 10); return isNaN(n) || n < 0 ? 0 : n; }
 
+// Token klien = token yang tercantum di kolom token tab Klien
+function klienMap_() {
+  const sh = getKlienSheet_(), out = { list: [], byToken: {} };
+  if (sh.getLastRow() < 2) return out;
+  sh.getRange(2, 1, sh.getLastRow() - 1, KLIEN_HEADERS.length).getValues().forEach(function (r, i) {
+    const slug = String(r[0] || '').trim();
+    if (!slug) return;
+    out.list.push({ klien: slug, nama: String(r[1] || slug), row: i + 2 });
+    String(r[4] || '').split(/[,;\n]/).map(function (t) { return t.trim(); }).filter(String).forEach(function (t) { out.byToken[t] = slug; });
+  });
+  return out;
+}
+function jenisOf_(status, jenis, token, km) {
+  const j = String(jenis || '').toLowerCase().trim();
+  if (j === 'personal' || j === 'klien' || j === 'admin') return j;
+  if (String(status).toLowerCase().trim() === 'tim') return km && km.byToken[token] ? 'klien' : 'admin';
+  return 'personal';
+}
+function rowObj_(r, rowNo, km) {
+  const g = function (h) { return r[TC[h] - 1]; };
+  const token = normToken_(g('token')), status = String(g('status') || '').toLowerCase().trim();
+  return { row: rowNo, token: token, status: status, jenis: jenisOf_(status, g('jenis'), token, km), sesi: String(g('sesi') || ''), idHasil: String(g('id_hasil') || ''),
+    kuota: num_(g('kuota')), berlaku: ymd_(g('berlaku_sampai')), dipakai: num_(g('dipakai_kali')) };
+}
+function readTokens_() {
+  const sh = getTokenSheet_(), n = sh.getLastRow() - 1;
+  return { sh: sh, vals: n > 0 ? sh.getRange(2, 1, n, TOKEN_HEADERS.length).getValues() : [] };
+}
 function findToken_(token) {
-  const sh = getTokenSheet_();
-  const t = tokenKey_(token);
-  if (!t || sh.getLastRow() < 2) return { sh: sh, row: 0 };
-  const vals = sh.getRange(2, 1, sh.getLastRow() - 1, TOKEN_HEADERS.length).getValues();
-  for (let i = 0; i < vals.length; i++) {
-    if (tokenKey_(vals[i][0]) === t) return { sh: sh, row: i + 2, token: normToken_(vals[i][0]), status: String(vals[i][1]).toLowerCase().trim(), sesi: String(vals[i][7]), idHasil: String(vals[i][6]) };
+  const t = tokenKey_(token), d = readTokens_();
+  if (!t) return { sh: d.sh, row: 0 };
+  for (let i = 0; i < d.vals.length; i++) {
+    if (tokenKey_(d.vals[i][0]) === t) {
+      const o = rowObj_(d.vals[i], i + 2, String(d.vals[i][1]).toLowerCase().trim() === 'tim' && !d.vals[i][TC.jenis - 1] ? klienMap_() : null);
+      o.sh = d.sh; return o;
+    }
   }
-  return { sh: sh, row: 0 };
+  return { sh: d.sh, row: 0 };
 }
 
 // Dipanggil saat peserta memasukkan token
 function startToken_(token, session) {
   const f = findToken_(token);
   if (!f.row) return { ok: false, reason: 'tidak_ditemukan' };
-  if (f.status === 'tim') return { ok: true }; // token tim internal: bisa dipakai berkali-kali
+  if (f.status === 'nonaktif') return { ok: false, reason: 'nonaktif' };
+  if (f.berlaku && today_() > f.berlaku) return { ok: false, reason: 'kedaluwarsa' };
+  if (f.jenis !== 'personal') {
+    if (f.kuota > 0 && f.dipakai >= f.kuota) return { ok: false, reason: 'kuota_habis' };
+    return { ok: true }; // token klien/admin: bisa dipakai banyak orang
+  }
   if (f.status === '' || f.status === 'aktif') {
-    f.sh.getRange(f.row, 2).setValue('dipakai');
-    f.sh.getRange(f.row, 5).setValue(new Date());
-    f.sh.getRange(f.row, 8).setValue(session);
+    f.sh.getRange(f.row, TC.status).setValue('dipakai');
+    f.sh.getRange(f.row, TC.mulai_dipakai).setValue(new Date());
+    f.sh.getRange(f.row, TC.sesi).setValue(session);
     return { ok: true };
   }
   if (f.status === 'dipakai' && f.sesi === String(session)) return { ok: true }; // lanjut di perangkat yang sama
-  if (f.status === 'nonaktif') return { ok: false, reason: 'nonaktif' };
   return { ok: false, reason: 'sudah_dipakai' };
 }
 
@@ -180,13 +231,153 @@ function startToken_(token, session) {
 function finishToken_(token, session, idHasil) {
   const f = findToken_(token);
   if (!f.row) return { ok: false, reason: 'tidak_ditemukan' };
-  if (f.status === 'tim') { f.sh.getRange(f.row, 6).setValue(new Date()); f.sh.getRange(f.row, 7).setValue(idHasil); return { ok: true, token: f.token, tim: true }; }
+  if (f.jenis !== 'personal') {
+    // hasil yang sudah dikerjakan selalu diterima, walau kuota/masa berlaku habis di tengah jalan
+    if (f.status === 'tim') f.sh.getRange(f.row, TC.status).setValue('aktif');
+    if (!f.sh.getRange(f.row, TC.jenis).getValue()) f.sh.getRange(f.row, TC.jenis).setValue(f.jenis);
+    if (!f.sh.getRange(f.row, TC.mulai_dipakai).getValue()) f.sh.getRange(f.row, TC.mulai_dipakai).setValue(new Date());
+    f.sh.getRange(f.row, TC.selesai).setValue(new Date());
+    f.sh.getRange(f.row, TC.id_hasil).setValue(idHasil);
+    f.sh.getRange(f.row, TC.dipakai_kali).setValue(f.dipakai + 1);
+    return { ok: true, token: f.token, tim: true };
+  }
   if (f.status === 'selesai' && f.idHasil === String(idHasil)) return { ok: true, token: f.token };
   if (f.status !== 'dipakai' || f.sesi !== String(session)) return { ok: false, reason: 'sudah_dipakai' };
-  f.sh.getRange(f.row, 2).setValue('selesai');
-  f.sh.getRange(f.row, 6).setValue(new Date());
-  f.sh.getRange(f.row, 7).setValue(idHasil);
+  f.sh.getRange(f.row, TC.status).setValue('selesai');
+  f.sh.getRange(f.row, TC.selesai).setValue(new Date());
+  f.sh.getRange(f.row, TC.id_hasil).setValue(idHasil);
+  f.sh.getRange(f.row, TC.dipakai_kali).setValue(1);
   return { ok: true, token: f.token };
+}
+
+/* ---------- kelola token dari dashboard admin ---------- */
+function tokenList_() {
+  const d = readTokens_(), km = klienMap_();
+  // token lama: isi kolom jenis & ubah status "tim" jadi "aktif" (sekali saja)
+  let changed = false, hitung = null;
+  const pakaiDariHasil = function (t) {
+    if (!hitung) {
+      hitung = {};
+      const sh = getSheet_(SHEET_HASIL), lc = sh.getLastColumn(), lr = sh.getLastRow();
+      const c = lc ? sh.getRange(1, 1, 1, lc).getValues()[0].indexOf('token') + 1 : 0;
+      if (c && lr > 1) sh.getRange(2, c, lr - 1, 1).getValues().forEach(function (r) { const k = normToken_(r[0]); if (k) hitung[k] = (hitung[k] || 0) + 1; });
+    }
+    return hitung[t] || 0;
+  };
+  d.vals.forEach(function (r) {
+    if (!normToken_(r[0])) return;
+    const st = String(r[1] || '').toLowerCase().trim();
+    if (!r[TC.jenis - 1]) { r[TC.jenis - 1] = jenisOf_(st, '', normToken_(r[0]), km); changed = true; }
+    if (st === 'tim') { r[1] = 'aktif'; changed = true; }
+    if (r[TC.jenis - 1] === 'personal' && !r[TC.kuota - 1]) { r[TC.kuota - 1] = 1; changed = true; }
+    if (r[TC.jenis - 1] === 'personal' && st === 'selesai' && !r[TC.dipakai_kali - 1]) { r[TC.dipakai_kali - 1] = 1; changed = true; }
+    if (r[TC.jenis - 1] !== 'personal' && r[TC.dipakai_kali - 1] === '') { r[TC.dipakai_kali - 1] = pakaiDariHasil(normToken_(r[0])); changed = true; }
+  });
+  if (changed && d.vals.length) d.sh.getRange(2, 1, d.vals.length, TOKEN_HEADERS.length).setValues(d.vals);
+  const tokens = d.vals.filter(function (r) { return normToken_(r[0]); }).map(function (r) {
+    const t = normToken_(r[0]);
+    return { token: t, status: String(r[1] || '').toLowerCase().trim() || 'aktif', catatan: String(r[2] || ''), dibuat: iso_(r[3]), mulai: iso_(r[4]), selesai: iso_(r[5]),
+      id_hasil: String(r[6] || ''), jenis: String(r[TC.jenis - 1]), kuota: num_(r[TC.kuota - 1]), berlaku: ymd_(r[TC.berlaku_sampai - 1]),
+      label: String(r[TC.label - 1] || ''), dipakai: num_(r[TC.dipakai_kali - 1]), klien: km.byToken[t] || '' };
+  });
+  return { ok: true, tokens: tokens, klien: km.list.map(function (k) { return { klien: k.klien, nama: k.nama }; }), today: today_() };
+}
+
+function setKlienToken_(token, slug) {
+  // lepas token dari semua klien, lalu (kalau ada slug) tambahkan ke klien itu
+  const sh = getKlienSheet_();
+  if (sh.getLastRow() < 2) return !slug;
+  const vals = sh.getRange(2, 1, sh.getLastRow() - 1, KLIEN_HEADERS.length).getValues();
+  let found = !slug;
+  vals.forEach(function (r, i) {
+    const list = String(r[4] || '').split(/[,;\n]/).map(function (t) { return t.trim(); }).filter(String);
+    const isTarget = slug && String(r[0]).trim().toLowerCase() === String(slug).toLowerCase();
+    let next = list.filter(function (t) { return t !== token; });
+    if (isTarget) { next.push(token); found = true; }
+    if (next.join(', ') !== list.join(', ')) sh.getRange(i + 2, 5).setValue(next.join(', '));
+  });
+  return found;
+}
+
+function tokenCreate_(d) {
+  const jenis = ['personal', 'klien', 'admin'].indexOf(d.jenis) >= 0 ? d.jenis : '';
+  if (!jenis) return { ok: false, error: 'Jenis token tidak dikenal' };
+  const slug = jenis === 'admin' ? '' : String(d.klien || '').trim();
+  if (jenis === 'klien' && !slug) return { ok: false, error: 'Pilih klien untuk token klien' };
+  const km = klienMap_();
+  if (slug && !km.list.some(function (k) { return k.klien.toLowerCase() === slug.toLowerCase(); })) return { ok: false, error: 'Klien tidak ditemukan di tab Klien' };
+  const berlaku = ymd_(d.berlaku), kuota = jenis === 'personal' ? 1 : jenis === 'klien' ? num_(d.kuota) : 0;
+  const label = String(d.label || '').trim().slice(0, 60), catatan = String(d.catatan || '').trim().slice(0, 300);
+  const rd = readTokens_(), existing = {};
+  rd.vals.forEach(function (r) { existing[normToken_(r[0]).toLowerCase()] = true; });
+  let codes = [];
+  if (d.kode) {
+    const k = normToken_(d.kode);
+    if (!/^[A-Za-z0-9_.\-]{3,40}$/.test(k)) return { ok: false, error: 'Kode 3 sampai 40 karakter: huruf, angka, titik, strip, atau garis bawah' };
+    if (existing[k.toLowerCase()]) return { ok: false, error: 'Kode ' + k + ' sudah dipakai token lain' };
+    codes = [k];
+  } else {
+    const n = Math.max(1, Math.min(jenis === 'personal' ? 500 : 1, num_(d.jumlah) || 1));
+    const pre = normToken_(d.awalan).replace(/[^A-Za-z0-9_.\-]/g, '').slice(0, 20) || (jenis === 'admin' ? 'ADMIN' : 'MGP');
+    const abc = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'; // tanpa 0/O/1/I supaya tidak tertukar
+    let guard = 0;
+    while (codes.length < n && guard++ < n * 50) {
+      let c = ''; for (let i = 0; i < 6; i++) c += abc.charAt(Math.floor(Math.random() * abc.length));
+      const t = pre + '-' + c;
+      if (existing[t.toLowerCase()]) continue;
+      existing[t.toLowerCase()] = true; codes.push(t);
+    }
+  }
+  const now = new Date();
+  const rows = codes.map(function (t) {
+    const r = TOKEN_HEADERS.map(function () { return ''; });
+    r[TC.token - 1] = t; r[TC.status - 1] = 'aktif'; r[TC.catatan - 1] = catatan; r[TC.dibuat - 1] = now;
+    r[TC.jenis - 1] = jenis; r[TC.kuota - 1] = kuota || ''; r[TC.berlaku_sampai - 1] = berlaku; r[TC.label - 1] = label; r[TC.dipakai_kali - 1] = 0;
+    return r;
+  });
+  rd.sh.getRange(rd.sh.getLastRow() + 1, 1, rows.length, TOKEN_HEADERS.length).setValues(rows);
+  if (slug) {
+    const sh = getKlienSheet_(), k = km.list.filter(function (x) { return x.klien.toLowerCase() === slug.toLowerCase(); })[0];
+    const cur = String(sh.getRange(k.row, 5).getValue() || '').split(/[,;\n]/).map(function (t) { return t.trim(); }).filter(String);
+    sh.getRange(k.row, 5).setValue(cur.concat(codes).join(', '));
+  }
+  const out = tokenList_(); out.created = codes; return out;
+}
+
+function tokenUpdate_(d) {
+  const want = {}; (d.tokens || []).forEach(function (t) { want[normToken_(t)] = true; });
+  const rd = readTokens_(), km = klienMap_(), f = d.fields || {};
+  let n = 0;
+  rd.vals.forEach(function (r, i) {
+    const t = normToken_(r[0]);
+    if (!want[t]) return;
+    const o = rowObj_(r, i + 2, km), row = i + 2, set = function (h, v) { rd.sh.getRange(row, TC[h]).setValue(v); };
+    if (!r[TC.jenis - 1]) set('jenis', o.jenis);
+    if (d.op === 'nonaktif') set('status', 'nonaktif');
+    if (d.op === 'aktif') {
+      if (o.jenis === 'personal') { set('status', 'aktif'); set('sesi', ''); set('mulai_dipakai', ''); }
+      else set('status', 'aktif');
+    }
+    if (d.op === 'set') {
+      if ('catatan' in f) set('catatan', String(f.catatan || '').slice(0, 300));
+      if ('label' in f) set('label', String(f.label || '').trim().slice(0, 60));
+      if ('berlaku' in f) set('berlaku_sampai', ymd_(f.berlaku));
+      if ('kuota' in f && o.jenis === 'klien') set('kuota', num_(f.kuota) || '');
+      if ('klien' in f && o.jenis !== 'admin' && !(o.jenis === 'klien' && !f.klien)) setKlienToken_(t, f.klien || '');
+    }
+    n++;
+  });
+  if (!n) return { ok: false, error: 'Token tidak ditemukan' };
+  const out = tokenList_(); out.updated = n; return out;
+}
+
+function tokenDelete_(d) {
+  const want = {}; (d.tokens || []).forEach(function (t) { want[normToken_(t)] = true; });
+  const rd = readTokens_(), rows = [];
+  rd.vals.forEach(function (r, i) { if (want[normToken_(r[0])]) rows.push(i + 2); });
+  rows.reverse().forEach(function (row) { rd.sh.deleteRow(row); });
+  Object.keys(want).forEach(function (t) { setKlienToken_(t, ''); });
+  const out = tokenList_(); out.deleted = rows.length; return out;
 }
 
 function getTokenSheet_() {
@@ -199,21 +390,28 @@ function getTokenSheet_() {
     sh.getRange(1, 1, sh.getMaxRows(), 1).setNumberFormat('@');
     sh.getRange(1, 7, sh.getMaxRows(), 2).setNumberFormat('@');
   }
+  // kolom baru (jenis, kuota, berlaku_sampai, label, dipakai_kali) ditambahkan otomatis di kanan
+  const head = sh.getRange(1, 1, 1, Math.max(1, Math.min(sh.getMaxColumns(), TOKEN_HEADERS.length))).getValues()[0];
+  if (head.length < TOKEN_HEADERS.length || TOKEN_HEADERS.some(function (h, i) { return head[i] !== h; })) {
+    if (sh.getMaxColumns() < TOKEN_HEADERS.length) sh.insertColumnsAfter(sh.getMaxColumns(), TOKEN_HEADERS.length - sh.getMaxColumns());
+    sh.getRange(1, 1, 1, TOKEN_HEADERS.length).setValues([TOKEN_HEADERS]).setFontWeight('bold');
+    sh.getRange(1, TC.berlaku_sampai, sh.getMaxRows(), 2).setNumberFormat('@');
+  }
   return sh;
 }
 
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('Mengapa')
-    .addItem('Buat token baru', 'menuBuatToken')
-    .addItem('Buat token tim (abadi)', 'menuTokenTim')
+    .addItem('Buat token personal', 'menuBuatToken')
+    .addItem('Buat token admin (TIM-MENGAPA)', 'menuTokenTim')
     .addToUi();
 }
 
 function menuTokenTim() {
   const sh = getTokenSheet_(), f = findToken_('TIM-MENGAPA');
-  if (f.row) sh.getRange(f.row, 2).setValue('tim');
-  else sh.appendRow(['TIM-MENGAPA', 'tim', 'token tim internal, tidak pernah habis', new Date(), '', '', '', '']);
-  SpreadsheetApp.getUi().alert('Token tim siap: TIM-MENGAPA (status "tim", bisa dipakai berkali-kali).');
+  if (f.row) { sh.getRange(f.row, TC.status).setValue('aktif'); sh.getRange(f.row, TC.jenis).setValue('admin'); }
+  else sh.appendRow(['TIM-MENGAPA', 'aktif', 'token admin, tidak pernah habis', new Date(), '', '', '', '', 'admin', '', '', '', 0]);
+  SpreadsheetApp.getUi().alert('Token admin siap: TIM-MENGAPA (bisa dipakai berkali-kali).');
 }
 
 function menuBuatToken() {
@@ -242,7 +440,7 @@ function buatToken_(n, prefix, catatan) {
     const t = pre + '-' + code;
     if (existing[t]) continue;
     existing[t] = true;
-    rows.push([t, 'aktif', catatan || '', new Date(), '', '', '', '']);
+    rows.push([t, 'aktif', catatan || '', new Date(), '', '', '', '', 'personal', 1, '', '', 0]);
   }
   sh.getRange(sh.getLastRow() + 1, 1, rows.length, TOKEN_HEADERS.length).setValues(rows);
   return rows.map(function (r) { return r[0]; });
