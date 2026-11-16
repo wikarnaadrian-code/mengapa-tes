@@ -1119,6 +1119,8 @@ footer.foot { padding: 48px 0 50px; }
 /* Nomor versi */
 footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5B5B0; letter-spacing: .02em; }
 
+.spin-s { display: inline-block; width: 14px; height: 14px; margin-right: 8px; vertical-align: -2px; border-radius: 50%; border: 2px solid rgba(255,255,255,.35); border-top-color: currentColor; animation: spin .8s linear infinite; }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -1169,7 +1171,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.8.3', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.9.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3636,9 +3638,9 @@ const bind = {
       const tok = normToken(f.elements.token.value);
       f.elements.token.value = tok;
       if (tok.length < 3) { err.hidden = false; err.textContent = tr('Masukkan token kamu dulu.'); return; }
-      btn.disabled = true; err.hidden = true;
+      err.hidden = true; const done = btnBusy(btn, L('Memeriksa token…', 'Checking token…'));
       const r = await checkToken(tok);
-      btn.disabled = false;
+      done();
       if (!r.ok) { ga('token_gagal', { alasan: r.reason || 'server' }); err.hidden = false; err.textContent = tr(MSG[r.reason] || MSG.server); return; }
       if (state.token !== tok) resetFull();
       state.mode = 'full'; state.token = tok; state.tokenOk = true; state.preview = !!r.preview;
@@ -3758,14 +3760,14 @@ const bind = {
     bindSticky();
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
-      btn.disabled = true;
+      const done = btnBusy(btn, L('Menyiapkan gambar…', 'Preparing image…'));
       try {
         const r = state.gmResult, a = analyzeMindset(r.answers), cat = GM_CATEGORIES[a.category];
         const blob = await gmCard({ nickname: nickname(r.profile.name), dateLabel: fmtDate(r.finishedAt), total: a.total, cat,
           pillars: GM_PILLAR_ORDER.map(k => ({ name: GM_PILLARS[k].name, color: GM_PILLARS[k].color, v: a.pillars[k] })) });
         await deliverImage(blob, 'mengapa-growth-mindset.png');
       } catch (e) { if (e && e.name !== 'AbortError') toast('Gagal membuat gambar. Coba lagi ya.'); }
-      finally { btn.disabled = false; }
+      finally { done(); }
     });
     on('again', () => { state.mode = 'gm'; resetGm(); save(); go('consent'); });
   },
@@ -3777,14 +3779,14 @@ const bind = {
     on('full', () => go('token'));
     on('again', () => { state.mode = 'mini'; resetMini(); save(); go('consent'); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
-      btn.disabled = true;
+      const done = btnBusy(btn, L('Menyiapkan gambar…', 'Preparing image…'));
       try {
         const r = state.miniResult, a = miniAnalyze(r.answers), P = TEMPS[a.primary];
         const blob = await shareCard({ mini: true, profile: { nickname: nickname(r.profile.name) }, dateLabel: fmtDate(r.finishedAt),
           analysis: { primary: a.primary, secondary: a.primary, combo: { name: P.name, tagline: `${P.title}. ${P.motto}` }, scores: { t: a.t } } });
         await deliverImage(blob, `mengapa-mini-${P.name.toLowerCase()}.png`, L(`Temperamen dominanku ${P.name}. Kamu yang mana? ${CONFIG.site}`, `My primary temperament is ${P.name}. What's yours? ${CONFIG.site}`));
       } catch (e) { if (e && e.name !== 'AbortError') toast('Gagal membuat gambar. Coba lagi ya.'); }
-      finally { btn.disabled = false; }
+      finally { done(); }
     });
   },
   interlude() { on('cont', () => { state.interludeSeen = true; state.index = 20; go('test', false); }); },
@@ -3795,17 +3797,21 @@ const bind = {
     on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.tieType === 'dominan_seri' ? [a.primary + a.secondary, a.secondary + a.primary] : a.primary + a.secondary, btn); });
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
-      btn.disabled = true;
+      const done = btnBusy(btn, L('Menyiapkan gambar…', 'Preparing image…'));
       try {
         const r = state.result, a = analyze(r.answers);
         const blob = await shareCard({ profile: { nickname: nickname(r.profile.name) }, analysis: a, dateLabel: fmtDate(r.finishedAt) });
         await deliverImage(blob, `mengapa-${a.combo.name.toLowerCase().replace(/\s+/g, '-')}.png`, L(`Hasil tesku: ${a.combo.name} (${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}). Kamu yang mana? ${CONFIG.site}`, `My result: ${a.combo.name} (${TEMPS[a.primary].name} + ${TEMPS[a.secondary].name}). What's yours? ${CONFIG.site}`));
       } catch (e) {
         if (e && e.name !== 'AbortError') toast('Gagal membuat gambar. Coba lagi ya.');
-      } finally { btn.disabled = false; }
+      } finally { done(); }
     });
   },
 };
+function btnBusy(btn, text) {
+  const html = btn.innerHTML; btn.disabled = true; btn.innerHTML = `<span class="spin-s"></span>${text}`;
+  return () => { btn.disabled = false; btn.innerHTML = html; };
+}
 async function deliverImage(blob, filename) {
   const file = new File([blob], filename, { type: 'image/png' });
   const phone = matchMedia('(pointer:coarse)').matches;
