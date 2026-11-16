@@ -1368,7 +1368,7 @@ const pkDomName = ds => ds.map(d => PK_DIMS[d].name).join(' & ');
 
 
 {
-const API = '/api/admin', SKEY = 'mengapa:admin:sesi'; // sesi sama dengan dashboard admin Mengapa
+const API = '/api/admin', SKEY_ADMIN = 'mengapa:admin:sesi', SKEY_HK = 'mengapa:admin:sesi:hkgold'; // sesi sama dengan dashboard admin Mengapa / dashboard HKGold
 const $app = document.getElementById('app');
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const ls = {
@@ -1376,10 +1376,11 @@ const ls = {
   set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* abaikan */ } },
   del(k) { try { localStorage.removeItem(k); } catch (e) { /* abaikan */ } },
 };
+function readSess(key) { try { const v = JSON.parse(ls.get(key)); return v && v.exp > Date.now() ? v.s : ''; } catch (e) { return ''; } }
 const session = {
-  get() { try { const v = JSON.parse(ls.get(SKEY)); return v && v.exp > Date.now() ? v.s : ''; } catch (e) { return ''; } },
-  set(s, hours) { ls.set(SKEY, JSON.stringify({ s, exp: Date.now() + hours * 3600e3 })); },
-  clear() { ls.del(SKEY); },
+  get() { return readSess(SKEY_ADMIN) || readSess(SKEY_HK); },
+  set(s, hours, hk) { ls.set(hk ? SKEY_HK : SKEY_ADMIN, JSON.stringify({ s, exp: Date.now() + hours * 3600e3 })); },
+  clear() { ls.del(SKEY_ADMIN); ls.del(SKEY_HK); },
 };
 const S = { session: session.get(), rows: null, at: '', err: '', q: '', job: '', dom: '', sort: 'time', dir: -1, open: '', loading: false, day: 'all' };
 const pct = (n, t) => t ? Math.round(n / t * 100) : 0;
@@ -1420,7 +1421,7 @@ function login() {
     <form class="login-card" id="lf" autocomplete="on">
       <div class="pk-brand">${logoHtml}<span class="pk-x">×</span>${hkLogo}</div>
       <h1>Hasil Tes Pandangan Kerja</h1>
-      <p class="muted">Khusus tim Mengapa. Masuk dengan akun dashboard admin Mengapa.</p>
+      <p class="muted">Khusus tim Mengapa dan HK Gold. Masuk dengan akun dashboard admin Mengapa atau akun dashboard HK Gold.</p>
       <label>Username<input name="user" autocomplete="username" value="admin" required></label>
       <label>Password<input name="pass" type="password" autocomplete="current-password" required autofocus></label>
       <div class="err" id="lerr" ${S.err ? '' : 'hidden'}>${esc(S.err)}</div>
@@ -1557,9 +1558,15 @@ function render() {
       e.preventDefault();
       const btn = document.getElementById('lbtn'), er = document.getElementById('lerr');
       btn.disabled = true; btn.textContent = 'Memeriksa…'; er.hidden = true;
+      const user = f.elements.user.value, pass = f.elements.pass.value;
       try {
-        const j = await api({ action: 'login', user: f.elements.user.value, pass: f.elements.pass.value });
-        S.session = j.session; session.set(j.session, j.hours || 12); S.err = ''; load();
+        let j, hk = false;
+        try { j = await api({ action: 'login', user, pass }); }
+        catch (e1) {
+          try { j = await api({ client: 'HKGold', action: 'login', user, pass }); hk = true; }
+          catch (e2) { throw e1; }
+        }
+        S.session = j.session; session.set(j.session, j.hours || 12, hk); S.err = ''; load();
       } catch (err) { er.hidden = false; er.textContent = err.message; btn.disabled = false; btn.textContent = 'Masuk'; }
     });
     return;
