@@ -899,9 +899,6 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 
 /* ===== v2.1: warna kartu tes ditukar ===== */
 :root { --green: #2E7553; }
-.plan:not(.pro):not(.wide-plan) .btn { background: var(--green); }
-.plan:not(.pro):not(.wide-plan) .btn:hover { background: #245F43; }
-.plan:not(.pro):not(.wide-plan) .btn .arrow { color: var(--green); }
 .plan.pro { background: var(--pP); color: var(--ink); }
 .plan.pro .tagp { background: rgba(255,255,255,.8); color: var(--ink); }
 .plan.pro .plan-meta { color: #3E4A36; }
@@ -951,6 +948,44 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
   .use, .insight, .col, .side, .gps > *, .res-hero, li { break-inside: avoid; page-break-inside: avoid; }
   body { background: #FFFFFF; }
 }
+
+/* ===== v2.2: tanpa kartu charcoal besar; GM = putih + aksen lavender ===== */
+:root { --lav: #E4DCF8; --lav-deep: #6E56C2; }
+.wide-plan { background: #FFFFFF; color: var(--ink); }
+.wide-plan .tagp { background: var(--lav); color: #3E2F7A; }
+.wide-plan .plan-meta { color: #8A8A8A; }
+.wide-plan .ticks li { color: var(--ink-2); }
+.wide-plan .ticks li::before { background-color: var(--lav); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233E2F7A' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); }
+.wide-plan .btn { background: var(--ink); color: #FFFFFF; }
+.wide-plan .btn:hover { background: #000; }
+.wide-plan .btn .arrow { background: #FFFFFF; color: var(--ink); }
+.wide-plan .linkbtn { color: #8A8A8A; }
+/* kartu "deep" jadi putih */
+.deep { background: #FFFFFF; color: var(--ink); }
+.deep .eyebrow { color: #8A8A8A; }
+.deep h2 { color: var(--ink); }
+.deep p, .deep li { color: var(--ink-2); }
+.deep .small { color: #8A8A8A; }
+.card.deep .copy-btn { background: var(--ink); color: #FFFFFF; }
+.deep .btn.inv { background: var(--ink); color: #FFFFFF; }
+.deep .btn.inv .arrow { background: #FFFFFF; color: var(--ink); }
+.deep .code-box, .deep .code-note { background: #F4F4F2; color: var(--ink); }
+/* link layanan & panel perusahaan jadi terang */
+.svc-link { background: #FFFFFF; color: var(--ink); }
+.svc-link svg { width: 40px; height: 40px; padding: 11px; box-sizing: border-box; border-radius: 50%; background: var(--ink); color: #FFFFFF; }
+.sv-dark { background: var(--pS); color: var(--ink); }
+.sv-dark .eyebrow { color: rgba(29,29,29,.6); }
+.sv-dark h2 { color: var(--ink); }
+.sv-dark .sv-no { color: rgba(29,29,29,.25); }
+.sv-dark .sv-tile { background: rgba(255,255,255,.75); }
+.sv-dark .sv-tile h3 { color: var(--ink); }
+.sv-dark .sv-tile p { color: #4A4A3A; }
+.sv-dark .sv-chip { color: #6E6A50; }
+.sv-dark .sv-ic2 { background: #FFFFFF !important; }
+.sv-dark .btn.inv { background: var(--ink); color: #FFFFFF; }
+.sv-dark .btn.inv .arrow { background: #FFFFFF; color: var(--ink); }
+/* spektrum GM pakai lavender */
+.gs-track { background: linear-gradient(90deg, #F2EEFC 0%, #D9CEF5 50%, #B7A5EC 75%, #8B72DA 100%); }
 
 </style>
 </head>
