@@ -1427,6 +1427,10 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .pkr .pk-tie { max-width: none; text-align: left; font-size: 16px; }
 .pkr > .wrap > .block:not(.pk-part):not(.no-print) { max-width: 680px; margin-left: auto; margin-right: auto; }
 @media (max-width: 640px) { .pk-sum { grid-template-columns: 1fr; } .pkr .pk-part { margin-top: 48px; } }
+.pka-kpi.one { grid-template-columns: 1fr; margin-bottom: 4px; }
+.pka-kpi.one .pka-card { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.pka-kpi.one .pka-card small { flex: 0 0 auto; }
+.pka-kpi.one .pka-card b { margin-top: 0; }
 
 </style>
 </head>
@@ -1721,9 +1725,11 @@ function app() {
       ${S.job || S.day !== 'all' ? '<button class="linkbtn" data-act="clearTop">Tampilkan semua</button>' : ''}
     </div>
 
-    <div class="pka-sec">Bagian 1 · Alasan bertahan <small>rata-rata skala 1 sampai 5</small></div>
-    <section class="pka-kpi">
+    <section class="pka-kpi one">
       <div class="pka-card"><small>Peserta</small><b>${s.n}</b><span>${all.length !== s.n ? `${esc(scope)} · ${pct(s.n, all.length)}% dari ${all.length}` : 'total masuk'}</span></div>
+    </section>
+    <div class="pka-sec">Bagian 1 · Alasan bertahan <small>rata-rata skala 1 sampai 5</small></div>
+    <section class="pka-kpi three">
       ${PK_ORDER.map(d => `<div class="pka-card" style="--c:${PK_DIMS[d].color};--soft:${PK_DIMS[d].soft}"><small><i class="pk-dot"></i>${PK_DIMS[d].name}</small><b>${s.n ? pkNum(s.avg[d]) : '-'}</b><span>${s.n ? pkLevel(s.avg[d]) : ''}</span></div>`).join('')}
     </section>
     <div class="pka-sec">Bagian 2 · Cara memandang pekerjaan <small>rata-rata skala 0 sampai 3</small></div>
