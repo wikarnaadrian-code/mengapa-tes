@@ -1042,6 +1042,12 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 .trio .mini .combo-art { max-width: 76px; margin: 0 auto 10px; }
 .trio .mini b { margin-bottom: 3px; }
 
+/* Bullet sejajar dengan tengah huruf baris pertama */
+.list li::before { top: 6.6px; }
+.list.warn li::before { width: 8px; height: 8px; top: 6.6px; }
+.words li::before { top: 8.5px; }
+.ticks li::before { top: 2px; }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
