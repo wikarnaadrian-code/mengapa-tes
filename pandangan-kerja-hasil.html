@@ -1465,7 +1465,7 @@ function app() {
     <header class="pka-top">
       <div class="pk-brand">${logoHtml}<span class="pk-x">×</span>${hkLogo}</div>
       <div class="pka-actions">
-        <span class="pka-status" id="status">${S.loading ? 'Memuat…' : S.at ? `Diperbarui ${new Date(S.at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' })} · otomatis tiap 30 detik` : ''}</span>
+        <span class="pka-status" id="status">${S.loading ? 'Memuat…' : S.at ? `Diperbarui ${new Date(S.at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}` : ''}</span>
         <button class="btn ghost sm" data-act="reload">Muat ulang</button>
         <button class="btn ghost sm" data-act="csv">Unduh CSV</button>
         <button class="btn ghost sm" data-act="logout">Keluar</button>
