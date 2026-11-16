@@ -1677,6 +1677,8 @@ body.tk-busy { cursor: progress; }
   .seg button small { font-size: 11px; }
 }
 
+.spin-s { display: inline-block; width: 13px; height: 13px; margin-right: 7px; vertical-align: -2px; border-radius: 50%; border: 2px solid rgba(0,0,0,.18); border-top-color: currentColor; animation: spin .8s linear infinite; }
+
 </style>
 </head>
 <body data-client="1">
@@ -1705,7 +1707,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.8.2', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.8.3', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -4384,7 +4386,7 @@ function headHtml() {
       ${langToggle()}
       <div class="dash-actions">
         <span class="upd">${tkv ? (TK.loading ? L('Memuat…', 'Loading…') : TK.at ? `${L('Diperbarui', 'Updated')} ${fmtTime(TK.at)}` : '') : S.loading ? L('Memuat…', 'Loading…') : S.at ? `${L('Diperbarui', 'Updated')} ${fmtTime(S.at)}` : ''}</span>
-        <button class="btn ghost sm outbtn" data-act="reload"${S.loading || TK.loading ? ' disabled' : ''}>${L('Muat ulang', 'Reload')}</button>
+        <button class="btn ghost sm outbtn" data-act="reload"${S.loading || TK.loading ? ' disabled' : ''}>${S.loading || TK.loading ? `<span class="spin-s"></span>${L('Memuat…', 'Loading…')}` : L('Muat ulang', 'Reload')}</button>
         <button class="btn ghost sm outbtn" data-act="csv">${L('Unduh CSV', 'Download CSV')}</button>
         <button class="btn ghost sm outbtn" data-act="logout">${L('Keluar', 'Sign out')}</button>
       </div>

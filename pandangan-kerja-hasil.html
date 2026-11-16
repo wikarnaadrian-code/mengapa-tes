@@ -1444,6 +1444,9 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 @media (max-width: 767px) { .pka-actions { gap: 6px; } .pka-status { font-size: 12px; margin-right: 0; white-space: nowrap; } .pka-actions .btn.sm { padding: 0 11px; font-size: 13px; } }
 @media (max-width: 380px) { .pka-actions { flex-wrap: wrap; } .pka-status { flex: 0 0 100% !important; } }
 
+.spin-s { display: inline-block; width: 13px; height: 13px; margin-right: 7px; vertical-align: -2px; border-radius: 50%; border: 2px solid rgba(0,0,0,.18); border-top-color: currentColor; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 </style>
 </head>
 <body>
@@ -1457,7 +1460,7 @@ const LOGO_WORD = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5
 
 /* ===== pkdata.js ===== */
 /* Versi Tes Pandangan Kerja, terpisah dari versi web app utama */
-const PK_VERSION = '2.0.2';
+const PK_VERSION = '2.0.3';
 /* ============ Tes Pandangan Kerja (khusus HK Gold) · isi tes ============ */
 const PK_SCALE = ['Sangat tidak setuju', 'Tidak setuju', 'Netral / ragu-ragu', 'Setuju', 'Sangat setuju'];
 const PK_SCALE_SHORT = ['STS', 'TS', 'N', 'S', 'SS'];
@@ -1722,7 +1725,7 @@ function app() {
       <div class="pk-brand">${logoHtml}<span class="pk-x">×</span>${hkLogo}</div>
       <div class="pka-actions">
         <span class="pka-status" id="status">${S.loading ? 'Memuat…' : S.at ? `Diperbarui ${new Date(S.at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}` : ''}</span>
-        <button class="btn ghost sm" data-act="reload">Muat ulang</button>
+        <button class="btn ghost sm" data-act="reload" id="reloadbtn"${S.loading ? ' disabled' : ''}>${S.loading ? '<span class="spin-s"></span>Memuat…' : 'Muat ulang'}</button>
         <button class="btn ghost sm" data-act="csv">Unduh CSV</button>
         <button class="btn ghost sm" data-act="logout">Keluar</button>
       </div>
@@ -1836,7 +1839,7 @@ function csv() {
   document.body.appendChild(a); a.click(); a.remove();
 }
 
-function paintStatus() { const el = document.getElementById('status'); if (el) el.textContent = S.loading ? 'Memuat…' : S.at ? `Diperbarui ${new Date(S.at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}` : ''; }
+function paintStatus() { const rb = document.getElementById('reloadbtn'); if (rb) { rb.disabled = !!S.loading; rb.innerHTML = S.loading ? '<span class="spin-s"></span>Memuat…' : 'Muat ulang'; } const el = document.getElementById('status'); if (el) el.textContent = S.loading ? 'Memuat…' : S.at ? `Diperbarui ${new Date(S.at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}` : ''; }
 
 function render() {
   if (!S.session) {
