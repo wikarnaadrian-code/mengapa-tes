@@ -1712,7 +1712,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.9.2', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.10.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3984,6 +3984,14 @@ const findItem = k => S.items.find(x => x.key === k) || S.trash.find(x => x.key 
 const daysLeft = x => Math.max(0, 30 - Math.floor((Date.now() - x.trashed) / 864e5));
 const rowsOf = tab => tab === 'Mini' ? S.rows.mini : tab === 'Mindset' ? S.rows.mindset : S.rows.hasil;
 async function trashApi(body) { return api({ action: 'trash', session: S.session, ...body }); }
+function openPrint(x) {
+  const row = rowsOf(itemTab(x)).find(r => String(r.id) === String(x.id));
+  if (!row) { toast(L('Data hasil tidak ditemukan', 'Result data not found')); return; }
+  const w = window.open('/?cetak=1', '_blank');
+  if (!w) { toast(L('Pop-up diblokir browser. Izinkan pop-up lalu coba lagi.', 'Pop-up blocked. Allow pop-ups and try again.')); return; }
+  const onMsg = e => { if (e.origin !== location.origin || e.source !== w || !e.data || e.data.t !== 'cetak-ready') return; window.removeEventListener('message', onMsg); w.postMessage({ t: 'cetak-data', kind: x.kind, row }, location.origin); };
+  window.addEventListener('message', onMsg); setTimeout(() => window.removeEventListener('message', onMsg), 20000);
+}
 function trashMove(xs) {
   const n = xs.length;
   tkConfirm({ title: L('Pindahkan ke Sampah?', 'Move to Trash?'),
@@ -4304,6 +4312,7 @@ function detail(x) {
     <div class="d-actions">
       ${SLUG ? '' : x.wa ? `<a class="btn wa" href="https://wa.me/${x.wa}?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener">WhatsApp ${esc(waPretty(x.wa))}</a>` : `<span class="nowa">${L('Tidak mengisi WhatsApp', 'No WhatsApp number given')}</span>`}
       <button class="btn ghost" data-copy="${esc(x.id)}">${L('Salin kode', 'Copy code')} ${esc(x.id)}</button>
+      ${SLUG || x.trashed || x.legacy || !x.id || !S.rows ? '' : `<button class="btn ghost" data-rprint>${L('Buka versi cetak', 'Open print version')}</button>`}
       ${SLUG || x.trashed || !S.trashOk ? '' : `<button class="btn ghost danger rtrash" data-rtrash>${ICON.trash}${L('Pindahkan ke Sampah', 'Move to Trash')}</button>`}
     </div>
     ${x.trashed ? `<div class="box trashbox"><p>${ICON.trash}<span>${L(`Di Sampah sejak ${fmtDate(x.trashed)}, ${fmtTime(x.trashed)}. Terhapus permanen dalam <b>${daysLeft(x)} hari</b>.`, `In Trash since ${fmtDate(x.trashed)}, ${fmtTime(x.trashed)}. Permanently deleted in <b>${daysLeft(x)} days</b>.`)}</span></p><div class="tk-zoneact"><button class="btn sm" data-rrestore>${L('Pulihkan', 'Restore')}</button><button class="btn ghost sm danger" data-rpurge>${L('Hapus permanen', 'Delete permanently')}</button></div></div>` : ''}
@@ -4483,6 +4492,7 @@ function bindCommon(root) {
     try { await navigator.clipboard.writeText(b.dataset.copy); toast(L('Disalin', 'Copied')); } catch (e) { toast(b.dataset.copy); }
   }));
   root.querySelectorAll('[data-act=close]').forEach(b => b.addEventListener('click', closeDetail));
+  root.querySelectorAll('[data-rprint]').forEach(b => b.addEventListener('click', () => { const x = findItem(S.sel); if (x) openPrint(x); }));
   root.querySelectorAll('[data-rtrash]').forEach(b => b.addEventListener('click', () => { const x = findItem(S.sel); if (x) { if (history.state && history.state.d) history.back(); trashMove([x]); } }));
   root.querySelectorAll('[data-rrestore]').forEach(b => b.addEventListener('click', () => { const x = findItem(S.sel); if (x) trashRestore([{ tab: itemTab(x), id: x.id }]); }));
   root.querySelectorAll('[data-rpurge]').forEach(b => b.addEventListener('click', () => { const x = findItem(S.sel); if (x) trashDelete([x]); }));

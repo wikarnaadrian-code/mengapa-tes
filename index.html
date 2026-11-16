@@ -1171,7 +1171,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.9.2', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.10.0', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2529,7 +2529,8 @@ if (!Array.isArray(state.gmAnswers) || state.gmAnswers.length !== 15) state.gmAn
 const gmAnswered = () => state.gmAnswers.filter(Boolean).length;
 function resetGm() { state.gmAnswers = Array(15).fill(null); state.gmIndex = 0; state.gmStartedAt = null; }
 if (META.ref || META.utm_source) state.meta = { ...state.meta, ...Object.fromEntries(Object.entries(META).filter(([, v]) => v)) };
-const save = () => store.set(KEY, state);
+const CETAK = params.get('cetak') === '1' && !!window.opener;
+const save = () => { if (!CETAK) store.set(KEY, state); };
 const normToken = v => String(v || '').trim().replace(/\s+/g, '').slice(0, 60);
 const URL_TOKEN = normToken(params.get('token'));
 function resetFull() { state.answers = Array(40).fill(null); state.index = 0; state.interludeSeen = false; state.startedAt = null; }
@@ -2606,7 +2607,7 @@ const stepper = n => { const total = state.mode === 'full' ? 3 : 2; return `<div
 /* ---------- navigasi ---------- */
 const backOf = sc => ({ services: 'home', token: 'home', consent: state.mode === 'full' ? 'token' : 'home', gmresult: 'home', profile: 'consent', guide: 'profile', result: 'home', mresult: 'home' })[sc];
 /* ---------- Google Analytics: hanya data perilaku, tanpa nama atau nomor ---------- */
-function ga(ev, p = {}) { try { if (!state.preview && typeof window.gtag === 'function') window.gtag('event', ev, p); } catch (e) { /* abaikan */ } }
+function ga(ev, p = {}) { try { if (!CETAK && !state.preview && typeof window.gtag === 'function') window.gtag('event', ev, p); } catch (e) { /* abaikan */ } }
 function go(screen, push = true) {
   state.screen = screen; save();
   ga('lihat_layar', { layar: screen });
@@ -4056,14 +4057,28 @@ if (!['result', 'mresult', 'test', 'mtest', 'gmresult', 'gmtest'].includes(state
 if (/^\/layanan\/?$/i.test(location.pathname) || location.hash === '#layanan') state.screen = 'services';
 if (URL_TOKEN && !(state.tokenOk && state.token === URL_TOKEN)) state.screen = 'token';
 history.replaceState({ s: state.screen }, '');
-render();
-ga('lihat_layar', { layar: state.screen });
+if (CETAK) {
+  /* Versi cetak untuk admin: data dikirim dari dashboard admin (satu asal), tidak disimpan di browser ini. */
+  const $a = document.getElementById('app'); if ($a) $a.innerHTML = '<p style="text-align:center;margin:80px 20px;color:#6b6b66">Menyiapkan versi cetak…</p>';
+  window.addEventListener('message', e => {
+    if (e.origin !== location.origin || e.source !== window.opener || !e.data || e.data.t !== 'cetak-data') return;
+    const { kind, row: w } = e.data, ans = String(w.jawaban || '').split('');
+    const r = { id: w.id, answers: kind === 'mindset' ? ans.map(Number) : ans, profile: { name: w.nama || '', dob: w.tanggal_lahir || '', age: w.usia || '', wa: w.whatsapp || '', guardian: w.nama_wali || '', source: w.sumber || '' },
+      consent: {}, startedAt: null, finishedAt: Date.parse(w.waktu_iso) || Date.parse(w.diterima_server) || Date.now(), meta: {}, token: w.token || '' };
+    if (kind === 'mini') { state.miniResult = r; state.screen = 'mresult'; } else if (kind === 'mindset') { state.gmResult = r; state.screen = 'gmresult'; } else { state.result = r; state.screen = 'result'; }
+    document.title = `Hasil Tes ${r.profile.name || ''} - Mengapa`.replace(/\s+/g, ' ');
+    render(); window.scrollTo(0, 0);
+  });
+  try { window.opener.postMessage({ t: 'cetak-ready' }, location.origin); } catch (err) { /* abaikan */ }
+} else {
+  render();
+  ga('lihat_layar', { layar: state.screen });
+}
 document.addEventListener('click', e => {
   const a = e.target.closest && e.target.closest('a[href*="wa.me"]');
   if (a) ga('klik_whatsapp', { posisi: state.screen + (a.classList.contains('stickycta') ? '_melayang' : '') });
 }, true);
-setTimeout(flush, 1500);
-window.addEventListener('online', flush);
+if (!CETAK) { setTimeout(flush, 1500); window.addEventListener('online', flush); }
 
 </script>
 </body>
