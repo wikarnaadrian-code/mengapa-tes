@@ -3091,7 +3091,7 @@ function mresult() {
   const a = miniAnalyze(r.answers), p = a.primary, P = TEMPS[p], prof = MINI_PROFILE[p];
   const nick = esc(nickname(r.profile.name));
   const list = arr => arr.map(k => TEMPS[k].name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
-  const tieNote = a.top.length === 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Tes Karakter Lengkap yang menentukan mana yang benar-benar dominan.`, `${list(a.top)} are equally strong in the mini test. The Full Character Test shows which one is truly primary.`)
+  const tieNote = a.top.length === 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Kamu bisa terbaca sebagai keduanya, dan Tes Karakter Lengkap memberi gambaran yang lebih utuh.`, `${list(a.top)} are equally strong in the mini test. You can be read as both, and the Full Character Test gives a fuller picture.`)
     : a.top.length > 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Polamu belum terlihat jelas dari 10 pertanyaan, dan Tes Karakter Lengkap akan memperjelasnya.`, `${list(a.top)} are equally strong in the mini test. Ten questions aren’t enough to see your pattern clearly, and the Full Character Test will clarify it.`) : '';
   const trio = ORDER.filter(k => k !== p).map(k => p + k);
   const wa = waLink(L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Tes Karakter Mini (${fmtDate(r.finishedAt)}).\nHasil: ${P.name}.\nKode hasil: ${r.id}\n\nSaya ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm ${r.profile.name}. I just finished the Mini Character Test (${fmtDate(r.finishedAt)}).\nResult: ${P.name}.\nResult code: ${r.id}\n\nI'd like to take the Full Character Test. How do I get a token?`));
