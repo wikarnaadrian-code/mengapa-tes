@@ -1525,7 +1525,7 @@ const COMBOS = {
   MP: {
     name: 'Thinker', en: '', natural: true,
     tagline: 'Mengamati dulu, bicara saat sudah matang.',
-    about: 'Kamu reflektif seperti Melankolis dan tenang seperti Plegmatis. Kamu lebih suka mengamati sebelum bicara, dan saat bicara isinya biasanya matang. Ini kombinasi paling introver: kamu mengisi ulang energi lewat waktu sendiri.',
+    about: 'Kamu reflektif seperti Melankolis dan tenang seperti Plegmatis. Kamu lebih suka mengamati sebelum bicara, dan saat bicara isinya biasanya matang. Ini kombinasi paling introvert: kamu mengisi ulang energi lewat waktu sendiri.',
     powers: ['Pemikir yang mendalam dan teliti', 'Setia dan bisa diandalkan', 'Pendengar yang baik'],
     watch: ['Ragu dan lama memutuskan', 'Cenderung khawatir atau pesimis', 'Memendam perasaan'],
     thrive: 'Riset, penulisan, akuntansi, IT, desain, konseling.',
@@ -1560,7 +1560,7 @@ const COMBOS = {
     watch: ['Pasif dan menunggu diminta', 'Mudah cemas soal hal kecil', 'Sulit bilang tidak'],
     thrive: 'Administrasi, keuangan, kesehatan, pendidikan anak, riset, layanan.',
     figures: ['Warren Buffett', 'Baymax'],
-    fact: 'Plegmatis dan Melankolis sama-sama introver. Dalam teori temperamen, keduanya disebut pasangan alami. Banyak yang dirasakan dan dipikirkan, tapi tidak semuanya ditunjukkan.',
+    fact: 'Plegmatis dan Melankolis sama-sama introvert. Dalam teori temperamen, keduanya disebut pasangan alami. Banyak yang dirasakan dan dipikirkan, tapi tidak semuanya ditunjukkan.',
   },
 };
 
@@ -1625,7 +1625,7 @@ const MINI_PROFILE = {
 /* Yang terbuka di tes lengkap (ditampilkan terkunci di hasil tes mini) */
 const FULL_BENEFITS = [
   'Kebutuhan emosionalmu: yang bikin kamu merasa dihargai',
-  'Kombinasi dominan + sekunder: 1 dari 12 karakter',
+  'Kombinasi karakter dominan dan terkuat kedua: 1 dari 12 karakter',
   'Lembar skor: kekuatan dan kelemahan di keempat sisi',
   'Karakter dominan dan ruang tumbuh terbesarmu',
   'Insight tambahan dari tim Mengapa',
@@ -2096,6 +2096,8 @@ const UI = {
   'Sebelumnya': 'Previous',
   'Sekunder': 'Secondary',
   'Sekunder (seri)': 'Secondary (tie)',
+  'Terkuat kedua': 'Secondary',
+  'Terkuat kedua (seri)': 'Secondary (tie)',
   'Semua orang punya keempatnya, hanya porsinya yang berbeda. Tes ini tidak mengotak-ngotakkan orang. Tujuannya mengenali sisi yang paling sering kamu pakai, supaya kamu bisa belajar memakai sisi lainnya juga.': 'Everyone has all four, only in different proportions. This test doesn’t put people in boxes. The goal is to recognize the side you use most, so you can learn to use the others too.',
   'Semua orang punya kelemahan. Pilih yang paling sering terjadi, bukan yang paling enak dibaca. Kalau ragu, pikirkan juga masa lalumu.': 'Everyone has weaknesses. Pick what happens most often, not what sounds nicest. If unsure, think about your past too.',
   'Setengah jalan. Sekarang': 'Halfway there. Now,',
@@ -2157,6 +2159,7 @@ const UI = {
   'diagnosis.': 'a diagnosis.',
   'jebakan karakter': 'the character trap',
   'karakter ini': 'characters',
+  'kombinasi karakter ini': 'character combinations',
   'ke pihak lain.': 'to third parties.',
   'keempatnya': 'all four',
   'kelemahan': 'weaknesses',
@@ -2182,6 +2185,14 @@ const UI = {
 
 let LANG = 'id';
 const L = (id, en) => (LANG === 'en' ? en : id);
+/* Kata asing di teks Indonesia dibuat miring (input sudah aman, di-escape dulu) */
+const FX_TERMS = ['customer relations','public speaking','quality control','content creator','sales leader','overthinking','entrepreneur','hospitality','engineering','programmer','introvert','insight','founder','trainer','event','sales','mood'];
+const FX_RE = new RegExp('\\b(' + FX_TERMS.join('|') + ')\\b', 'gi');
+const fx = s => {
+  const e = String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return LANG === 'en' ? e : e.replace(FX_RE, '<i>$1</i>');
+};
+
 
 const C = { TEMPS, COMBOS, FIELD_INSIGHTS, USE, MINI_PROFILE, GM_PILLARS, GM_CATEGORIES, GM_STEP, FUN_FACTS, FULL_BENEFITS, GM_SCALE, MINI_ROWS, GM_ITEMS, ROWS };
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
@@ -2301,9 +2312,9 @@ function analyze(answers, cfg = CONFIG) {
     ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi kamu adalah ${combo.name} sekaligus ${COMBOS[s + p].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so you are ${combo.name} and ${COMBOS[s + p].name} at once. That’s normal, because how we act can shift with the situation. `));
     tieReason = sc.s[p] > sc.s[s] ? `${combo.name} ditampilkan lebih dulu karena kekuatan ${name(p)} lebih banyak (${sc.s[p]} vs ${sc.s[s]}).` : sc.w[p] < sc.w[s] ? `${combo.name} ditampilkan lebih dulu karena kelemahan ${name(p)} lebih sedikit (${sc.w[p]} vs ${sc.w[s]}).` : 'Urutan tampil mengikuti urutan baku (S, C, M, P).';
   } else if (tieType === 'sekunder_seri') {
-    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya dan kombinasimu bisa juga ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and your blend could also be ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
+    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi karakter terkuat keduamu bisa yang mana saja dan kombinasimu bisa juga ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and your blend could also be ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
   } else if (tieType === 'tiga_terbawah_sama') {
-    ties.push(L(`${name(p)} jelas dominan, tapi tiga sisi lainnya punya skor sama (${sc.t[s]}). Sisi sekundermu belum menonjol, jadi ${name(s)} di sini hanya urutan tampil.`, `${name(p)} is clearly primary, but the other three sides have the same score (${sc.t[s]}). Your secondary side doesn’t stand out yet, so ${name(s)} here is display order only.`));
+    ties.push(L(`${name(p)} jelas dominan, tapi tiga sisi lainnya punya skor sama (${sc.t[s]}). Karakter terkuat keduamu belum menonjol, jadi ${name(s)} di sini hanya urutan tampil.`, `${name(p)} is clearly primary, but the other three sides have the same score (${sc.t[s]}). Your secondary side doesn’t stand out yet, so ${name(s)} here is display order only.`));
   } else if (tieType === 'tiga_teratas_sama') {
     ties.push(L(`${list(top)} punya skor tertinggi yang sama (${sc.t[p]}). Polamu belum mengerucut ke dua sisi, jadi kombinasi di halaman ini hanya salah satu cara membacanya.`, `${list(top)} share the same top score (${sc.t[p]}). Your pattern hasn’t narrowed to two sides yet, so the combination on this page is just one way to read it.`));
   } else if (tieType === 'empat_sama') {
@@ -2874,7 +2885,7 @@ const FLAG_BASIS = () => ({
   extreme: L('Skor satu temperamen di atas 20 dari 40. Dari pengalaman lapangan Mengapa, skor sekuat ini sering terkait sisi yang "terpaksa" kuat karena keadaan atau pengalaman tertentu, termasuk kemungkinan trauma.', 'One temperament scores above 20 of 40. In Mengapa field experience, a score this strong often relates to a side that had to become strong because of circumstances, including possible trauma.'),
   gap: L('Kelemahan yang dipilih minimal 3 lebih banyak dari kekuatannya di temperamen yang sama (5 atau lebih = prioritas tinggi). Dari pengalaman lapangan Mengapa, pola ini sering berkaitan dengan cara pandang negatif terhadap diri sendiri atau pengalaman yang melukai.', 'At least 3 more weaknesses than strengths in the same temperament (5 or more = high priority). In Mengapa field experience, this pattern often relates to a negative self-view or hurtful experiences.'),
   imbalance: L('Kekuatan dan kelemahan tersebar tidak seimbang di keempat temperamen (indeks ketidakseimbangan 8 atau lebih).', 'Strengths and weaknesses are unevenly spread across the four temperaments (imbalance index 8 or more).'),
-  opposite: L('Dominan dan sekunder adalah pasangan berlawanan (Sanguinis-Melankolis atau Koleris-Plegmatis). Menurut Florence Littauer, kombinasi ini jarang alami dan sering menandakan "topeng": satu sisi terbentuk karena peran atau tuntutan lingkungan.', 'Primary and secondary are opposites (Sanguine-Melancholy or Choleric-Phlegmatic). According to Florence Littauer, this combination is rarely natural and often signals a "mask": one side shaped by a role or expectations.'),
+  opposite: L('Karakter dominan dan karakter terkuat kedua adalah pasangan berlawanan (Sanguinis-Melankolis atau Koleris-Plegmatis). Menurut Florence Littauer, kombinasi ini jarang alami dan sering menandakan "topeng": satu sisi terbentuk karena peran atau tuntutan lingkungan.', 'Primary and secondary are opposites (Sanguine-Melancholy or Choleric-Phlegmatic). According to Florence Littauer, this combination is rarely natural and often signals a "mask": one side shaped by a role or expectations.'),
   triad: L('Tiga temperamen skornya berdekatan (selisih 2 atau kurang, skor 9 ke atas). Menurut konsep topeng Littauer, ini layak dicek: mana yang bawaan, mana yang terbentuk karena peran.', 'Three temperaments score close together (within 2, at 9 or above). Based on Littauer\'s mask concept, this is worth checking: which is natural and which was shaped by a role.'),
 });
 function shownToParticipant(x) {
@@ -2883,7 +2894,7 @@ function shownToParticipant(x) {
     const a = x.a, sc = a.scores, maxT = Math.max(...ORDER.map(k => sc.t[k])), minT = Math.min(...ORDER.map(k => sc.t[k]));
     const comfort = ORDER.filter(k => sc.t[k] === maxT && maxT !== minT), grow = ORDER.filter(k => sc.t[k] === minT && maxT !== minT);
     return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
-      ${tag(L('Penjelasan kombinasi', 'Combination explanation'))}<p><b>${esc(a.combo.name)}</b>. ${esc(a.combo.tagline)} ${esc(a.combo.about)}</p>
+      ${tag(L('Penjelasan kombinasi', 'Combination explanation'))}<p><b>${esc(a.combo.name)}</b>. ${esc(a.combo.tagline)} ${fx(a.combo.about)}</p>
       ${comfort.length ? `${tag(L('Cara membaca hasil', 'How to read the result'))}<p>${L('Karakter dominan', 'Primary trait')}: <b>${comfort.map(k => TEMPS[k].name).join(', ')}</b> · ${L('Ruang tumbuh terbesar', 'Biggest growth area')}: <b>${grow.map(k => TEMPS[k].name).join(', ')}</b></p>` : ''}
       ${a.insights.length ? `${tag(L('Insight tambahan', 'More insights'))}<ul>${a.insights.map(i => `<li><b>${esc(i.title)}.</b> ${esc(i.text)}</li>`).join('')}</ul>` : ''}
       ${a.ties.length ? `${tag(L('Catatan skor seri', 'Tie note'))}${a.ties.map(t => `<p>${esc(t)}</p>`).join('')}` : ''}
@@ -2895,14 +2906,14 @@ function shownToParticipant(x) {
     const pr = MINI_PROFILE[x.p];
     return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
       ${tag(L('Temperamen dominan', 'Primary temperament'))}<p><b>${esc(TEMPS[x.p].name)}</b>. ${esc(TEMPS[x.p].essence)}</p>
-      ${tag(L('Kekuatan dan yang perlu diwaspadai', 'Strengths and watch-outs'))}<ul>${pr.powers.map(t => `<li>${esc(t)}</li>`).join('')}${pr.watch.map(t => `<li class="neg">${esc(t)}</li>`).join('')}</ul>
+      ${tag(L('Kekuatan dan yang perlu diwaspadai', 'Strengths and watch-outs'))}<ul>${pr.powers.map(t => `<li>${fx(t)}</li>`).join('')}${pr.watch.map(t => `<li class="neg">${fx(t)}</li>`).join('')}</ul>
       <p class="muted small">${L('Diajak mengambil Tes Karakter Lengkap via Instagram atau WhatsApp.', 'Invited to take the Full Character Test via Instagram or WhatsApp.')}</p>
     </section>`;
   }
   if (x.kind === 'mindset' && x.gm) {
     const a = x.gm, focus = a.weakest.length ? a.weakest : [a.sorted[4]];
     return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
-      ${tag(L('Penjelasan kategori', 'Category explanation'))}<p>${esc(GM_CATEGORIES[a.category].about)}</p>
+      ${tag(L('Penjelasan kategori', 'Category explanation'))}<p>${fx(GM_CATEGORIES[a.category].about)}</p>
       ${tag(L('Penjelasan per pilar', 'Per-pillar explanation'))}<ul>${GM_PILLAR_ORDER.map(k => `<li><b>${esc(GM_PILLARS[k].name)} (${a.pillars[k]}).</b> ${esc(GM_PILLARS[k][a.level(a.pillars[k])])}</li>`).join('')}</ul>
       ${tag(L('Langkah kecil minggu ini', 'One small step this week'))}<p>${esc(GM_STEP[focus[0]])}</p>
       <p class="muted small">${L('Diajak Tes Karakter Lengkap atau sesi coaching via Instagram atau WhatsApp.', 'Invited to the Full Character Test or a coaching session via Instagram or WhatsApp.')}</p>
@@ -2922,10 +2933,10 @@ function detailLengkap(x) {
     ${!SLUG && a.flags.length ? `<section class="box warn"><h3>${L('Perlu follow up', 'Needs follow-up')} · ${esc(levelName(a.level))}</h3><ul class="flaglist">${a.flags.map(f => `<li><b>${esc(f.internal)}</b><span>${esc(FLAG_BASIS()[f.code] || '')}</span></li>`).join('')}</ul></section>` : ''}
     <section class="box"><h3>${L('Gambaran singkat', 'Quick profile')}</h3>
       <div class="prof">
-        <div><h4>${L('Kekuatan utama', 'Key strengths')}</h4><ul>${a.combo.powers.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
-        <div><h4>${L('Perlu diwaspadai', 'Watch out for')}</h4><ul>${a.combo.watch.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
+        <div><h4>${L('Kekuatan utama', 'Key strengths')}</h4><ul>${a.combo.powers.map(t => `<li>${fx(t)}</li>`).join('')}</ul></div>
+        <div><h4>${L('Perlu diwaspadai', 'Watch out for')}</h4><ul>${a.combo.watch.map(t => `<li>${fx(t)}</li>`).join('')}</ul></div>
         <div><h4>${L('Kebutuhan emosional', 'Emotional needs')}</h4><ul>${P.needs.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>
-        <div><h4>${L('Biasanya bersinar di', 'Usually shines in')}</h4><p>${esc(a.combo.thrive)}</p></div>
+        <div><h4>${L('Biasanya bersinar di', 'Usually shines in')}</h4><p>${fx(a.combo.thrive)}</p></div>
       </div>
     </section>
     <section class="box"><h3>${L('Lembar skor', 'Score sheet')}</h3>

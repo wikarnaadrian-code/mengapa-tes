@@ -1257,7 +1257,7 @@ const COMBOS = {
   MP: {
     name: 'Thinker', en: '', natural: true,
     tagline: 'Mengamati dulu, bicara saat sudah matang.',
-    about: 'Kamu reflektif seperti Melankolis dan tenang seperti Plegmatis. Kamu lebih suka mengamati sebelum bicara, dan saat bicara isinya biasanya matang. Ini kombinasi paling introver: kamu mengisi ulang energi lewat waktu sendiri.',
+    about: 'Kamu reflektif seperti Melankolis dan tenang seperti Plegmatis. Kamu lebih suka mengamati sebelum bicara, dan saat bicara isinya biasanya matang. Ini kombinasi paling introvert: kamu mengisi ulang energi lewat waktu sendiri.',
     powers: ['Pemikir yang mendalam dan teliti', 'Setia dan bisa diandalkan', 'Pendengar yang baik'],
     watch: ['Ragu dan lama memutuskan', 'Cenderung khawatir atau pesimis', 'Memendam perasaan'],
     thrive: 'Riset, penulisan, akuntansi, IT, desain, konseling.',
@@ -1292,7 +1292,7 @@ const COMBOS = {
     watch: ['Pasif dan menunggu diminta', 'Mudah cemas soal hal kecil', 'Sulit bilang tidak'],
     thrive: 'Administrasi, keuangan, kesehatan, pendidikan anak, riset, layanan.',
     figures: ['Warren Buffett', 'Baymax'],
-    fact: 'Plegmatis dan Melankolis sama-sama introver. Dalam teori temperamen, keduanya disebut pasangan alami. Banyak yang dirasakan dan dipikirkan, tapi tidak semuanya ditunjukkan.',
+    fact: 'Plegmatis dan Melankolis sama-sama introvert. Dalam teori temperamen, keduanya disebut pasangan alami. Banyak yang dirasakan dan dipikirkan, tapi tidak semuanya ditunjukkan.',
   },
 };
 
@@ -1357,7 +1357,7 @@ const MINI_PROFILE = {
 /* Yang terbuka di tes lengkap (ditampilkan terkunci di hasil tes mini) */
 const FULL_BENEFITS = [
   'Kebutuhan emosionalmu: yang bikin kamu merasa dihargai',
-  'Kombinasi dominan + sekunder: 1 dari 12 karakter',
+  'Kombinasi karakter dominan dan terkuat kedua: 1 dari 12 karakter',
   'Lembar skor: kekuatan dan kelemahan di keempat sisi',
   'Karakter dominan dan ruang tumbuh terbesarmu',
   'Insight tambahan dari tim Mengapa',
@@ -1828,6 +1828,8 @@ const UI = {
   'Sebelumnya': 'Previous',
   'Sekunder': 'Secondary',
   'Sekunder (seri)': 'Secondary (tie)',
+  'Terkuat kedua': 'Secondary',
+  'Terkuat kedua (seri)': 'Secondary (tie)',
   'Semua orang punya keempatnya, hanya porsinya yang berbeda. Tes ini tidak mengotak-ngotakkan orang. Tujuannya mengenali sisi yang paling sering kamu pakai, supaya kamu bisa belajar memakai sisi lainnya juga.': 'Everyone has all four, only in different proportions. This test doesn’t put people in boxes. The goal is to recognize the side you use most, so you can learn to use the others too.',
   'Semua orang punya kelemahan. Pilih yang paling sering terjadi, bukan yang paling enak dibaca. Kalau ragu, pikirkan juga masa lalumu.': 'Everyone has weaknesses. Pick what happens most often, not what sounds nicest. If unsure, think about your past too.',
   'Setengah jalan. Sekarang': 'Halfway there. Now,',
@@ -1889,6 +1891,7 @@ const UI = {
   'diagnosis.': 'a diagnosis.',
   'jebakan karakter': 'the character trap',
   'karakter ini': 'characters',
+  'kombinasi karakter ini': 'character combinations',
   'ke pihak lain.': 'to third parties.',
   'keempatnya': 'all four',
   'kelemahan': 'weaknesses',
@@ -1914,6 +1917,14 @@ const UI = {
 
 let LANG = 'id';
 const L = (id, en) => (LANG === 'en' ? en : id);
+/* Kata asing di teks Indonesia dibuat miring (input sudah aman, di-escape dulu) */
+const FX_TERMS = ['customer relations','public speaking','quality control','content creator','sales leader','overthinking','entrepreneur','hospitality','engineering','programmer','introvert','insight','founder','trainer','event','sales','mood'];
+const FX_RE = new RegExp('\\b(' + FX_TERMS.join('|') + ')\\b', 'gi');
+const fx = s => {
+  const e = String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  return LANG === 'en' ? e : e.replace(FX_RE, '<i>$1</i>');
+};
+
 
 const C = { TEMPS, COMBOS, FIELD_INSIGHTS, USE, MINI_PROFILE, GM_PILLARS, GM_CATEGORIES, GM_STEP, FUN_FACTS, FULL_BENEFITS, GM_SCALE, MINI_ROWS, GM_ITEMS, ROWS };
 const isObj = v => v && typeof v === 'object' && !Array.isArray(v);
@@ -2033,9 +2044,9 @@ function analyze(answers, cfg = CONFIG) {
     ties.push(L(`Skor ${name(p)} dan ${name(s)} sama (${sc.t[p]}). Dua sisi ini sama kuat, jadi kamu adalah ${combo.name} sekaligus ${COMBOS[s + p].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi. `, `${name(p)} and ${name(s)} have the same score (${sc.t[p]}). Both sides are equally strong, so you are ${combo.name} and ${COMBOS[s + p].name} at once. That’s normal, because how we act can shift with the situation. `));
     tieReason = sc.s[p] > sc.s[s] ? `${combo.name} ditampilkan lebih dulu karena kekuatan ${name(p)} lebih banyak (${sc.s[p]} vs ${sc.s[s]}).` : sc.w[p] < sc.w[s] ? `${combo.name} ditampilkan lebih dulu karena kelemahan ${name(p)} lebih sedikit (${sc.w[p]} vs ${sc.w[s]}).` : 'Urutan tampil mengikuti urutan baku (S, C, M, P).';
   } else if (tieType === 'sekunder_seri') {
-    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi sisi sekundermu bisa keduanya dan kombinasimu bisa juga ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and your blend could also be ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
+    ties.push(L(`Skor ${list(coSecondary)} sama (${sc.t[s]}), jadi karakter terkuat keduamu bisa yang mana saja dan kombinasimu bisa juga ${COMBOS[p + coSecondary.find(k => k !== s)].name}. Ini wajar, karena cara kita bersikap bisa bergeser sesuai situasi.`, `${list(coSecondary)} have the same score (${sc.t[s]}), so your secondary side could be either, and your blend could also be ${COMBOS[p + coSecondary.find(k => k !== s)].name}. That’s normal, because how we act can shift with the situation.`));
   } else if (tieType === 'tiga_terbawah_sama') {
-    ties.push(L(`${name(p)} jelas dominan, tapi tiga sisi lainnya punya skor sama (${sc.t[s]}). Sisi sekundermu belum menonjol, jadi ${name(s)} di sini hanya urutan tampil.`, `${name(p)} is clearly primary, but the other three sides have the same score (${sc.t[s]}). Your secondary side doesn’t stand out yet, so ${name(s)} here is display order only.`));
+    ties.push(L(`${name(p)} jelas dominan, tapi tiga sisi lainnya punya skor sama (${sc.t[s]}). Karakter terkuat keduamu belum menonjol, jadi ${name(s)} di sini hanya urutan tampil.`, `${name(p)} is clearly primary, but the other three sides have the same score (${sc.t[s]}). Your secondary side doesn’t stand out yet, so ${name(s)} here is display order only.`));
   } else if (tieType === 'tiga_teratas_sama') {
     ties.push(L(`${list(top)} punya skor tertinggi yang sama (${sc.t[p]}). Polamu belum mengerucut ke dua sisi, jadi kombinasi di halaman ini hanya salah satu cara membacanya.`, `${list(top)} share the same top score (${sc.t[p]}). Your pattern hasn’t narrowed to two sides yet, so the combination on this page is just one way to read it.`));
   } else if (tieType === 'empat_sama') {
@@ -3068,7 +3079,7 @@ function gmresult() {
       <div class="block">
         <div class="eyebrow">Gambaran umum</div>
         <h2>Pola pikirmu saat ini</h2>
-        <p class="prose">${esc(cat.about)}</p>
+        <p class="prose">${fx(cat.about)}</p>
       </div>
 
       <div class="block">
@@ -3150,7 +3161,7 @@ function mtest() {
       <div class="opts" role="radiogroup" aria-label="${L(`Pilihan pertanyaan ${i + 1}`, `Options for question ${i + 1}`)}">
         ${row.options.map((o, k) => `
           <button class="opt${state.miniAnswers[i] === o.type ? ' sel' : ''}" role="radio" aria-checked="${state.miniAnswers[i] === o.type}" data-type="${o.type}">
-            <span class="key">${k + 1}</span><b class="long">${esc(o.text)}</b>
+            <span class="key">${k + 1}</span><b class="long">${fx(o.text)}</b>
           </button>`).join('')}
       </div>
       <div class="testfoot"><span>Gratis · hasil langsung</span><span></span></div>
@@ -3211,16 +3222,16 @@ function mresult() {
         <div class="eyebrow">${L(`Sisi ${P.name}`, `Your ${P.name} side`)}</div>
         <h2>Yang biasanya terlihat darimu</h2>
         <div class="two">
-          <div class="card flat" style="--dot:${P.color}"><h3>Kekuatan utama</h3><ul class="list">${prof.powers.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
-          <div class="card flat" style="--dot:${P.color}"><h3>Perlu diwaspadai</h3><ul class="list warn">${prof.watch.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
+          <div class="card flat" style="--dot:${P.color}"><h3>Kekuatan utama</h3><ul class="list">${prof.powers.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>
+          <div class="card flat" style="--dot:${P.color}"><h3>Perlu diwaspadai</h3><ul class="list warn">${prof.watch.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>
         </div>
         <p class="muted" style="margin-top:14px">${L(`Dominan bukan berarti satu-satunya. Kamu punya keempat sisi, dan ${P.name} hanya yang paling sering kamu pakai.`, `Primary doesn’t mean only. You have all four sides, and ${P.name} is simply the one you use most.`)}</p>
       </div>
 
       <div class="block">
         <div class="eyebrow">Yang belum terjawab</div>
-        <h2>Kamu salah satu dari <em>tiga</em> karakter ini</h2>
-        <p class="muted">${L(`Sisi sekundermu yang menentukan. Dua orang ${P.name} bisa sangat berbeda tergantung sisi keduanya.`, `Your secondary side decides. Two ${P.name} people can be very different depending on their second side.`)}</p>
+        <h2>Kamu salah satu dari <em>tiga</em> kombinasi karakter ini</h2>
+        <p class="muted">${L(`Yang menentukan adalah karakter terkuat keduamu. Dua orang ${P.name} bisa sangat berbeda tergantung karakter terkuat keduanya.`, `Your secondary dominant character decides. Two ${P.name} people can be very different depending on their secondary one.`)}</p>
         <div class="trio">
           ${trio.map(c => `<div class="mini">${comboArt(c[0], c[1], 96, 't')}<b>${COMBOS[c].name}</b><small>+ ${TEMPS[c[1]].name}</small></div>`).join('')}
         </div>
@@ -3231,7 +3242,7 @@ function mresult() {
           <div class="eyebrow">Tes Karakter Lengkap${CONFIG.fullPrice ? ' · ' + esc(CONFIG.fullPrice) : ''}</div>
           <h2 style="margin:8px 0 12px">Lihat gambaran utuhnya</h2>
           <p style="margin-bottom:12px">Dominanmu baru satu bagian. Tes Karakter Lengkap menunjukkan kombinasi, kekuatan, dan kelemahanmu di keempat sisi.</p>
-          <ul class="locks">${FULL_BENEFITS.map(x => `<li>${lockIcon()}<span>${esc(x)}</span></li>`).join('')}</ul>
+          <ul class="locks">${FULL_BENEFITS.map(x => `<li>${lockIcon()}<span>${fx(x)}</span></li>`).join('')}</ul>
           <div class="endcta">${contactRow(wa, 'Dapatkan token lewat:')}</div>
           ${codeNote(r.id)}
           <button class="btn block inv" style="margin-top:14px" data-act="full">Saya sudah punya token</button>
@@ -3260,7 +3271,7 @@ function result() {
   const durMin = r.startedAt ? Math.max(1, Math.round((r.finishedAt - r.startedAt) / 60000)) : 0;
   const sorted = a.ranking;
   const roleOf = k => a.coDominant.includes(k) ? 'dom' : a.coSecondary.includes(k) ? 'sec' : '';
-  const roleLabel = k => { const r = roleOf(k); return !r ? '' : r === 'dom' ? (a.coDominant.length > 1 ? 'Dominan (seri)' : 'Dominan') : (a.coSecondary.length > 1 ? 'Sekunder (seri)' : 'Sekunder'); };
+  const roleLabel = k => { const r = roleOf(k); return !r ? '' : r === 'dom' ? (a.coDominant.length > 1 ? 'Dominan (seri)' : 'Dominan') : (a.coSecondary.length > 1 ? 'Terkuat kedua (seri)' : 'Terkuat kedua'); };
   const maxT = Math.max(...ORDER.map(k => sc.t[k])), minT = Math.min(...ORDER.map(k => sc.t[k]));
   const joinNames = ks => ks.map(k => TEMPS[k].name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
   const zeroSides = ORDER.filter(k => sc.t[k] === 0);
@@ -3302,7 +3313,7 @@ function result() {
         <p class="tagline">${esc(combo.tagline)}</p>`}
         <div class="badges">
           <span class="badge">${tmark(p, 26)}<span><em>${roleLabel(p)}</em> ${P.name}</span></span>
-          <span class="badge">${tmark(s, 26)}<span><em>${roleLabel(s) || 'Sekunder'}</em> ${S.name}</span></span>
+          <span class="badge">${tmark(s, 26)}<span><em>${roleLabel(s) || 'Terkuat kedua'}</em> ${S.name}</span></span>
         </div>
         <div class="meta-line">${L(`Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}`, `Taken on ${fmtDate(r.finishedAt)} at ${fmtTime(r.finishedAt)}`)}${durMin ? L(` · selesai dalam ${durMin} menit`, ` · finished in ${durMin} min`) : ''}</div>
         ${a.ties.map(t => `<div class="note">${esc(t)}</div>`).join('')}
@@ -3364,12 +3375,12 @@ function result() {
         <h2>${dual ? `${P.name} <em>dan</em> ${S.name}, sama kuat` : `${P.name} <em>dengan sentuhan</em> ${S.name}`}</h2>
         ${(dual ? [[combo, P], [combo2, S]] : [[combo, P]]).map(([c, T]) => `
         ${dual ? `<h3 class="pola-name" style="margin-top:22px">${c.name}</h3>` : ''}
-        <p class="prose">${esc(c.about)}</p>
+        <p class="prose">${fx(c.about)}</p>
         <div class="two" style="margin-top:20px">
-          <div class="card flat" style="--dot:${T.color}"><h3>Kekuatan super</h3><ul class="list">${c.powers.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
-          <div class="card flat" style="--dot:${T.color}"><h3>Perlu diwaspadai</h3><ul class="list warn">${c.watch.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
+          <div class="card flat" style="--dot:${T.color}"><h3>Kekuatan super</h3><ul class="list">${c.powers.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>
+          <div class="card flat" style="--dot:${T.color}"><h3>Perlu diwaspadai</h3><ul class="list warn">${c.watch.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>
         </div>
-        <div class="card flat" style="margin-top:14px"><h3>Biasanya bersinar di</h3><p class="muted" style="margin-top:6px">${esc(c.thrive)}</p></div>`).join('')}
+        <div class="card flat" style="margin-top:14px"><h3>Biasanya bersinar di</h3><p class="muted" style="margin-top:6px">${fx(c.thrive)}</p></div>`).join('')}
       </div>
 
       <div class="block">
@@ -3419,7 +3430,7 @@ function result() {
       <div class="block">
         <div class="eyebrow">Fun fact</div>
         <div class="card flat">
-          <p>${esc(combo.fact)}</p>
+          <p>${fx(combo.fact)}</p>
           <hr class="divider" style="margin:16px 0" />
           <p class="muted">${esc(fact2)}</p>
         </div>
