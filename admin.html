@@ -1006,6 +1006,16 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 @media (prefers-reduced-motion: reduce) { .char-stage { animation: none; } .cx-slide .char-art, .cx-slide.out .char-art { transform: none !important; filter: none !important; } }
 @media print { .char-stage { animation: none; width: 200px; } }
 
+/* ===== Tombol WhatsApp melayang di hasil Tes Lengkap ===== */
+.stickycta { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 40; display: inline-flex; align-items: center; gap: 10px; max-width: calc(100% - 28px); padding: 11px 18px 11px 14px; border-radius: 999px; background: #1F8F55; color: #fff; text-decoration: none; font-size: 14px; line-height: 1.25; box-shadow: 0 8px 24px rgba(0,0,0,.16); transform: translate(-50%, 140%); opacity: 0; pointer-events: none; transition: transform .45s var(--ease), opacity .3s ease; }
+.stickycta.on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.stickycta svg { flex: 0 0 auto; }
+.stickycta span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stickycta b { font-weight: 700; }
+@media (hover: hover) { .stickycta:hover { filter: brightness(1.06); } }
+@media (prefers-reduced-motion: reduce) { .stickycta { transition: opacity .2s; } }
+@media print { .stickycta { display: none !important; } }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
