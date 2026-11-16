@@ -18,6 +18,11 @@
  *
  * Kalau kode ini diubah: Deploy > Manage deployments > Edit (pensil) > Version: New version > Deploy.
  *
+ * NOTIFIKASI EMAIL: setiap hasil tes baru dikirim ke NOTIF_EMAIL (lihat di bawah).
+ *  Token tim internal tidak dikirimi email. Kuota Gmail biasa: 100 email per hari.
+ *  Kalau gagal kirim (misalnya kuota habis), data tetap tersimpan di Sheet.
+ *  Untuk mematikan notifikasi: ubah NOTIF_EMAIL jadi '' lalu deploy ulang.
+ *
  * CARA BIKIN TOKEN:
  *  a) Manual / custom: ketik token di kolom A tab "Token", bebas (contoh Magelang_OCIE atau budi-2026). Tanpa spasi.
  *     Case sensitive: peserta harus mengetik huruf besar/kecil persis sama (Magelang_OCIE beda dengan magelang_ocie).
@@ -36,6 +41,8 @@ const SHEET_KLIEN = 'Klien';
 const SHEET_LAMA = 'Lama'; // hasil dari web app lama (impor sekali)
 const KLIEN_HEADERS = ['klien', 'nama', 'username', 'password', 'token', 'catatan'];
 const TOKEN_HEADERS = ['token', 'status', 'catatan', 'dibuat', 'mulai_dipakai', 'selesai', 'id_hasil', 'sesi'];
+const NOTIF_EMAIL = 'mengapa.me@gmail.com';
+const DASHBOARD_URL = 'https://www.mengapa.me/admin';
 const TEXT_COLUMNS = ['id', 'token', 'whatsapp', 'tanggal_lahir', 'tanggal_tes', 'jam_tes', 'jawaban', 'kode_kombinasi'];
 
 function doPost(e) {
@@ -63,10 +70,12 @@ function doPost(e) {
     }
 
     // Tes lengkap wajib punya token yang sah untuk sesi ini
+    let tokenTim = false;
     if (!mini) {
       const t = finishToken_(row.token, data.session, row.id);
       if (!t.ok) return json_({ ok: false, error: 'token', reason: t.reason });
       row.token = t.token || row.token; // simpan token persis seperti yang ditulis di tab Token
+      tokenTim = !!t.tim;
     }
 
     const missing = Object.keys(row).filter(k => headers.indexOf(k) === -1);
@@ -76,10 +85,61 @@ function doPost(e) {
       formatTextColumns_(sh, headers);
     }
     sh.appendRow(headers.map(h => (row[h] === undefined || row[h] === null) ? '' : row[h]));
+    if (!tokenTim) kirimNotif_(row); // email gagal tidak membatalkan penyimpanan data
     return json_({ ok: true });
   } finally {
     lock.releaseLock();
   }
+}
+
+/* ---------------- NOTIFIKASI EMAIL ---------------- */
+function kirimNotif_(row) {
+  if (!NOTIF_EMAIL) return;
+  try {
+    const jenis = row.jenis_tes === 'mindset' ? 'Growth' : row.jenis_tes === 'mini' ? 'Mini' : 'Lengkap';
+    const hasil = row.jenis_tes === 'mindset' ? (row.kategori || '') + (row.skor_total !== undefined ? ' (skor ' + row.skor_total + ')' : '')
+      : row.jenis_tes === 'mini' ? (row.dominan_seri ? 'Seri: ' + row.dominan_seri : (row.dominan || ''))
+      : (row.kombinasi || '') + ' (' + (row.dominan || '') + ' + ' + (row.sekunder || '') + ')';
+    const nama = row.nama || 'Tanpa nama';
+    const subjek = '[' + jenis + '] ' + nama + ' · ' + hasil;
+    const wa = waLink_(row.whatsapp);
+    const baris = [
+      ['Jenis tes', jenis === 'Growth' ? 'Growth Mindset' : 'Tes Karakter ' + jenis],
+      ['Nama', nama],
+      ['Usia', row.usia],
+      ['WhatsApp', row.whatsapp ? (wa ? '<a href="' + wa + '">' + esc_(row.whatsapp) + '</a>' : esc_(row.whatsapp)) : '-', true],
+      ['Boleh dihubungi', row.boleh_dihubungi],
+      ['Hasil', hasil],
+      ['Tahu Mengapa dari', row.sumber],
+      ['Token', row.token],
+      ['Waktu', [row.tanggal_tes, row.jam_tes].filter(String).join(' ')],
+      ['Durasi', row.durasi_detik ? Math.round(row.durasi_detik / 60 * 10) / 10 + ' menit' : ''],
+      ['Kode hasil', row.id],
+    ].filter(function (b) { return b[1] !== undefined && b[1] !== null && b[1] !== ''; });
+    const html = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#1D1D1D">'
+      + '<p style="margin:0 0 12px">Ada hasil tes baru di mengapa.me.</p>'
+      + '<table cellpadding="6" style="border-collapse:collapse">'
+      + baris.map(function (b) { return '<tr><td style="color:#6E6E6E;padding-right:16px">' + b[0] + '</td><td><b>' + (b[2] ? b[1] : esc_(b[1])) + '</b></td></tr>'; }).join('')
+      + '</table>'
+      + '<p style="margin:16px 0 0"><a href="' + DASHBOARD_URL + '">Buka dashboard</a></p></div>';
+    const teks = baris.map(function (b) { return b[0] + ': ' + (b[2] ? (row.whatsapp || '-') : b[1]); }).join('\n') + '\n\nDashboard: ' + DASHBOARD_URL;
+    MailApp.sendEmail({ to: NOTIF_EMAIL, subject: subjek, body: teks, htmlBody: html, name: 'Mengapa · Notifikasi Tes' });
+  } catch (err) {
+    console.error('Notifikasi email gagal: ' + err);
+  }
+}
+function waLink_(v) {
+  let d = String(v || '').replace(/\D/g, '');
+  if (!d) return '';
+  if (d.indexOf('0') === 0) d = '62' + d.slice(1);
+  return 'https://wa.me/' + d;
+}
+function esc_(v) { return String(v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+// Jalankan sekali dari editor (pilih "tesNotifikasi" > Run) untuk cek email dan memberi izin kirim email
+function tesNotifikasi() {
+  kirimNotif_({ id: 'TES-123', jenis_tes: 'lengkap', nama: 'Contoh Peserta', usia: 28, whatsapp: '081234567890', boleh_dihubungi: 'YA',
+    kombinasi: 'Thinker', dominan: 'Melankolis', sekunder: 'Plegmatis', sumber: 'Instagram', token: 'CONTOH', tanggal_tes: '2026-11-16', jam_tes: '15:00', durasi_detik: 540 });
 }
 
 /* ---------------- TOKEN ---------------- */
@@ -117,7 +177,7 @@ function startToken_(token, session) {
 function finishToken_(token, session, idHasil) {
   const f = findToken_(token);
   if (!f.row) return { ok: false, reason: 'tidak_ditemukan' };
-  if (f.status === 'tim') { f.sh.getRange(f.row, 6).setValue(new Date()); f.sh.getRange(f.row, 7).setValue(idHasil); return { ok: true, token: f.token }; }
+  if (f.status === 'tim') { f.sh.getRange(f.row, 6).setValue(new Date()); f.sh.getRange(f.row, 7).setValue(idHasil); return { ok: true, token: f.token, tim: true }; }
   if (f.status === 'selesai' && f.idHasil === String(idHasil)) return { ok: true, token: f.token };
   if (f.status !== 'dipakai' || f.sesi !== String(session)) return { ok: false, reason: 'sudah_dipakai' };
   f.sh.getRange(f.row, 2).setValue('selesai');
