@@ -1034,6 +1034,10 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 .use b small { display: table; margin: 4px 0 0; }
 @media print { .duo { width: 100%; } }
 
+/* ikon i dan x pakai SVG biar presisi di tengah */
+.info-i, .cxs-x { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+.info-i svg, .cxs-x svg { display: block; flex: none; }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -2533,7 +2537,7 @@ function openAllCombos(mine, opener) {
   const group = k => {
     const list = ORDER.filter(x => x !== k).map(x => k + x).filter(c => COMBOS[c]);
     return `<section class="cxs-group"><h4>${tmark(k, 24)}<span>${L('Dominan', 'Dominant')} ${TEMPS[k].name}</span></h4>
-      <div class="cxs-row">${list.map(c => `<div class="cxs-item${c === mine ? ' me' : ''}">${comboArt(c[0], c[1], 64, 'cxs' + c)}<div><b>${COMBOS[c].name}${c === mine ? `<em>${L('Kamu', 'You')}</em>` : ''}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><p>${esc(COMBOS[c].tagline)}</p></div></div>`).join('')}</div></section>`;
+      <div class="cxs-row">${list.map(c => `<div class="cxs-item${[].concat(mine).includes(c) ? ' me' : ''}">${comboArt(c[0], c[1], 64, 'cxs' + c)}<div><b>${COMBOS[c].name}${[].concat(mine).includes(c) ? `<em>${L('Kamu', 'You')}</em>` : ''}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><p>${esc(COMBOS[c].tagline)}</p></div></div>`).join('')}</div></section>`;
   };
   const el = document.createElement('div');
   el.className = 'cxs no-print';
@@ -2542,7 +2546,7 @@ function openAllCombos(mine, opener) {
       <div class="cxs-grip"></div>
       <div class="cxs-head"><div><div class="eyebrow">${L('Tes Karakter Lengkap', 'Full Character Test')}</div><h3 id="cxs-h">${L('12 kombinasi karakter', '12 character blends')}</h3>
         <p>${L('Kombinasi dibaca dari karakter dominan dan karakter keduamu.', 'Each blend reads your dominant temperament with your second one.')}</p></div>
-        <button class="cxs-x" data-x aria-label="${L('Tutup', 'Close')}">&times;</button></div>
+        <button class="cxs-x" data-x aria-label="${L('Tutup', 'Close')}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="cxs-body">${ORDER.map(group).join('')}</div>
     </div>`;
   document.body.appendChild(el);
@@ -3275,10 +3279,10 @@ function result() {
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil ${nick}`, `${nick}’s result`) : L('Hasil kamu', 'Your result')}</div>
         ${dual ? `<div class="duo">${[[p, s, combo], [s, p, combo2]].map(([x, y, c]) => `<figure><div class="char-stage" style="background:${CBG[x]}">${charArt(x, y, 150)}</div><figcaption><small>${esc(c.tagline)}</small></figcaption></figure>`).join('')}</div>
-        <h1>${combo.name} <em>&amp;</em> ${combo2.name}<button class="info-i no-print" data-act="allcombos" aria-label="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}" title="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}">i</button></h1>
+        <h1>${combo.name} <em>&amp;</em> ${combo2.name}<button class="info-i no-print" data-act="allcombos" aria-label="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}" title="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><rect x="10.2" y="9.5" width="3.6" height="11" rx="1.8"/></svg></button></h1>
         <p class="tagline">${L('Dua sisi yang sama kuat', 'Two equally strong sides')}</p>` : `
         <div class="char-stage" style="background:${CBG[p]}">${charArt(p, s, 200)}</div>
-        <h1>${combo.name}<button class="info-i no-print" data-act="allcombos" aria-label="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}" title="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}">i</button></h1>
+        <h1>${combo.name}<button class="info-i no-print" data-act="allcombos" aria-label="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}" title="${L('Lihat semua 12 kombinasi', 'See all 12 blends')}"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><rect x="10.2" y="9.5" width="3.6" height="11" rx="1.8"/></svg></button></h1>
         ${combo.en ? `<div class="en">${combo.en}</div>` : ''}
         <p class="tagline">${esc(combo.tagline)}</p>`}
         <div class="badges">
@@ -3656,7 +3660,7 @@ const bind = {
       new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; upd(); }).observe(hero);
       new IntersectionObserver(([e]) => { endSeen = e.isIntersecting || e.boundingClientRect.top < 0; upd(); }).observe(end);
     }
-    on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.primary + a.secondary, btn); });
+    on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.tieType === 'dominan_seri' ? [a.primary + a.secondary, a.secondary + a.primary] : a.primary + a.secondary, btn); });
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       btn.disabled = true;

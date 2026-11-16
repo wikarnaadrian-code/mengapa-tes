@@ -1029,6 +1029,10 @@ h1 em, h2 em, h3 em { font-style: normal; font-weight: 600; color: #A3A3A3; }
 .use b small { display: table; margin: 4px 0 0; }
 @media print { .duo { width: 100%; } }
 
+/* ikon i dan x pakai SVG biar presisi di tengah */
+.info-i, .cxs-x { display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+.info-i svg, .cxs-x svg { display: block; flex: none; }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
