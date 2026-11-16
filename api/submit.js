@@ -67,9 +67,10 @@ module.exports = async (req, res) => {
     const row = body.row;
     const mini = row.jenis_tes === 'mini';
     const mindset = row.jenis_tes === 'mindset';
-    for (const k of ['id', 'nama', 'tanggal_lahir', 'jawaban']) if (!row[k]) return res.status(400).json({ ok: false, error: 'kurang: ' + k });
-    if (!(mindset ? /^[1-5]{15}$/ : mini ? /^[SCMP]{10}$/ : /^[SCMP]{40}$/).test(String(row.jawaban))) return res.status(400).json({ ok: false, error: 'jawaban' });
-    if (!mini && !mindset && !normToken(row.token)) return res.status(200).json({ ok: false, error: 'token' });
+    const pk = row.jenis_tes === 'pandangan'; // Tes Pandangan Kerja (khusus HK Gold)
+    for (const k of (pk ? ['id', 'nama', 'jabatan', 'jawaban'] : ['id', 'nama', 'tanggal_lahir', 'jawaban'])) if (!row[k]) return res.status(400).json({ ok: false, error: 'kurang: ' + k });
+    if (!(pk ? /^[1-5]{12}$/ : mindset ? /^[1-5]{15}$/ : mini ? /^[SCMP]{10}$/ : /^[SCMP]{40}$/).test(String(row.jawaban))) return res.status(400).json({ ok: false, error: 'jawaban' });
+    if (!mini && !mindset && !pk && !normToken(row.token)) return res.status(200).json({ ok: false, error: 'token' });
 
     // Bersihkan: hanya teks/angka pendek, cegah formula spreadsheet (=, +, -, @)
     const clean = {};
@@ -79,8 +80,8 @@ module.exports = async (req, res) => {
       if (typeof s === 'string' && /^[=+\-@]/.test(s) && !/^\+?\d[\d\s-]*$/.test(s)) s = "'" + s;
       clean[k] = s;
     }
-    clean.jenis_tes = mindset ? 'mindset' : mini ? 'mini' : 'lengkap';
-    if (!mini && !mindset) clean.token = normToken(row.token);
+    clean.jenis_tes = pk ? 'pandangan' : mindset ? 'mindset' : mini ? 'mini' : 'lengkap';
+    if (!mini && !mindset && !pk) clean.token = normToken(row.token);
     clean.diterima_server = new Date().toISOString();
     clean.ip_negara = req.headers['x-vercel-ip-country'] || '';
     clean.ip_kota = decodeURIComponent(req.headers['x-vercel-ip-city'] || '');

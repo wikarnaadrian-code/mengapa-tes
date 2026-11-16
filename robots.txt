@@ -7,6 +7,7 @@ Disallow: /hkgold
 Disallow: /HKGold
 Disallow: /HKGOLD
 Disallow: /HkGold
+Disallow: /pandangan-kerja
 Disallow: /api/
 
 Sitemap: https://www.mengapa.me/sitemap.xml

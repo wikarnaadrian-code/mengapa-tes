@@ -5,6 +5,7 @@
  *   "Hasil"  : hasil tes lengkap
  *   "Mini"   : hasil tes mini (gratis)
  *   "Mindset": hasil Growth Mindset Test (gratis)
+ *   "PandanganKerja": hasil Tes Pandangan Kerja (khusus workshop HK Gold, tanpa notifikasi email)
  *
  * CARA PASANG (sekali saja):
  * 1. Buat Google Sheet baru, beri nama misalnya "Mengapa - Data Tes".
@@ -36,6 +37,7 @@
 const SHEET_HASIL = 'Hasil';
 const SHEET_MINI = 'Mini';
 const SHEET_MINDSET = 'Mindset';
+const SHEET_PK = 'PandanganKerja';
 const SHEET_TOKEN = 'Token';
 const SHEET_KLIEN = 'Klien';
 const SHEET_LAMA = 'Lama'; // hasil dari web app lama (impor sekali)
@@ -58,8 +60,9 @@ function doPost(e) {
     if (data.action === 'token') return json_(startToken_(data.token, data.session));
 
     const row = data.row || {};
-    const mini = row.jenis_tes === 'mini' || row.jenis_tes === 'mindset';
-    const sh = getSheet_(row.jenis_tes === 'mindset' ? SHEET_MINDSET : row.jenis_tes === 'mini' ? SHEET_MINI : SHEET_HASIL);
+    const pk = row.jenis_tes === 'pandangan';
+    const mini = row.jenis_tes === 'mini' || row.jenis_tes === 'mindset' || pk;
+    const sh = getSheet_(pk ? SHEET_PK : row.jenis_tes === 'mindset' ? SHEET_MINDSET : row.jenis_tes === 'mini' ? SHEET_MINI : SHEET_HASIL);
     let headers = sh.getLastColumn() ? sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0].filter(String) : [];
 
     // ID yang sama terkirim ulang: jangan simpan dua kali
@@ -85,7 +88,7 @@ function doPost(e) {
       formatTextColumns_(sh, headers);
     }
     sh.appendRow(headers.map(h => (row[h] === undefined || row[h] === null) ? '' : row[h]));
-    if (!tokenTim) kirimNotif_(row); // email gagal tidak membatalkan penyimpanan data
+    if (!tokenTim && !pk) kirimNotif_(row); // email gagal tidak membatalkan penyimpanan data
     return json_({ ok: true });
   } finally {
     lock.releaseLock();
@@ -253,6 +256,7 @@ function buat10Token() { Logger.log(buatToken_(10, 'MGP', 'dibuat dari editor').
  *   GET .../exec?token=READ_TOKEN&tab=mini     -> hasil tes mini
  *   GET .../exec?token=READ_TOKEN&tab=mindset  -> hasil Growth Mindset Test
  *   GET .../exec?token=READ_TOKEN&tab=lama     -> hasil tes dari web app lama
+ *   GET .../exec?token=READ_TOKEN&tab=pandangan -> hasil Tes Pandangan Kerja (HK Gold)
  *   tambahkan &ref=febe atau &id=MGP-XXXXXX untuk filter
  */
 function doGet(e) {
@@ -260,7 +264,7 @@ function doGet(e) {
   const p = (e && e.parameter) || {};
   if (!token || p.token !== token) return json_({ ok: true, service: 'mengapa-tes' });
 
-  const sheet = p.tab === 'klien' ? getKlienSheet_() : getSheet_(p.tab === 'mini' ? SHEET_MINI : p.tab === 'mindset' ? SHEET_MINDSET : p.tab === 'lama' ? SHEET_LAMA : SHEET_HASIL);
+  const sheet = p.tab === 'klien' ? getKlienSheet_() : getSheet_(p.tab === 'mini' ? SHEET_MINI : p.tab === 'mindset' ? SHEET_MINDSET : p.tab === 'lama' ? SHEET_LAMA : p.tab === 'pandangan' ? SHEET_PK : SHEET_HASIL);
   const values = sheet.getDataRange().getDisplayValues();
   const headers = values.shift() || [];
   let rows = values.map(r => { const o = {}; headers.forEach((h, i) => { o[h] = r[i]; }); return o; });
@@ -271,7 +275,7 @@ function doGet(e) {
 
 /** Jalankan sekali dari editor untuk menyiapkan tab & izin. */
 function setup() {
-  getTokenSheet_(); getKlienSheet_(); getSheet_(SHEET_HASIL); getSheet_(SHEET_MINI); getSheet_(SHEET_MINDSET);
+  getTokenSheet_(); getKlienSheet_(); getSheet_(SHEET_HASIL); getSheet_(SHEET_MINI); getSheet_(SHEET_MINDSET); getSheet_(SHEET_PK);
   Logger.log('Tab siap. Secret terpasang: ' +
     (PropertiesService.getScriptProperties().getProperty('SHEET_SECRET') ? 'YA' : 'BELUM, isi di Project Settings'));
 }

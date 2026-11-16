@@ -39,6 +39,24 @@
           "value": "noindex, nofollow"
         }
       ]
+    },
+    {
+      "source": "/(pandangan-kerja|pandangan-kerja-hasil)(.html)?",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/:hk(HKGold|hkgold|HKGOLD|HkGold)/:rest*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     }
   ],
   "redirects": [
@@ -89,6 +107,14 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/:hk(HKGold|hkgold|HKGOLD|HkGold)/:t(TesPandanganKerja|tespandangankerja|TESPANDANGANKERJA|Tespandangankerja)/:h(Hasil|hasil|HASIL)",
+      "destination": "/pandangan-kerja-hasil"
+    },
+    {
+      "source": "/:hk(HKGold|hkgold|HKGOLD|HkGold)/:t(TesPandanganKerja|tespandangankerja|TESPANDANGANKERJA|Tespandangankerja)",
+      "destination": "/pandangan-kerja"
+    },
     {
       "source": "/HKGold",
       "destination": "/hkgold"

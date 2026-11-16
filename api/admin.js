@@ -104,5 +104,17 @@ module.exports = async (req, res) => {
       return res.status(502).json({ ok: false, error: String(e.message || e) });
     }
   }
+  // Tes Pandangan Kerja HK Gold: hanya admin Mengapa (sesi admin biasa, bukan sesi klien)
+  if (body.action === 'pandangan') {
+    const sess = readSession(body.session, key);
+    if (!sess || sess.c) return res.status(401).json({ ok: false, error: 'sesi' });
+    if (!readToken) return res.status(500).json({ ok: false, error: 'READ_TOKEN belum diisi di Vercel' });
+    try {
+      const rows = await readTab(url, readToken, 'pandangan');
+      return res.status(200).json({ ok: true, rows, at: new Date().toISOString() });
+    } catch (e) {
+      return res.status(502).json({ ok: false, error: String(e.message || e) });
+    }
+  }
   return res.status(400).json({ ok: false, error: 'action' });
 };
