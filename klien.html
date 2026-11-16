@@ -1083,6 +1083,16 @@ footer.foot { padding: 48px 0 50px; }
   .gmr .insight .num { width: 34px; height: 34px; font-size: 15px; }
 }
 
+
+/* Tanaman dinamis + hero Growth Mindset seimbang */
+.gmr .gm-hero { display: grid; grid-template-columns: 120px 210px; align-items: end; justify-content: center; gap: 6px; }
+.gmr .plant { width: 120px; height: 104px; margin-bottom: 4px; }
+.plant .grow { transform-box: fill-box; transform-origin: 50% 100%; animation: plantGrow 1.1s .25s cubic-bezier(.2,.9,.3,1.2) both; }
+@keyframes plantGrow { from { transform: scale(.2); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (max-width: 380px) { .gmr .gm-hero { grid-template-columns: 100px 180px; } .gmr .plant { width: 100px; height: 87px; } .gmr .gauge { width: 180px; } }
+@media (prefers-reduced-motion: reduce) { .plant .grow { animation: none; } }
+@media print { .plant .grow { animation: none; } }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -2665,12 +2675,16 @@ async function gmCard({ nickname, dateLabel, total, cat, pillars }) {
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
   const { W, cv, ctx } = await cardBase(L('Tes Growth Mindset', 'Growth Mindset Test'));
   ctx.fillStyle = '#E4DCF8'; roundRect(ctx, 60, 262, W - 120, 860, 64); ctx.fill();
-  const cx = W / 2, cy = 520, rr = 180;
+  const cx = 372, cy = 540, rr = 150;
+  try { // tanaman sesuai skor di kanan lingkaran skor
+    const im = new Image(); im.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(plantSvg(total).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="312" ').replace(/ class="grow"/g, ''));
+    await im.decode(); ctx.drawImage(im, 600, 360, 360, 312);
+  } catch (e) { /* abaikan */ }
   ctx.lineWidth = 34; ctx.lineCap = 'round';
   ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
   ctx.strokeStyle = '#1D1D1D'; ctx.beginPath(); ctx.arc(cx, cy, rr, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * Math.max(.02, total / 100)); ctx.stroke();
-  ctx.textAlign = 'center'; ctx.fillStyle = '#1D1D1D'; ctx.font = `800 150px ${SANS}`; ctx.letterSpacing = '-4px'; ctx.fillText(String(total), cx, cy + 50); ctx.letterSpacing = '0px';
-  ctx.font = `600 30px ${SANS}`; ctx.fillStyle = 'rgba(29,29,29,.6)'; ctx.fillText(L('dari 100', 'out of 100'), cx, cy + 100);
+  ctx.textAlign = 'center'; ctx.fillStyle = '#1D1D1D'; ctx.font = `800 128px ${SANS}`; ctx.letterSpacing = '-4px'; ctx.fillText(String(total), cx, cy + 42); ctx.letterSpacing = '0px';
+  ctx.font = `600 30px ${SANS}`; ctx.fillStyle = 'rgba(29,29,29,.6)'; ctx.fillText(L('dari 100', 'out of 100'), cx, cy + 88);
   ctx.fillStyle = '#1D1D1D'; let fs = 96; ctx.font = `800 ${fs}px ${SANS}`;
   while (ctx.measureText(cat.name).width > 880 && fs > 56) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
   ctx.letterSpacing = '-3px'; ctx.fillText(cat.name, W / 2, 872); ctx.letterSpacing = '0px';
@@ -2686,6 +2700,35 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath();
   ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
   ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+
+/* ---------------------------------------------------------
+   TANAMAN GROWTH MINDSET: 6 tahap mengikuti skor (0-100)
+   --------------------------------------------------------- */
+const plantStage = total => total >= 85 ? 5 : total >= 70 ? 4 : total >= 55 ? 3 : total >= 40 ? 2 : total >= 20 ? 1 : 0;
+function plantSvg(total, cls = 'plant') {
+  const st = plantStage(total);
+  const G = '#88A261', GL = '#A9C47F', D = '#3F5524', T = '#7A5A3A', S = '#B98B5E', SD = '#9C7048', GR = '#E3DDD2';
+  const ground = `<ellipse cx="60" cy="97" rx="${st >= 4 ? 40 : 32}" ry="6.5" fill="${GR}"/>`;
+  const mound = (w, h) => `<path d="M${60 - w} 97 C${60 - w * .7} ${97 - h} ${60 + w * .7} ${97 - h} ${60 + w} 97 Z" fill="${S}"/>`;
+  const leaf = (x, y, dx, dy, f = G) => { // daun dari titik (x,y) ke ujung (x+dx, y+dy)
+    const mx = x + dx / 2, my = y + dy / 2, nx = -dy * .45, ny = dx * .45;
+    return `<path d="M${x} ${y} Q${mx + nx} ${my + ny} ${x + dx} ${y + dy} Q${mx - nx} ${my - ny} ${x} ${y}Z" fill="${f}"/>`; };
+  const parts = [
+    // 0: gundukan tanah, benih belum muncul
+    `${ground}${mound(24, 20)}<path d="M53 87 q4 -3 7 0 q3 3 7 0" fill="none" stroke="${SD}" stroke-width="2" stroke-linecap="round"/><circle cx="48" cy="92" r="1.6" fill="${SD}"/><circle cx="71" cy="91" r="1.4" fill="${SD}"/>`,
+    // 1: ujung tunas baru nongol
+    `${ground}${mound(24, 18)}<g class="grow"><path d="M60 88 C60 82 60 79 62 76" fill="none" stroke="${D}" stroke-width="3" stroke-linecap="round"/>${leaf(62, 76, 8, -5, GL)}</g>`,
+    // 2: tunas kecil, dua daun
+    `${ground}${mound(22, 10)}<g class="grow"><path d="M60 92 V68" stroke="${D}" stroke-width="3.2" stroke-linecap="round"/>${leaf(60, 72, -16, -10)}${leaf(60, 68, 15, -12, GL)}</g>`,
+    // 3: tanaman muda, beberapa daun
+    `${ground}<g class="grow"><path d="M60 95 C60 80 58 64 60 50" fill="none" stroke="${D}" stroke-width="3.8" stroke-linecap="round"/>${leaf(60, 82, -18, -6, GL)}${leaf(59.5, 72, 19, -8)}${leaf(59.2, 62, -18, -10)}${leaf(60, 54, 15, -14, GL)}${leaf(60, 50, -4, -16)}</g>`,
+    // 4: pohon muda, batang mulai kokoh
+    `${ground}<g class="grow"><path d="M55.5 97 C57 84 58 72 58.5 58 L61.5 58 C62 72 63 84 64.5 97 Z" fill="${T}"/><path d="M59.5 74 L48 64" stroke="${T}" stroke-width="3.2" stroke-linecap="round"/><circle cx="60" cy="46" r="19" fill="${G}"/><circle cx="45" cy="56" r="11" fill="${G}"/><circle cx="75" cy="55" r="12" fill="${GL}"/><circle cx="54" cy="38" r="6" fill="${GL}" opacity=".7"/></g>`,
+    // 5: pohon kuat, tajuk rimbun, berbuah
+    `${ground}<g class="grow"><path d="M55 97 C57 84 57 70 58 56 L62 56 C63 70 63 84 65 97 Z" fill="${T}"/><path d="M60 70 L46 60 M60 66 L74 57" stroke="${T}" stroke-width="3.4" stroke-linecap="round"/><circle cx="60" cy="36" r="25" fill="${G}"/><circle cx="38" cy="50" r="16" fill="${G}"/><circle cx="82" cy="49" r="16" fill="${G}"/><circle cx="48" cy="26" r="11" fill="${GL}"/><circle cx="74" cy="28" r="10" fill="${GL}"/><circle cx="60" cy="54" r="12" fill="${G}"/><circle cx="50" cy="38" r="3.6" fill="#E5BE2E"/><circle cx="72" cy="44" r="3.6" fill="#BC4235"/><circle cx="62" cy="22" r="3.2" fill="#E5BE2E"/><circle cx="38" cy="52" r="3.2" fill="#BC4235"/><circle cx="84" cy="52" r="3" fill="#E5BE2E"/></g>`,
+  ];
+  return `<svg class="${cls}" viewBox="0 0 120 104" aria-hidden="true" data-stage="${st}">${parts[st]}</svg>`;
 }
 
 /* ===== tim.js ===== */
