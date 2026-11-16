@@ -1302,6 +1302,10 @@ body { background: var(--bg); }
 .bdur b { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .bdur span { color: var(--ink); font-weight: 600; } .bdur i { font-style: normal; color: #A3A3A3; font-weight: 500; }
 
+/* karakter badan penuh di detail */
+.hero-char { border-radius: 24px; display: grid; place-items: center; padding: 10px 14px 4px; }
+.hero-char .char-art { display: block; }
+
 </style>
 </head>
 <body>
@@ -2867,7 +2871,7 @@ function detailLengkap(x) {
   const traits = k => ({ s: a.picks.strengths.filter(w => w.type === k).map(w => w.word), w: a.picks.weaknesses.filter(w => w.type === k).map(w => w.word) });
   return `
     <section class="hero" style="--soft:${P.soft}">
-      <div class="hero-art">${comboArt(a.primary, a.secondary, 132, 'd' + x.id)}</div>
+      <div class="hero-art hero-char" style="background:${CBG[a.primary]}">${charArt(a.primary, a.secondary, 112)}</div>
       <div><small class="eyebrow">${P.name} + ${Sx.name}</small><h2>${esc(a.combo.name)}</h2><p class="muted">${esc(a.combo.tagline)}</p>
         ${a.alts.length ? `<p class="note">${L('Juga cocok dengan', 'Also fits')}: ${a.alts.map(k => COMBOS[k].name).join(', ')}</p>` : ''}</div>
     </section>
