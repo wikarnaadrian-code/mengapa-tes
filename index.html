@@ -1171,7 +1171,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.9.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.9.1', // diisi otomatis saat build dari file VERSION
   buildDate: '16 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3783,7 +3783,7 @@ const bind = {
       try {
         const r = state.miniResult, a = miniAnalyze(r.answers), P = TEMPS[a.primary];
         const blob = await shareCard({ mini: true, profile: { nickname: nickname(r.profile.name) }, dateLabel: fmtDate(r.finishedAt),
-          analysis: { primary: a.primary, secondary: a.primary, combo: { name: P.name, tagline: `${P.title}. ${P.motto}` }, scores: { t: a.t } } });
+          analysis: { primary: a.primary, secondary: a.primary, combo: { name: P.name, tagline: P.essence }, scores: { t: a.t } } });
         await deliverImage(blob, `mengapa-mini-${P.name.toLowerCase()}.png`, L(`Temperamen dominanku ${P.name}. Kamu yang mana? ${CONFIG.site}`, `My primary temperament is ${P.name}. What's yours? ${CONFIG.site}`));
       } catch (e) { if (e && e.name !== 'AbortError') toast('Gagal membuat gambar. Coba lagi ya.'); }
       finally { done(); }
