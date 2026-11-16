@@ -1273,6 +1273,53 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .pka-people th:nth-child(1), .pka-people td:nth-child(1) { min-width: 160px; }
 .pka-people th:nth-child(2), .pka-people td:nth-child(2) { min-width: 120px; }
 
+/* filter atas (memotong seluruh dashboard) dan toolbar daftar peserta yang menempel */
+.pka-flabel { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
+.pka-filters select.input { flex: 0 1 260px; }
+.pka-tools { position: sticky; top: 0; z-index: 4; background: #FFFFFF; margin: -18px -20px 0; padding: 16px 20px 12px; border-radius: 22px 22px 0 0; }
+.pka-tools.stuck { border-radius: 0; box-shadow: 0 6px 14px -10px rgba(0,0,0,.25); }
+.pka-tools-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.pka-q { width: min(100%, 320px) !important; flex: 0 1 320px; min-height: 42px; padding: 9px 14px; font-size: 15px; background: #F5F5F3; border-color: transparent; }
+.pka-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.pka-chips button { display: inline-flex; align-items: center; gap: 6px; border: 0; background: #F0F0EE; border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; }
+.pka-chips button small { opacity: .6; font-weight: 600; }
+.pka-chips button[aria-pressed="true"] { background: #1D1D1D; color: #FFFFFF; }
+.pka-chips .pk-dot { width: 9px; height: 9px; }
+.pka-people thead th { background: #FFFFFF; }
+@media (min-width: 900px) {
+  .pka-people-wrap { overflow: visible; }
+  .pka-people thead th { position: sticky; top: var(--th-top, 0px); z-index: 3; }
+}
+@media (max-width: 520px) { .pka-tools { margin: -18px -16px 0; padding: 14px 16px 10px; } .pka-q { width: 100% !important; flex: 1 1 100%; } }
+
+/* HP: daftar peserta jadi kartu */
+@media (max-width: 640px) {
+  .pka-people-wrap { overflow: visible; margin: 8px 0 0; }
+  .pka-people, .pka-people tbody { display: block; }
+  .pka-people thead { display: none; }
+  .pka-people tr.pka-p { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px 8px; padding: 12px 10px; border-bottom: 1px solid rgba(0,0,0,.07); border-radius: 14px; }
+  .pka-people tr.pka-p td { border: 0; padding: 0; background: transparent !important; }
+  .pka-people .c-name { grid-column: 1 / 3; }
+  .pka-people .c-time { grid-column: 3; text-align: right; font-size: 12px; }
+  .pka-people .c-job { grid-column: 1 / -1; font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+  .pka-people td.num { width: auto; text-align: left; font-size: 16px; background: #F5F5F3 !important; border-radius: 10px; padding: 6px 10px; }
+  .pka-people td.num::before { content: attr(data-l); display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+  .pka-people .c-dom { grid-column: 1 / 3; margin-top: 8px; }
+  .pka-people .c-time { margin-top: 8px; align-self: center; }
+  .pka-people tr.pka-p:hover, .pka-people tr.pka-p.open { background: #F7F7F5; }
+  .pka-people tr.pka-detail { display: block; }
+  .pka-people tr.pka-detail td { display: block; border-radius: 14px; }
+  .pka-people tr:not(.pka-p):not(.pka-detail) { display: block; }
+  .pka-people tr:not(.pka-p):not(.pka-detail) td { display: block; border: 0; }
+}
+@media (max-width: 640px) {
+  .pka-tools-h h2 { font-size: 17px; }
+  .pka-q { min-height: 40px; }
+  .pka-chips { flex-wrap: nowrap; overflow-x: auto; margin: 10px -16px 0; padding: 0 16px 2px; scrollbar-width: none; }
+  .pka-chips::-webkit-scrollbar { display: none; }
+  .pka-chips button { flex: 0 0 auto; }
+}
+
 </style>
 </head>
 <body>
@@ -1430,9 +1477,10 @@ function login() {
   </main>`;
 }
 
+const base = () => S.rows.filter(x => (!S.job || jobKey(x.job) === S.job) && (S.day === 'all' || dayOf(x.iso) === S.day));
 function filtered() {
   const q = S.q.trim().toLowerCase();
-  let xs = S.rows.filter(x => (!S.job || jobKey(x.job) === S.job) && (!S.dom || x.dom === S.dom) && (S.day === 'all' || dayOf(x.iso) === S.day) && (!q || x.name.toLowerCase().includes(q) || x.job.toLowerCase().includes(q)));
+  let xs = base().filter(x => (!S.dom || x.dom === S.dom) && (!q || x.name.toLowerCase().includes(q) || x.job.toLowerCase().includes(q)));
   const key = { time: x => x.t, name: x => x.name.toLowerCase(), job: x => x.job.toLowerCase(), A: x => x.a.avg.A, B: x => x.a.avg.B, N: x => x.a.avg.N, dom: x => x.dom }[S.sort];
   return xs.slice().sort((p, q2) => { const a = key(p), b = key(q2); return (a < b ? -1 : a > b ? 1 : 0) * S.dir; });
 }
@@ -1453,12 +1501,14 @@ function byJob(xs) {
 }
 
 const th = (k, label, cls = '') => `<th class="${cls}"><button data-sort="${k}" aria-pressed="${S.sort === k}">${label}${S.sort === k ? (S.dir > 0 ? ' ↑' : ' ↓') : ''}</button></th>`;
-const cell = (x, d) => `<td class="num${x.a.dominant.includes(d) ? ' hi' : ''}" style="--c:${PK_DIMS[d].color}">${pkNum(x.a.avg[d])}</td>`;
+const cell = (x, d) => `<td class="num c-${d}${x.a.dominant.includes(d) ? ' hi' : ''}" data-l="${PK_DIMS[d].name}" style="--c:${PK_DIMS[d].color}">${pkNum(x.a.avg[d])}</td>`;
 
 function app() {
-  const all = S.rows || [], xs = filtered(), s = summary(xs), jobs = byJob(all), groups = byJob(xs);
+  const all = S.rows || [], bs = base(), xs = filtered(), s = summary(bs), jobs = byJob(all), groups = byJob(bs);
   const days = [...new Set(all.map(x => dayOf(x.iso)).filter(Boolean))];
-  const domOpts = [...PK_ORDER.map(d => PK_DIMS[d].name), ...new Set(all.map(x => x.dom).filter(k => k.includes('&')))];
+  const domCnt = {}; bs.forEach(x => { domCnt[x.dom] = (domCnt[x.dom] || 0) + 1; });
+  const domOpts = [...PK_ORDER.map(d => PK_DIMS[d].name), ...Object.keys(domCnt).filter(k => k.includes('&')).sort()];
+  const scope = [S.job ? (jobs.find(j => jobKey(j.name) === S.job) || {}).name : '', S.day !== 'all' ? S.day : ''].filter(Boolean).join(' · ');
   const maxDom = Math.max(1, ...s.singles.map(o => o.n), s.ties);
   return `
   <div class="pka">
@@ -1477,15 +1527,14 @@ function app() {
     </div>
 
     <div class="pka-filters">
-      <input class="input" id="q" placeholder="Cari nama atau jabatan" value="${esc(S.q)}" />
-      <select class="input" id="fjob"><option value="">Semua jabatan (${all.length})</option>${jobs.map(j => `<option value="${esc(jobKey(j.name))}" ${S.job === jobKey(j.name) ? 'selected' : ''}>${esc(j.name)} (${j.xs.length})</option>`).join('')}</select>
-      <select class="input" id="fdom"><option value="">Semua komitmen dominan</option>${domOpts.map(o => `<option ${S.dom === o ? 'selected' : ''}>${esc(o)}</option>`).join('')}</select>
-      ${days.length > 1 ? `<select class="input" id="fday"><option value="all">Semua tanggal</option>${days.map(d => `<option ${S.day === d ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select>` : ''}
-      ${S.q || S.job || S.dom || S.day !== 'all' ? '<button class="linkbtn" data-act="clear">Hapus filter</button>' : ''}
+      <span class="pka-flabel">Tampilkan data</span>
+      <select class="input" id="fjob" aria-label="Jabatan"><option value="">Semua jabatan (${all.length})</option>${jobs.map(j => `<option value="${esc(jobKey(j.name))}" ${S.job === jobKey(j.name) ? 'selected' : ''}>${esc(j.name)} (${j.xs.length})</option>`).join('')}</select>
+      ${days.length > 1 ? `<select class="input" id="fday" aria-label="Tanggal"><option value="all">Semua tanggal</option>${days.map(d => `<option ${S.day === d ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select>` : ''}
+      ${S.job || S.day !== 'all' ? '<button class="linkbtn" data-act="clearTop">Tampilkan semua</button>' : ''}
     </div>
 
     <section class="pka-kpi">
-      <div class="pka-card"><small>Peserta</small><b>${s.n}</b><span>${all.length !== s.n ? `dari ${all.length} total` : 'total masuk'}</span></div>
+      <div class="pka-card"><small>Peserta</small><b>${s.n}</b><span>${all.length !== s.n ? `${esc(scope)} · ${pct(s.n, all.length)}% dari ${all.length}` : 'total masuk'}</span></div>
       ${PK_ORDER.map(d => `<div class="pka-card" style="--c:${PK_DIMS[d].color};--soft:${PK_DIMS[d].soft}"><small><i class="pk-dot"></i>Rata-rata ${PK_DIMS[d].name}</small><b>${s.n ? pkNum(s.avg[d]) : '-'}</b><span>${s.n ? pkLevel(s.avg[d]) : ''}</span></div>`).join('')}
     </section>
 
@@ -1518,13 +1567,20 @@ function app() {
     </section>
 
     <section class="pka-card pka-panel">
-      <h2>Peserta <small class="muted">${xs.length}</small></h2>
-      <p class="muted small">Klik baris untuk melihat jawaban per pernyataan. Angka tebal berwarna = komitmen tertinggi orang itu.</p>
-      <div class="pka-scroll"><table class="pka-t pka-people">
+      <div class="pka-tools">
+        <div class="pka-tools-h"><h2>Peserta <small class="muted">${xs.length === bs.length ? xs.length : `${xs.length} dari ${bs.length}`}</small></h2>
+          <input class="input pka-q" id="q" type="search" placeholder="Cari nama atau jabatan" value="${esc(S.q)}" autocomplete="off" /></div>
+        <div class="pka-chips" role="group" aria-label="Komitmen dominan">
+          <button data-dom="" aria-pressed="${!S.dom}">Semua <small>${bs.length}</small></button>
+          ${domOpts.map(o => { const d = PK_ORDER.find(k => PK_DIMS[k].name === o); return `<button data-dom="${esc(o)}" aria-pressed="${S.dom === o}" style="--c:${d ? PK_DIMS[d].color : '#9A9A96'}">${d ? '<i class="pk-dot"></i>' : ''}${esc(o)} <small>${domCnt[o] || 0}</small></button>`; }).join('')}
+        </div>
+      </div>
+      <p class="muted small">Klik baris untuk melihat jawaban per pernyataan. Klik judul kolom untuk mengurutkan. Angka tebal berwarna = komitmen tertinggi orang itu.</p>
+      <div class="pka-scroll pka-people-wrap"><table class="pka-t pka-people">
         <thead><tr>${th('name', 'Nama')}${th('job', 'Jabatan')}${PK_ORDER.map(d => th(d, PK_DIMS[d].name, 'num')).join('')}${th('dom', 'Dominan')}${th('time', 'Waktu')}</tr></thead>
         <tbody>${xs.length ? xs.map(x => `
-          <tr class="pka-p${S.open === x.id ? ' open' : ''}" data-id="${esc(x.id)}"><td><b>${esc(x.name)}</b></td><td>${esc(x.job)}</td>${PK_ORDER.map(d => cell(x, d)).join('')}<td><span class="pka-dom">${esc(x.dom)}</span></td><td class="muted nowrap">${esc(fmt(x.iso))}</td></tr>
-          ${S.open === x.id ? `<tr class="pka-detail"><td colspan="7">${detail(x)}</td></tr>` : ''}`).join('') : `<tr><td colspan="7" class="muted">${S.rows && S.rows.length ? 'Tidak ada peserta yang cocok dengan filter.' : 'Belum ada peserta yang menyelesaikan tes.'}</td></tr>`}</tbody>
+          <tr class="pka-p${S.open === x.id ? ' open' : ''}" data-id="${esc(x.id)}"><td class="c-name"><b>${esc(x.name)}</b></td><td class="c-job">${esc(x.job)}</td>${PK_ORDER.map(d => cell(x, d)).join('')}<td class="c-dom"><span class="pka-dom">${esc(x.dom)}</span></td><td class="c-time muted nowrap">${esc(fmt(x.iso))}</td></tr>
+          ${S.open === x.id ? `<tr class="pka-detail"><td colspan="7">${detail(x)}</td></tr>` : ''}`).join('') : `<tr><td colspan="7" class="muted">${S.rows && S.rows.length ? 'Tidak ada peserta yang cocok. <button class="linkbtn" data-act="clear">Hapus pencarian</button>' : 'Belum ada peserta yang menyelesaikan tes.'}</td></tr>`}</tbody>
       </table></div>
     </section>
     <p class="small muted pka-foot">Data diambil dari tab PandanganKerja di Google Sheet Mengapa. Rata-rata dihitung ulang dari jawaban asli.</p>
@@ -1577,13 +1633,24 @@ function render() {
   if (focus === 'q') { qi.focus(); try { qi.setSelectionRange(pos, pos); } catch (e) { /* abaikan */ } }
   qi.addEventListener('input', () => { S.q = qi.value; render(); });
   document.getElementById('fjob').addEventListener('change', e => { S.job = e.target.value; render(); });
-  document.getElementById('fdom').addEventListener('change', e => { S.dom = e.target.value; render(); });
+  $app.querySelectorAll('[data-dom]').forEach(b => b.addEventListener('click', () => { S.dom = b.dataset.dom; render(); }));
   const fd = document.getElementById('fday'); if (fd) fd.addEventListener('change', e => { S.day = e.target.value; render(); });
   const act = (a, fn) => { const el = $app.querySelector(`[data-act="${a}"]`); if (el) el.addEventListener('click', fn); };
   act('reload', load); act('logout', logout); act('csv', csv);
-  act('clear', () => { S.q = ''; S.job = ''; S.dom = ''; S.day = 'all'; render(); });
+  act('clear', () => { S.q = ''; S.dom = ''; render(); });
+  act('clearTop', () => { S.job = ''; S.day = 'all'; render(); });
   $app.querySelectorAll('[data-sort]').forEach(b => b.addEventListener('click', () => {
     const k = b.dataset.sort; if (S.sort === k) S.dir *= -1; else { S.sort = k; S.dir = ['time', 'A', 'B', 'N'].includes(k) ? -1 : 1; } render(); }));
+  // header tabel peserta menempel tepat di bawah toolbar; toolbar diberi bayangan saat menempel
+  const tools = $app.querySelector('.pka-tools');
+  if (tools) {
+    const setTop = () => $app.querySelector('.pka-people').style.setProperty('--th-top', tools.offsetHeight + 'px');
+    setTop();
+    if (!render.ro && 'ResizeObserver' in window) render.ro = new ResizeObserver(setTop);
+    if (render.ro) { render.ro.disconnect(); render.ro.observe(tools); }
+    const onScroll = () => tools.classList.toggle('stuck', tools.getBoundingClientRect().top <= 0.5 && window.scrollY > 0);
+    window.removeEventListener('scroll', render.onScroll || (() => {})); render.onScroll = onScroll; window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+  }
   $app.querySelectorAll('tr.pka-p').forEach(tr => tr.addEventListener('click', () => { S.open = S.open === tr.dataset.id ? '' : tr.dataset.id; render(); }));
 }
 
