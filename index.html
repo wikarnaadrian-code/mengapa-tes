@@ -3243,6 +3243,9 @@ function result() {
   const roleOf = k => a.coDominant.includes(k) ? 'dom' : a.coSecondary.includes(k) ? 'sec' : '';
   const roleLabel = k => { const r = roleOf(k); return !r ? '' : r === 'dom' ? (a.coDominant.length > 1 ? 'Dominan (seri)' : 'Dominan') : (a.coSecondary.length > 1 ? 'Sekunder (seri)' : 'Sekunder'); };
   const maxT = Math.max(...ORDER.map(k => sc.t[k])), minT = Math.min(...ORDER.map(k => sc.t[k]));
+  const joinNames = ks => ks.map(k => TEMPS[k].name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
+  const zeroSides = ORDER.filter(k => sc.t[k] === 0);
+  const topNames = joinNames((a.coDominant.length > 2 ? a.coDominant : [p, s]).filter(k => sc.t[k] > 0));
   const dual = a.tieType === 'dominan_seri', combo2 = dual ? COMBOS[s + p] : null;
   const comboLabel = dual ? `${combo.name} & ${combo2.name}` : combo.name;
   const showAlts = !dual && a.alts.length >= 1 && a.alts.length <= 2;
@@ -3322,10 +3325,10 @@ function result() {
 
       <div class="block">
         <div class="eyebrow">Cara membaca hasil ini</div>
-        <h2>Kamu punya <em>keempatnya</em></h2>
+        <h2>${zeroSides.length ? L('Sisi yang paling sering kamu pakai', 'The sides you use most') : 'Kamu punya <em>keempatnya</em>'}</h2>
         <div class="mix">
           <div class="mix-bar" role="img" aria-label="${L('Porsi keempat temperamenmu', 'The mix of your four temperaments')}">${[...sorted].map(k => `<span style="flex:${Math.max(sc.t[k], 1)};background:${PASTEL[k]}">${tmark(k, 22)}<b>${sc.t[k]}</b></span>`).join('')}</div>
-          <p>${L(`Setiap orang punya keempat temperamen, hanya porsinya yang berbeda. ${a.coDominant.length > 2 ? 'Sisi dengan skor tertinggi' : P.name + ' dan ' + S.name} adalah sisi yang paling sering kamu pakai. Sisi lainnya tetap ada dan bisa dilatih.`, `Everyone has all four temperaments, only in different proportions. ${a.coDominant.length > 2 ? 'Your highest-scoring sides are' : P.name + ' and ' + S.name + ' are'} the sides you use most. The others are still there and can be trained.`)}</p><p class="prose" style="margin-top:10px">Masalah muncul saat kita hanya memakai sisi yang nyaman di semua situasi. Itu yang kami sebut jebakan karakter. Tujuannya belajar menempatkan diri: memakai sisi yang cocok dengan situasi yang dihadapi, tanpa kehilangan jati diri.</p>
+          <p>${zeroSides.length ? L(`Kamu paling banyak memakai sisi ${topNames}. Sisi ${joinNames(zeroSides)} jarang kamu pakai, dan tetap bisa dilatih kalau kamu butuh.`, `You use your ${topNames} side(s) the most. Your ${joinNames(zeroSides)} side${zeroSides.length > 1 ? 's are' : ' is'} rarely used, and can still be trained when you need ${zeroSides.length > 1 ? 'them' : 'it'}.`) : L(`Setiap orang punya keempat temperamen, hanya porsinya yang berbeda. ${a.coDominant.length > 2 ? 'Sisi dengan skor tertinggi' : P.name + ' dan ' + S.name} adalah sisi yang paling sering kamu pakai. Sisi lainnya tetap ada dan bisa dilatih.`, `Everyone has all four temperaments, only in different proportions. ${a.coDominant.length > 2 ? 'Your highest-scoring sides are' : P.name + ' and ' + S.name + ' are'} the sides you use most. The others are still there and can be trained.`)}</p><p class="prose" style="margin-top:10px">Masalah muncul saat kita hanya memakai sisi yang nyaman di semua situasi. Itu yang kami sebut jebakan karakter. Tujuannya belajar menempatkan diri: memakai sisi yang cocok dengan situasi yang dihadapi, tanpa kehilangan jati diri.</p>
         </div>
         <div class="uses">
           ${[...sorted].reverse().map((k, i) => { const t = TEMPS[k]; return `
