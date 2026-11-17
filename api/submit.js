@@ -60,6 +60,14 @@ module.exports = async (req, res) => {
       return res.status(200).json({ ok: j.ok, reason: j.reason || '' });
     }
 
+    // ---------- lepas token (tes lengkap dibatalkan) ----------
+    if (body.action === 'token_release') {
+      const token = normToken(body.token);
+      if (token.length < 3 || !session) return res.status(200).json({ ok: true });
+      await callSheet(url, { secret, action: 'token_release', token, session });
+      return res.status(200).json({ ok: true });
+    }
+
     // ---------- simpan hasil ----------
     if (!body.row) return res.status(400).json({ ok: false, error: 'payload' });
     if (body.hp) return res.status(200).json({ ok: true }); // bot: pura-pura sukses, data dibuang

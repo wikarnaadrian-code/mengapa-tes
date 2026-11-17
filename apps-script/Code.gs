@@ -69,6 +69,7 @@ function doPost(e) {
   lock.waitLock(20000);
   try {
     if (data.action === 'token') return json_(startToken_(data.token, data.session));
+    if (data.action === 'token_release') return json_(releaseToken_(data.token, data.session));
     if (data.action === 'token_list') return json_(tokenList_());
     if (data.action === 'token_create') return json_(tokenCreate_(data));
     if (data.action === 'token_update') return json_(tokenUpdate_(data));
@@ -241,6 +242,18 @@ function startToken_(token, session) {
   }
   if (f.status === 'dipakai' && f.sesi === String(session)) return { ok: true }; // lanjut di perangkat yang sama
   return { ok: false, reason: 'sudah_dipakai' };
+}
+
+// Dipanggil saat peserta membatalkan tes lengkap: token personal kembali aktif, hanya dari perangkat yang memakainya
+function releaseToken_(token, session) {
+  const f = findToken_(token);
+  if (!f.row || f.jenis !== 'personal' || !session) return { ok: true };
+  if (f.status === 'dipakai' && f.sesi === String(session)) {
+    f.sh.getRange(f.row, TC.status).setValue('aktif');
+    f.sh.getRange(f.row, TC.sesi).setValue('');
+    f.sh.getRange(f.row, TC.mulai_dipakai).setValue('');
+  }
+  return { ok: true };
 }
 
 // Dipanggil saat hasil tes lengkap masuk

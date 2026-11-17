@@ -1116,6 +1116,29 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 
 .spin-s { display: inline-block; width: 14px; height: 14px; margin-right: 8px; vertical-align: -2px; border-radius: 50%; border: 2px solid rgba(255,255,255,.35); border-top-color: currentColor; animation: spin .8s linear infinite; }
 
+/* ---------- konfirmasi keluar / batalkan tes ---------- */
+.qm-ov { position: fixed; inset: 0; z-index: 80; background: rgba(20,20,18,.42); display: grid; place-items: center; padding: 20px; animation: qmfade .16s ease-out; }
+.qm { background: #FFFFFF; border-radius: 26px; padding: 26px 24px 20px; width: min(420px, 100%); box-shadow: 0 30px 80px rgba(0,0,0,.25); animation: qmup .2s var(--ease, ease-out); }
+.qm h3 { margin: 0 0 8px; font-size: 21px; letter-spacing: -.02em; }
+.qm p { margin: 0 0 20px; color: var(--muted); font-size: 15px; line-height: 1.55; }
+.qm-act { display: grid; gap: 8px; }
+.qm-act .btn { width: 100%; justify-content: center; min-height: 50px; }
+.qm-act .btn.danger { background: #B04A39; color: #fff; }
+.qm-act .btn.danger:hover { background: #963C2D; }
+.qm-act .btn.link { background: none; box-shadow: none; color: var(--muted); font-weight: 600; min-height: 42px; }
+@keyframes qmfade { from { opacity: 0; } }
+@keyframes qmup { from { transform: translateY(14px); opacity: 0; } }
+.testbar .exitbtn { flex: 0 0 auto; }
+.resume-act { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+.resume + .resume { margin-top: 10px; }
+.qm-act .btn.ghost { background: #F2F2EF; box-shadow: none; }
+.qm-act .btn.ghost:hover { background: #E8E8E4; }
+@media (max-width: 520px) {
+  .resume { flex-wrap: wrap; }
+  .resume > div:first-child { flex: 1 1 100%; }
+  .resume-act { width: 100%; justify-content: flex-end; gap: 12px; }
+}
+
 /* ============ Tes Pandangan Kerja (HK Gold) ============ */
 .pk-brand { display: flex; align-items: center; gap: 12px; }
 .pk-brand .brand img.li { height: 34px; }
