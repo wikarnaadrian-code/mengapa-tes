@@ -1735,12 +1735,12 @@ body.tk-busy { cursor: progress; }
   .tk-kpis::-webkit-scrollbar { display: none; }
   .tk-sw::after { content: ''; position: absolute; top: 0; right: -14px; bottom: 10px; width: 48px; pointer-events: none; opacity: 0; transition: opacity .25s; background: linear-gradient(to right, rgba(240,240,238,0), var(--bg) 90%); }
   .tk-sw.sw-more::after { opacity: 1; }
-  .tk-swipe { display: inline-flex; align-items: center; gap: 3px; position: absolute; right: 2px; top: -22px; pointer-events: none; font-size: 12px; font-weight: 700; color: var(--muted); opacity: 0; transition: opacity .3s; }
-  .tk-sw.sw-hint .tk-swipe { opacity: 1; }
-  .tk-sw.sw-hint .tk-swipe svg { animation: tkswipe 1.2s ease-in-out infinite; }
+  .tk-swipe { display: grid; place-items: center; position: absolute; right: -12px; top: 50%; margin-top: -22px; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.18); pointer-events: none; opacity: 0; transition: opacity .3s; z-index: 2; }
+  .tk-sw.sw-hint .tk-swipe { opacity: 1; animation: tkswipe 1.2s ease-in-out infinite; }
+  .tk-sw.sw-hint .tk-swipe svg { animation: none; }
 }
-@keyframes tkswipe { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
-@media (prefers-reduced-motion: reduce) { .tk-sw.sw-hint .tk-swipe svg { animation: none; } }
+@keyframes tkswipe { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
+@media (prefers-reduced-motion: reduce) { .tk-sw.sw-hint .tk-swipe { animation: none; } }
 
 </style>
 </head>
@@ -1770,7 +1770,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.14.2', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.14.3', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -4740,7 +4740,7 @@ function swipeHints() {
     const w = document.createElement('div'); w.className = 'tk-sw';
     el.parentNode.insertBefore(w, el); w.appendChild(el);
     const h = document.createElement('span'); h.className = 'tk-swipe'; h.setAttribute('aria-hidden', 'true');
-    h.innerHTML = `${L('Geser', 'Swipe')}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>`;
+    h.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>`;
     w.appendChild(h);
     const upd = () => { const more = el.scrollWidth - el.clientWidth - el.scrollLeft > 6; w.classList.toggle('sw-more', more); w.classList.toggle('sw-hint', more && !SWIPED && el.scrollLeft < 6); };
     el.addEventListener('scroll', () => { if (el.scrollLeft > 12) SWIPED = true; upd(); }, { passive: true });
