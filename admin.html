@@ -1777,7 +1777,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.15.1', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2907,19 +2907,19 @@ function tmark(k, size = 40) {
   </svg>`;
 }
 
-// Hasil seri: bulatan terbagi rata (2 = belah dua, 3 = tiga irisan, 4 = empat potongan), irisan berwarna pastel tiap temperamen
+// Hasil seri (ikon kecil): ikon penuh tiap temperamen dipotong sesuai jumlah seri (2 = separuh, 3 = sepertiga, 4 = seperempat), lalu digabung
+let PIE_N = 0;
 function pieMark(keys, size = 40) {
-  const n = keys.length, R = 50, pt = (ang, r) => [50 + r * Math.cos(ang), 50 + r * Math.sin(ang)];
+  const n = keys.length, R = 50, pt = ang => [50 + R * Math.cos(ang), 50 + R * Math.sin(ang)];
+  const id = 'pie' + (++PIE_N);
   const slices = keys.map((k, i) => {
     const a0 = -Math.PI / 2 + (2 * Math.PI * i) / n, a1 = -Math.PI / 2 + (2 * Math.PI * (i + 1)) / n;
-    const [x0, y0] = pt(a0, R), [x1, y1] = pt(a1, R);
-    const path = `<path d="M50 50 L${x0.toFixed(2)} ${y0.toFixed(2)} A${R} ${R} 0 ${n === 2 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${PASTEL[k]}"/>`;
-    const [gx, gy] = pt((a0 + a1) / 2, n === 2 ? 26 : 29), gs = n === 2 ? .4 : .34;
-    const g = size >= 80 ? `<g transform="translate(${(gx - 50 * gs).toFixed(2)} ${(gy - 50 * gs).toFixed(2)}) scale(${gs})">${GLYPH[k](TEMPS[k].color, TEMPS[k].deep)}</g>` : '';
-    return path + g;
+    const [x0, y0] = pt(a0), [x1, y1] = pt(a1), t = TEMPS[k];
+    return `<clipPath id="${id}-${i}"><path d="M50 50 L${x0.toFixed(2)} ${y0.toFixed(2)} A${R} ${R} 0 ${n === 2 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z"/></clipPath>
+      <g clip-path="url(#${id}-${i})"><circle cx="50" cy="50" r="50" fill="${PASTEL[k]}"/><circle cx="50" cy="50" r="34" fill="#fff"/><g transform="translate(25 25) scale(.5)">${GLYPH[k](t.color, t.deep)}</g></g>`;
   }).join('');
-  const lines = keys.map((_, i) => { const [x, y] = pt(-Math.PI / 2 + (2 * Math.PI * i) / n, R); return `<line x1="50" y1="50" x2="${x.toFixed(2)}" y2="${y.toFixed(2)}" stroke="#fff" stroke-width="3"/>`; }).join('');
-  return `<svg class="tmark pie" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true"><clipPath id="pc${size}${keys.join('')}"><circle cx="50" cy="50" r="50"/></clipPath><g clip-path="url(#pc${size}${keys.join('')})">${slices}${lines}</g></svg>`;
+  const lines = keys.map((_, i) => { const [x, y] = pt(-Math.PI / 2 + (2 * Math.PI * i) / n); return `<line x1="50" y1="50" x2="${x.toFixed(2)}" y2="${y.toFixed(2)}" stroke="#fff" stroke-width="2.5"/>`; }).join('');
+  return `<svg class="tmark pie" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true">${slices}${lines}</svg>`;
 }
 
 // Ilustrasi kombinasi gaya v2: tanda dominan besar + tanda sekunder di pojok
@@ -4389,7 +4389,7 @@ function detailLengkap(x) {
   const traits = k => ({ s: a.picks.strengths.filter(w => w.type === k).map(w => w.word), w: a.picks.weaknesses.filter(w => w.type === k).map(w => w.word) });
   return `
     <section class="hero" style="--soft:${P.soft}">
-      ${a.tieType === 'dominan_seri' ? `<div class="hero-duo">${[[a.primary, a.secondary], [a.secondary, a.primary]].map(([x, y]) => `<div class="hero-art hero-char" style="background:${CBG[x]}">${charArt(x, y, 84)}</div>`).join('')}</div>` : a.coDominant.length > 2 ? `<div class="hero-art">${pieMark(a.coDominant, 112)}</div>` : `<div class="hero-art hero-char" style="background:${CBG[a.primary]}">${charArt(a.primary, a.secondary, 112)}</div>`}
+      ${a.tieType === 'dominan_seri' ? `<div class="hero-duo">${[[a.primary, a.secondary], [a.secondary, a.primary]].map(([x, y]) => `<div class="hero-art hero-char" style="background:${CBG[x]}">${charArt(x, y, 84)}</div>`).join('')}</div>` : `<div class="hero-art hero-char" style="background:${CBG[a.primary]}">${charArt(a.primary, a.secondary, 112)}</div>`}
       <div><small class="eyebrow">${P.name} + ${Sx.name}${a.tieType === 'dominan_seri' ? L(' · sama kuat', ' · equally strong') : ''}</small><h2>${esc(a.tieType === 'dominan_seri' ? `${a.combo.name} & ${COMBOS[a.secondary + a.primary].name}` : a.combo.name)}</h2><p class="muted">${esc(a.combo.tagline)}</p>
         ${a.alts.length ? `<p class="note">${L('Kombinasi lain', 'Other blend')}: ${a.alts.map(k => COMBOS[k].name).join(', ')}</p>` : ''}${a.tieReason ? `<p class="note">${esc(a.tieReason)}</p>` : ''}</div>
     </section>
@@ -4423,7 +4423,7 @@ function detailMini(x) {
   const c = x.mini;
   return `
     <section class="hero" style="--soft:${TEMPS[x.p].soft}">
-      <div class="hero-art">${x.top.length > 1 ? pieMark(x.top, 110) : tmark(x.p, 110)}</div>
+      <div class="hero-art"${x.top.length > 1 ? ' style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"' : ''}>${x.top.length > 1 ? x.top.map(k => tmark(k, x.top.length > 2 ? 52 : 64)).join('') : tmark(x.p, 110)}</div>
       <div><small class="eyebrow">${testName('mini')}</small><h2>${esc(x.title)}</h2><p class="muted">${x.top.length > 1 ? L('Dominan seri, perlu tes lengkap untuk memastikan.', 'Tied primary. The full test is needed to confirm.') : esc(TEMPS[x.p].title + '. ' + TEMPS[x.p].motto)}</p></div>
     </section>
     <section class="box"><h3>${L('Skor (dari 10 pertanyaan)', 'Scores (from 10 questions)')}</h3><div class="bars wide">${bars(ORDER.map(k => ({ label: TEMPS[k].name, v: c[k], color: TEMPS[k].color })), 10)}</div></section>
