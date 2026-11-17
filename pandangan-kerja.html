@@ -1254,6 +1254,25 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .contact-row .btn { line-height: 1; padding-bottom: 2px; }
 .contact-row .btn svg { transform: translateY(1px); }
 
+/* Kebutuhan inti dan cara kerja temperamen */
+.core { margin: 10px 0 0; padding: 12px 16px; border-radius: 18px; font-size: 16px; font-weight: 700; line-height: 1.35; }
+.core small { display: block; font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .7; margin-bottom: 2px; }
+.core + .needs { margin-top: 10px; }
+.card.ins { margin-top: 12px; }
+.card.ins h3 { margin-bottom: 10px; }
+.insd { display: grid; gap: 14px; margin: 0; }
+.insd dt { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.insd dd { margin: 3px 0 0; font-size: 15px; line-height: 1.5; color: var(--ink-2); }
+
+/* Selamat datang kembali */
+.card.wb { margin-top: 20px; padding: 16px 18px; }
+.card.wb > b { font-size: 15px; }
+.wb-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+.wb-pill { display: inline-flex; align-items: center; justify-content: center; gap: 7px; padding: 10px 8px; border: 0; border-radius: 999px; background: #F4F4F2; color: var(--ink-2); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background .18s; }
+.wb-pill svg { color: #8A8A8A; flex: none; }
+.wb-pill:hover { background: #EBEBE8; }
+.card.wb + .resume { margin-top: 10px; }
+
 /* ============ Tes Pandangan Kerja (HK Gold) ============ */
 .pk-brand { display: flex; align-items: center; gap: 12px; }
 .pk-brand .brand img.li { height: 34px; }
@@ -1616,7 +1635,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.16', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.18.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -1648,6 +1667,8 @@ const TEMPS = {
     element: 'Udara', origin: 'sanguis (darah)', motto: 'Ayo seru-seruan!',
     essence: 'Ekspresif, hangat, dan bikin suasana hidup. Energimu datang dari orang-orang di sekitarmu.',
     needs: ['Perhatian', 'Kasih sayang', 'Pujian yang tulus', 'Diterima apa adanya'],
+    core: "Dipuji dan dilihat",
+    ins: { stress: "Kamu cerita ke siapa saja, belanja, dan sekitarmu jadi berantakan.", strive: "Seru. Kamu paling hidup saat suasananya fun dan ada yang menikmati kehadiranmu.", crit: "Ini yang paling berat buatmu. Kritik terasa seperti ditolak, apalagi di depan orang. Kritik yang disampaikan hangat dan empat mata jauh lebih mudah kamu terima.", tantrum: "Kamu cenderung memakai pesona: melucu atau merayu supaya orang luluh, bukan menyampaikan kesalmu langsung.", tone: "Nada bicaramu otomatis tinggi dan bersemangat. Buat orang yang lebih tenang, itu bisa terdengar seperti dimarahi. Menurut pengamatan kami, banyak orang Indonesia cenderung Melankolis atau Plegmatis, jadi pelankan sedikit saat bicara hal serius." },
     focus: 'orang', pace: 'cepat',
   },
   C: {
@@ -1656,6 +1677,8 @@ const TEMPS = {
     element: 'Api', origin: 'chole (empedu kuning)', motto: 'Ayo selesaikan!',
     essence: 'Berorientasi tujuan, tegas, dan cepat bergerak. Kamu merasa hidup saat ada target yang dikejar.',
     needs: ['Loyalitas', 'Rasa memegang kendali', 'Apresiasi', 'Pengakuan atas kerja keras'],
+    core: "Dihargai prestasinya dan apa yang jadi kebanggaannya",
+    ins: { stress: "Kamu marah, lalu menenggelamkan diri di pekerjaan.", strive: "Kontrol. Kamu tenang kalau tahu arahnya dan memegang kendali.", crit: "Di antara empat temperamen, kamu yang paling mungkin terpacu karena kritik, bukan patah. Tantangan malah bikin kamu melejit. Tapi jangan kira orang lain sekuat itu.", tantrum: "Kamu cenderung memakai amarah. Nadamu naik, dan orang di sekitarmu bisa langsung diam.", tone: "Nada bicaramu otomatis tinggi dan tegas. Buat orang yang lebih tenang, itu bisa terdengar seperti dimarahi. Menurut pengamatan kami, banyak orang Indonesia cenderung Melankolis atau Plegmatis, jadi pelankan sedikit saat bicara hal serius." },
     focus: 'tugas', pace: 'cepat',
   },
   M: {
@@ -1664,6 +1687,8 @@ const TEMPS = {
     element: 'Tanah', origin: 'melaina chole (empedu hitam)', motto: 'Ayo lakukan dengan benar.',
     essence: 'Mendalam, teliti, dan punya standar tinggi. Kamu ingin segala sesuatu bermakna dan dikerjakan dengan benar.',
     needs: ['Kepekaan', 'Dukungan', 'Ruang pribadi', 'Ketenangan'],
+    core: "Dicintai dan diperhatikan",
+    ins: { stress: "Hatimu mendung: overthinking, murung, dan galau. Kamu menarik diri ke dalam kepalamu sendiri.", strive: "Sempurna. Kamu ingin semuanya tepat dan bermakna.", crit: "Kamu tidak suka dikritik, tapi justru jago mengkritik. Kemampuan itu berguna, tapi bisa membuat orang lain merasa dinilai terus.", tantrum: "Kamu cenderung memakai suasana hati: diam atau murung, lalu berharap orang menebak sendiri apa salahnya.", tone: "Kamu alergi nada tinggi. Kalau merasa dibentak, kamu cenderung diam dan mencatatnya dalam hati. Bilang pelan-pelan, misalnya \"nadamu bikin aku tegang\", lebih membantu daripada memendamnya." },
     focus: 'tugas', pace: 'lambat',
   },
   P: {
@@ -1672,6 +1697,8 @@ const TEMPS = {
     element: 'Air', origin: 'phlegma (lendir)', motto: 'Santai aja, pelan-pelan.',
     essence: 'Tenang, sabar, dan menenangkan. Kamu menjaga keseimbangan dan kedamaian di sekitarmu.',
     needs: ['Kedamaian', 'Rasa berharga', 'Bebas dari tekanan', 'Dihormati'],
+    core: "Dianggap ada: keberadaan, keputusan, dan dampaknya diakui",
+    ins: { stress: "Kamu tidur, menarik diri, dan menunda-nunda.", strive: "Damai. Kamu ingin semuanya tenang tanpa keributan.", crit: "Kritik membuatmu makin ciut, bukan terpacu. Kamu paling terbantu oleh kritik yang tenang, spesifik, dan disertai pengakuan atas usahamu.", tantrum: "Kamu cenderung memakai penundaan. Kamu tidak melawan, tapi pelan-pelan berhenti mengerjakan.", tone: "Kamu alergi nada tinggi. Di depan orang yang bicara keras, kamu cenderung diam lalu menjauh. Coba sampaikan kebutuhanmu lebih awal, sebelum menumpuk." },
     focus: 'orang', pace: 'lambat',
   },
 };
@@ -2015,10 +2042,10 @@ const GM_STEP = {
 /* English content. Same structure as content.js; only the fields that are shown to users. */
 const EN = {
   TEMPS: {
-    S: { name: 'Sanguine', title: 'Popular', motto: "Let's have fun!", essence: 'Expressive, warm, and the life of the room. You draw your energy from the people around you.', needs: ['Attention', 'Affection', 'Sincere praise', 'Acceptance as you are'] },
-    C: { name: 'Choleric', title: 'Powerful', motto: "Let's get it done!", essence: 'Goal-driven, decisive, and quick to move. You feel most alive with a target to chase.', needs: ['Loyalty', 'A sense of control', 'Appreciation', 'Credit for hard work'] },
-    M: { name: 'Melancholy', title: 'Perfect', motto: "Let's do it right.", essence: 'Deep, careful, and holding high standards. You want things to be meaningful and done properly.', needs: ['Sensitivity', 'Support', 'Personal space', 'Quiet'] },
-    P: { name: 'Phlegmatic', title: 'Peaceful', motto: 'Take it easy, one step at a time.', essence: 'Calm, patient, and soothing. You keep the balance and the peace around you.', needs: ['Peace', 'A sense of worth', 'Freedom from pressure', 'Respect'] },
+    S: { name: 'Sanguine', title: 'Popular', motto: "Let's have fun!", essence: 'Expressive, warm, and the life of the room. You draw your energy from the people around you.', needs: ['Attention', 'Affection', 'Sincere praise', 'Acceptance as you are'], core: "To be praised and noticed", ins: { stress: "You tell everyone about it, go shopping, and things around you get messy.", strive: "Fun. You come alive when the mood is light and people enjoy having you around.", crit: "This is the hardest one for you. Criticism feels like rejection, especially in front of others. It lands much more easily when it is warm and private.", tantrum: "You tend to use charm: joking or sweet-talking people into softening instead of saying what upset you.", tone: "Your voice naturally runs high and excited. To calmer people, that can sound like being scolded. In our observation, many Indonesians lean Melancholy or Phlegmatic, so soften your tone a little for serious topics." } },
+    C: { name: 'Choleric', title: 'Powerful', motto: "Let's get it done!", essence: 'Goal-driven, decisive, and quick to move. You feel most alive with a target to chase.', needs: ['Loyalty', 'A sense of control', 'Appreciation', 'Credit for hard work'], core: "To have their achievements and what they take pride in appreciated", ins: { stress: "You get angry, then bury yourself in work.", strive: "Control. You feel calm when you know the direction and hold the wheel.", crit: "Of the four temperaments, you are the one most likely to be pushed forward by criticism instead of knocked down. Challenge makes you rise. But do not assume others are as sturdy.", tantrum: "You tend to use anger. Your voice goes up, and people around you can fall silent at once.", tone: "Your voice naturally runs high and firm. To calmer people, that can sound like being scolded. In our observation, many Indonesians lean Melancholy or Phlegmatic, so soften your tone a little for serious topics." } },
+    M: { name: 'Melancholy', title: 'Perfect', motto: "Let's do it right.", essence: 'Deep, careful, and holding high standards. You want things to be meaningful and done properly.', needs: ['Sensitivity', 'Support', 'Personal space', 'Quiet'], core: "To be loved and cared about", ins: { stress: "Your mood turns gloomy: overthinking, brooding, and feeling blue. You retreat into your own head.", strive: "Perfection. You want everything to be right and meaningful.", crit: "You dislike being criticised, yet you are good at criticising. That skill is useful, but it can make others feel constantly judged.", tantrum: "You tend to use mood: going quiet or gloomy, then hoping others guess what went wrong.", tone: "You are allergic to raised voices. When you feel shouted at, you tend to go quiet and keep score inside. Saying it gently, such as \"your tone makes me tense\", helps more than holding it in." } },
+    P: { name: 'Phlegmatic', title: 'Peaceful', motto: 'Take it easy, one step at a time.', essence: 'Calm, patient, and soothing. You keep the balance and the peace around you.', needs: ['Peace', 'A sense of worth', 'Freedom from pressure', 'Respect'], core: "To be seen as present: their presence, decisions, and impact acknowledged", ins: { stress: "You sleep, withdraw, and put things off.", strive: "Peace. You want everything calm and free of conflict.", crit: "Criticism makes you shrink, not rise. You are helped most by criticism that is calm, specific, and paired with recognition of your effort.", tantrum: "You tend to use delay. You do not fight back, but you slowly stop doing the work.", tone: "You are allergic to raised voices. Around loud people you tend to go quiet and pull away. Try voicing your needs early, before they pile up." } },
   },
   COMBOS: {
     SC: { name: 'Spark', en: '', tagline: 'Energy that spreads, and people start moving.',
