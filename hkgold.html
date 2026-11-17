@@ -7,7 +7,7 @@
   <script>window.__KLIEN={"found":true,"nama":"HK Gold","logo":""}</script>
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Dashboard HK Gold × Mengapa" />
-  <meta property="og:description" content="Hasil Tes Karakter Lengkap karyawan HK Gold dalam satu dashboard." />
+  <meta property="og:description" content="Hasil Full Personality Test karyawan HK Gold dalam satu dashboard." />
   <meta property="og:image" content="https://mengapa.me/og-hk-sq.png?v=4" />
   <meta property="og:image:width" content="300" />
   <meta property="og:image:height" content="300" />
@@ -1805,7 +1805,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.7', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.16.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2056,7 +2056,7 @@ const MINI = [
 ];
 
 /* ---------------------------------------------------------
-   PENJELASAN SKOR SERI (Tes Mini, dan Tes Lengkap saat 3 atau 4 sisi sama kuat)
+   PENJELASAN SKOR SERI (Quick Test, dan Full Test saat 3 atau 4 sisi sama kuat)
    Kunci = temperamen yang seri, urut S C M P. [Indonesia, English]
    --------------------------------------------------------- */
 const TIE_TEXT = {
@@ -2096,7 +2096,7 @@ const MINI_PROFILE = {
   P: { powers: ['Tenang dan sabar di bawah tekanan', 'Pendengar yang baik dan penengah alami', 'Mudah menyesuaikan diri'], watch: ['Menunda dan sulit memutuskan', 'Menghindari konflik yang perlu dihadapi'] },
 };
 
-/* Yang terbuka di tes lengkap (ditampilkan terkunci di hasil tes mini) */
+/* Yang terbuka di Full Test (ditampilkan terkunci di hasil Quick Test) */
 const FULL_BENEFITS = [
   'Kebutuhan emosionalmu: yang bikin kamu merasa dihargai',
   'Kombinasi karakter dominan dan terkuat kedua: 1 dari 12 karakter',
@@ -2386,7 +2386,7 @@ const UI = {
   'DM Instagram': 'DM Instagram',
   'Dapatkan token lewat:': 'Get a token via:',
   'Konsultasi lewat:': 'Book a consultation via:',
-  'Tanya Tes Karakter Lengkap atau sesi coaching lewat:': 'Ask about the Full Character Test or coaching via:',
+  'Tanya Full Personality Test atau sesi coaching lewat:': 'Ask about the Full Personality Test or coaching via:',
   'Kode hasilmu': 'Your result code',
   'Sertakan kode ini kalau chat lewat Instagram, supaya tim kami bisa langsung membuka hasilmu.': 'Include this code if you message us on Instagram, so our team can open your result right away.',
   'Salin': 'Copy',
@@ -2410,7 +2410,7 @@ const UI = {
   '40 pertanyaan · lamanya beda tiap karakter': '40 questions · time differs by character',
   '40 pertanyaan, satu pilihan': '40 questions, one choice each',
   'Ada pola menarik di hasilmu': 'There is an interesting pattern in your result',
-  'Ambil Tes Karakter Lengkap': 'Take the Full Character Test',
+  'Ambil Full Personality Test': 'Take the Full Personality Test',
   'Analisis di halaman ini dibaca dari jawaban tesmu saja. Saat konsultasi, tim Mengapa memakai metode pendukung lain untuk membaca hasilmu lebih dalam, sebagai bahan refleksi dan pengembangan diri.': 'The analysis on this page is based on your answers alone. In a consultation, the Mengapa team uses other supporting methods to read your result more deeply, for reflection and personal growth.',
   'Analisis mendalam': 'In-depth analysis',
   'Bagian 1 dari 2': 'Part 1 of 2',
@@ -2430,13 +2430,13 @@ const UI = {
   'Buka tes': 'Open test',
   'Bukan': 'Not',
   'bukan': 'not',
-  'Cara kita merespons gagal dan kritik banyak dipengaruhi karakter dan pengalaman yang membentuk kita, termasuk dari masa kecil. Tes Karakter Lengkap membantu melihat akarnya, dan sesi coaching membantu mengubah polanya.': 'How we respond to failure and criticism is shaped by our character and the experiences that formed us, including in childhood. The Full Character Test helps you see the roots, and coaching helps you change the pattern.',
+  'Cara kita merespons gagal dan kritik banyak dipengaruhi karakter dan pengalaman yang membentuk kita, termasuk dari masa kecil. Full Personality Test membantu melihat akarnya, dan sesi coaching membantu mengubah polanya.': 'How we respond to failure and criticism is shaped by our character and the experiences that formed us, including in childhood. The Full Personality Test helps you see the roots, and coaching helps you change the pattern.',
   'Cara membaca hasil ini': 'How to read this result',
   'Cara memilihnya sama': 'Same way of choosing',
   'Cara mengisi': 'How it works',
   'Centang persetujuan dulu untuk lanjut.': 'Please tick the consent box to continue.',
   'Centang izin orang tua/wali dulu ya.': 'Please tick the parent/guardian permission box.',
-  'Coba Tes Karakter Mini': 'Try the Mini Character Test',
+  'Coba Quick Personality Test': 'Try the Quick Personality Test',
   'Dapatkan token via WhatsApp': 'Get a token via WhatsApp',
   'Dari 10 pertanyaan. Ini indikasi awal, bukan skor lengkap.': 'From 10 questions. This is an early indication, not a full score.',
   'Data diri': 'About you',
@@ -2446,7 +2446,7 @@ const UI = {
   'Disclaimer & persetujuan': 'Disclaimer & consent',
   'Dominan': 'Primary',
   'Dominan (seri)': 'Primary (tie)',
-  'Dominanmu baru satu bagian. Tes Karakter Lengkap menunjukkan kombinasi, kekuatan, dan kelemahanmu di keempat sisi.': 'Your primary temperament is only one part. The Full Character Test shows your combination, strengths, and weaknesses across all four sides.',
+  'Dominanmu baru satu bagian. Full Personality Test menunjukkan kombinasi, kekuatan, dan kelemahanmu di keempat sisi.': 'Your primary temperament is only one part. The Full Personality Test shows your combination, strengths, and weaknesses across all four sides.',
   'Ekstrover': 'Extrovert',
   'Empat hal sebelum': 'Four things before you',
   'Empat temperamen': 'Four temperaments',
@@ -2466,7 +2466,7 @@ const UI = {
   'Hasil 40 pilihanmu': 'Your 40 choices',
   'Hasilnya menggambarkan kecenderungan, bukan label permanen. Karakter bisa dikenali, dikelola, dan bertumbuh.': 'Results describe tendencies, not permanent labels. Character can be recognized, managed, and grown.',
   'Hasilnya menggambarkan kecenderungan, bukan label permanen. Pola pikir bisa dikenali, dikelola, dan bertumbuh.': 'Results describe tendencies, not permanent labels. Mindsets can be recognized, managed, and grown.',
-  'Hubungi tim Mengapa lewat WhatsApp, atau coba Tes Karakter Mini gratis dulu.': 'Contact the Mengapa team via WhatsApp, or try the free Mini Character Test first.',
+  'Hubungi tim Mengapa lewat WhatsApp, atau coba Quick Personality Test gratis dulu.': 'Contact the Mengapa team via WhatsApp, or try the free Quick Personality Test first.',
   'Ini baru permukaannya': 'This is just the surface',
   'Instagram kami': 'Our Instagram',
   'Introver': 'Introvert',
@@ -2505,17 +2505,17 @@ const UI = {
   'Langkah kecil minggu ini': 'One small step this week',
   'Lanjut': 'Continue',
   'Lanjut ke bagian 2': 'Continue to part 2',
-  'Lanjutkan Tes Karakter Lengkap?': 'Continue the Full Character Test?',
+  'Lanjutkan Full Personality Test?': 'Continue the Full Personality Test?',
   'Lanjutkan perjalananmu': 'Continue your journey',
   'Lanjutkan tes': 'Continue test',
-  'Lanjutkan tes mini': 'Continue mini test',
+  'Lanjutkan Quick Test': 'Continue Quick Test',
   'Layak didalami': 'Worth exploring',
   'Lebih dalam bersama tim Mengapa': 'Go deeper with the Mengapa team',
   'Lembar skor': 'Score sheet',
   'Lihat gambaran utuhnya': 'See the full picture',
-  'Lihat hasil lengkap terakhir': 'See latest full result',
+  'Lihat hasil lengkap terakhir': 'See latest Full Test result',
   'Lihat hasil mindset terakhir': 'See latest mindset result',
-  'Lihat hasil mini terakhir': 'See latest mini result',
+  'Lihat hasil mini terakhir': 'See latest Quick Test result',
   'Lihat hasil terakhir': 'See latest result',
   'Lihat seberapa terbuka pola pikirmu terhadap gagal, kritik, dan tantangan.': 'See how open your mindset is to failure, criticism, and challenges.',
   'Mana yang menguatkan, mana yang menahan': 'What strengthens you, what holds you back',
@@ -2532,8 +2532,8 @@ const UI = {
   'Menyusun profil karaktermu…': 'Building your character profile…',
   'More insights': 'More insights',
   'Mulai tes': 'Start test',
-  'Mulai tes mindset': 'Start mindset test',
-  'Mulai tes mini': 'Start mini test',
+  'Mulai Mindset Test': 'Start Mindset Test',
+  'Mulai Quick Test': 'Start Quick Test',
   'Nama kamu': 'Your name',
   'Nama lengkap': 'Full name',
   'Nama orang tua / wali': 'Parent / guardian name',
@@ -2593,17 +2593,17 @@ const UI = {
   'Temperamen yang bersebelahan saling melengkapi secara alami. Yang berseberangan secara diagonal adalah pasangan berlawanan.': 'Neighbouring temperaments complement each other naturally. Diagonal ones are opposites.',
   'Tentang Mengapa': 'About Mengapa',
   'Tentang tes ini': 'About this test',
-  'Terbuka di Tes Karakter Lengkap': 'Unlocked in the Full Character Test',
-  'Tes Karakter Lengkap': 'Full Character Test',
-  'Tes Karakter Mini': 'Mini Character Test',
-  'Tes Karakter Mini adalah alat refleksi diri singkat berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Hasilnya indikasi awal dan bisa berbeda dari tes lengkap.': 'The Mini Character Test is a short self-reflection tool based on the four temperaments theory, not a clinical psychology test or diagnosis. Results are an early indication and may differ from the full test.',
-  'Tes Karakter · Empat Temperamen': 'Character Tests · Four Temperaments',
+  'Terbuka di Full Personality Test': 'Unlocked in the Full Personality Test',
+  'Full Personality Test': 'Full Personality Test',
+  'Quick Personality Test': 'Quick Personality Test',
+  'Quick Personality Test adalah alat refleksi diri singkat berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Hasilnya indikasi awal dan bisa berbeda dari Full Test.': 'The Quick Personality Test is a short self-reflection tool based on the four temperaments theory, not a clinical psychology test or diagnosis. Results are an early indication and may differ from the Full Test.',
+  'Personality Test · Empat Temperamen': 'Personality Test · Four Temperaments',
   'Tes Pola Pikir': 'Mindset Test',
   'Tes ini adalah alat refleksi diri berdasarkan konsep growth mindset (Carol Dweck), bukan tes psikologi klinis. Semua orang punya campuran fixed dan growth mindset, dan campurannya bisa berubah.': 'This test is a self-reflection tool based on the growth mindset concept (Carol Dweck), not a clinical psychology test. Everyone has a mix of fixed and growth mindsets, and the mix can change.',
   'Tes ini adalah alat refleksi diri berdasarkan konsep growth mindset.': 'This test is a self-reflection tool based on the growth mindset concept.',
   'Tes ini adalah alat refleksi diri berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Semua orang punya keempat temperamen. Hasil ini menggambarkan kecenderungan, bukan label.': 'This test is a self-reflection tool based on the four temperaments theory, not a clinical psychology test or diagnosis. Everyone has all four temperaments. This result describes tendencies, not labels.',
   'Tes ini adalah alat refleksi diri berdasarkan teori empat temperamen.': 'This test is a self-reflection tool based on the four temperaments theory.',
-  'Tes karakter & pola pikir': 'Character & mindset tests',
+  'Personality test & pola pikir': 'Personality & mindset tests',
   'Tiap pertanyaan berisi empat sifat. Pilih satu yang paling menggambarkan kamu.': 'Each question has four traits. Pick the one that describes you best.',
   'Tidak ada pemicu yang kamu setujui': 'No triggers you agreed with',
   'Tim Mengapa': 'The Mengapa team',
@@ -2612,7 +2612,7 @@ const UI = {
   'Token ini sudah tidak aktif. Hubungi tim Mengapa.': 'This token is no longer active. Please contact the Mengapa team.',
   'Masa berlaku token ini sudah habis. Hubungi tim Mengapa atau pihak yang memberi token.': 'This token has expired. Please contact the Mengapa team or whoever gave you the token.',
   'Kuota token ini sudah terpakai semua. Hubungi tim Mengapa atau pihak yang memberi token.': 'This token has reached its limit. Please contact the Mengapa team or whoever gave you the token.',
-  'Tes Karakter Lengkap memakai token dari tim Mengapa. Satu token berlaku untuk satu kali tes.': 'The Full Character Test requires a token from the Mengapa team. Each token is valid for one test.',
+  'Full Personality Test memakai token dari tim Mengapa. Satu token berlaku untuk satu kali tes.': 'The Full Personality Test requires a token from the Mengapa team. Each token is valid for one test.',
   'Token tidak ditemukan. Cek lagi penulisannya ya.': 'Token not found. Please check the spelling.',
   'Tidak bisa memeriksa token. Cek koneksi internet lalu coba lagi.': 'Could not check the token. Check your internet connection and try again.',
   'Sistem sedang bermasalah. Coba lagi sebentar lagi.': 'Something went wrong on our side. Please try again shortly.',
@@ -2993,7 +2993,7 @@ function charLabel(p, s) {
   const P = TEMPS[p], key = p + (s || '');
   return s && COMBOS[key] ? `${COMBOS[key].name}: ${P.name} + ${TEMPS[s].name}` : P.name;
 }
-/* Badan penuh, untuk tampilan besar. s kosong = tanpa elemen kepala (hasil Tes Mini). */
+/* Badan penuh, untuk tampilan besar. s kosong = tanpa elemen kepala (hasil Quick Test). */
 function charArt(p, s, size = 220) {
   let inner = pose(p, s);
   const pr = s && CPROP[p + s];
@@ -3072,7 +3072,7 @@ async function shareCard(result) {
   const { primary: p, secondary: s, combo, scores } = analysis;
   const P = TEMPS[p], S = TEMPS[s];
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
-  const { W, cv, ctx } = await cardBase(mini ? L('Tes Karakter Mini', 'Mini Character Test') : L('Tes Karakter Lengkap', 'Full Character Test'));
+  const { W, cv, ctx } = await cardBase(mini ? L('Quick Personality Test', 'Quick Personality Test') : L('Full Personality Test', 'Full Personality Test'));
 
   // kartu utama berwarna pastel dominan
   ctx.fillStyle = CBG[p]; roundRect(ctx, 60, 262, W - 120, 1000, 64); ctx.fill();
@@ -3109,7 +3109,7 @@ async function shareCard(result) {
 
 async function gmCard({ nickname, dateLabel, total, cat, pillars }) {
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
-  const { W, cv, ctx } = await cardBase(L('Tes Growth Mindset', 'Growth Mindset Test'));
+  const { W, cv, ctx } = await cardBase(L('Growth Mindset Test', 'Growth Mindset Test'));
   ctx.fillStyle = '#E4DCF8'; roundRect(ctx, 60, 262, W - 120, 860, 64); ctx.fill();
   const cx = 372, cy = 540, rr = 150;
   try { // tanaman sesuai skor di kanan lingkaran skor
@@ -3243,8 +3243,8 @@ const tkLink = code => `${String(CONFIG.site || 'https://www.mengapa.me').replac
 const tkPct = (a, b) => b ? Math.round(a / b * 100) : 0;
 function tkWa(t) {
   const link = tkLink(t.token), one = t.jenis === 'personal', until = t.berlaku ? tkDate(t.berlaku) : '';
-  return L(`Halo! Kamu diundang mengikuti Tes Karakter Lengkap dari Mengapa.\n\nKlik link ini untuk mulai (token sudah otomatis terisi):\n${link}\n\nToken: ${t.token}\n${one ? 'Token ini berlaku untuk satu kali tes.\n' : ''}${until ? `Berlaku sampai ${until}.\n` : ''}Tesnya sekitar 10 menit dan hasilnya langsung keluar.`,
-    `Hi! You're invited to take the Mengapa Full Character Test.\n\nOpen this link to start (the token is filled in for you):\n${link}\n\nToken: ${t.token}\n${one ? 'This token is valid for one test.\n' : ''}${until ? `Valid until ${until}.\n` : ''}The test takes about 10 minutes and you get your result right away.`);
+  return L(`Halo! Kamu diundang mengikuti Full Personality Test dari Mengapa.\n\nKlik link ini untuk mulai (token sudah otomatis terisi):\n${link}\n\nToken: ${t.token}\n${one ? 'Token ini berlaku untuk satu kali tes.\n' : ''}${until ? `Berlaku sampai ${until}.\n` : ''}Tesnya sekitar 10 menit dan hasilnya langsung keluar.`,
+    `Hi! You're invited to take the Mengapa Full Personality Test.\n\nOpen this link to start (the token is filled in for you):\n${link}\n\nToken: ${t.token}\n${one ? 'This token is valid for one test.\n' : ''}${until ? `Valid until ${until}.\n` : ''}The test takes about 10 minutes and you get your result right away.`);
 }
 function tkUsage(t) {
   const n = tkUsed(t);
@@ -3774,7 +3774,7 @@ function tkBind() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && TK.modal) tkModal(null); });
 
 /* ===================== Kelola Klien ===================== */
-const KL_RESERVED = ['admin', 'api', 'assets', 'klien', 'tim', 'layanan', 'teslengkap', 'tesmini', 'tesmindset', 'index', 'pandangan-kerja', 'pandangan-kerja-hasil', 'logo-klien', 'apps-script', 'robots', 'sitemap', 'favicon', 'public-workshops', 'private-workshops', 'tes', 'test', 'dashboard', 'login', 'mengapa', 'www', 'hasil', 'token', 'readme'];
+const KL_RESERVED = ['admin', 'api', 'assets', 'klien', 'tim', 'layanan', 'teslengkap', 'tesmini', 'tesmindset', 'quicktest', 'fulltest', 'mindsettest', 'index', 'pandangan-kerja', 'pandangan-kerja-hasil', 'logo-klien', 'apps-script', 'robots', 'sitemap', 'favicon', 'public-workshops', 'private-workshops', 'tes', 'test', 'dashboard', 'login', 'mengapa', 'www', 'hasil', 'token', 'readme'];
 const KL_WORDS = ['Kopi', 'Senja', 'Hujan', 'Bintang', 'Pagi', 'Laut', 'Bulan', 'Angin', 'Gunung', 'Pelangi', 'Embun', 'Daun', 'Awan', 'Ombak', 'Rimba', 'Teduh', 'Cahaya', 'Sungai'];
 const klRand = n => { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; };
 const klPass = () => `${KL_WORDS[klRand(KL_WORDS.length)]}-${1000 + klRand(9000)}-${KL_WORDS[klRand(KL_WORDS.length)]}`;
@@ -3799,8 +3799,8 @@ function klLogo(k, cls = '') {
   return badge;
 }
 function klWa(k) {
-  return L(`Halo! Berikut akses dashboard hasil tes Mengapa untuk ${k.nama}.\n\nLink: ${klLink(k.klien)}\nUsername: ${k.username}\nPassword: ${k.password}\n\nDi dashboard ini bisa dilihat hasil Tes Karakter Lengkap peserta dari ${k.nama}. Mohon password dijaga kerahasiaannya ya.`,
-    `Hi! Here is the Mengapa results dashboard access for ${k.nama}.\n\nLink: ${klLink(k.klien)}\nUsername: ${k.username}\nPassword: ${k.password}\n\nThis dashboard shows the Full Character Test results of ${k.nama}'s participants. Please keep the password confidential.`);
+  return L(`Halo! Berikut akses dashboard hasil tes Mengapa untuk ${k.nama}.\n\nLink: ${klLink(k.klien)}\nUsername: ${k.username}\nPassword: ${k.password}\n\nDi dashboard ini bisa dilihat hasil Full Personality Test peserta dari ${k.nama}. Mohon password dijaga kerahasiaannya ya.`,
+    `Hi! Here is the Mengapa results dashboard access for ${k.nama}.\n\nLink: ${klLink(k.klien)}\nUsername: ${k.username}\nPassword: ${k.password}\n\nThis dashboard shows the Full Personality Test results of ${k.nama}'s participants. Please keep the password confidential.`);
 }
 function klLoginCard(k) {
   return `<div class="kl-login">
@@ -4064,8 +4064,8 @@ S.clientLogo = SLUG ? ls.get(SKEY + ':logo') || '' : ''; S.found = null; S.trash
 { const K = SLUG && window.__KLIEN; if (K) { S.found = !!K.found; if (K.found) { S.clientName = K.nama || S.clientName; S.clientLogo = K.logo || ''; ls.set(SKEY + ':nama', S.clientName); ls.set(SKEY + ':logo', S.clientLogo); } } }
 S.view = !SLUG && ['token', 'klien'].includes(ls.get('mengapa:admin:view')) ? ls.get('mengapa:admin:view') : 'hasil';
 TK.sort = ls.get('mengapa:admin:tksort') || 'new';
-const kindName = k => ({ lengkap: L('Lengkap', 'Full'), mini: 'Mini', mindset: 'Mindset' })[k];
-const testName = k => ({ lengkap: L('Tes Karakter Lengkap', 'Full Character Test'), mini: L('Tes Karakter Mini', 'Mini Character Test'), mindset: L('Tes Growth Mindset', 'Growth Mindset Test') })[k];
+const kindName = k => ({ lengkap: 'Full', mini: 'Quick', mindset: 'Mindset' })[k];
+const testName = k => ({ lengkap: L('Full Personality Test', 'Full Personality Test'), mini: L('Quick Personality Test', 'Quick Personality Test'), mindset: L('Growth Mindset Test', 'Growth Mindset Test') })[k];
 const levelName = v => v === 'Tinggi' ? L('Tinggi', 'High') : v === 'Sedang' ? L('Sedang', 'Medium') : v;
 const MON = () => L('Jan Feb Mar Apr Mei Jun Jul Agu Sep Okt Nov Des', 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec').split(' ');
 const pad = n => String(n).padStart(2, '0');
@@ -4249,7 +4249,7 @@ const SORTS = () => [['date', L('Tanggal tes', 'Test date')], ['type', L('Jenis 
 const DEFDIR = { type: 1, date: -1, name: 1, dom: 1, age: 1, score: -1 };
 const dirLabel = () => ({
   date: [L('Terlama dulu', 'Oldest first'), L('Terbaru dulu', 'Newest first')],
-  type: [L('Lengkap dulu', 'Full first'), L('Mindset dulu', 'Mindset first')],
+  type: [L('Full Test dulu', 'Full Test first'), L('Mindset dulu', 'Mindset first')],
   name: [L('A ke Z', 'A to Z'), L('Z ke A', 'Z to A')],
   dom: [L('S, K, M, P', 'S, C, M, P'), L('P, M, K, S', 'P, M, C, S')],
   age: [L('Termuda dulu', 'Youngest first'), L('Tertua dulu', 'Oldest first')],
@@ -4312,7 +4312,7 @@ function login() {
     <form class="login-card" id="lf" autocomplete="on">
       <div class="login-top">${SLUG ? clientLogo() : logoHtml}${langToggle()}</div>
       <h1>Dashboard</h1>
-      <p class="muted">${SLUG ? (S.clientName ? L(`Hasil Tes Karakter tim ${esc(S.clientName)}. Data bersifat rahasia.`, `Character Test results for the ${esc(S.clientName)} team. Data is confidential.`) : L('Hasil Tes Karakter tim kamu. Data bersifat rahasia.', 'Character Test results for your team. Data is confidential.')) : L('Khusus tim Mengapa. Data peserta bersifat rahasia.', 'For the Mengapa team only. Participant data is confidential.')}</p>
+      <p class="muted">${SLUG ? (S.clientName ? L(`Hasil Personality Test tim ${esc(S.clientName)}. Data bersifat rahasia.`, `Personality Test results for the ${esc(S.clientName)} team. Data is confidential.`) : L('Hasil Personality Test tim kamu. Data bersifat rahasia.', 'Personality Test results for your team. Data is confidential.')) : L('Khusus tim Mengapa. Data peserta bersifat rahasia.', 'For the Mengapa team only. Participant data is confidential.')}</p>
       <label>Username<input name="user" autocomplete="username" value="${SLUG ? '' : 'admin'}" required></label>
       <label>Password<span class="pwwrap"><input name="pass" id="pw" type="password" autocomplete="current-password" required autofocus><button type="button" class="eye" id="eye" aria-label="${L('Tampilkan password', 'Show password')}" title="${L('Tampilkan password', 'Show password')}">${EYE[0]}</button></span></label>
       <div class="err" id="lerr" ${S.err ? '' : 'hidden'}>${esc(S.err)}</div>
@@ -4399,7 +4399,7 @@ function shownToParticipant(x) {
       ${tag(tied ? L(`Temperamen dominan seri (${tops.length})`, `Tied primary temperaments (${tops.length})`) : L('Temperamen dominan', 'Primary temperament'))}
       ${tied ? `<p><b>${tops.map(k => esc(TEMPS[k].name)).join(' / ')}</b>${tt ? `. ${esc(L(tt[0], tt[1]))}` : ''}</p>` : `<p><b>${esc(TEMPS[x.p].name)}</b>. ${esc(TEMPS[x.p].essence)}</p>`}
       ${tag(L('Kekuatan dan yang perlu diwaspadai', 'Strengths and watch-outs'))}${tops.map(side).join('')}
-      <p class="muted small">${L('Diajak mengambil Tes Karakter Lengkap via Instagram atau WhatsApp.', 'Invited to the Full Character Test via Instagram or WhatsApp.')}</p>
+      <p class="muted small">${L('Diajak mengambil Full Personality Test via Instagram atau WhatsApp.', 'Invited to the Full Personality Test via Instagram or WhatsApp.')}</p>
     </section>`;
   }
   if (x.kind === 'mindset' && x.gm) {
@@ -4408,7 +4408,7 @@ function shownToParticipant(x) {
       ${tag(L('Penjelasan kategori', 'Category explanation'))}<p>${fx(GM_CATEGORIES[a.category].about)}</p>
       ${tag(L('Penjelasan per pilar', 'Per-pillar explanation'))}<ul>${GM_PILLAR_ORDER.map(k => `<li><b>${esc(GM_PILLARS[k].name)} (${a.pillars[k]}).</b> ${esc(GM_PILLARS[k][a.level(a.pillars[k])])}</li>`).join('')}</ul>
       ${tag(L('Langkah kecil minggu ini', 'One small step this week'))}<p>${esc(GM_STEP[focus[0]])}</p>
-      <p class="muted small">${L('Diajak Tes Karakter Lengkap atau sesi coaching via Instagram atau WhatsApp.', 'Invited to the Full Character Test or a coaching session via Instagram or WhatsApp.')}</p>
+      <p class="muted small">${L('Diajak Full Personality Test atau sesi coaching via Instagram atau WhatsApp.', 'Invited to the Full Personality Test or a coaching session via Instagram or WhatsApp.')}</p>
     </section>`;
   }
   return '';
@@ -4453,10 +4453,10 @@ function detailMini(x) {
   return `
     <section class="hero" style="--soft:${TEMPS[x.p].soft}">
       <div class="hero-art"${x.top.length > 1 ? ' style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"' : ''}>${x.top.length > 1 ? x.top.map(k => tmark(k, x.top.length > 2 ? 52 : 64)).join('') : tmark(x.p, 110)}</div>
-      <div><small class="eyebrow">${testName('mini')}</small><h2>${esc(x.title)}</h2><p class="muted">${x.top.length > 1 ? L('Dominan seri, perlu tes lengkap untuk memastikan.', 'Tied primary. The full test is needed to confirm.') : esc(TEMPS[x.p].title + '. ' + TEMPS[x.p].motto)}</p></div>
+      <div><small class="eyebrow">${testName('mini')}</small><h2>${esc(x.title)}</h2><p class="muted">${x.top.length > 1 ? L('Dominan seri, perlu Full Test untuk memastikan.', 'Tied primary. The Full Test is needed to confirm.') : esc(TEMPS[x.p].title + '. ' + TEMPS[x.p].motto)}</p></div>
     </section>
     <section class="box"><h3>${L('Skor (dari 10 pertanyaan)', 'Scores (from 10 questions)')}</h3><div class="bars wide">${bars(ORDER.map(k => ({ label: TEMPS[k].name, v: c[k], color: TEMPS[k].color })), 10)}</div></section>
-    <section class="box tip"><p>${L('Peserta ini kandidat untuk Tes Karakter Lengkap.', 'This participant is a candidate for the Full Character Test.')}</p></section>`;
+    <section class="box tip"><p>${L('Peserta ini kandidat untuk Full Personality Test.', 'This participant is a candidate for the Full Personality Test.')}</p></section>`;
 }
 
 function detailMindset(x) {
@@ -4464,7 +4464,7 @@ function detailMindset(x) {
   return `
     <section class="hero" style="--soft:#E4DCF8">
       <div class="hero-art"><span class="gauge" style="--v:${a.total}"><b>${a.total}</b><small>${L('dari 100', 'out of 100')}</small></span></div>
-      <div><small class="eyebrow">${L('Tes Growth Mindset', 'Growth Mindset Test')}</small><h2>${esc(cat.name)}</h2><p class="muted">${esc(cat.tagline)}</p></div>
+      <div><small class="eyebrow">${L('Growth Mindset Test', 'Growth Mindset Test')}</small><h2>${esc(cat.name)}</h2><p class="muted">${esc(cat.tagline)}</p></div>
     </section>
     <section class="box"><h3>${L('Skor per pilar', 'Score per pillar')}</h3><div class="bars wide">${bars(GM_PILLAR_ORDER.map(k => ({ label: GM_PILLARS[k].name, v: a.pillars[k], color: GM_PILLARS[k].color })), 100)}</div>
       ${a.weakest.length ? `<p class="note">${L('Paling menahan', 'Holding back most')}: <b>${a.weakest.map(k => GM_PILLARS[k].name).join(', ')}</b></p>` : ''}
@@ -4555,7 +4555,7 @@ const fmtMed = s => s < 60 ? `${Math.round(s)} ${L('dtk', 's')}` : `${Math.floor
 function breakdown(B) {
   const pc = (n, tot) => tot ? Math.round(n / tot * 100) : 0;
   const row = (ic, name, n, tot, color) => `<li>${ic}<span class="bn">${name}</span><span class="bbar"><i style="width:${pc(n, tot)}%;background:${color}"></i></span><b>${n}</b><em>${pc(n, tot)}%</em></li>`;
-  const kinds = [['lengkap', L('Tes Lengkap', 'Full test'), '#CDE5B0'], ['mini', L('Tes Mini', 'Mini test'), '#F7E48E'], ['mindset', L('Tes Mindset', 'Mindset test'), '#D3C7F3']];
+  const kinds = [['lengkap', L('Full Test', 'Full Test'), '#CDE5B0'], ['mini', L('Quick Test', 'Quick Test'), '#F7E48E'], ['mindset', L('Mindset Test', 'Mindset Test'), '#D3C7F3']];
   const nk = k => B.filter(x => x.kind === k).length;
   const ch = B.filter(x => (x.kind === 'lengkap' || x.kind === 'mini') && x.p);
   const gm = B.filter(x => x.kind === 'mindset' && x.gm);
@@ -4564,9 +4564,9 @@ function breakdown(B) {
   return `<section class="brk">
     <div><h5>${L('Jenis tes', 'Test type')}</h5><ul>${kinds.map(([k, n, c]) => row(dot(c), n, nk(k), B.length, c)).join('')}</ul>
       <p class="bdur"><b>${L('Waktu pengerjaan (median)', 'Completion time (median)')}</b>${kinds.map(([k, n]) => { const m = medDur(B, k); return `<span>${n}: ${m ? fmtMed(m.v) : '–'}${m ? ` <i>(${m.n})</i>` : ''}</span>`; }).join('')}</p></div>
-    <div><h5>${L('Karakter dominan', 'Primary temperament')} <small>${L('Lengkap + Mini', 'Full + Mini')}</small></h5><ul>${ORDER.map(k => row(tmark(k, 22), TEMPS[k].name, ch.filter(x => x.p === k).length, ch.length, P[k])).join('')}</ul>
+    <div><h5>${L('Karakter dominan', 'Primary temperament')} <small>${'Full + Quick'}</small></h5><ul>${ORDER.map(k => row(tmark(k, 22), TEMPS[k].name, ch.filter(x => x.p === k).length, ch.length, P[k])).join('')}</ul>
       ${(() => { const fl = B.filter(x => x.kind === 'lengkap' && x.p && x.s); const op = fl.filter(x => ['SM', 'MS', 'CP', 'PC'].includes(x.p + x.s)).length;
-        return fl.length ? `<p class="bdur"><b>${L('Kombinasi berlawanan', 'Opposite blends')}</b><span>${op} ${L('dari', 'of')} ${fl.length} ${L('hasil Tes Lengkap', 'Full test results')} · ${pc(op, fl.length)}%</span></p>` : ''; })()}</div>
+        return fl.length ? `<p class="bdur"><b>${L('Kombinasi berlawanan', 'Opposite blends')}</b><span>${op} ${L('dari', 'of')} ${fl.length} ${L('hasil Full Test', 'Full Test results')} · ${pc(op, fl.length)}%</span></p>` : ''; })()}</div>
     <div><h5>Growth mindset</h5><ul>${Object.entries(GM_CATEGORIES).map(([k, c], i) => row(dot(['#F6C1AE', '#F7E48E', '#CDE5B0'][i]), c.name, gm.filter(x => x.gm.category === k).length, gm.length, ['#F6C1AE', '#F7E48E', '#CDE5B0'][i])).join('')}</ul></div>
   </section>`;
 }
@@ -4619,7 +4619,7 @@ ${headHtml()}
     <div class="main">
       <aside class="list-pane">
         <div class="tools">
-          <div class="seg"${SLUG || S.src === 'old' || tv ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : ({ lengkap: L('Tes Lengkap', 'Full test'), mini: L('Tes Mini', 'Mini test'), mindset: L('Tes Mindset', 'Mindset test') })[k]}<small>${c(k)}</small></button>`).join('')}</div>
+          <div class="seg"${SLUG || S.src === 'old' || tv ? ' hidden' : ''}>${['all', 'lengkap', 'mini', 'mindset'].map(k => `<button data-tab="${k}" aria-pressed="${S.tab === k}">${k === 'all' ? L('Semua', 'All') : ({ lengkap: L('Full Test', 'Full Test'), mini: L('Quick Test', 'Quick Test'), mindset: L('Mindset Test', 'Mindset Test') })[k]}<small>${c(k)}</small></button>`).join('')}</div>
           <div class="search"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
             <input id="q" type="search" placeholder="${SLUG ? L('Cari nama, kode, token…', 'Search name, code, token…') : L('Cari nama, kode, WA, token…', 'Search name, code, WhatsApp, token…')}" value="${esc(S.q)}" autocomplete="off"></div>
           ${S.kl ? `<div class="pills"><button class="pillx" data-klclear>${L('Klien', 'Client')}: ${esc(S.kl.nama)}${ICON.x}</button></div>` : ''}

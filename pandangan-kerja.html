@@ -1555,7 +1555,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.7', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.16.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -1806,7 +1806,7 @@ const MINI = [
 ];
 
 /* ---------------------------------------------------------
-   PENJELASAN SKOR SERI (Tes Mini, dan Tes Lengkap saat 3 atau 4 sisi sama kuat)
+   PENJELASAN SKOR SERI (Quick Test, dan Full Test saat 3 atau 4 sisi sama kuat)
    Kunci = temperamen yang seri, urut S C M P. [Indonesia, English]
    --------------------------------------------------------- */
 const TIE_TEXT = {
@@ -1846,7 +1846,7 @@ const MINI_PROFILE = {
   P: { powers: ['Tenang dan sabar di bawah tekanan', 'Pendengar yang baik dan penengah alami', 'Mudah menyesuaikan diri'], watch: ['Menunda dan sulit memutuskan', 'Menghindari konflik yang perlu dihadapi'] },
 };
 
-/* Yang terbuka di tes lengkap (ditampilkan terkunci di hasil tes mini) */
+/* Yang terbuka di Full Test (ditampilkan terkunci di hasil Quick Test) */
 const FULL_BENEFITS = [
   'Kebutuhan emosionalmu: yang bikin kamu merasa dihargai',
   'Kombinasi karakter dominan dan terkuat kedua: 1 dari 12 karakter',
@@ -2136,7 +2136,7 @@ const UI = {
   'DM Instagram': 'DM Instagram',
   'Dapatkan token lewat:': 'Get a token via:',
   'Konsultasi lewat:': 'Book a consultation via:',
-  'Tanya Tes Karakter Lengkap atau sesi coaching lewat:': 'Ask about the Full Character Test or coaching via:',
+  'Tanya Full Personality Test atau sesi coaching lewat:': 'Ask about the Full Personality Test or coaching via:',
   'Kode hasilmu': 'Your result code',
   'Sertakan kode ini kalau chat lewat Instagram, supaya tim kami bisa langsung membuka hasilmu.': 'Include this code if you message us on Instagram, so our team can open your result right away.',
   'Salin': 'Copy',
@@ -2160,7 +2160,7 @@ const UI = {
   '40 pertanyaan · lamanya beda tiap karakter': '40 questions · time differs by character',
   '40 pertanyaan, satu pilihan': '40 questions, one choice each',
   'Ada pola menarik di hasilmu': 'There is an interesting pattern in your result',
-  'Ambil Tes Karakter Lengkap': 'Take the Full Character Test',
+  'Ambil Full Personality Test': 'Take the Full Personality Test',
   'Analisis di halaman ini dibaca dari jawaban tesmu saja. Saat konsultasi, tim Mengapa memakai metode pendukung lain untuk membaca hasilmu lebih dalam, sebagai bahan refleksi dan pengembangan diri.': 'The analysis on this page is based on your answers alone. In a consultation, the Mengapa team uses other supporting methods to read your result more deeply, for reflection and personal growth.',
   'Analisis mendalam': 'In-depth analysis',
   'Bagian 1 dari 2': 'Part 1 of 2',
@@ -2180,13 +2180,13 @@ const UI = {
   'Buka tes': 'Open test',
   'Bukan': 'Not',
   'bukan': 'not',
-  'Cara kita merespons gagal dan kritik banyak dipengaruhi karakter dan pengalaman yang membentuk kita, termasuk dari masa kecil. Tes Karakter Lengkap membantu melihat akarnya, dan sesi coaching membantu mengubah polanya.': 'How we respond to failure and criticism is shaped by our character and the experiences that formed us, including in childhood. The Full Character Test helps you see the roots, and coaching helps you change the pattern.',
+  'Cara kita merespons gagal dan kritik banyak dipengaruhi karakter dan pengalaman yang membentuk kita, termasuk dari masa kecil. Full Personality Test membantu melihat akarnya, dan sesi coaching membantu mengubah polanya.': 'How we respond to failure and criticism is shaped by our character and the experiences that formed us, including in childhood. The Full Personality Test helps you see the roots, and coaching helps you change the pattern.',
   'Cara membaca hasil ini': 'How to read this result',
   'Cara memilihnya sama': 'Same way of choosing',
   'Cara mengisi': 'How it works',
   'Centang persetujuan dulu untuk lanjut.': 'Please tick the consent box to continue.',
   'Centang izin orang tua/wali dulu ya.': 'Please tick the parent/guardian permission box.',
-  'Coba Tes Karakter Mini': 'Try the Mini Character Test',
+  'Coba Quick Personality Test': 'Try the Quick Personality Test',
   'Dapatkan token via WhatsApp': 'Get a token via WhatsApp',
   'Dari 10 pertanyaan. Ini indikasi awal, bukan skor lengkap.': 'From 10 questions. This is an early indication, not a full score.',
   'Data diri': 'About you',
@@ -2196,7 +2196,7 @@ const UI = {
   'Disclaimer & persetujuan': 'Disclaimer & consent',
   'Dominan': 'Primary',
   'Dominan (seri)': 'Primary (tie)',
-  'Dominanmu baru satu bagian. Tes Karakter Lengkap menunjukkan kombinasi, kekuatan, dan kelemahanmu di keempat sisi.': 'Your primary temperament is only one part. The Full Character Test shows your combination, strengths, and weaknesses across all four sides.',
+  'Dominanmu baru satu bagian. Full Personality Test menunjukkan kombinasi, kekuatan, dan kelemahanmu di keempat sisi.': 'Your primary temperament is only one part. The Full Personality Test shows your combination, strengths, and weaknesses across all four sides.',
   'Ekstrover': 'Extrovert',
   'Empat hal sebelum': 'Four things before you',
   'Empat temperamen': 'Four temperaments',
@@ -2216,7 +2216,7 @@ const UI = {
   'Hasil 40 pilihanmu': 'Your 40 choices',
   'Hasilnya menggambarkan kecenderungan, bukan label permanen. Karakter bisa dikenali, dikelola, dan bertumbuh.': 'Results describe tendencies, not permanent labels. Character can be recognized, managed, and grown.',
   'Hasilnya menggambarkan kecenderungan, bukan label permanen. Pola pikir bisa dikenali, dikelola, dan bertumbuh.': 'Results describe tendencies, not permanent labels. Mindsets can be recognized, managed, and grown.',
-  'Hubungi tim Mengapa lewat WhatsApp, atau coba Tes Karakter Mini gratis dulu.': 'Contact the Mengapa team via WhatsApp, or try the free Mini Character Test first.',
+  'Hubungi tim Mengapa lewat WhatsApp, atau coba Quick Personality Test gratis dulu.': 'Contact the Mengapa team via WhatsApp, or try the free Quick Personality Test first.',
   'Ini baru permukaannya': 'This is just the surface',
   'Instagram kami': 'Our Instagram',
   'Introver': 'Introvert',
@@ -2255,17 +2255,17 @@ const UI = {
   'Langkah kecil minggu ini': 'One small step this week',
   'Lanjut': 'Continue',
   'Lanjut ke bagian 2': 'Continue to part 2',
-  'Lanjutkan Tes Karakter Lengkap?': 'Continue the Full Character Test?',
+  'Lanjutkan Full Personality Test?': 'Continue the Full Personality Test?',
   'Lanjutkan perjalananmu': 'Continue your journey',
   'Lanjutkan tes': 'Continue test',
-  'Lanjutkan tes mini': 'Continue mini test',
+  'Lanjutkan Quick Test': 'Continue Quick Test',
   'Layak didalami': 'Worth exploring',
   'Lebih dalam bersama tim Mengapa': 'Go deeper with the Mengapa team',
   'Lembar skor': 'Score sheet',
   'Lihat gambaran utuhnya': 'See the full picture',
-  'Lihat hasil lengkap terakhir': 'See latest full result',
+  'Lihat hasil lengkap terakhir': 'See latest Full Test result',
   'Lihat hasil mindset terakhir': 'See latest mindset result',
-  'Lihat hasil mini terakhir': 'See latest mini result',
+  'Lihat hasil mini terakhir': 'See latest Quick Test result',
   'Lihat hasil terakhir': 'See latest result',
   'Lihat seberapa terbuka pola pikirmu terhadap gagal, kritik, dan tantangan.': 'See how open your mindset is to failure, criticism, and challenges.',
   'Mana yang menguatkan, mana yang menahan': 'What strengthens you, what holds you back',
@@ -2282,8 +2282,8 @@ const UI = {
   'Menyusun profil karaktermu…': 'Building your character profile…',
   'More insights': 'More insights',
   'Mulai tes': 'Start test',
-  'Mulai tes mindset': 'Start mindset test',
-  'Mulai tes mini': 'Start mini test',
+  'Mulai Mindset Test': 'Start Mindset Test',
+  'Mulai Quick Test': 'Start Quick Test',
   'Nama kamu': 'Your name',
   'Nama lengkap': 'Full name',
   'Nama orang tua / wali': 'Parent / guardian name',
@@ -2343,17 +2343,17 @@ const UI = {
   'Temperamen yang bersebelahan saling melengkapi secara alami. Yang berseberangan secara diagonal adalah pasangan berlawanan.': 'Neighbouring temperaments complement each other naturally. Diagonal ones are opposites.',
   'Tentang Mengapa': 'About Mengapa',
   'Tentang tes ini': 'About this test',
-  'Terbuka di Tes Karakter Lengkap': 'Unlocked in the Full Character Test',
-  'Tes Karakter Lengkap': 'Full Character Test',
-  'Tes Karakter Mini': 'Mini Character Test',
-  'Tes Karakter Mini adalah alat refleksi diri singkat berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Hasilnya indikasi awal dan bisa berbeda dari tes lengkap.': 'The Mini Character Test is a short self-reflection tool based on the four temperaments theory, not a clinical psychology test or diagnosis. Results are an early indication and may differ from the full test.',
-  'Tes Karakter · Empat Temperamen': 'Character Tests · Four Temperaments',
+  'Terbuka di Full Personality Test': 'Unlocked in the Full Personality Test',
+  'Full Personality Test': 'Full Personality Test',
+  'Quick Personality Test': 'Quick Personality Test',
+  'Quick Personality Test adalah alat refleksi diri singkat berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Hasilnya indikasi awal dan bisa berbeda dari Full Test.': 'The Quick Personality Test is a short self-reflection tool based on the four temperaments theory, not a clinical psychology test or diagnosis. Results are an early indication and may differ from the Full Test.',
+  'Personality Test · Empat Temperamen': 'Personality Test · Four Temperaments',
   'Tes Pola Pikir': 'Mindset Test',
   'Tes ini adalah alat refleksi diri berdasarkan konsep growth mindset (Carol Dweck), bukan tes psikologi klinis. Semua orang punya campuran fixed dan growth mindset, dan campurannya bisa berubah.': 'This test is a self-reflection tool based on the growth mindset concept (Carol Dweck), not a clinical psychology test. Everyone has a mix of fixed and growth mindsets, and the mix can change.',
   'Tes ini adalah alat refleksi diri berdasarkan konsep growth mindset.': 'This test is a self-reflection tool based on the growth mindset concept.',
   'Tes ini adalah alat refleksi diri berdasarkan teori empat temperamen, bukan tes psikologi klinis atau diagnosis. Semua orang punya keempat temperamen. Hasil ini menggambarkan kecenderungan, bukan label.': 'This test is a self-reflection tool based on the four temperaments theory, not a clinical psychology test or diagnosis. Everyone has all four temperaments. This result describes tendencies, not labels.',
   'Tes ini adalah alat refleksi diri berdasarkan teori empat temperamen.': 'This test is a self-reflection tool based on the four temperaments theory.',
-  'Tes karakter & pola pikir': 'Character & mindset tests',
+  'Personality test & pola pikir': 'Personality & mindset tests',
   'Tiap pertanyaan berisi empat sifat. Pilih satu yang paling menggambarkan kamu.': 'Each question has four traits. Pick the one that describes you best.',
   'Tidak ada pemicu yang kamu setujui': 'No triggers you agreed with',
   'Tim Mengapa': 'The Mengapa team',
@@ -2362,7 +2362,7 @@ const UI = {
   'Token ini sudah tidak aktif. Hubungi tim Mengapa.': 'This token is no longer active. Please contact the Mengapa team.',
   'Masa berlaku token ini sudah habis. Hubungi tim Mengapa atau pihak yang memberi token.': 'This token has expired. Please contact the Mengapa team or whoever gave you the token.',
   'Kuota token ini sudah terpakai semua. Hubungi tim Mengapa atau pihak yang memberi token.': 'This token has reached its limit. Please contact the Mengapa team or whoever gave you the token.',
-  'Tes Karakter Lengkap memakai token dari tim Mengapa. Satu token berlaku untuk satu kali tes.': 'The Full Character Test requires a token from the Mengapa team. Each token is valid for one test.',
+  'Full Personality Test memakai token dari tim Mengapa. Satu token berlaku untuk satu kali tes.': 'The Full Personality Test requires a token from the Mengapa team. Each token is valid for one test.',
   'Token tidak ditemukan. Cek lagi penulisannya ya.': 'Token not found. Please check the spelling.',
   'Tidak bisa memeriksa token. Cek koneksi internet lalu coba lagi.': 'Could not check the token. Check your internet connection and try again.',
   'Sistem sedang bermasalah. Coba lagi sebentar lagi.': 'Something went wrong on our side. Please try again shortly.',
@@ -2743,7 +2743,7 @@ function charLabel(p, s) {
   const P = TEMPS[p], key = p + (s || '');
   return s && COMBOS[key] ? `${COMBOS[key].name}: ${P.name} + ${TEMPS[s].name}` : P.name;
 }
-/* Badan penuh, untuk tampilan besar. s kosong = tanpa elemen kepala (hasil Tes Mini). */
+/* Badan penuh, untuk tampilan besar. s kosong = tanpa elemen kepala (hasil Quick Test). */
 function charArt(p, s, size = 220) {
   let inner = pose(p, s);
   const pr = s && CPROP[p + s];
@@ -2822,7 +2822,7 @@ async function shareCard(result) {
   const { primary: p, secondary: s, combo, scores } = analysis;
   const P = TEMPS[p], S = TEMPS[s];
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
-  const { W, cv, ctx } = await cardBase(mini ? L('Tes Karakter Mini', 'Mini Character Test') : L('Tes Karakter Lengkap', 'Full Character Test'));
+  const { W, cv, ctx } = await cardBase(mini ? L('Quick Personality Test', 'Quick Personality Test') : L('Full Personality Test', 'Full Personality Test'));
 
   // kartu utama berwarna pastel dominan
   ctx.fillStyle = CBG[p]; roundRect(ctx, 60, 262, W - 120, 1000, 64); ctx.fill();
@@ -2859,7 +2859,7 @@ async function shareCard(result) {
 
 async function gmCard({ nickname, dateLabel, total, cat, pillars }) {
   try { await document.fonts.ready; } catch (e) { /* abaikan */ }
-  const { W, cv, ctx } = await cardBase(L('Tes Growth Mindset', 'Growth Mindset Test'));
+  const { W, cv, ctx } = await cardBase(L('Growth Mindset Test', 'Growth Mindset Test'));
   ctx.fillStyle = '#E4DCF8'; roundRect(ctx, 60, 262, W - 120, 860, 64); ctx.fill();
   const cx = 372, cy = 540, rr = 150;
   try { // tanaman sesuai skor di kanan lingkaran skor

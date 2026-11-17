@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
   const meta = `<title>Dashboard · ${esc(nama)}</title>
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Dashboard ${esc(nama)} × Mengapa" />
-  <meta property="og:description" content="Hasil Tes Karakter Lengkap tim ${esc(nama)} dalam satu dashboard." />
+  <meta property="og:description" content="Hasil Full Personality Test tim ${esc(nama)} dalam satu dashboard." />
   <meta property="og:image" content="${esc(img)}" />
   <meta name="twitter:card" content="summary" />
   <script>window.__KLIEN=${js({ found: true, nama, logo })}</script>`;
