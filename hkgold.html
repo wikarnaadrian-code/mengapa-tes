@@ -1193,23 +1193,6 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .wide-plan .lastres:hover { background: #EBEBE8; }
 .wide-plan .lastres svg { color: #6E56C2; }
 
-/* Full Test: hijau #4F7942 dengan aksen kuning #FFD700 */
-.plan.pro { background: #4F7942; color: #FFFFFF; border: 0; position: relative; overflow: hidden; }
-.plan.pro::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: linear-gradient(90deg, #E5B800, #FFD700 50%, #E5B800); }
-.plan.pro h3 { color: #FFFFFF; }
-.plan.pro .tagp { background: rgba(255,215,0,.18); color: #FFD700; }
-.plan.pro .ptop .tokbtn { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5); color: #FFFFFF !important; }
-.plan.pro .pmeta span { background: rgba(255,255,255,.12); color: #F1F5EC; }
-.plan.pro .pmeta svg { color: #FFD700; }
-.plan.pro .ticks li { color: #F1F5EC; }
-.plan.pro .ticks li::before { background-color: rgba(255,215,0,.2); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFD700' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); }
-.plan.pro .btn.inv { background: #FFD700; color: #2B3A1F; }
-.plan.pro .btn.inv:hover { background: #FFE24D; }
-.plan.pro .btn.inv .arrow { background: #2B3A1F; color: #FFD700; }
-.plan.pro .lastres { background: rgba(255,255,255,.12); color: #FFFFFF; }
-.plan.pro .lastres svg { color: #FFD700; }
-.plan.pro .lastres:hover { background: rgba(255,255,255,.2); }
-
 /* Quick Test lebih ringkas supaya Full Test jadi pusat perhatian */
 .plan.lite { padding: 18px 20px 20px; }
 .plan.lite h3 { font-size: 22px; margin-top: 14px; }
@@ -1225,16 +1208,11 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.wide-plan.lite .ticks { margin-top: 14px; }
 .plan.wide-plan.lite .ticks li { font-size: 15px; }
 
-/* Full Test v2.17.5: hijau lebih muda, tombol hitam, kuning minim, tombol beranimasi */
-.plan.pro { background: #5C8B4A; }
-.plan.pro::before { height: 3px; background: #FFD700; }
-.plan.pro .tagp { background: rgba(255,255,255,.18); color: #FFFFFF; }
-.plan.pro .pmeta span { background: rgba(255,255,255,.16); }
-.plan.pro .pmeta svg { color: #F1F5EC; }
-.plan.pro .ticks li::before { background-color: rgba(255,255,255,.2); }
-.plan.pro .btn.inv { background: var(--ink); color: #FFFFFF; position: relative; overflow: hidden; }
-.plan.pro .btn.inv:hover { background: #000; }
-.plan.pro .btn.inv .arrow { background: #FFD700; color: var(--ink); animation: nudge 2.4s ease-in-out infinite; }
+/* Full Test: hijau muda seperti semula, garis kuning di tepi atas, tombol beranimasi */
+.plan.pro { position: relative; overflow: hidden; }
+.plan.pro::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #FFD700; }
+.plan.pro .btn.inv { position: relative; overflow: hidden; }
+.plan.pro .btn.inv .arrow { animation: nudge 2.4s ease-in-out infinite; }
 .plan.pro .btn.inv::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-18deg); animation: sheen 4s ease-in-out infinite; pointer-events: none; }
 @keyframes nudge { 0%, 60%, 100% { transform: translateX(0); } 75% { transform: translateX(5px); } 90% { transform: translateX(0); } }
 @keyframes sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
@@ -1852,7 +1830,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.5', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.6', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
