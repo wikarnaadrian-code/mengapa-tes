@@ -1535,7 +1535,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.14.5', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.15.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2663,6 +2663,21 @@ function tmark(k, size = 40) {
     <circle cx="50" cy="50" r="34" fill="#fff"/>
     <g transform="translate(25 25) scale(.5)">${GLYPH[k](t.color, t.deep)}</g>
   </svg>`;
+}
+
+// Hasil seri: bulatan terbagi rata (2 = belah dua, 3 = tiga irisan, 4 = empat potongan), irisan berwarna pastel tiap temperamen
+function pieMark(keys, size = 40) {
+  const n = keys.length, R = 50, pt = (ang, r) => [50 + r * Math.cos(ang), 50 + r * Math.sin(ang)];
+  const slices = keys.map((k, i) => {
+    const a0 = -Math.PI / 2 + (2 * Math.PI * i) / n, a1 = -Math.PI / 2 + (2 * Math.PI * (i + 1)) / n;
+    const [x0, y0] = pt(a0, R), [x1, y1] = pt(a1, R);
+    const path = `<path d="M50 50 L${x0.toFixed(2)} ${y0.toFixed(2)} A${R} ${R} 0 ${n === 2 ? 1 : 0} 1 ${x1.toFixed(2)} ${y1.toFixed(2)} Z" fill="${PASTEL[k]}"/>`;
+    const [gx, gy] = pt((a0 + a1) / 2, n === 2 ? 26 : 29), gs = n === 2 ? .4 : .34;
+    const g = size >= 80 ? `<g transform="translate(${(gx - 50 * gs).toFixed(2)} ${(gy - 50 * gs).toFixed(2)}) scale(${gs})">${GLYPH[k](TEMPS[k].color, TEMPS[k].deep)}</g>` : '';
+    return path + g;
+  }).join('');
+  const lines = keys.map((_, i) => { const [x, y] = pt(-Math.PI / 2 + (2 * Math.PI * i) / n, R); return `<line x1="50" y1="50" x2="${x.toFixed(2)}" y2="${y.toFixed(2)}" stroke="#fff" stroke-width="3"/>`; }).join('');
+  return `<svg class="tmark pie" width="${size}" height="${size}" viewBox="0 0 100 100" aria-hidden="true"><clipPath id="pc${size}${keys.join('')}"><circle cx="50" cy="50" r="50"/></clipPath><g clip-path="url(#pc${size}${keys.join('')})">${slices}${lines}</g></svg>`;
 }
 
 // Ilustrasi kombinasi gaya v2: tanda dominan besar + tanda sekunder di pojok
