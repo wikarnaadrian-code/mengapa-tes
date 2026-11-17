@@ -1225,6 +1225,21 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.wide-plan.lite .ticks { margin-top: 14px; }
 .plan.wide-plan.lite .ticks li { font-size: 15px; }
 
+/* Full Test v2.17.5: hijau lebih muda, tombol hitam, kuning minim, tombol beranimasi */
+.plan.pro { background: #5C8B4A; }
+.plan.pro::before { height: 3px; background: #FFD700; }
+.plan.pro .tagp { background: rgba(255,255,255,.18); color: #FFFFFF; }
+.plan.pro .pmeta span { background: rgba(255,255,255,.16); }
+.plan.pro .pmeta svg { color: #F1F5EC; }
+.plan.pro .ticks li::before { background-color: rgba(255,255,255,.2); }
+.plan.pro .btn.inv { background: var(--ink); color: #FFFFFF; position: relative; overflow: hidden; }
+.plan.pro .btn.inv:hover { background: #000; }
+.plan.pro .btn.inv .arrow { background: #FFD700; color: var(--ink); animation: nudge 2.4s ease-in-out infinite; }
+.plan.pro .btn.inv::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-18deg); animation: sheen 4s ease-in-out infinite; pointer-events: none; }
+@keyframes nudge { 0%, 60%, 100% { transform: translateX(0); } 75% { transform: translateX(5px); } 90% { transform: translateX(0); } }
+@keyframes sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
+@media (prefers-reduced-motion: reduce) { .plan.pro .btn.inv .arrow, .plan.pro .btn.inv::after { animation: none; } }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -1837,7 +1852,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.4', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.5', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
