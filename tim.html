@@ -1207,7 +1207,22 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.wide-plan.lite .ticks { margin-top: 14px; }
 .plan.wide-plan.lite .ticks li { font-size: 15px; }
 
-/* Full Test: gaya hijau muda awal, hanya tombol yang beranimasi */
+/* Full Test: tiga gaya, dipilih lewat FULL_STYLE di app.js. Animasi tombol berlaku untuk semuanya. */
+.plan.pro.fv2 { --fvbg: #5C8B4A; }
+.plan.pro.fv3 { --fvbg: #6BCD9C; }
+.plan.pro.fv2, .plan.pro.fv3 { background: var(--fvbg); color: #FFFFFF; border: 0; }
+.plan.pro.fv2 h3, .plan.pro.fv3 h3 { color: #FFFFFF; }
+.plan.pro.fv2 .tagp, .plan.pro.fv3 .tagp { background: rgba(255,255,255,.18); color: #FFFFFF; }
+.plan.pro.fv2 .ptop .tokbtn, .plan.pro.fv3 .ptop .tokbtn { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5); color: #FFFFFF !important; }
+.plan.pro.fv2 .pmeta span, .plan.pro.fv3 .pmeta span { background: rgba(255,255,255,.16); color: #F1F5EC; }
+.plan.pro.fv2 .pmeta svg, .plan.pro.fv3 .pmeta svg { color: #F1F5EC; }
+.plan.pro.fv2 .ticks li, .plan.pro.fv3 .ticks li { color: #F1F5EC; }
+.plan.pro.fv2 .ticks li::before, .plan.pro.fv3 .ticks li::before { background-color: rgba(255,255,255,.2); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFD700' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); }
+.plan.pro.fv2 .lastres, .plan.pro.fv3 .lastres { background: rgba(255,255,255,.14); color: #FFFFFF; }
+.plan.pro.fv2 .lastres svg, .plan.pro.fv3 .lastres svg { color: #FFD700; }
+.plan.pro.fv2 .lastres:hover, .plan.pro.fv3 .lastres:hover { background: rgba(255,255,255,.22); }
+.plan.pro.fv2 .btn.inv, .plan.pro.fv3 .btn.inv { color: #FFD700; }
+.plan.pro.fv2 .btn.inv .arrow, .plan.pro.fv3 .btn.inv .arrow { background: #FFD700; }
 .plan.pro .btn.inv { position: relative; overflow: hidden; }
 .plan.pro .btn.inv .arrow { animation: nudge 2.4s ease-in-out infinite; }
 .plan.pro .btn.inv::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-18deg); animation: sheen 4s ease-in-out infinite; pointer-events: none; }
@@ -1827,7 +1842,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.9', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.10', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',

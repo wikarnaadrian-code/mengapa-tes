@@ -1212,7 +1212,22 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.wide-plan.lite .ticks { margin-top: 14px; }
 .plan.wide-plan.lite .ticks li { font-size: 15px; }
 
-/* Full Test: gaya hijau muda awal, hanya tombol yang beranimasi */
+/* Full Test: tiga gaya, dipilih lewat FULL_STYLE di app.js. Animasi tombol berlaku untuk semuanya. */
+.plan.pro.fv2 { --fvbg: #5C8B4A; }
+.plan.pro.fv3 { --fvbg: #6BCD9C; }
+.plan.pro.fv2, .plan.pro.fv3 { background: var(--fvbg); color: #FFFFFF; border: 0; }
+.plan.pro.fv2 h3, .plan.pro.fv3 h3 { color: #FFFFFF; }
+.plan.pro.fv2 .tagp, .plan.pro.fv3 .tagp { background: rgba(255,255,255,.18); color: #FFFFFF; }
+.plan.pro.fv2 .ptop .tokbtn, .plan.pro.fv3 .ptop .tokbtn { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5); color: #FFFFFF !important; }
+.plan.pro.fv2 .pmeta span, .plan.pro.fv3 .pmeta span { background: rgba(255,255,255,.16); color: #F1F5EC; }
+.plan.pro.fv2 .pmeta svg, .plan.pro.fv3 .pmeta svg { color: #F1F5EC; }
+.plan.pro.fv2 .ticks li, .plan.pro.fv3 .ticks li { color: #F1F5EC; }
+.plan.pro.fv2 .ticks li::before, .plan.pro.fv3 .ticks li::before { background-color: rgba(255,255,255,.2); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFD700' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); }
+.plan.pro.fv2 .lastres, .plan.pro.fv3 .lastres { background: rgba(255,255,255,.14); color: #FFFFFF; }
+.plan.pro.fv2 .lastres svg, .plan.pro.fv3 .lastres svg { color: #FFD700; }
+.plan.pro.fv2 .lastres:hover, .plan.pro.fv3 .lastres:hover { background: rgba(255,255,255,.22); }
+.plan.pro.fv2 .btn.inv, .plan.pro.fv3 .btn.inv { color: #FFD700; }
+.plan.pro.fv2 .btn.inv .arrow, .plan.pro.fv3 .btn.inv .arrow { background: #FFD700; }
 .plan.pro .btn.inv { position: relative; overflow: hidden; }
 .plan.pro .btn.inv .arrow { animation: nudge 2.4s ease-in-out infinite; }
 .plan.pro .btn.inv::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-18deg); animation: sheen 4s ease-in-out infinite; pointer-events: none; }
@@ -1270,7 +1285,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.9', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.10', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2639,6 +2654,8 @@ function plantSvg(total, cls = 'plant') {
 
 
 
+// Gaya kartu Full Test di beranda: 1 = hijau muda teks hitam, 2 = hijau #5C8B4A teks putih, 3 = hijau mint #6BCD9C teks putih. Ganti angkanya saja.
+const FULL_STYLE = 3;
 const KEY = 'mengapa4t:v2';
 const QKEY = 'mengapa4t:queue';
 const $app = document.getElementById('app');
@@ -2969,7 +2986,7 @@ function home() {
           ${state.miniResult ? `<button class="lastres" data-act="lastmini"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil terakhir</button>` : ''}
           <button class="btn block" data-act="mini">${miniProgress ? 'Lanjutkan Quick Test' : 'Mulai Quick Test'} ${ARROW}</button>
         </div>
-        <div class="plan pro">
+        <div class="plan pro fv${FULL_STYLE}">
           <div class="ptop"><span class="tagp">Dengan token${CONFIG.fullPrice ? ' · ' + esc(CONFIG.fullPrice) : ''}</span><a class="tokbtn" href="${buyLink()}" target="_blank" rel="noopener">${L('Belum punya?', 'Need one?')}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a></div>
           <h3>Full Test</h3>
           <div class="pmeta"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-4 4v-4A2 2 0 0 1 4 14z"/></svg>${L('40 pertanyaan', '40 questions')}</span><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>± 10 ${L('menit', 'min')}</span></div>
