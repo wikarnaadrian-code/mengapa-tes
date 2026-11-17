@@ -1207,21 +1207,9 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.wide-plan.lite .ticks { margin-top: 14px; }
 .plan.wide-plan.lite .ticks li { font-size: 15px; }
 
-/* Full Test: hijau #5C8B4A, teks putih, tombol hitam bertulisan kuning dan beranimasi */
-.plan.pro { background: #5C8B4A; color: #FFFFFF; border: 0; position: relative; overflow: hidden; }
-.plan.pro h3 { color: #FFFFFF; }
-.plan.pro .tagp { background: rgba(255,255,255,.18); color: #FFFFFF; }
-.plan.pro .ptop .tokbtn { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5); color: #FFFFFF !important; }
-.plan.pro .pmeta span { background: rgba(255,255,255,.16); color: #F1F5EC; }
-.plan.pro .pmeta svg { color: #F1F5EC; }
-.plan.pro .ticks li { color: #F1F5EC; }
-.plan.pro .ticks li::before { background-color: rgba(255,255,255,.2); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFD700' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E"); }
-.plan.pro .lastres { background: rgba(255,255,255,.14); color: #FFFFFF; }
-.plan.pro .lastres svg { color: #FFD700; }
-.plan.pro .lastres:hover { background: rgba(255,255,255,.22); }
-.plan.pro .btn.inv { background: var(--ink); color: #FFD700; position: relative; overflow: hidden; }
-.plan.pro .btn.inv:hover { background: #000; }
-.plan.pro .btn.inv .arrow { background: #FFD700; color: var(--ink); animation: nudge 2.4s ease-in-out infinite; }
+/* Full Test: gaya hijau muda awal, hanya tombol yang beranimasi */
+.plan.pro .btn.inv { position: relative; overflow: hidden; }
+.plan.pro .btn.inv .arrow { animation: nudge 2.4s ease-in-out infinite; }
 .plan.pro .btn.inv::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-18deg); animation: sheen 4s ease-in-out infinite; pointer-events: none; }
 @keyframes nudge { 0%, 60%, 100% { transform: translateX(0); } 75% { transform: translateX(5px); } 90% { transform: translateX(0); } }
 @keyframes sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
@@ -1839,7 +1827,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.8', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.9', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
