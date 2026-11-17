@@ -1742,6 +1742,13 @@ body.tk-busy { cursor: progress; }
 .d-actions .btn.ghost:not(.danger) { box-shadow: inset 0 0 0 1.5px var(--line-2); background: #FFFFFF; }
 .d-actions .btn.ghost:not(.danger):hover { background: var(--tint); }
 
+/* tombol aksi di detail hasil: di HP selalu tersusun sama (satu kolom, lebar penuh), tidak bergantung panjang nama */
+@media (max-width: 767px) {
+  .d-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .d-actions .btn, .d-actions .nowa { width: 100%; justify-content: center; text-align: center; box-sizing: border-box; }
+  .d-actions .nowa { padding: 12px 0; }
+}
+
 </style>
 </head>
 <body data-client="1">
@@ -1770,7 +1777,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.15.2', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
