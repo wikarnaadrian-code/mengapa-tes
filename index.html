@@ -1327,7 +1327,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.18.3', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.19.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2789,6 +2789,7 @@ const codeNote = id => `<div class="code-box no-print"><div><small>Kode hasilmu<
 const resultActions = again => `
       <div class="block no-print">
         <div class="eyebrow">Simpan hasilmu</div>
+        <div class="share-row one"><button class="btn" data-act="sharetest">${shareIcon()} ${L('Bagikan tes ini', 'Share this test')}</button></div>
         <div class="share-row">
           <button class="btn" data-act="share">${dlIcon()} Simpan gambar</button>
           <button class="btn ghost" data-act="pdf">Simpan PDF</button>
@@ -4138,6 +4139,7 @@ const bind = {
     on('home', () => go('home'));
     bindSticky();
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
+    on('sharetest', btn => shareTest(btn));
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       const done = btnBusy(btn, L('Menyiapkan gambar…', 'Preparing image…'));
       try {
@@ -4155,6 +4157,7 @@ const bind = {
     bindSticky();
     on('stickyfull', () => { ga('klik_cta_melayang', { layar: 'mresult' }); const c = $app.querySelector('.endcta'); c && c.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
+    on('sharetest', btn => shareTest(btn));
     on('full', () => go('token'));
     on('again', () => { state.mode = 'mini'; resetMini(); save(); go('consent'); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
@@ -4176,6 +4179,7 @@ const bind = {
     bindSticky();
     on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.coDominant.length > 1 ? a.coDominant.flatMap(x => a.coDominant.filter(y => y !== x).map(y => x + y)) : a.primary + a.secondary, btn); });
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
+    on('sharetest', btn => shareTest(btn));
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       const done = btnBusy(btn, L('Menyiapkan gambar…', 'Preparing image…'));
       try {
@@ -4188,6 +4192,32 @@ const bind = {
     });
   },
 };
+function shareTestText() {
+  const sc = state.screen;
+  if (sc === 'gmresult') return L('Hai, aku baru ikut Growth Mindset Test dari Mengapa. Cek pola pikirmu juga!', 'Hi, I just took the Growth Mindset Test by Mengapa. Check your mindset too!');
+  let nm;
+  if (sc === 'mresult') { const a = miniAnalyze(state.miniResult.answers); nm = a.top.map(k => TEMPS[k].name).join(' & '); }
+  else { const a = analyze(state.result.answers); nm = TEMPS[a.primary].name; }
+  return L(`Hai, aku baru tahu kepribadianku ${nm}. Cek punyamu juga!`, `Hi, I just found out my personality is ${nm}. Check yours now!`);
+}
+async function shareTest(btn) {
+  const url = `${CONFIG.site.replace(/\/$/, '')}/?utm_source=share&utm_medium=result`;
+  const text = shareTestText();
+  ga('bagikan_tes', { jenis: state.screen });
+  if (navigator.share && matchMedia('(pointer:coarse)').matches) {
+    try { await navigator.share({ title: 'Mengapa', text, url }); } catch (e) {}
+    return;
+  }
+  const row = btn.closest('.share-row');
+  if (row.nextElementSibling && row.nextElementSibling.classList.contains('share-alt')) return;
+  const alt = document.createElement('div');
+  alt.className = 'share-row share-alt';
+  alt.innerHTML = `<a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}">WhatsApp</a><button type="button" class="btn ghost">${L('Salin teks & link', 'Copy text & link')}</button>`;
+  alt.querySelector('button').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(text + ' ' + url); toast(L('Tersalin. Tinggal tempel ya.', 'Copied. Just paste it.')); } catch (e) { toast(L('Gagal menyalin.', 'Could not copy.')); }
+  });
+  row.after(alt);
+}
 function btnBusy(btn, text) {
   const html = btn.innerHTML; btn.disabled = true; btn.innerHTML = `<span class="spin-s"></span>${text}`;
   return () => { btn.disabled = false; btn.innerHTML = html; };
