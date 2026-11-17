@@ -1240,7 +1240,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.5', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.15.6', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -1951,6 +1951,7 @@ const UI = {
   'Lihat hasil lengkap terakhir': 'See latest full result',
   'Lihat hasil mindset terakhir': 'See latest mindset result',
   'Lihat hasil mini terakhir': 'See latest mini result',
+  'Lihat hasil terakhir': 'See latest result',
   'Lihat seberapa terbuka pola pikirmu terhadap gagal, kritik, dan tantangan.': 'See how open your mindset is to failure, criticism, and challenges.',
   'Mana yang menguatkan, mana yang menahan': 'What strengthens you, what holds you back',
   'Mana yang paling menggambarkan dirimu?': 'Which one describes you best?',
@@ -2935,7 +2936,7 @@ function home() {
             <li>Kekuatan utama dan hal yang perlu diwaspadai</li>
             <li>Gambaran awal untuk kenalan dulu</li>
           </ul>
-          ${state.miniResult ? `<button class="lastres" data-act="lastmini"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil mini terakhir</button>` : ''}
+          ${state.miniResult ? `<button class="lastres" data-act="lastmini"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil terakhir</button>` : ''}
           <button class="btn block" data-act="mini">${miniProgress ? 'Lanjutkan tes mini' : 'Mulai tes mini'} ${ARROW}</button>
         </div>
         <div class="plan pro">
@@ -2947,7 +2948,7 @@ function home() {
             <li>${L('Lembar skor dan ruang tumbuh terbesarmu', 'Score sheet and your biggest room to grow')}</li>
             <li>${L('Kebutuhan emosional yang bikin kamu merasa dihargai', 'The emotional needs that make you feel valued')}</li>
           </ul>
-          ${state.result ? `<button class="lastres" data-act="last"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil lengkap terakhir</button>` : ''}
+          ${state.result ? `<button class="lastres" data-act="last"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil terakhir</button>` : ''}
           <button class="btn block inv" data-act="full">Saya punya token ${ARROW}</button>
         </div>
         </div>
@@ -2966,7 +2967,7 @@ function home() {
             <li>Skor di 5 pilar: bakat, kegagalan, tantangan, kritik, kesuksesan orang lain</li>
             <li>Blind spot dan pemicu fixed mindset-mu</li>
           </ul>
-          ${state.gmResult ? `<button class="lastres" data-act="lastgm"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil mindset terakhir</button>` : ''}
+          ${state.gmResult ? `<button class="lastres" data-act="lastgm"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil terakhir</button>` : ''}
           <button class="btn block" data-act="gm">${!state.gmResult && gmAnswered() > 0 && state.gmStartedAt ? 'Lanjutkan tes' : 'Mulai tes mindset'} ${ARROW}</button>
         </div>
       </div>
