@@ -1158,6 +1158,10 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .tie-marks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 .tie-marks span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 6px; border-radius: 999px; font-size: 13.5px; font-weight: 700; }
 
+/* tombol di dalam kartu kombinasi: lingkaran panah ikut warna karakter */
+.cx-btn { margin-top: 16px; }
+.cx-btn .arrow { background: var(--ca, #FFFFFF) !important; transition: background .7s var(--ease), transform .2s var(--ease); }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -1208,7 +1212,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.13.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.14.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2847,6 +2851,7 @@ function home() {
   const inProgress = state.tokenOk && answered() > 0;
   const miniProgress = !state.miniResult && miniAnswered() > 0 && state.miniStartedAt;
   const gmProgress = !state.gmResult && gmAnswered() > 0 && state.gmStartedAt;
+  const ACC = { S: 'var(--pS)', C: 'var(--pC)', M: 'var(--pM)', P: 'var(--pP)' };
   const combos = ['SC', 'CM', 'MP', 'PS', 'CS', 'MC', 'PM', 'SP', 'SM', 'CP', 'MS', 'PC'];
   return `
   <section class="screen">
@@ -2935,13 +2940,15 @@ function home() {
       <div class="block">
         <div class="eyebrow">${L('Terbuka di Tes Karakter Lengkap', 'Unlocked in the Full Character Test')}</div>
         <h2>${L('12 kombinasi karakter. <em>Kamu yang mana?</em>', '12 character blends. <em>Which one are you?</em>')}</h2>
-        <div class="cx" aria-hidden="true">
-          <div class="cx-stage">
-            ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}">${charArt(c[0], c[1], 132)}<figcaption><b>${COMBOS[c].name}</b><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
+        <div class="cx" style="--ca:${ACC[combos[0][0]]}">
+          <div aria-hidden="true">
+            <div class="cx-stage">
+              ${combos.map((c, i) => `<figure class="cx-slide${i === 0 ? ' on' : ''}" data-ca="${ACC[c[0]]}">${charArt(c[0], c[1], 132)}<figcaption><b>${COMBOS[c].name}</b><i>${esc(COMBOS[c].tagline)}</i></figcaption></figure>`).join('')}
+            </div>
+            <div class="cx-meta"><span class="cx-bar"><i></i></span></div>
           </div>
-          <div class="cx-meta"><span class="cx-bar"><i></i></span></div>
+          <button class="btn block cx-btn" data-act="full">${L('Cari tahu kombinasimu', 'Find your blend')}${ARROW}</button>
         </div>
-        <button class="cx-cta" data-act="full">${L('Cari tahu kombinasimu', 'Find your blend')}${ARROW}</button>
       </div>
       <div class="block about">
         <div class="eyebrow">Tentang Mengapa</div>
@@ -3770,7 +3777,7 @@ const bind = {
         if (!box.isConnected) { clearInterval(window.__cxT); return; }
         if (!seen || document.hidden) return;
         const prev = slides[i]; prev.classList.remove('on'); prev.classList.add('out'); setTimeout(() => prev.classList.remove('out'), 800);
-        i = (i + 1) % slides.length; slides[i].classList.add('on'); kick();
+        i = (i + 1) % slides.length; slides[i].classList.add('on'); box.style.setProperty('--ca', slides[i].dataset.ca); kick();
       }, 3200);
     }
     on('services', () => go('services'));
