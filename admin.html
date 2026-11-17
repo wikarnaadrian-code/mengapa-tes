@@ -1734,6 +1734,21 @@ body.tk-busy { cursor: progress; }
 .d-actions .btn.ghost:not(.danger) { box-shadow: inset 0 0 0 1.5px var(--line-2); background: #FFFFFF; }
 .d-actions .btn.ghost:not(.danger):hover { background: var(--tint); }
 
+/* kartu angka bisa digeser: tanpa scrollbar, ada gradasi tepi dan petunjuk Geser (hanya jika memang meluber) */
+.tk-sw { position: relative; }
+.tk-swipe { display: none; }
+@media (max-width: 767px) {
+  .tk-kpis { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tk-kpis::-webkit-scrollbar { display: none; }
+  .tk-sw::after { content: ''; position: absolute; top: 0; right: -14px; bottom: 10px; width: 48px; pointer-events: none; opacity: 0; transition: opacity .25s; background: linear-gradient(to right, rgba(240,240,238,0), var(--bg) 90%); }
+  .tk-sw.sw-more::after { opacity: 1; }
+  .tk-swipe { display: inline-flex; align-items: center; gap: 3px; position: absolute; right: 2px; top: -22px; pointer-events: none; font-size: 12px; font-weight: 700; color: var(--muted); opacity: 0; transition: opacity .3s; }
+  .tk-sw.sw-hint .tk-swipe { opacity: 1; }
+  .tk-sw.sw-hint .tk-swipe svg { animation: tkswipe 1.2s ease-in-out infinite; }
+}
+@keyframes tkswipe { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+@media (prefers-reduced-motion: reduce) { .tk-sw.sw-hint .tk-swipe svg { animation: none; } }
+
 </style>
 </head>
 <body>
@@ -1762,7 +1777,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.14.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.14.2', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -4300,11 +4315,14 @@ function shownToParticipant(x) {
     </section>`;
   }
   if (x.kind === 'mini' && x.mini) {
-    const pr = MINI_PROFILE[x.p];
+    const tops = x.top && x.top.length ? x.top : [x.p], tied = tops.length > 1;
+    const tt = tied ? TIE_TEXT[tops.join('')] : null;
+    const side = k => { const pr = MINI_PROFILE[k]; return `${tied ? `<p style="margin-top:10px"><b>${esc(TEMPS[k].name)}</b>. ${esc(TEMPS[k].essence)}</p>` : ''}<ul>${pr.powers.map(t => `<li>${fx(t)}</li>`).join('')}${pr.watch.map(t => `<li class="neg">${fx(t)}</li>`).join('')}</ul>`; };
     return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
-      ${tag(L('Temperamen dominan', 'Primary temperament'))}<p><b>${esc(TEMPS[x.p].name)}</b>. ${esc(TEMPS[x.p].essence)}</p>
-      ${tag(L('Kekuatan dan yang perlu diwaspadai', 'Strengths and watch-outs'))}<ul>${pr.powers.map(t => `<li>${fx(t)}</li>`).join('')}${pr.watch.map(t => `<li class="neg">${fx(t)}</li>`).join('')}</ul>
-      <p class="muted small">${L('Diajak mengambil Tes Karakter Lengkap via Instagram atau WhatsApp.', 'Invited to take the Full Character Test via Instagram or WhatsApp.')}</p>
+      ${tag(tied ? L(`Temperamen dominan seri (${tops.length})`, `Tied primary temperaments (${tops.length})`) : L('Temperamen dominan', 'Primary temperament'))}
+      ${tied ? `<p><b>${tops.map(k => esc(TEMPS[k].name)).join(' / ')}</b>${tt ? `. ${esc(L(tt[0], tt[1]))}` : ''}</p>` : `<p><b>${esc(TEMPS[x.p].name)}</b>. ${esc(TEMPS[x.p].essence)}</p>`}
+      ${tag(L('Kekuatan dan yang perlu diwaspadai', 'Strengths and watch-outs'))}${tops.map(side).join('')}
+      <p class="muted small">${L('Diajak mengambil Tes Karakter Lengkap via Instagram atau WhatsApp.', 'Invited to the Full Character Test via Instagram or WhatsApp.')}</p>
     </section>`;
   }
   if (x.kind === 'mindset' && x.gm) {
@@ -4357,7 +4375,7 @@ function detailMini(x) {
   const c = x.mini;
   return `
     <section class="hero" style="--soft:${TEMPS[x.p].soft}">
-      <div class="hero-art">${tmark(x.p, 110)}</div>
+      <div class="hero-art"${x.top.length > 1 ? ' style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center"' : ''}>${x.top.length > 1 ? x.top.map(k => tmark(k, x.top.length > 2 ? 52 : 64)).join('') : tmark(x.p, 110)}</div>
       <div><small class="eyebrow">${testName('mini')}</small><h2>${esc(x.title)}</h2><p class="muted">${x.top.length > 1 ? L('Dominan seri, perlu tes lengkap untuk memastikan.', 'Tied primary. The full test is needed to confirm.') : esc(TEMPS[x.p].title + '. ' + TEMPS[x.p].motto)}</p></div>
     </section>
     <section class="box"><h3>${L('Skor (dari 10 pertanyaan)', 'Scores (from 10 questions)')}</h3><div class="bars wide">${bars(ORDER.map(k => ({ label: TEMPS[k].name, v: c[k], color: TEMPS[k].color })), 10)}</div></section>
@@ -4719,6 +4737,25 @@ if (SLUG && !S.session && S.found === null) {
 }
 render();
 if (S.session) { load(); if (S.view !== 'hasil' && tkAuthed()) tkLoad(); }
+
+
+/* petunjuk geser untuk deretan kartu angka di layar kecil */
+let SWIPED = false;
+function swipeHints() {
+  $app.querySelectorAll('.tk-kpis:not([data-sw])').forEach(el => {
+    el.setAttribute('data-sw', '1');
+    const w = document.createElement('div'); w.className = 'tk-sw';
+    el.parentNode.insertBefore(w, el); w.appendChild(el);
+    const h = document.createElement('span'); h.className = 'tk-swipe'; h.setAttribute('aria-hidden', 'true');
+    h.innerHTML = `${L('Geser', 'Swipe')}<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>`;
+    w.appendChild(h);
+    const upd = () => { const more = el.scrollWidth - el.clientWidth - el.scrollLeft > 6; w.classList.toggle('sw-more', more); w.classList.toggle('sw-hint', more && !SWIPED && el.scrollLeft < 6); };
+    el.addEventListener('scroll', () => { if (el.scrollLeft > 12) SWIPED = true; upd(); }, { passive: true });
+    window.addEventListener('resize', upd); requestAnimationFrame(upd); setTimeout(upd, 400);
+  });
+}
+new MutationObserver(swipeHints).observe($app, { childList: true, subtree: true });
+swipeHints();
 
 </script>
 </body>
