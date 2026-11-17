@@ -1224,6 +1224,10 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.lite .ticks + .lastres { margin-top: 18px; }
 @media (min-width: 620px) { .plans { grid-template-columns: 6fr 7fr; } }
 .plan.lite .pmeta span { font-size: 12px; padding: 5px 9px 5px 8px; gap: 5px; }
+/* Growth Mindset: lebih kecil dari Full Test, di layar lebar di tengah */
+@media (min-width: 620px) { .plan.wide-plan.lite { max-width: 440px; margin-left: auto; margin-right: auto; } }
+.plan.wide-plan.lite .ticks { margin-top: 14px; }
+.plan.wide-plan.lite .ticks li { font-size: 15px; }
 
 </style>
 <script type="application/ld+json">
@@ -1275,7 +1279,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.1', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2993,7 +2997,7 @@ function home() {
         <div class="eyebrow">Tes Pola Pikir</div>
         <p class="group-sub">Lihat seberapa terbuka pola pikirmu terhadap gagal, kritik, dan tantangan.</p>
         <div class="fit"><div class="fit-h">${L('Cocok untuk kamu yang:', 'Great for:')}</div><div class="fit-chips"><span>${L('Penasaran pola pikirmu', 'Curious about your mindset')}</span><span>${L('Mau lebih kuat saat gagal', 'Wanting to bounce back stronger')}</span><span>${L('Ingin lebih konsisten', 'Aiming to be more consistent')}</span></div></div>
-        <div class="plan wide-plan">
+        <div class="plan wide-plan lite">
           <span class="tagp">Gratis</span>
           <h3>${L('Growth Mindset Test', 'Growth Mindset Test')}</h3>
           <div class="pmeta"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-4 4v-4A2 2 0 0 1 4 14z"/></svg>${L('15 pernyataan', '15 statements')}</span><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>± 4 ${L('menit', 'min')}</span></div>
