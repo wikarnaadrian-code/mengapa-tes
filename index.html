@@ -1304,7 +1304,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.14', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.15', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2750,9 +2750,10 @@ function resetFull() { state.answers = Array(40).fill(null); state.index = 0; st
 function resetMini() { state.miniAnswers = Array(10).fill(null); state.miniIndex = 0; state.miniStartedAt = null; }
 const agreed = m => !!(state.consent.agreed && state.consent.agreed[m]);
 function clearConsent(m) { state.consent = { ...state.consent, agreed: { ...(state.consent.agreed || {}), [m]: false }, guardian: null }; }
-const igLink = () => `https://ig.me/m/${CONFIG.instagram}`;
+// Link DM langsung (ig.me) tidak andal di semua perangkat, jadi buka profil Instagram saja
+const igLink = () => `https://www.instagram.com/${CONFIG.instagram}/`;
 const igIcon = () => `<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
-const contactRow = (waHref, lead) => `${lead ? `<p class="contact-lead">${lead}</p>` : ''}<div class="contact-row no-print"><a class="btn ig" href="${igLink()}" target="_blank" rel="noopener">${igIcon()} DM Instagram</a><a class="btn wa" href="${waHref}" target="_blank" rel="noopener">${waIcon()} WhatsApp</a></div>`;
+const contactRow = (waHref, lead) => `${lead ? `<p class="contact-lead">${lead}</p>` : ''}<div class="contact-row no-print"><a class="btn ig" href="${igLink()}" target="_blank" rel="noopener">${igIcon()} Instagram</a><a class="btn wa" href="${waHref}" target="_blank" rel="noopener">${waIcon()} WhatsApp</a></div>`;
 const codeNote = id => `<div class="code-box no-print"><div><small>Kode hasilmu</small><b class="code">${id}</b></div><button type="button" class="copy-btn" data-copy="${id}">Salin</button></div><p class="small code-note">Sertakan kode ini kalau chat lewat Instagram, supaya tim kami bisa langsung membuka hasilmu.</p>`;
 const resultActions = again => `
       <div class="block no-print">
