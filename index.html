@@ -1249,6 +1249,11 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plans .plan.lite:not(.wide-plan) .tagp { background: var(--fvc); }
 .plans.fv2 .plan.lite:not(.wide-plan) .tagp { color: #FFFFFF; }
 
+/* Kotak "Lihat layanan": whitespace atas dan bawah diseimbangkan */
+.svc-link { padding: 12px 20px 19px 22px; }
+.svc-link svg { width: 38px; height: 38px; padding: 10px; }
+.svc-link small { margin-top: 2px; }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -1299,7 +1304,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.13', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.14', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -1623,7 +1628,7 @@ const GM_PILLARS = {
     hi: 'Kamu bisa memisahkan kritik atas pekerjaan dari nilai dirimu, bahkan aktif mencari masukan.',
     mid: 'Kamu bisa menerima masukan, tapi reaksi pertamamu masih sering membela diri. Biasanya setelah tenang baru bisa dipakai.',
     lo: 'Kritik masih sering terasa seperti serangan pribadi. Energimu habis untuk bertahan, bukan untuk memperbaiki.' },
-  others: { name: 'Kesuksesan Orang Lain', sub: 'Iri vs inspirasi', color: '#1F3A36',
+  others: { name: 'Saat Orang Lain Sukses', sub: 'Iri vs inspirasi', color: '#1F3A36',
     hi: 'Keberhasilan orang lain kamu jadikan bahan belajar, bukan ancaman.',
     mid: 'Kadang kamu terinspirasi, kadang merasa tertinggal. Tergantung siapa orangnya dan seberapa dekat dengan bidangmu.',
     lo: 'Keberhasilan orang lain mudah membuatmu merasa kecil. Perbandingan diam-diam ini sering menguras semangat.' },
@@ -1844,7 +1849,7 @@ const EN = {
       hi: 'You can separate criticism of your work from your worth as a person, and you even seek feedback out.',
       mid: 'You can take feedback, but your first reaction is often to defend yourself. Usually you can use it once you have calmed down.',
       lo: 'Criticism still often feels like a personal attack. Your energy goes into defending, not improving.' },
-    others: { name: 'Others’ Success', sub: 'Envy vs inspiration',
+    others: { name: 'When Others Succeed', sub: 'Envy vs inspiration',
       hi: 'You turn other people’s success into something to learn from, not a threat.',
       mid: 'Sometimes you feel inspired, sometimes left behind. It depends on who they are and how close they are to your field.',
       lo: 'Other people’s success easily makes you feel small. This quiet comparison often drains your motivation.' },
@@ -2102,7 +2107,7 @@ const UI = {
   'Simpan & bagikan': 'Save & share',
   'Simpan PDF': 'Save PDF',
   'Skor 0 sampai 100 per pilar. 75 ke atas kuat, 50 sampai 74 sedang, di bawah 50 perlu perhatian.': 'Scores from 0 to 100 per pillar. 75 and above is strong, 50 to 74 is moderate, below 50 needs attention.',
-  'Skor di 5 pilar: bakat, kegagalan, tantangan, kritik, kesuksesan orang lain': 'Scores on 5 pillars: talent, failure, challenge, criticism, others’ success',
+  'Skor di 5 area: keyakinan soal bakat, sikap saat gagal, ditantang, dikritik, dan melihat orang lain berhasil': 'Scores in 5 areas: beliefs about talent, handling failure, challenge, criticism, and seeing others succeed',
   'Skor per pilar': 'Score per pillar',
   'Skormu sangat tinggi. Semua orang punya campuran fixed dan growth, jadi coba jujur cek: kapan terakhir kali kamu merasa defensif atau menghindari sesuatu karena takut gagal?': 'Your score is very high. Everyone has a mix of fixed and growth, so check honestly: when did you last feel defensive or avoid something for fear of failing?',
   'Tahu tes ini dari mana?': 'Where did you hear about this test?',
@@ -3053,7 +3058,7 @@ function home() {
           <div class="pmeta"><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H10l-4 4v-4A2 2 0 0 1 4 14z"/></svg>${L('15 pernyataan', '15 statements')}</span><span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>± 4 ${L('menit', 'min')}</span></div>
           <ul class="ticks">
             <li>Posisi pola pikirmu: fixed, transisi, atau growth</li>
-            <li>Skor di 5 pilar: bakat, kegagalan, tantangan, kritik, kesuksesan orang lain</li>
+            <li>Skor di 5 area: keyakinan soal bakat, sikap saat gagal, ditantang, dikritik, dan melihat orang lain berhasil</li>
             <li>Blind spot dan pemicu fixed mindset-mu</li>
           </ul>
           ${state.gmResult ? `<button class="lastres" data-act="lastgm"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil terakhir</button>` : ''}
