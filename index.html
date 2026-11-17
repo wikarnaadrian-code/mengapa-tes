@@ -1177,6 +1177,17 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 @keyframes swnudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
 @media (prefers-reduced-motion: reduce) { .sw-hint .sw-bub { animation: none; } }
 
+/* "Lihat hasil terakhir": di atas tombol utama, tombol di dasar kartu tetap sejajar */
+.plan .lastres { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; box-sizing: border-box; margin: 0 0 10px; padding: 10px 14px; border: 0; border-radius: 999px; background: #F4F4F2; color: var(--ink-2); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background .18s; }
+.plan .lastres svg { flex: none; color: #8A8A8A; }
+.plan .lastres:hover { background: #EBEBE8; }
+.plan.pro .lastres { background: rgba(255,255,255,.6); color: var(--ink); }
+.plan.pro .lastres svg { color: #4E6B3A; }
+.plan.pro .lastres:hover { background: rgba(255,255,255,.8); }
+.wide-plan .lastres { background: var(--lav); color: #3E2F7A; }
+.wide-plan .lastres svg { color: #6E56C2; }
+.wide-plan .lastres:hover { background: #D9CEF5; }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -1227,7 +1238,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.3', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.15.4', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2922,8 +2933,8 @@ function home() {
             <li>Kekuatan utama dan hal yang perlu diwaspadai</li>
             <li>Gambaran awal untuk kenalan dulu</li>
           </ul>
+          ${state.miniResult ? `<button class="lastres" data-act="lastmini"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil mini terakhir</button>` : ''}
           <button class="btn block" data-act="mini">${miniProgress ? 'Lanjutkan tes mini' : 'Mulai tes mini'} ${ARROW}</button>
-          ${state.miniResult ? `<button class="linkbtn" data-act="lastmini">Lihat hasil mini terakhir</button>` : ''}
         </div>
         <div class="plan pro">
           <div class="ptop"><span class="tagp">Dengan token${CONFIG.fullPrice ? ' · ' + esc(CONFIG.fullPrice) : ''}</span><a class="tokbtn" href="${buyLink()}" target="_blank" rel="noopener">${L('Belum punya?', 'Need one?')}<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a></div>
@@ -2934,8 +2945,8 @@ function home() {
             <li>${L('Lembar skor dan ruang tumbuh terbesarmu', 'Score sheet and your biggest room to grow')}</li>
             <li>${L('Kebutuhan emosional yang bikin kamu merasa dihargai', 'The emotional needs that make you feel valued')}</li>
           </ul>
+          ${state.result ? `<button class="lastres" data-act="last"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil lengkap terakhir</button>` : ''}
           <button class="btn block inv" data-act="full">Saya punya token ${ARROW}</button>
-          ${state.result ? `<button class="linkbtn" data-act="last">Lihat hasil lengkap terakhir</button>` : ''}
         </div>
         </div>
       </div>
@@ -2953,8 +2964,8 @@ function home() {
             <li>Skor di 5 pilar: bakat, kegagalan, tantangan, kritik, kesuksesan orang lain</li>
             <li>Blind spot dan pemicu fixed mindset-mu</li>
           </ul>
+          ${state.gmResult ? `<button class="lastres" data-act="lastgm"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil mindset terakhir</button>` : ''}
           <button class="btn block" data-act="gm">${!state.gmResult && gmAnswered() > 0 && state.gmStartedAt ? 'Lanjutkan tes' : 'Mulai tes mindset'} ${ARROW}</button>
-          ${state.gmResult ? `<button class="linkbtn" data-act="lastgm">Lihat hasil mindset terakhir</button>` : ''}
         </div>
       </div>
 

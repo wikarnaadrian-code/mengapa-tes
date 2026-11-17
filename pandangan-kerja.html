@@ -1173,6 +1173,17 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 @keyframes swnudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
 @media (prefers-reduced-motion: reduce) { .sw-hint .sw-bub { animation: none; } }
 
+/* "Lihat hasil terakhir": di atas tombol utama, tombol di dasar kartu tetap sejajar */
+.plan .lastres { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; box-sizing: border-box; margin: 0 0 10px; padding: 10px 14px; border: 0; border-radius: 999px; background: #F4F4F2; color: var(--ink-2); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; transition: background .18s; }
+.plan .lastres svg { flex: none; color: #8A8A8A; }
+.plan .lastres:hover { background: #EBEBE8; }
+.plan.pro .lastres { background: rgba(255,255,255,.6); color: var(--ink); }
+.plan.pro .lastres svg { color: #4E6B3A; }
+.plan.pro .lastres:hover { background: rgba(255,255,255,.8); }
+.wide-plan .lastres { background: var(--lav); color: #3E2F7A; }
+.wide-plan .lastres svg { color: #6E56C2; }
+.wide-plan .lastres:hover { background: #D9CEF5; }
+
 /* ============ Tes Pandangan Kerja (HK Gold) ============ */
 .pk-brand { display: flex; align-items: center; gap: 12px; }
 .pk-brand .brand img.li { height: 34px; }
@@ -1535,7 +1546,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.3', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.15.4', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
