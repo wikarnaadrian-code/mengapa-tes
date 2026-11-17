@@ -1227,10 +1227,10 @@ body { background: var(--bg); }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--S); display: block; }
 .dot.hi { background: var(--C); }
 .kind { font-style: normal; font-weight: 700; }
-.k-lengkap { color: var(--ink); } .k-mini { color: #7A5F06; } .k-mindset { color: #3F5524; }
+.k-lengkap { color: var(--ink); } .k-mini { color: #7A5F06; } .k-mindset { color: #5B46A8; }
 .av { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--tint); font-weight: 700; font-size: 14px; overflow: hidden; flex: 0 0 auto; }
 .av.art svg { width: 44px; height: 44px; }
-.av.ring { background: conic-gradient(var(--P) calc(var(--v) * 1%), var(--line) 0); }
+.av.ring { background: conic-gradient(#8B72DA calc(var(--v) * 1%), var(--line) 0); }
 .av.ring b { width: 34px; height: 34px; border-radius: 50%; background: var(--paper); display: grid; place-items: center; font-size: 13px; }
 .empty { padding: 40px 20px; text-align: center; color: var(--muted); font-size: 14px; }
 .spin { display: block; width: 26px; height: 26px; margin: 0 auto 12px; border-radius: 50%; border: 3px solid var(--line); border-top-color: var(--ink); animation: spin .8s linear infinite; }
@@ -1249,7 +1249,7 @@ body { background: var(--bg); }
 .hero h2 { font-family: var(--serif); font-weight: 600; font-size: 28px; margin: 2px 0 4px; line-height: 1.15; }
 .hero p { margin: 0; font-size: 14.5px; }
 .hero .note { margin-top: 8px; }
-.gauge { width: 112px; height: 112px; border-radius: 50%; display: grid; place-content: center; text-align: center; background: radial-gradient(closest-side, var(--soft) 78%, transparent 79%), conic-gradient(var(--P) calc(var(--v) * 1%), rgba(0,0,0,.08) 0); }
+.gauge { width: 112px; height: 112px; border-radius: 50%; display: grid; place-content: center; text-align: center; background: radial-gradient(closest-side, var(--soft) 78%, transparent 79%), conic-gradient(#8B72DA calc(var(--v) * 1%), rgba(0,0,0,.08) 0); }
 .gauge b { font-family: var(--serif); font-size: 34px; line-height: 1; }
 .gauge small { font-size: 11px; color: var(--muted); }
 .box { margin-top: 14px; border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; }
@@ -1785,7 +1785,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.15.2', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.15.3', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -4441,7 +4441,7 @@ function detailMini(x) {
 function detailMindset(x) {
   const a = x.gm, cat = GM_CATEGORIES[a.category];
   return `
-    <section class="hero" style="--soft:#E4ECD8">
+    <section class="hero" style="--soft:#E4DCF8">
       <div class="hero-art"><span class="gauge" style="--v:${a.total}"><b>${a.total}</b><small>${L('dari 100', 'out of 100')}</small></span></div>
       <div><small class="eyebrow">${L('Tes Growth Mindset', 'Growth Mindset Test')}</small><h2>${esc(cat.name)}</h2><p class="muted">${esc(cat.tagline)}</p></div>
     </section>
@@ -4534,7 +4534,7 @@ const fmtMed = s => s < 60 ? `${Math.round(s)} ${L('dtk', 's')}` : `${Math.floor
 function breakdown(B) {
   const pc = (n, tot) => tot ? Math.round(n / tot * 100) : 0;
   const row = (ic, name, n, tot, color) => `<li>${ic}<span class="bn">${name}</span><span class="bbar"><i style="width:${pc(n, tot)}%;background:${color}"></i></span><b>${n}</b><em>${pc(n, tot)}%</em></li>`;
-  const kinds = [['lengkap', L('Tes Lengkap', 'Full test'), '#CDE5B0'], ['mini', L('Tes Mini', 'Mini test'), '#F7E48E'], ['mindset', L('Tes Mindset', 'Mindset test'), '#BDE1EA']];
+  const kinds = [['lengkap', L('Tes Lengkap', 'Full test'), '#CDE5B0'], ['mini', L('Tes Mini', 'Mini test'), '#F7E48E'], ['mindset', L('Tes Mindset', 'Mindset test'), '#D3C7F3']];
   const nk = k => B.filter(x => x.kind === k).length;
   const ch = B.filter(x => (x.kind === 'lengkap' || x.kind === 'mini') && x.p);
   const gm = B.filter(x => x.kind === 'mindset' && x.gm);
