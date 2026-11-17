@@ -1237,6 +1237,13 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .sv-tile .sv-chip { margin-top: auto; align-self: flex-start; }
 }
 
+/* Pill "Gratis" di Quick Test memakai warna latar kartu Full Test */
+.plans.fv1 { --fvc: var(--pP); }
+.plans.fv2 { --fvc: #5C8B4A; }
+.plans.fv3 { --fvc: #6BCD9C; }
+.plans .plan.lite:not(.wide-plan) .tagp { background: var(--fvc); }
+.plans.fv2 .plan.lite:not(.wide-plan) .tagp { color: #FFFFFF; }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -1849,7 +1856,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.12', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.13', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2224,6 +2231,19 @@ const GM_CATEGORIES = {
 
 /* Langkah kecil per pilar (Growth Mindset) */
 const GM_STEP = {
+  master: {
+    blindTitle: 'Tantanganmu sekarang: menjaganya tetap nyata',
+    blind: 'Skor setinggi ini berarti kamu konsisten memandang kemampuan bisa dilatih, di kelima pilar. Tidak ada pilar yang tertinggal jauh, jadi tidak ada titik lemah yang perlu ditambal. Tantangan di level ini lain: menjaganya tetap nyata. Carol Dweck, peneliti yang mempopulerkan growth mindset, mengingatkan bahwa tidak ada orang yang bermental growth di semua hal sepanjang waktu. Bahayanya adalah merasa sudah punya, lalu berhenti menguji diri.',
+    stepsEyebrow: 'Langkah naik level',
+    stepsTitle: 'Dari bertumbuh ke menularkan',
+    steps: [
+      { h: 'Tularkan', p: 'Dampingi satu orang minggu ini, entah teman, anggota tim, atau anak. Saat memuji, sebut prosesnya: strategi yang dicoba, bantuan yang dicari, kemajuan yang terlihat. Bukan sekadar "kamu pintar".' },
+      { h: 'Konsisten', p: 'Jadwalkan satu latihan kecil yang rutin, misalnya 20 menit dua kali seminggu, di area yang belum nyaman buatmu. Catat satu hal yang berubah. Kebiasaan kecil yang berulang lebih berharga daripada semangat sesaat.' },
+      { h: 'Persisten', p: 'Pilih satu target yang pernah kamu tinggalkan, lalu coba lagi dengan strategi yang beda dan minta masukan dari orang yang sudah menguasainya. Gigih bukan berarti mengulang cara yang sama dengan lebih keras.' },
+      { h: 'Rendah hati', p: 'Minta satu orang yang jujur menunjukkan situasi saat kamu terlihat defensif atau cepat merasa paling tahu. Dengarkan tanpa menjelaskan. Kerendahan hati menjaga growth mindset tetap hidup, bukan sekadar label.' },
+    ],
+    note: 'Disusun dari pandangan Carol Dweck tentang "false growth mindset" dan riset intellectual humility. Skor tes ini gambaran dari jawabanmu hari ini, bukan vonis.',
+  },
   talent: 'Pilih satu hal yang selama ini kamu anggap "bukan bakatku". Latih 15 menit sehari selama seminggu, lalu catat apa yang berubah. Tujuannya bukan jadi jago, tapi membuktikan ke dirimu sendiri bahwa kemampuan bisa bergerak.',
   failure: 'Saat gagal minggu ini, tulis tiga hal: apa yang terjadi, apa yang bisa dipelajari, dan satu hal yang akan kamu coba berbeda. Pisahkan "aku gagal" dari "aku orang gagal".',
   challenge: 'Ambil satu tugas yang sedikit di atas kemampuanmu, yang peluang berhasilnya sekitar 60 persen. Rasa tidak nyaman itu tanda kamu sedang di zona belajar.',
@@ -2412,6 +2432,19 @@ const EN = {
       about: 'You consistently see ability as something that can be trained, and your reactions to failure and criticism tend to be healthy. The challenge now is keeping this pattern when the stakes are high, and passing it on to the people around you.' },
   },
   GM_STEP: {
+    master: {
+      blindTitle: 'Your challenge now: keeping it real',
+      blind: 'A score this high means you consistently see ability as trainable, across all five pillars. No pillar lags far behind, so there is no weak spot to patch. The challenge at this level is different: keeping it real. Carol Dweck, the researcher who popularised the growth mindset, reminds us that nobody has a growth mindset in everything all the time. The danger is assuming you already have it, and then you stop testing yourself.',
+      stepsEyebrow: 'Level-up steps',
+      stepsTitle: 'From growing to spreading it',
+      steps: [
+        { h: 'Spread it', p: 'Support one person this week, whether a friend, a teammate, or a child. When you praise, name the process: the strategy they tried, the help they sought, the progress you can see. Not just "you are smart".' },
+        { h: 'Be consistent', p: 'Schedule one small, regular practice, for example 20 minutes twice a week, in an area that is not yet comfortable for you. Note one thing that changed. Small habits repeated beat a burst of enthusiasm.' },
+        { h: 'Persist', p: 'Pick one goal you once dropped, then try again with a different strategy and ask for feedback from someone who has mastered it. Persisting does not mean repeating the same method harder.' },
+        { h: 'Stay humble', p: 'Ask one honest person to point out moments when you seemed defensive or quick to assume you know best. Listen without explaining. Humility keeps a growth mindset alive instead of leaving it as a label.' },
+      ],
+      note: 'Based on Carol Dweck’s view of the "false growth mindset" and research on intellectual humility. This score reflects your answers today, not a verdict.',
+    },
     talent: 'Pick one thing you have always considered "not my talent". Practise it for 15 minutes a day for a week, then note what changed. The goal is not to become great, but to prove to yourself that ability can move.',
     failure: 'When you fail this week, write down three things: what happened, what you can learn, and one thing you will try differently. Separate "I failed" from "I am a failure".',
     challenge: 'Take on one task slightly beyond your ability, with roughly a 60 percent chance of success. That discomfort is a sign you are in the learning zone.',
@@ -2610,7 +2643,7 @@ const UI = {
   'Satu sifat per pertanyaan, yang paling menggambarkan kamu sehari-hari.': 'One trait per question, the one that best describes you day to day.',
   'Saya Punya Token': 'I Have a Token',
   'Saya sudah membaca dan setuju': 'I have read and agree',
-  'Saya sudah punya token': 'I already have a token',
+  'Saya Sudah Punya Token': 'I Already Have a Token',
   'Sebelum mulai': 'Before you start',
   'Sebelumnya': 'Previous',
   'Sekunder': 'Secondary',
@@ -2927,7 +2960,9 @@ function analyzeMindset(answers) {
   const patterns = [];
   if (beliefGap >= 20) patterns.push('head');
   if (total >= 90) patterns.push('veryhigh');
-  return { pillars, total, category, level, sorted, strongest, weakest, triggers, reaction, beliefGap, patterns };
+  // Semua pilar sudah di 90 ke atas: tidak ada titik lemah yang perlu ditambal, fokusnya menjaga dan menularkan
+  const mastery = bottom >= 90;
+  return { pillars, total, category, level, sorted, strongest, weakest, triggers, reaction, beliefGap, patterns, mastery };
 }
 
 /* ===== art.js ===== */
@@ -4451,7 +4486,7 @@ function shownToParticipant(x) {
     return `<section class="box seen"><h3>${L('Yang dilihat peserta', 'What the participant saw')}</h3>
       ${tag(L('Penjelasan kategori', 'Category explanation'))}<p>${fx(GM_CATEGORIES[a.category].about)}</p>
       ${tag(L('Penjelasan per pilar', 'Per-pillar explanation'))}<ul>${GM_PILLAR_ORDER.map(k => `<li><b>${esc(GM_PILLARS[k].name)} (${a.pillars[k]}).</b> ${esc(GM_PILLARS[k][a.level(a.pillars[k])])}</li>`).join('')}</ul>
-      ${tag(L('Langkah kecil minggu ini', 'One small step this week'))}<p>${esc(GM_STEP[focus[0]])}</p>
+      ${a.mastery ? `${tag(L('Langkah naik level', 'Level-up steps'))}<ul>${GM_STEP.master.steps.map(s => `<li><b>${esc(s.h)}.</b> ${esc(s.p)}</li>`).join('')}</ul>` : `${tag(L('Langkah kecil minggu ini', 'One small step this week'))}<p>${esc(GM_STEP[focus[0]])}</p>`}
       <p class="muted small">${L('Diajak Full Personality Test atau sesi coaching via Instagram atau WhatsApp.', 'Invited to the Full Personality Test or a coaching session via Instagram or WhatsApp.')}</p>
     </section>`;
   }

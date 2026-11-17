@@ -1237,6 +1237,13 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .sv-tile .sv-chip { margin-top: auto; align-self: flex-start; }
 }
 
+/* Pill "Gratis" di Quick Test memakai warna latar kartu Full Test */
+.plans.fv1 { --fvc: var(--pP); }
+.plans.fv2 { --fvc: #5C8B4A; }
+.plans.fv3 { --fvc: #6BCD9C; }
+.plans .plan.lite:not(.wide-plan) .tagp { background: var(--fvc); }
+.plans.fv2 .plan.lite:not(.wide-plan) .tagp { color: #FFFFFF; }
+
 /* ============ Tes Pandangan Kerja (HK Gold) ============ */
 .pk-brand { display: flex; align-items: center; gap: 12px; }
 .pk-brand .brand img.li { height: 34px; }
