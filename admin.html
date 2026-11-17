@@ -1157,6 +1157,21 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .cx-btn { margin-top: 12px; }
 .cx-btn .arrow { background: var(--ca, #FFFFFF) !important; transition: background .7s var(--ease), transform .2s var(--ease); }
 
+/* geser: tepi kartu memudar penuh (mask), bulatan panah hanya di layar sentuh */
+.sw-wrap { position: relative; }
+.sw-bub { display: none; }
+.sw-r { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 64px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 64px), transparent); }
+.sw-l { -webkit-mask-image: linear-gradient(to right, transparent, #000 48px); mask-image: linear-gradient(to right, transparent, #000 48px); }
+.sw-l.sw-r { -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 64px), transparent); mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 64px), transparent); }
+@media (hover: none) and (pointer: coarse) {
+  .tk-kpis, .tk-batches, .brk, .pka-chips, .pka-scroll { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tk-kpis::-webkit-scrollbar, .tk-batches::-webkit-scrollbar, .brk::-webkit-scrollbar, .pka-chips::-webkit-scrollbar, .pka-scroll::-webkit-scrollbar { display: none; }
+  .sw-bub { display: grid; place-items: center; position: absolute; right: -12px; top: 50%; margin-top: -15px; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.18); pointer-events: none; opacity: 0; transition: opacity .3s; z-index: 2; }
+  .sw-hint .sw-bub { opacity: 1; animation: swnudge 1.2s ease-in-out infinite; }
+}
+@keyframes swnudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
+@media (prefers-reduced-motion: reduce) { .sw-hint .sw-bub { animation: none; } }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -1734,21 +1749,6 @@ body.tk-busy { cursor: progress; }
 .d-actions .btn.ghost:not(.danger) { box-shadow: inset 0 0 0 1.5px var(--line-2); background: #FFFFFF; }
 .d-actions .btn.ghost:not(.danger):hover { background: var(--tint); }
 
-/* kartu angka bisa digeser: tanpa scrollbar, ada gradasi tepi dan petunjuk Geser (hanya jika memang meluber) */
-.tk-sw { position: relative; }
-.tk-swipe { display: none; }
-@media (max-width: 767px) {
-  .tk-kpis { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-  .tk-kpis::-webkit-scrollbar { display: none; }
-  .tk-sw::after { content: ''; position: absolute; top: 0; right: -14px; bottom: 10px; width: 48px; pointer-events: none; opacity: 0; transition: opacity .25s; background: linear-gradient(to right, rgba(240,240,238,0), var(--bg) 90%); }
-  .tk-sw.sw-more::after { opacity: 1; }
-  .tk-swipe { display: grid; place-items: center; position: absolute; right: -12px; top: 50%; margin-top: -22px; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.18); pointer-events: none; opacity: 0; transition: opacity .3s; z-index: 2; }
-  .tk-sw.sw-hint .tk-swipe { opacity: 1; animation: tkswipe 1.2s ease-in-out infinite; }
-  .tk-sw.sw-hint .tk-swipe svg { animation: none; }
-}
-@keyframes tkswipe { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
-@media (prefers-reduced-motion: reduce) { .tk-sw.sw-hint .tk-swipe { animation: none; } }
-
 </style>
 </head>
 <body>
@@ -1777,7 +1777,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.14.3', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.14.4', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3122,6 +3122,37 @@ function plantSvg(total, cls = 'plant') {
   ];
   return `<svg class="${cls}" viewBox="0 0 120 104" aria-hidden="true" data-stage="${st}">${parts[st]}</svg>`;
 }
+
+/* ===== swipe.js ===== */
+/* ============ Petunjuk geser: tepi memudar + bulatan panah (hanya jika memang meluber) ============ */
+const SW_SEL = '.tk-kpis, .tk-batches, .brk, .pka-chips, .pka-scroll';
+const SW_NOBUBBLE = '.pka-scroll';
+let SWIPED = false;
+function swipeScan(root) {
+  root.querySelectorAll(SW_SEL).forEach(el => {
+    if (el.dataset.sw) return;
+    el.dataset.sw = '1';
+    let w = null;
+    if (!el.matches(SW_NOBUBBLE)) {
+      w = document.createElement('div'); w.className = 'sw-wrap';
+      el.parentNode.insertBefore(w, el); w.appendChild(el);
+      const h = document.createElement('span'); h.className = 'sw-bub'; h.setAttribute('aria-hidden', 'true');
+      h.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+      w.appendChild(h);
+    }
+    const upd = () => {
+      const max = el.scrollWidth - el.clientWidth, x = el.scrollLeft;
+      const r = max > 6 && max - x > 6, l = max > 6 && x > 6;
+      el.classList.toggle('sw-r', r); el.classList.toggle('sw-l', l);
+      if (w) w.classList.toggle('sw-hint', r && !SWIPED && x < 6);
+    };
+    let touched = false;
+    ['touchstart', 'pointerdown', 'wheel'].forEach(t => el.addEventListener(t, () => { touched = true; }, { passive: true }));
+    el.addEventListener('scroll', () => { if (touched && el.scrollLeft > 12) SWIPED = true; upd(); }, { passive: true });
+    window.addEventListener('resize', upd); requestAnimationFrame(upd); setTimeout(upd, 400);
+  });
+}
+function swipeInit(root) { swipeScan(root); new MutationObserver(() => swipeScan(root)).observe(root, { childList: true, subtree: true }); }
 
 /* ===== tok.js ===== */
 /* Kelola token: bagian dashboard admin Mengapa (tidak tampil di dashboard klien).
@@ -4738,24 +4769,7 @@ if (SLUG && !S.session && S.found === null) {
 render();
 if (S.session) { load(); if (S.view !== 'hasil' && tkAuthed()) tkLoad(); }
 
-
-/* petunjuk geser untuk deretan kartu angka di layar kecil */
-let SWIPED = false;
-function swipeHints() {
-  $app.querySelectorAll('.tk-kpis:not([data-sw])').forEach(el => {
-    el.setAttribute('data-sw', '1');
-    const w = document.createElement('div'); w.className = 'tk-sw';
-    el.parentNode.insertBefore(w, el); w.appendChild(el);
-    const h = document.createElement('span'); h.className = 'tk-swipe'; h.setAttribute('aria-hidden', 'true');
-    h.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>`;
-    w.appendChild(h);
-    const upd = () => { const more = el.scrollWidth - el.clientWidth - el.scrollLeft > 6; w.classList.toggle('sw-more', more); w.classList.toggle('sw-hint', more && !SWIPED && el.scrollLeft < 6); };
-    el.addEventListener('scroll', () => { if (el.scrollLeft > 12) SWIPED = true; upd(); }, { passive: true });
-    window.addEventListener('resize', upd); requestAnimationFrame(upd); setTimeout(upd, 400);
-  });
-}
-new MutationObserver(swipeHints).observe($app, { childList: true, subtree: true });
-swipeHints();
+swipeInit($app);
 
 </script>
 </body>

@@ -1157,6 +1157,21 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .cx-btn { margin-top: 12px; }
 .cx-btn .arrow { background: var(--ca, #FFFFFF) !important; transition: background .7s var(--ease), transform .2s var(--ease); }
 
+/* geser: tepi kartu memudar penuh (mask), bulatan panah hanya di layar sentuh */
+.sw-wrap { position: relative; }
+.sw-bub { display: none; }
+.sw-r { -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 64px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 64px), transparent); }
+.sw-l { -webkit-mask-image: linear-gradient(to right, transparent, #000 48px); mask-image: linear-gradient(to right, transparent, #000 48px); }
+.sw-l.sw-r { -webkit-mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 64px), transparent); mask-image: linear-gradient(to right, transparent, #000 48px, #000 calc(100% - 64px), transparent); }
+@media (hover: none) and (pointer: coarse) {
+  .tk-kpis, .tk-batches, .brk, .pka-chips, .pka-scroll { scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tk-kpis::-webkit-scrollbar, .tk-batches::-webkit-scrollbar, .brk::-webkit-scrollbar, .pka-chips::-webkit-scrollbar, .pka-scroll::-webkit-scrollbar { display: none; }
+  .sw-bub { display: grid; place-items: center; position: absolute; right: -12px; top: 50%; margin-top: -15px; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.18); pointer-events: none; opacity: 0; transition: opacity .3s; z-index: 2; }
+  .sw-hint .sw-bub { opacity: 1; animation: swnudge 1.2s ease-in-out infinite; }
+}
+@keyframes swnudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-6px); } }
+@media (prefers-reduced-motion: reduce) { .sw-hint .sw-bub { animation: none; } }
+
 /* ============ Tes Pandangan Kerja (HK Gold) ============ */
 .pk-brand { display: flex; align-items: center; gap: 12px; }
 .pk-brand .brand img.li { height: 34px; }
@@ -1645,6 +1660,37 @@ const PK_COMBO = {
   NC: { t: 'Terpanggil sekaligus merasa berutang budi', p: 'Kamu menganggap pekerjaanmu bermakna dan merasa punya kewajiban moral pada perusahaan. Dedikasimu tinggi. Yang perlu dijaga: kamu bisa sulit menolak permintaan dan lupa menjaga diri sendiri. Loyalitas yang sehat tetap memberi ruang untuk istirahat dan berkata tidak.' },
 };
 
+/* ===== swipe.js ===== */
+/* ============ Petunjuk geser: tepi memudar + bulatan panah (hanya jika memang meluber) ============ */
+const SW_SEL = '.tk-kpis, .tk-batches, .brk, .pka-chips, .pka-scroll';
+const SW_NOBUBBLE = '.pka-scroll';
+let SWIPED = false;
+function swipeScan(root) {
+  root.querySelectorAll(SW_SEL).forEach(el => {
+    if (el.dataset.sw) return;
+    el.dataset.sw = '1';
+    let w = null;
+    if (!el.matches(SW_NOBUBBLE)) {
+      w = document.createElement('div'); w.className = 'sw-wrap';
+      el.parentNode.insertBefore(w, el); w.appendChild(el);
+      const h = document.createElement('span'); h.className = 'sw-bub'; h.setAttribute('aria-hidden', 'true');
+      h.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+      w.appendChild(h);
+    }
+    const upd = () => {
+      const max = el.scrollWidth - el.clientWidth, x = el.scrollLeft;
+      const r = max > 6 && max - x > 6, l = max > 6 && x > 6;
+      el.classList.toggle('sw-r', r); el.classList.toggle('sw-l', l);
+      if (w) w.classList.toggle('sw-hint', r && !SWIPED && x < 6);
+    };
+    let touched = false;
+    ['touchstart', 'pointerdown', 'wheel'].forEach(t => el.addEventListener(t, () => { touched = true; }, { passive: true }));
+    el.addEventListener('scroll', () => { if (touched && el.scrollLeft > 12) SWIPED = true; upd(); }, { passive: true });
+    window.addEventListener('resize', upd); requestAnimationFrame(upd); setTimeout(upd, 400);
+  });
+}
+function swipeInit(root) { swipeScan(root); new MutationObserver(() => swipeScan(root)).observe(root, { childList: true, subtree: true }); }
+
 /* ===== pkadmin.js ===== */
 /* ============ MENGAPA × HK GOLD · Dashboard Tes Pandangan Kerja (khusus tim Mengapa) ============ */
 
@@ -1652,6 +1698,7 @@ const PK_COMBO = {
 {
 const API = '/api/admin', SKEY_ADMIN = 'mengapa:admin:sesi', SKEY_HK = 'mengapa:admin:sesi:hkgold'; // sesi sama dengan dashboard admin Mengapa / dashboard HKGold
 const $app = document.getElementById('app');
+swipeInit($app);
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const ls = {
   get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
