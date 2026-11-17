@@ -1327,7 +1327,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.18.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.18.2', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3022,8 +3022,6 @@ function home() {
   const miniProgress = !state.miniResult && miniAnswered() > 0 && state.miniStartedAt;
   const gmProgress = !state.gmResult && gmAnswered() > 0 && state.gmStartedAt;
   const wbList = [[state.miniResult, 'lastmini', 'Quick'], [state.result, 'last', 'Full'], [state.gmResult, 'lastgm', 'Mindset']].filter(x => x[0]);
-  const wbLatest = wbList.map(x => x[0]).sort((x, y) => (y.finishedAt || 0) - (x.finishedAt || 0))[0];
-  const wbNick = wbLatest ? esc(nickname(wbLatest.profile && wbLatest.profile.name)) : '';
   const ACC = { S: 'var(--pS)', C: 'var(--pC)', M: 'var(--pM)', P: 'var(--pP)' };
   const combos = ['SC', 'CM', 'MP', 'PS', 'CS', 'MC', 'PM', 'SP', 'SM', 'CP', 'MS', 'PC'];
   return `
@@ -3031,7 +3029,7 @@ function home() {
     <div class="wrap">
       <div class="top">${logo()}</div>
       <div class="hero">
-        <div class="eyebrow">${wbNick ? L(`Selamat datang kembali, ${wbNick}`, `Welcome back, ${wbNick}`) : L('Selamat datang di Mengapa', 'Welcome to Mengapa')}</div>
+        <div class="eyebrow">${wbList.length ? L('Selamat datang kembali', 'Welcome back') : L('Selamat datang di Mengapa', 'Welcome to Mengapa')}</div>
         <h1>${L('Kenali dirimu. Tumbuh lebih <em>jauh</em>.', 'Know yourself. Grow <em>further</em>.')}</h1>
         <p class="lead">Pahami karakter dan pola pikir yang paling sering kamu pakai, lalu belajar keluar dari jebakannya.</p>
       </div>
