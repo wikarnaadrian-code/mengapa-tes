@@ -1207,9 +1207,9 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.wide-plan.lite .ticks { margin-top: 14px; }
 .plan.wide-plan.lite .ticks li { font-size: 15px; }
 
-/* Full Test: hijau muda seperti semula, garis kuning di tepi atas, tombol beranimasi */
+/* Full Test: hijau muda seperti semula, teks tombol kuning, tombol beranimasi */
 .plan.pro { position: relative; overflow: hidden; }
-.plan.pro::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: #FFD700; }
+.plan.pro .btn.inv { color: #FFD700; }
 .plan.pro .btn.inv { position: relative; overflow: hidden; }
 .plan.pro .btn.inv .arrow { animation: nudge 2.4s ease-in-out infinite; }
 .plan.pro .btn.inv::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%; background: linear-gradient(100deg, transparent, rgba(255,255,255,.28), transparent); transform: skewX(-18deg); animation: sheen 4s ease-in-out infinite; pointer-events: none; }
