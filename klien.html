@@ -1223,6 +1223,13 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 @keyframes sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
 @media (prefers-reduced-motion: reduce) { .plan.pro .btn.inv .arrow, .plan.pro .btn.inv::after { animation: none; } }
 
+/* Layanan: chip di bawah kartu rata bawah supaya sejajar di satu baris */
+@media (min-width: 620px) {
+  .sv-tile > div:not(.sv-art) { flex: 1; display: flex; flex-direction: column; }
+  .sv-tile p { margin-bottom: 12px; }
+  .sv-tile .sv-chip { margin-top: auto; align-self: flex-start; }
+}
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -1835,7 +1842,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.11', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.12', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2594,7 +2601,7 @@ const UI = {
   'Riset internal untuk meningkatkan layanan kami. Data kamu': 'Internal research to improve our services. Your data is',
   'Ruang tumbuh terbesar': 'Biggest growth area',
   'Satu sifat per pertanyaan, yang paling menggambarkan kamu sehari-hari.': 'One trait per question, the one that best describes you day to day.',
-  'Saya punya token': 'I have a token',
+  'Saya Punya Token': 'I Have a Token',
   'Saya sudah membaca dan setuju': 'I have read and agree',
   'Saya sudah punya token': 'I already have a token',
   'Sebelum mulai': 'Before you start',

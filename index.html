@@ -1235,6 +1235,13 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 @keyframes sheen { 0%, 55% { left: -60%; } 100% { left: 130%; } }
 @media (prefers-reduced-motion: reduce) { .plan.pro .btn.inv .arrow, .plan.pro .btn.inv::after { animation: none; } }
 
+/* Layanan: chip di bawah kartu rata bawah supaya sejajar di satu baris */
+@media (min-width: 620px) {
+  .sv-tile > div:not(.sv-art) { flex: 1; display: flex; flex-direction: column; }
+  .sv-tile p { margin-bottom: 12px; }
+  .sv-tile .sv-chip { margin-top: auto; align-self: flex-start; }
+}
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -1285,7 +1292,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.11', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.12', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -2044,7 +2051,7 @@ const UI = {
   'Riset internal untuk meningkatkan layanan kami. Data kamu': 'Internal research to improve our services. Your data is',
   'Ruang tumbuh terbesar': 'Biggest growth area',
   'Satu sifat per pertanyaan, yang paling menggambarkan kamu sehari-hari.': 'One trait per question, the one that best describes you day to day.',
-  'Saya punya token': 'I have a token',
+  'Saya Punya Token': 'I Have a Token',
   'Saya sudah membaca dan setuju': 'I have read and agree',
   'Saya sudah punya token': 'I already have a token',
   'Sebelum mulai': 'Before you start',
@@ -2996,7 +3003,7 @@ function home() {
             <li>${L('Kebutuhan emosional yang bikin kamu merasa dihargai', 'The emotional needs that make you feel valued')}</li>
           </ul>
           ${state.result ? `<button class="lastres" data-act="last"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></svg>Lihat hasil terakhir</button>` : ''}
-          <button class="btn block inv" data-act="full">Saya punya token ${ARROW}</button>
+          <button class="btn block inv" data-act="full">Saya Punya Token ${ARROW}</button>
         </div>
         </div>
       </div>
@@ -3085,8 +3092,8 @@ function services() {
       <section class="sv-sec">
         <div class="sv-head"><span class="sv-no">01</span><div><div class="eyebrow">${L('Untuk kamu', 'For you')}</div><h2>${L('Satu lawan satu, <em>pelan-pelan</em>.', 'One on one, <em>at your pace</em>.')}</h2></div></div>
         <div class="sv-grid two">
-          ${tile('counseling', L('Counseling', 'Counseling'), L('Bongkar akar pola, termasuk pengalaman masa lalu.', 'Get to the root of your patterns, past included.'), L('1:1 · Online / offline', '1:1 · Online / offline'), P)}
-          ${tile('coaching', 'Coaching', L('Tetapkan target, bangun kebiasaan baru.', 'Set goals, build new habits.'), L('1:1 · Online / offline', '1:1 · Online / offline'), P)}
+          ${tile('counseling', L('Counseling', 'Counseling'), L('Bongkar akar pola, termasuk pengalaman masa lalu.', 'Get to the root of your patterns, past included.'), L('1:1 · Online / Offline', '1:1 · Online / Offline'), P)}
+          ${tile('coaching', 'Coaching', L('Tetapkan target, bangun kebiasaan baru.', 'Set goals, build new habits.'), L('1:1 · Online / Offline', '1:1 · Online / Offline'), P)}
         </div>
       </section>
 
@@ -3102,8 +3109,8 @@ function services() {
       <section class="sv-sec sv-dark">
         <div class="sv-head"><span class="sv-no">03</span><div><div class="eyebrow">${L('Untuk perusahaan & organisasi', 'For companies & organizations')}</div><h2>${L('Tim yang saling <em>paham</em>.', 'Teams that <em>understand</em> each other.')}</h2></div></div>
         <div class="sv-grid three">
-          ${tile('training', 'Corporate training', L('Kepemimpinan, komunikasi, dan kerja tim.', 'Leadership, communication, and teamwork.'), L('Tim · Kantor / venue', 'Team · On-site / venue'), C)}
-          ${tile('private', 'Private workshop', L('Materi khusus untuk timmu saja.', 'Tailored sessions just for your team.'), L('Tim · Online / offline', 'Team · Online / offline'), C)}
+          ${tile('training', 'Corporate training', L('Kepemimpinan, komunikasi, dan kerja tim.', 'Leadership, communication, and teamwork.'), L('Tim · Kantor / Venue', 'Team · On-site / Venue'), C)}
+          ${tile('private', 'Private workshop', L('Materi khusus untuk timmu saja.', 'Tailored sessions just for your team.'), L('Tim · Online / Offline', 'Team · Online / Offline'), C)}
           ${tile('outing', 'Corporate outing', L('Seru, dan pulang lebih saling paham.', 'Fun, and everyone comes back closer.'), L('Tim · Outdoor', 'Team · Outdoor'), C)}
         </div>
         <a class="btn inv block sv-corp" href="${waCorp}" target="_blank" rel="noopener">${L('Diskusi program untuk timmu', 'Discuss a program for your team')} ${ARROW}</a>
