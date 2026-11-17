@@ -1144,6 +1144,20 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .resume-act { width: 100%; justify-content: flex-end; gap: 12px; }
 }
 
+/* ===== Skor seri di Tes Mini dan Tes Lengkap ===== */
+.duo.n3 { grid-template-columns: repeat(3, 1fr); width: min(100%, 480px); }
+.duo.n4 { grid-template-columns: repeat(4, 1fr); width: min(100%, 560px); gap: 8px; }
+.duo.n3 .char-stage .char-art, .duo.n4 .char-stage .char-art { width: 88%; }
+.duo.n4 figcaption b { font-size: 14px; } .duo.n4 figcaption small { font-size: 11.5px; }
+.tie-sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.tie-sides h3 { display: flex; align-items: center; gap: 8px; }
+.tie-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.tie-lbl { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; }
+.tie-card { margin-top: 14px; text-align: left; }
+.tie-card p { margin: 10px 0 0; line-height: 1.6; }
+.tie-marks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tie-marks span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 6px; border-radius: 999px; font-size: 13.5px; font-weight: 700; }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -1194,7 +1208,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.12.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.13.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -1443,6 +1457,36 @@ const MINI = [
   { q: 'Yang paling bikin kamu tidak nyaman…', S: 'Diabaikan atau dianggap membosankan', C: 'Kehilangan kendali atas situasi', M: 'Hasil yang berantakan atau asal-asalan', P: 'Tekanan dan keributan' },
   { q: 'Yang paling bikin kamu bersemangat…', S: 'Diperhatikan dan diapresiasi banyak orang', C: 'Mencapai target dan menang', M: 'Menghasilkan sesuatu yang benar-benar berkualitas', P: 'Suasana damai tanpa tuntutan' },
 ];
+
+/* ---------------------------------------------------------
+   PENJELASAN SKOR SERI (Tes Mini, dan Tes Lengkap saat 3 atau 4 sisi sama kuat)
+   Kunci = temperamen yang seri, urut S C M P. [Indonesia, English]
+   --------------------------------------------------------- */
+const TIE_TEXT = {
+  SC: ['Kamu ekstrovert yang hangat sekaligus tegas. Kamu cepat akrab dengan orang dan cepat juga mengambil keputusan, jadi orang mudah mengikutimu. Tantangannya: semangat yang besar bisa membuatmu bergerak terlalu cepat dan melewatkan detail.',
+       'You are an outgoing person who is both warm and decisive. You connect with people quickly and make decisions quickly, so others find it easy to follow you. The challenge: your big energy can make you move too fast and miss the details.'],
+  SM: ['Dua sisi yang berlawanan sama kuat di dirimu: yang ekspresif dan suka keramaian, dan yang mendalam dan butuh ruang sendiri. Suasana hatimu bisa berganti cukup cepat, dari antusias ke reflektif. Kekuatannya: kamu bisa hangat ke banyak orang sekaligus peka terhadap hal yang mendalam.',
+       'Two opposite sides are equally strong in you: one expressive and fond of crowds, the other deep and in need of personal space. Your mood can shift fairly quickly, from enthusiastic to reflective. The strength: you can be warm with many people while staying sensitive to what runs deep.'],
+  SP: ['Kamu santai dan mudah disukai. Sisi ceria membuatmu menyenangkan diajak ngobrol, sisi tenang membuatmu enak diajak bekerja sama, dan kamu jarang mencari konflik. Tantangannya: dorongan untuk mengejar target dan disiplin perlu kamu bangun dengan sengaja.',
+       'You are easygoing and easy to like. Your cheerful side makes you fun to talk to, your calm side makes you easy to work with, and you rarely look for conflict. The challenge: drive and discipline toward targets need to be built on purpose.'],
+  CM: ['Kamu berorientasi tugas: tegas dan teliti sekaligus. Kamu ingin hasil yang cepat dan juga benar, jadi standarmu tinggi untuk diri sendiri dan orang lain. Tantangannya: lebih peka pada perasaan orang dan memberi diri ruang untuk istirahat.',
+       'You are task-oriented: decisive and meticulous at once. You want results that are fast and also right, so your standards are high for yourself and others. The challenge: being more sensitive to how people feel and giving yourself room to rest.'],
+  CP: ['Dua sisi yang berlawanan sama kuat di dirimu: yang ingin cepat bergerak dan memimpin, dan yang ingin tenang dan menjaga kedamaian. Kamu bisa tegas saat perlu, lalu kembali santai saat situasi aman. Kekuatannya: kamu tahu kapan harus mendorong dan kapan harus menahan diri.',
+       'Two opposite sides are equally strong in you: one that wants to move fast and lead, the other that wants calm and peace. You can be firm when needed, then relax again once things are settled. The strength: you know when to push and when to hold back.'],
+  MP: ['Kamu introvert yang tenang dan teliti. Kamu berpikir dulu sebelum bicara, bekerja dengan rapi, dan menjaga suasana tetap damai, jadi orang mengandalkanmu karena konsisten. Tantangannya: berani mengambil keputusan lebih cepat dan menyuarakan pendapatmu.',
+       'You are a calm and careful introvert. You think before you speak, work neatly, and keep the peace, so people rely on you for your consistency. The challenge: daring to decide faster and to voice your opinion.'],
+  SCM: ['Tiga sisi sama kuat di dirimu: ekspresif, tegas, dan teliti. Sisi yang paling jarang kamu pakai justru Plegmatis yang santai. Kamu punya banyak energi untuk orang, target, dan kualitas sekaligus, jadi waspadai rasa lelah karena jarang benar-benar beristirahat.',
+        'Three sides are equally strong in you: expressive, decisive, and meticulous. The side you use least is the easygoing Phlegmatic. You have plenty of energy for people, targets, and quality all at once, so watch out for exhaustion from rarely truly resting.'],
+  SCP: ['Tiga sisi sama kuat di dirimu: ekspresif, tegas, dan tenang. Sisi yang paling jarang kamu pakai adalah Melankolis yang teliti dan mendalam. Kamu luwes bergaul, berani memutuskan, dan bisa tetap kalem, tapi detail dan perencanaan jangka panjang perlu lebih kamu perhatikan.',
+        'Three sides are equally strong in you: expressive, decisive, and calm. The side you use least is the meticulous, deep Melancholy. You are sociable, bold in deciding, and able to stay composed, but details and long-term planning need more of your attention.'],
+  SMP: ['Tiga sisi sama kuat di dirimu: ekspresif, teliti, dan tenang. Sisi yang paling jarang kamu pakai adalah Koleris yang tegas dan berorientasi target. Kamu hangat, peka, dan mudah diajak bekerja sama, tapi mengambil keputusan cepat dan memimpin di bawah tekanan mungkin terasa paling berat.',
+        'Three sides are equally strong in you: expressive, meticulous, and calm. The side you use least is the decisive, target-driven Choleric. You are warm, sensitive, and cooperative, but making quick decisions and leading under pressure may feel the hardest.'],
+  CMP: ['Tiga sisi sama kuat di dirimu: tegas, teliti, dan tenang. Sisi yang paling jarang kamu pakai adalah Sanguinis yang ekspresif dan spontan. Kamu bisa diandalkan untuk pekerjaan yang serius, tapi menunjukkan antusiasme dan bersenang-senang tanpa agenda mungkin perlu kamu latih.',
+        'Three sides are equally strong in you: decisive, meticulous, and calm. The side you use least is the expressive, spontaneous Sanguine. You can be relied on for serious work, but showing enthusiasm and having fun without an agenda may need practice.'],
+  SCMP: ['Keempat temperamen sama kuat di dirimu. Kamu menyesuaikan diri dengan situasi: bisa ekspresif, tegas, teliti, atau tenang sesuai kebutuhan. Ini bisa jadi kekuatan, tapi juga tanda bahwa polamu belum terlihat jelas dari tes ini.',
+         'All four temperaments are equally strong in you. You adapt to the situation: expressive, decisive, meticulous, or calm as needed. This can be a strength, but it can also mean your pattern is not yet clear from this test.'],
+};
+
 const MINI_ROWS = MINI.map((m, i) => ({
   no: i + 1, q: m.q,
   options: PERMS[(i * 5 + 11) % PERMS.length].map(t => ({ type: t, text: m[t] })),
@@ -2420,7 +2464,11 @@ async function shareCard(result) {
   // kartu utama berwarna pastel dominan
   ctx.fillStyle = CBG[p]; roundRect(ctx, 60, 262, W - 120, 1000, 64); ctx.fill();
   const dual = !mini && analysis.tieType === 'dominan_seri';
-  if (dual) {
+  const mtop = mini && analysis.top && analysis.top.length > 1 ? analysis.top : null;
+  if (mtop) {
+    const n = mtop.length, sz = n === 2 ? 400 : n === 3 ? 300 : 230, gap = 16, x0 = (W - (n * sz + (n - 1) * gap)) / 2;
+    for (let i = 0; i < n; i++) { const im = await svgToImage(charArt(mtop[i], null, sz)); ctx.drawImage(im, x0 + i * (sz + gap), 400 + (400 - sz) / 2, sz, sz * 1.1); }
+  } else if (dual) {
     const a1 = await svgToImage(charArt(p, s, 400)), a2 = await svgToImage(charArt(s, p, 400));
     ctx.drawImage(a1, W / 2 - 420, 400, 400, 440); ctx.drawImage(a2, W / 2 + 20, 400, 400, 440);
   } else {
@@ -2428,7 +2476,7 @@ async function shareCard(result) {
     ctx.drawImage(art, (W - 480) / 2, 318, 480, 528);
   }
   ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(29,29,29,.6)'; ctx.font = `700 28px ${SANS}`; ctx.letterSpacing = '5px';
-  ctx.fillText(mini ? L('TEMPERAMEN DOMINAN', 'PRIMARY TEMPERAMENT') : `${P.name.toUpperCase()} + ${S.name.toUpperCase()}`, W / 2 + 2, 930);
+  ctx.fillText(mtop ? L('TEMPERAMEN DOMINAN SERI', 'TIED PRIMARY TEMPERAMENTS') : mini ? L('TEMPERAMEN DOMINAN', 'PRIMARY TEMPERAMENT') : `${P.name.toUpperCase()} + ${S.name.toUpperCase()}`, W / 2 + 2, 930);
   ctx.letterSpacing = '0px';
   ctx.fillStyle = '#1D1D1D';
   let fs = 108; ctx.font = `800 ${fs}px ${SANS}`;
@@ -2436,7 +2484,7 @@ async function shareCard(result) {
   while (ctx.measureText(title).width > 880 && fs > 60) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
   ctx.letterSpacing = '-3px'; ctx.fillText(title, W / 2, 1040); ctx.letterSpacing = '0px';
   ctx.font = `500 38px ${SANS}`; ctx.fillStyle = '#2F2F2F';
-  wrap(ctx, dual ? L('Dua sisi yang sama kuat.', 'Two equally strong sides.') : combo.tagline, 820).slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, 1110 + i * 52));
+  wrap(ctx, mtop ? (mtop.length === 4 ? L('Keempat sisi sama kuat.', 'All four sides equally strong.') : mtop.length === 3 ? L('Tiga sisi yang sama kuat.', 'Three equally strong sides.') : L('Dua sisi yang sama kuat.', 'Two equally strong sides.')) : dual ? L('Dua sisi yang sama kuat.', 'Two equally strong sides.') : combo.tagline, 820).slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, 1110 + i * 52));
 
   // kartu skor
   ctx.fillStyle = '#FFFFFF'; roundRect(ctx, 60, 1290, W - 120, 400, 64); ctx.fill();
@@ -3398,10 +3446,13 @@ function mresult() {
   const a = miniAnalyze(r.answers), p = a.primary, P = TEMPS[p], prof = MINI_PROFILE[p];
   const nick = esc(nickname(r.profile.name));
   const list = arr => arr.map(k => TEMPS[k].name).join(', ').replace(/, ([^,]*)$/, L(' dan $1', ' and $1'));
-  const tieNote = a.top.length === 2 ? L(`Skor ${list(a.top)} sama kuat. Kamu punya keduanya, dan Tes Karakter Lengkap memberi gambaran yang lebih utuh.`, `${list(a.top)} are equally strong. You have both, and the Full Character Test gives a fuller picture.`)
-    : a.top.length > 2 ? L(`Skor ${list(a.top)} sama kuat di tes mini. Polamu belum terlihat jelas dari 10 pertanyaan, dan Tes Karakter Lengkap akan memperjelasnya.`, `${list(a.top)} are equally strong in the mini test. Ten questions aren’t enough to see your pattern clearly, and the Full Character Test will clarify it.`) : '';
-  const trio = ORDER.filter(k => k !== p).map(k => p + k);
-  const wa = waLink(L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Tes Karakter Mini (${fmtDate(r.finishedAt)}).\nHasil: ${P.name}.\nKode hasil: ${r.id}\n\nSaya ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm ${r.profile.name}. I just finished the Mini Character Test (${fmtDate(r.finishedAt)}).\nResult: ${P.name}.\nResult code: ${r.id}\n\nI'd like to take the Full Character Test. How do I get a token?`));
+  const tie = a.top.length > 1, nT = a.top.length;
+  const tieNote = !tie ? '' : nT === 2 ? L(`Skor ${list(a.top)} sama (${a.t[p]} dari 10). Tes Karakter Lengkap akan menunjukkan mana yang lebih kuat.`, `${list(a.top)} scored the same (${a.t[p]} of 10). The Full Character Test will show which one is stronger.`)
+    : L(`Skor ${list(a.top)} sama (${a.t[p]} dari 10). Sepuluh pertanyaan belum cukup untuk melihat polamu dengan jelas, dan Tes Karakter Lengkap akan memperjelasnya.`, `${list(a.top)} scored the same (${a.t[p]} of 10). Ten questions aren’t enough to see your pattern clearly, and the Full Character Test will clarify it.`);
+  const tieTxt = tie ? TIE_TEXT[a.top.join('')] : null;
+  const trio = !tie ? ORDER.filter(k => k !== p).map(k => p + k) : nT < 4 ? a.top.flatMap(x => a.top.filter(y => y !== x).map(y => x + y)) : [];
+  const hasilTxt = tie ? a.top.map(k => TEMPS[k].name).join(' / ') : P.name;
+  const wa = waLink(L(`Halo Mengapa, saya ${r.profile.name}. Saya baru selesai Tes Karakter Mini (${fmtDate(r.finishedAt)}).\nHasil: ${hasilTxt}.\nKode hasil: ${r.id}\n\nSaya ingin ikut Tes Karakter Lengkap. Bagaimana cara mendapatkan tokennya?`, `Hi Mengapa, I'm ${r.profile.name}. I just finished the Mini Character Test (${fmtDate(r.finishedAt)}).\nResult: ${P.name}.\nResult code: ${r.id}\n\nI'd like to take the Full Character Test. How do I get a token?`));
   return `
   <section class="screen">
     <div class="wrap wide">
@@ -3409,11 +3460,15 @@ function mresult() {
 
       <div class="res-hero">
         <div class="eyebrow">${nick ? L(`Hasil Tes Karakter Mini ${nick}`, `${nick}’s Mini Character Test result`) : L('Hasil Tes Karakter Mini', 'Your Mini Character Test result')}</div>
+        ${tie ? `<div class="duo n${nT}">${a.top.map(k => `<figure><div class="char-stage" style="background:${CBG[k]}">${charArt(k, null, 150)}</div><figcaption><b>${TEMPS[k].name}</b><small>${TEMPS[k].title}</small></figcaption></figure>`).join('')}</div>
+        <div class="eyebrow" style="margin-top:6px">${nT === 4 ? L('Keempat temperamen sama kuat', 'All four temperaments are tied') : nT === 3 ? L('Tiga temperamen dominanmu sama kuat', 'Your three primary temperaments are tied') : L('Dua temperamen dominanmu sama kuat', 'Your two primary temperaments are tied')}</div>
+        <h1>${nT === 4 ? L('Seimbang', 'Balanced') : a.top.map(k => TEMPS[k].name).join(', ').replace(/, ([^,]*)$/, ' <em>&amp;</em> $1')}</h1>
+        <p class="tagline">${esc(L(tieTxt[0], tieTxt[1]))}</p>` : `
         <div class="char-stage" style="background:${CBG[p]}">${charArt(p, null, 190)}</div>
         <div class="eyebrow" style="margin-top:6px">Temperamen dominanmu</div>
         <h1>${P.name}</h1>
         <div class="en">${P.title}</div>
-        <p class="tagline">${esc(P.essence)}</p>
+        <p class="tagline">${esc(P.essence)}</p>`}
         <div class="meta-line">${L(`Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}`, `Taken on ${fmtDate(r.finishedAt)} at ${fmtTime(r.finishedAt)}`)}</div>
         ${tieNote ? `<div class="note">${esc(tieNote)}</div>` : ''}
       </div>
@@ -3433,6 +3488,15 @@ function mresult() {
         </div>
       </div>
 
+      ${tie ? `
+      <div class="block">
+        <div class="eyebrow">${L(`${nT === 4 ? 'Keempat' : nT === 3 ? 'Ketiga' : 'Kedua'} sisi dominanmu`, `Your ${nT === 4 ? 'four' : nT === 3 ? 'three' : 'two'} primary sides`)}</div>
+        <h2>Yang biasanya terlihat darimu</h2>
+        <div class="tie-sides">
+          ${a.top.map(k => { const T = TEMPS[k], pr = MINI_PROFILE[k]; return `<div class="card flat" style="--dot:${T.color}"><h3><span class="tie-dot" style="background:${T.color}"></span>${T.name}</h3><p class="small muted" style="margin:0 0 10px">${esc(T.essence)}</p><div class="tie-lbl">${L('Kekuatan', 'Strengths')}</div><ul class="list">${pr.powers.map(x => `<li>${fx(x)}</li>`).join('')}</ul><div class="tie-lbl">${L('Perlu diwaspadai', 'Watch out for')}</div><ul class="list warn">${pr.watch.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>`; }).join('')}
+        </div>
+        <p class="muted" style="margin-top:14px">${L('Skor seri berarti sisi-sisi ini sama sering kamu pakai. Mana yang muncul biasanya tergantung situasi dan orang di sekitarmu.', 'A tie means you use these sides about equally often. Which one shows up usually depends on the situation and the people around you.')}</p>
+      </div>` : `
       <div class="block">
         <div class="eyebrow">${L(`Sisi ${P.name}`, `Your ${P.name} side`)}</div>
         <h2>Yang biasanya terlihat darimu</h2>
@@ -3441,16 +3505,18 @@ function mresult() {
           <div class="card flat" style="--dot:${P.color}"><h3>Perlu diwaspadai</h3><ul class="list warn">${prof.watch.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>
         </div>
         <p class="muted" style="margin-top:14px">${L(`Dominan bukan berarti satu-satunya. Kamu punya keempat sisi, dan ${P.name} hanya yang paling sering kamu pakai.`, `Primary doesn’t mean only. You have all four sides, and ${P.name} is simply the one you use most.`)}</p>
-      </div>
+      </div>`}
 
-      <div class="block">
+      ${trio.length ? `<div class="block">
         <div class="eyebrow">Yang belum terjawab</div>
+        ${tie ? `<h2>${trio.length === 2 ? L('Kamu salah satu dari <em>dua</em> kombinasi karakter ini', 'You are one of these <em>two</em> character blends') : L('Kamu salah satu dari <em>enam</em> kombinasi karakter ini', 'You are one of these <em>six</em> character blends')}</h2>
+        <p class="muted">${L('Yang menentukan adalah sisi mana yang sedikit lebih kuat. Tes Karakter Lengkap dengan 40 pertanyaan akan memperjelasnya.', 'It depends on which side is slightly stronger. The 40-question Full Character Test will make it clear.')}</p>` : `
         <h2>Kamu salah satu dari <em>tiga</em> kombinasi karakter ini</h2>
-        <p class="muted">${L(`Yang menentukan adalah karakter terkuat keduamu. Dua orang ${P.name} bisa sangat berbeda tergantung karakter terkuat keduanya.`, `Your secondary dominant character decides. Two ${P.name} people can be very different depending on their secondary one.`)}</p>
+        <p class="muted">${L(`Yang menentukan adalah karakter terkuat keduamu. Dua orang ${P.name} bisa sangat berbeda tergantung karakter terkuat keduanya.`, `Your secondary dominant character decides. Two ${P.name} people can be very different depending on their secondary one.`)}</p>`}
         <div class="trio">
           ${trio.map(c => `<div class="mini">${comboArt(c[0], c[1], 96, 't')}<b>${COMBOS[c].name}</b><small>+ ${TEMPS[c[1]].name}</small></div>`).join('')}
         </div>
-      </div>
+      </div>` : ''}
 
       <div class="block">
         <div class="card deep">
@@ -3532,6 +3598,7 @@ function result() {
         </div>
         <div class="meta-line">${L(`Tes diambil ${fmtDate(r.finishedAt)}, pukul ${fmtTime(r.finishedAt)}`, `Taken on ${fmtDate(r.finishedAt)} at ${fmtTime(r.finishedAt)}`)}${durMin ? L(` · selesai dalam ${durMin} menit`, ` · finished in ${durMin} min`) : ''}</div>
         ${a.ties.map(t => `<div class="note">${esc(t)}</div>`).join('')}
+        ${a.coDominant.length > 2 && TIE_TEXT[a.coDominant.join('')] ? `<div class="card tie-card"><div class="eyebrow">${a.coDominant.length === 4 ? L('Keempat sisi sama kuat', 'All four sides are tied') : L('Tiga sisi sama kuat', 'Three sides are tied')}</div><div class="tie-marks">${a.coDominant.map(k => `<span style="background:${TEMPS[k].soft || CBG[k]}">${tmark(k, 18)}${TEMPS[k].name}</span>`).join('')}</div><p>${esc(L(...TIE_TEXT[a.coDominant.join('')]))}</p></div>` : ''}
         ${showAlts ? `<div class="alts"><span class="eyebrow">Kombinasimu yang lain</span>${a.alts.map(c => `
           <div class="alt">${comboArt(c[0], c[1], 64, 'alt')}<div><b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small><p>${esc(COMBOS[c].tagline)}</p></div></div>`).join('')}</div>` : ''}
       </div>
@@ -3888,8 +3955,9 @@ const bind = {
       try {
         const r = state.miniResult, a = miniAnalyze(r.answers), P = TEMPS[a.primary];
         const blob = await shareCard({ mini: true, profile: { nickname: nickname(r.profile.name) }, dateLabel: fmtDate(r.finishedAt),
-          analysis: { primary: a.primary, secondary: a.primary, combo: { name: P.name, tagline: P.essence }, scores: { t: a.t } } });
-        await deliverImage(blob, `mengapa-mini-${P.name.toLowerCase()}.png`, L(`Temperamen dominanku ${P.name}. Kamu yang mana? ${CONFIG.site}`, `My primary temperament is ${P.name}. What's yours? ${CONFIG.site}`));
+          analysis: { primary: a.primary, secondary: a.primary, top: a.top, combo: { name: a.top.length === 4 ? L('Seimbang', 'Balanced') : a.top.map(k => TEMPS[k].name).join(', ').replace(/, ([^,]*)$/, ' & $1'), tagline: P.essence }, scores: { t: a.t } } });
+        const nm = a.top.map(k => TEMPS[k].name).join(' & ');
+        await deliverImage(blob, `mengapa-mini-${a.top.map(k => TEMPS[k].name.toLowerCase()).join('-')}.png`, a.top.length > 1 ? L(`Temperamen dominanku seri: ${nm}. Kamu yang mana? ${CONFIG.site}`, `My primary temperaments are tied: ${nm}. What's yours? ${CONFIG.site}`) : L(`Temperamen dominanku ${P.name}. Kamu yang mana? ${CONFIG.site}`, `My primary temperament is ${P.name}. What's yours? ${CONFIG.site}`));
       } catch (e) { if (e && e.name !== 'AbortError') toast('Gagal membuat gambar. Coba lagi ya.'); }
       finally { done(); }
     });
@@ -3899,7 +3967,7 @@ const bind = {
   result() {
     on('home', () => go('home'));
     bindSticky();
-    on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.tieType === 'dominan_seri' ? [a.primary + a.secondary, a.secondary + a.primary] : a.primary + a.secondary, btn); });
+    on('allcombos', btn => { const a = analyze(state.result.answers); openAllCombos(a.coDominant.length > 1 ? a.coDominant.flatMap(x => a.coDominant.filter(y => y !== x).map(y => x + y)) : a.primary + a.secondary, btn); });
     on('pdf', () => { ga('unduh_pdf', { jenis: state.screen }); window.print(); });
     on('share', async btn => { ga('bagikan_gambar', { jenis: state.screen });
       const done = btnBusy(btn, L('Menyiapkan gambar…', 'Preparing image…'));

@@ -1139,6 +1139,20 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .resume-act { width: 100%; justify-content: flex-end; gap: 12px; }
 }
 
+/* ===== Skor seri di Tes Mini dan Tes Lengkap ===== */
+.duo.n3 { grid-template-columns: repeat(3, 1fr); width: min(100%, 480px); }
+.duo.n4 { grid-template-columns: repeat(4, 1fr); width: min(100%, 560px); gap: 8px; }
+.duo.n3 .char-stage .char-art, .duo.n4 .char-stage .char-art { width: 88%; }
+.duo.n4 figcaption b { font-size: 14px; } .duo.n4 figcaption small { font-size: 11.5px; }
+.tie-sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.tie-sides h3 { display: flex; align-items: center; gap: 8px; }
+.tie-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.tie-lbl { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; }
+.tie-card { margin-top: 14px; text-align: left; }
+.tie-card p { margin: 10px 0 0; line-height: 1.6; }
+.tie-marks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tie-marks span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 6px; border-radius: 999px; font-size: 13.5px; font-weight: 700; }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -1744,7 +1758,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.12.0', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.13.0', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -1993,6 +2007,36 @@ const MINI = [
   { q: 'Yang paling bikin kamu tidak nyaman…', S: 'Diabaikan atau dianggap membosankan', C: 'Kehilangan kendali atas situasi', M: 'Hasil yang berantakan atau asal-asalan', P: 'Tekanan dan keributan' },
   { q: 'Yang paling bikin kamu bersemangat…', S: 'Diperhatikan dan diapresiasi banyak orang', C: 'Mencapai target dan menang', M: 'Menghasilkan sesuatu yang benar-benar berkualitas', P: 'Suasana damai tanpa tuntutan' },
 ];
+
+/* ---------------------------------------------------------
+   PENJELASAN SKOR SERI (Tes Mini, dan Tes Lengkap saat 3 atau 4 sisi sama kuat)
+   Kunci = temperamen yang seri, urut S C M P. [Indonesia, English]
+   --------------------------------------------------------- */
+const TIE_TEXT = {
+  SC: ['Kamu ekstrovert yang hangat sekaligus tegas. Kamu cepat akrab dengan orang dan cepat juga mengambil keputusan, jadi orang mudah mengikutimu. Tantangannya: semangat yang besar bisa membuatmu bergerak terlalu cepat dan melewatkan detail.',
+       'You are an outgoing person who is both warm and decisive. You connect with people quickly and make decisions quickly, so others find it easy to follow you. The challenge: your big energy can make you move too fast and miss the details.'],
+  SM: ['Dua sisi yang berlawanan sama kuat di dirimu: yang ekspresif dan suka keramaian, dan yang mendalam dan butuh ruang sendiri. Suasana hatimu bisa berganti cukup cepat, dari antusias ke reflektif. Kekuatannya: kamu bisa hangat ke banyak orang sekaligus peka terhadap hal yang mendalam.',
+       'Two opposite sides are equally strong in you: one expressive and fond of crowds, the other deep and in need of personal space. Your mood can shift fairly quickly, from enthusiastic to reflective. The strength: you can be warm with many people while staying sensitive to what runs deep.'],
+  SP: ['Kamu santai dan mudah disukai. Sisi ceria membuatmu menyenangkan diajak ngobrol, sisi tenang membuatmu enak diajak bekerja sama, dan kamu jarang mencari konflik. Tantangannya: dorongan untuk mengejar target dan disiplin perlu kamu bangun dengan sengaja.',
+       'You are easygoing and easy to like. Your cheerful side makes you fun to talk to, your calm side makes you easy to work with, and you rarely look for conflict. The challenge: drive and discipline toward targets need to be built on purpose.'],
+  CM: ['Kamu berorientasi tugas: tegas dan teliti sekaligus. Kamu ingin hasil yang cepat dan juga benar, jadi standarmu tinggi untuk diri sendiri dan orang lain. Tantangannya: lebih peka pada perasaan orang dan memberi diri ruang untuk istirahat.',
+       'You are task-oriented: decisive and meticulous at once. You want results that are fast and also right, so your standards are high for yourself and others. The challenge: being more sensitive to how people feel and giving yourself room to rest.'],
+  CP: ['Dua sisi yang berlawanan sama kuat di dirimu: yang ingin cepat bergerak dan memimpin, dan yang ingin tenang dan menjaga kedamaian. Kamu bisa tegas saat perlu, lalu kembali santai saat situasi aman. Kekuatannya: kamu tahu kapan harus mendorong dan kapan harus menahan diri.',
+       'Two opposite sides are equally strong in you: one that wants to move fast and lead, the other that wants calm and peace. You can be firm when needed, then relax again once things are settled. The strength: you know when to push and when to hold back.'],
+  MP: ['Kamu introvert yang tenang dan teliti. Kamu berpikir dulu sebelum bicara, bekerja dengan rapi, dan menjaga suasana tetap damai, jadi orang mengandalkanmu karena konsisten. Tantangannya: berani mengambil keputusan lebih cepat dan menyuarakan pendapatmu.',
+       'You are a calm and careful introvert. You think before you speak, work neatly, and keep the peace, so people rely on you for your consistency. The challenge: daring to decide faster and to voice your opinion.'],
+  SCM: ['Tiga sisi sama kuat di dirimu: ekspresif, tegas, dan teliti. Sisi yang paling jarang kamu pakai justru Plegmatis yang santai. Kamu punya banyak energi untuk orang, target, dan kualitas sekaligus, jadi waspadai rasa lelah karena jarang benar-benar beristirahat.',
+        'Three sides are equally strong in you: expressive, decisive, and meticulous. The side you use least is the easygoing Phlegmatic. You have plenty of energy for people, targets, and quality all at once, so watch out for exhaustion from rarely truly resting.'],
+  SCP: ['Tiga sisi sama kuat di dirimu: ekspresif, tegas, dan tenang. Sisi yang paling jarang kamu pakai adalah Melankolis yang teliti dan mendalam. Kamu luwes bergaul, berani memutuskan, dan bisa tetap kalem, tapi detail dan perencanaan jangka panjang perlu lebih kamu perhatikan.',
+        'Three sides are equally strong in you: expressive, decisive, and calm. The side you use least is the meticulous, deep Melancholy. You are sociable, bold in deciding, and able to stay composed, but details and long-term planning need more of your attention.'],
+  SMP: ['Tiga sisi sama kuat di dirimu: ekspresif, teliti, dan tenang. Sisi yang paling jarang kamu pakai adalah Koleris yang tegas dan berorientasi target. Kamu hangat, peka, dan mudah diajak bekerja sama, tapi mengambil keputusan cepat dan memimpin di bawah tekanan mungkin terasa paling berat.',
+        'Three sides are equally strong in you: expressive, meticulous, and calm. The side you use least is the decisive, target-driven Choleric. You are warm, sensitive, and cooperative, but making quick decisions and leading under pressure may feel the hardest.'],
+  CMP: ['Tiga sisi sama kuat di dirimu: tegas, teliti, dan tenang. Sisi yang paling jarang kamu pakai adalah Sanguinis yang ekspresif dan spontan. Kamu bisa diandalkan untuk pekerjaan yang serius, tapi menunjukkan antusiasme dan bersenang-senang tanpa agenda mungkin perlu kamu latih.',
+        'Three sides are equally strong in you: decisive, meticulous, and calm. The side you use least is the expressive, spontaneous Sanguine. You can be relied on for serious work, but showing enthusiasm and having fun without an agenda may need practice.'],
+  SCMP: ['Keempat temperamen sama kuat di dirimu. Kamu menyesuaikan diri dengan situasi: bisa ekspresif, tegas, teliti, atau tenang sesuai kebutuhan. Ini bisa jadi kekuatan, tapi juga tanda bahwa polamu belum terlihat jelas dari tes ini.',
+         'All four temperaments are equally strong in you. You adapt to the situation: expressive, decisive, meticulous, or calm as needed. This can be a strength, but it can also mean your pattern is not yet clear from this test.'],
+};
+
 const MINI_ROWS = MINI.map((m, i) => ({
   no: i + 1, q: m.q,
   options: PERMS[(i * 5 + 11) % PERMS.length].map(t => ({ type: t, text: m[t] })),
@@ -2970,7 +3014,11 @@ async function shareCard(result) {
   // kartu utama berwarna pastel dominan
   ctx.fillStyle = CBG[p]; roundRect(ctx, 60, 262, W - 120, 1000, 64); ctx.fill();
   const dual = !mini && analysis.tieType === 'dominan_seri';
-  if (dual) {
+  const mtop = mini && analysis.top && analysis.top.length > 1 ? analysis.top : null;
+  if (mtop) {
+    const n = mtop.length, sz = n === 2 ? 400 : n === 3 ? 300 : 230, gap = 16, x0 = (W - (n * sz + (n - 1) * gap)) / 2;
+    for (let i = 0; i < n; i++) { const im = await svgToImage(charArt(mtop[i], null, sz)); ctx.drawImage(im, x0 + i * (sz + gap), 400 + (400 - sz) / 2, sz, sz * 1.1); }
+  } else if (dual) {
     const a1 = await svgToImage(charArt(p, s, 400)), a2 = await svgToImage(charArt(s, p, 400));
     ctx.drawImage(a1, W / 2 - 420, 400, 400, 440); ctx.drawImage(a2, W / 2 + 20, 400, 400, 440);
   } else {
@@ -2978,7 +3026,7 @@ async function shareCard(result) {
     ctx.drawImage(art, (W - 480) / 2, 318, 480, 528);
   }
   ctx.textAlign = 'center'; ctx.fillStyle = 'rgba(29,29,29,.6)'; ctx.font = `700 28px ${SANS}`; ctx.letterSpacing = '5px';
-  ctx.fillText(mini ? L('TEMPERAMEN DOMINAN', 'PRIMARY TEMPERAMENT') : `${P.name.toUpperCase()} + ${S.name.toUpperCase()}`, W / 2 + 2, 930);
+  ctx.fillText(mtop ? L('TEMPERAMEN DOMINAN SERI', 'TIED PRIMARY TEMPERAMENTS') : mini ? L('TEMPERAMEN DOMINAN', 'PRIMARY TEMPERAMENT') : `${P.name.toUpperCase()} + ${S.name.toUpperCase()}`, W / 2 + 2, 930);
   ctx.letterSpacing = '0px';
   ctx.fillStyle = '#1D1D1D';
   let fs = 108; ctx.font = `800 ${fs}px ${SANS}`;
@@ -2986,7 +3034,7 @@ async function shareCard(result) {
   while (ctx.measureText(title).width > 880 && fs > 60) { fs -= 4; ctx.font = `800 ${fs}px ${SANS}`; }
   ctx.letterSpacing = '-3px'; ctx.fillText(title, W / 2, 1040); ctx.letterSpacing = '0px';
   ctx.font = `500 38px ${SANS}`; ctx.fillStyle = '#2F2F2F';
-  wrap(ctx, dual ? L('Dua sisi yang sama kuat.', 'Two equally strong sides.') : combo.tagline, 820).slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, 1110 + i * 52));
+  wrap(ctx, mtop ? (mtop.length === 4 ? L('Keempat sisi sama kuat.', 'All four sides equally strong.') : mtop.length === 3 ? L('Tiga sisi yang sama kuat.', 'Three equally strong sides.') : L('Dua sisi yang sama kuat.', 'Two equally strong sides.')) : dual ? L('Dua sisi yang sama kuat.', 'Two equally strong sides.') : combo.tagline, 820).slice(0, 3).forEach((l, i) => ctx.fillText(l, W / 2, 1110 + i * 52));
 
   // kartu skor
   ctx.fillStyle = '#FFFFFF'; roundRect(ctx, 60, 1290, W - 120, 400, 64); ctx.fill();

@@ -1139,6 +1139,20 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
   .resume-act { width: 100%; justify-content: flex-end; gap: 12px; }
 }
 
+/* ===== Skor seri di Tes Mini dan Tes Lengkap ===== */
+.duo.n3 { grid-template-columns: repeat(3, 1fr); width: min(100%, 480px); }
+.duo.n4 { grid-template-columns: repeat(4, 1fr); width: min(100%, 560px); gap: 8px; }
+.duo.n3 .char-stage .char-art, .duo.n4 .char-stage .char-art { width: 88%; }
+.duo.n4 figcaption b { font-size: 14px; } .duo.n4 figcaption small { font-size: 11.5px; }
+.tie-sides { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.tie-sides h3 { display: flex; align-items: center; gap: 8px; }
+.tie-dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.tie-lbl { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 12px 0 4px; }
+.tie-card { margin-top: 14px; text-align: left; }
+.tie-card p { margin: 10px 0 0; line-height: 1.6; }
+.tie-marks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tie-marks span { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 6px; border-radius: 999px; font-size: 13.5px; font-weight: 700; }
+
 /* ============ Tes Pandangan Kerja (HK Gold) ============ */
 .pk-brand { display: flex; align-items: center; gap: 12px; }
 .pk-brand .brand img.li { height: 34px; }
