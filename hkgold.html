@@ -1220,8 +1220,8 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .plan.lite .ticks + .lastres { margin-top: 18px; }
 @media (min-width: 620px) { .plans { grid-template-columns: 6fr 7fr; } }
 .plan.lite .pmeta span { font-size: 12px; padding: 5px 9px 5px 8px; gap: 5px; }
-/* Growth Mindset: lebih kecil dari Full Test, di layar lebar di tengah */
-@media (min-width: 620px) { .plan.wide-plan.lite { max-width: calc((100% - 10px) * 7 / 13); margin-left: auto; margin-right: auto; } }
+/* Growth Mindset: selebar kolom Quick Test, rata kiri sejajar grid */
+@media (min-width: 620px) { .plan.wide-plan.lite { max-width: calc((100% - 10px) * 6 / 13); margin-left: 0; margin-right: auto; } }
 .plan.wide-plan.lite .ticks { margin-top: 14px; }
 .plan.wide-plan.lite .ticks li { font-size: 15px; }
 
@@ -1837,7 +1837,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.17.2', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.17.3', // diisi otomatis saat build dari file VERSION
   buildDate: '17 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
