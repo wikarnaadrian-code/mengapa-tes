@@ -1327,8 +1327,8 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.19.0', // diisi otomatis saat build dari file VERSION
-  buildDate: '17 Nov 2026',
+  appVersion: '2.19.1', // diisi otomatis saat build dari file VERSION
+  buildDate: '18 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
   fullPrice: '',                      // contoh: 'Rp 99.000'. Kosongkan kalau harga tidak mau ditampilkan
@@ -3697,7 +3697,6 @@ function mresult() {
         <div class="tie-sides">
           ${a.top.map(k => { const T = TEMPS[k], pr = MINI_PROFILE[k]; return `<div class="card flat" style="--dot:${T.color}"><h3><span class="tie-dot" style="background:${T.color}"></span>${T.name}</h3><p class="small muted" style="margin:0 0 10px">${esc(T.essence)}</p><div class="tie-lbl">${L('Kekuatan', 'Strengths')}</div><ul class="list">${pr.powers.map(x => `<li>${fx(x)}</li>`).join('')}</ul><div class="tie-lbl">${L('Perlu diwaspadai', 'Watch out for')}</div><ul class="list warn">${pr.watch.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>`; }).join('')}
         </div>
-        <p class="muted" style="margin-top:14px">${L('Skor seri berarti sisi-sisi ini sama sering kamu pakai. Mana yang muncul biasanya tergantung situasi dan orang di sekitarmu.', 'A tie means you use these sides about equally often. Which one shows up usually depends on the situation and the people around you.')}</p>
       </div>` : `
       <div class="block">
         <div class="eyebrow">${L(`Sisi ${P.name}`, `Your ${P.name} side`)}</div>
@@ -3706,19 +3705,16 @@ function mresult() {
           <div class="card flat" style="--dot:${P.color}"><h3>Kekuatan utama</h3><ul class="list">${prof.powers.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>
           <div class="card flat" style="--dot:${P.color}"><h3>Perlu diwaspadai</h3><ul class="list warn">${prof.watch.map(x => `<li>${fx(x)}</li>`).join('')}</ul></div>
         </div>
-        <p class="muted" style="margin-top:14px">${L(`Dominan bukan berarti satu-satunya. Kamu punya keempat sisi, dan ${P.name} hanya yang paling sering kamu pakai.`, `Primary doesn’t mean only. You have all four sides, and ${P.name} is simply the one you use most.`)}</p>
       </div>`}
 
       ${insightBlock(tie ? a.top.slice(0, 2) : [p])}
 
       ${trio.length ? `<div class="block">
         <div class="eyebrow">Yang belum terjawab</div>
-        ${tie ? `<h2>${trio.length === 2 ? L('Kamu salah satu dari <em>dua</em> kombinasi karakter ini', 'You are one of these <em>two</em> character blends') : L('Kamu salah satu dari <em>enam</em> kombinasi karakter ini', 'You are one of these <em>six</em> character blends')}</h2>
-        <p class="muted">${L('Yang menentukan adalah sisi mana yang sedikit lebih kuat. Full Personality Test dengan 40 pertanyaan akan memperjelasnya.', 'It depends on which side is slightly stronger. The 40-question Full Personality Test will make it clear.')}</p>` : `
-        <h2>Kamu salah satu dari <em>tiga</em> kombinasi karakter ini</h2>
-        <p class="muted">${L(`Yang menentukan adalah karakter terkuat keduamu. Dua orang ${P.name} bisa sangat berbeda tergantung karakter terkuat keduanya.`, `Your secondary dominant character decides. Two ${P.name} people can be very different depending on their secondary one.`)}</p>`}
+        ${tie ? `<h2>${trio.length === 2 ? L('Kamu salah satu dari <em>dua</em> kombinasi karakter ini', 'You are one of these <em>two</em> character blends') : L('Kamu salah satu dari <em>enam</em> kombinasi karakter ini', 'You are one of these <em>six</em> character blends')}</h2>` : `
+        <h2>Kamu salah satu dari <em>tiga</em> kombinasi karakter ini</h2>`}
         <div class="trio${trio.length === 2 ? ' n2' : ''}">
-          ${trio.map(c => `<div class="mini">${comboArt(c[0], c[1], 96, 't')}<b>${COMBOS[c].name}</b><small>+ ${TEMPS[c[1]].name}</small></div>`).join('')}
+          ${trio.map(c => `<div class="mini">${comboArt(c[0], c[1], 96, 't')}<b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small></div>`).join('')}
         </div>
       </div>` : ''}
 
