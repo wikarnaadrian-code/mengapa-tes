@@ -1265,6 +1265,11 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .wb-pill:hover { background: #EBEBE8; }
 .card.wb + .resume { margin-top: 10px; }
 
+/* Quick Test: tanpa paragraf pengantar, beri jarak judul ke kartu */
+.block > h2 + .tie-sides, .block > h2 + .two { margin-top: 18px; }
+.block > h2 + .trio { margin-top: 18px; }
+.trio .mini small { display: block; line-height: 1.4; }
+
 :root { --tint: #F4F4F2; }
 /* ============ Ruang Tim ============ */
 body { background: var(--bg); }
@@ -1877,7 +1882,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.19.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.19.2', // diisi otomatis saat build dari file VERSION
   buildDate: '18 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',

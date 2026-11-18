@@ -1277,6 +1277,11 @@ footer.foot .ver { display: block; margin-top: 10px; font-size: 11px; color: #B5
 .wb-pill:hover { background: #EBEBE8; }
 .card.wb + .resume { margin-top: 10px; }
 
+/* Quick Test: tanpa paragraf pengantar, beri jarak judul ke kartu */
+.block > h2 + .tie-sides, .block > h2 + .two { margin-top: 18px; }
+.block > h2 + .trio { margin-top: 18px; }
+.trio .mini small { display: block; line-height: 1.4; }
+
 </style>
 <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
@@ -1327,7 +1332,7 @@ const CONFIG = {
   instagram: 'mengapa.me',
   site: 'https://mengapa.me',
   testVersion: 'mengapa-4t-v2',
-  appVersion: '2.19.1', // diisi otomatis saat build dari file VERSION
+  appVersion: '2.19.2', // diisi otomatis saat build dari file VERSION
   buildDate: '18 Nov 2026',
   consentVersion: 'v1-2026-11',
   submitEndpoint: '/api/submit',
@@ -3714,7 +3719,7 @@ function mresult() {
         ${tie ? `<h2>${trio.length === 2 ? L('Kamu salah satu dari <em>dua</em> kombinasi karakter ini', 'You are one of these <em>two</em> character blends') : L('Kamu salah satu dari <em>enam</em> kombinasi karakter ini', 'You are one of these <em>six</em> character blends')}</h2>` : `
         <h2>Kamu salah satu dari <em>tiga</em> kombinasi karakter ini</h2>`}
         <div class="trio${trio.length === 2 ? ' n2' : ''}">
-          ${trio.map(c => `<div class="mini">${comboArt(c[0], c[1], 96, 't')}<b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name} + ${TEMPS[c[1]].name}</small></div>`).join('')}
+          ${trio.map(c => `<div class="mini">${comboArt(c[0], c[1], 96, 't')}<b>${COMBOS[c].name}</b><small>${TEMPS[c[0]].name}<br>+ ${TEMPS[c[1]].name}</small></div>`).join('')}
         </div>
       </div>` : ''}
 
